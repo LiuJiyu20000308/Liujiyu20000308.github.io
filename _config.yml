@@ -2,7 +2,7 @@
 title: Liujiyu's blog
 description: learn & record
 url: https://liujiyu.github.io
-avatar: /avapig.jpg
+avatar: /head.jpg
 paginate: 5
 permalink: pretty
 cover_image: /bg.jpg
@@ -31,7 +31,7 @@ exclude:
 #twitter:
 #  username: vszhub
 #  card: summary
-logo: avapig.jpg
+logo: head.jpg
 social:
   name: liujiyu
   links:
