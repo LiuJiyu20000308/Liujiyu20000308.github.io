@@ -1,0 +1,93 @@
+// Sidebar
+//
+// Styles for the sidebar.
+
+.masthead {
+  text-align: center;
+  margin: auto;
+  width: 100%;
+
+  a {
+    color: var(--gray-900);
+    text-decoration: none;
+  }
+}
+
+.avatar-image {
+  width: 40%;
+  height: auto;
+  border-radius: 50%;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.masthead-title {
+  padding: 0;
+  margin: 0;
+  font-size: 2.1rem;
+  font-weight: 700;
+
+  a:hover,
+  a:focus {
+    color: var(--link-hover-color);
+  }
+}
+
+.masthead-tagline {
+  padding: 0;
+  margin: 0;
+  color: var(--red);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.navigation-list {
+  margin-top: var(--spacer-2);
+  font-size: 1.5rem;
+  color: var(--black);
+  padding: 0;
+  font-weight: 700;
+  list-style: none;
+}
+
+.navigation-item {
+  display: block;
+  margin-bottom: var(--spacer);
+}
+
+.navigation-item a {
+  background: transparent;
+  color: var(--gray-700);
+  letter-spacing: 0.05em;
+  font-size: 90%;
+  border-bottom: 2px solid;
+  border-color: inherit;
+
+  &:hover,
+  &:focus {
+    color: var(--link-hover-color);
+  }
+}
+
+.social {
+  margin-top: var(--spacer-2);
+  font-size: 150%;
+  white-space: normal;
+  line-height: .5;
+}
+
+.social-icon {
+  padding: var(--spacer);
+  &:hover,
+  &:focus {
+    color: var(--link-hover-color);
+    background-color: transparent;
+  }
+}
+
+@media (max-width: $md-width) {
+  .avatar-image {
+    width: 15%;
+  }
+}
