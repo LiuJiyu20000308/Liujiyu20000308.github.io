@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-11-24T21:55:39+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">CSAPP-1:信息的表示和处理</title><link href="http://localhost:4000/2023/11/24/CSAPP-1/" rel="alternate" type="text/html" title="CSAPP-1:信息的表示和处理" /><published>2023-11-24T14:23:00+08:00</published><updated>2023-11-24T14:23:00+08:00</updated><id>http://localhost:4000/2023/11/24/CSAPP-1</id><content type="html" xml:base="http://localhost:4000/2023/11/24/CSAPP-1/"><![CDATA[<h2 id="信息的表示和处理">信息的表示和处理</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-11-24T23:12:00+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">CSAPP-1:信息的表示和处理</title><link href="http://localhost:4000/2023/11/24/CSAPP-1/" rel="alternate" type="text/html" title="CSAPP-1:信息的表示和处理" /><published>2023-11-24T14:23:00+08:00</published><updated>2023-11-24T14:23:00+08:00</updated><id>http://localhost:4000/2023/11/24/CSAPP-1</id><content type="html" xml:base="http://localhost:4000/2023/11/24/CSAPP-1/"><![CDATA[<h1 id="信息的表示和处理">信息的表示和处理</h1>
 
-<h3 id="信息存储">信息存储</h3>
+<h2 id="信息存储">信息存储</h2>
 
-<h4 id="基本概念">基本概念</h4>
+<h3 id="基本概念">基本概念</h3>
 
 <p><strong>位(bit)</strong> 为计算机方位内存中单独的位，<strong>字节(byte)</strong> 为计算机中最小的可寻址的内存单位，大多数计算机使用8-Bit的字节。机器级程序将内存视为一个非常大的字节数，称为<strong>虚拟内存(virtual memory)</strong>。内存的每个字节都由一个唯一的数字来标识，被称为它的<strong>地址(address)</strong>，所有可能地址的集合被称为<strong>虚拟地址空间</strong>。</p>
 
@@ -11,7 +11,7 @@
 <div align="center"> <img src="/pic/WordSize.png" width="300" /> </div>
 <center><p>基本C数据类型的典型大小(以字节为单位)</p></center>
 
-<h4 id="寻址和字节顺序">寻址和字节顺序</h4>
+<h3 id="寻址和字节顺序">寻址和字节顺序</h3>
 <p>在几乎所有的机器上，多字节对象都被存储为连续的字节，但排列表示一个对象的字节有两种通用规则：</p>
 <ol>
   <li>最低有效字节在前面的方式称为<strong>小端法(little endian)</strong>，大多数Intel兼容机，Android和IOS都只用小端模式，</li>
@@ -64,11 +64,11 @@
 <div align="center"> <img src="/pic/Show_Bytes.png" width="500" /> </div>
 <p>这里注意每输出一次都是两位十六进制数，因为一个字节是8Bit，对应两位十六进制数。</p>
 
-<h4 id="字符串表示">字符串表示</h4>
+<h3 id="字符串表示">字符串表示</h3>
 
 <p>C语言中字符串被编码为一个以null(其值为0)字符结尾的字符数组，例如我们以参数<code class="language-plaintext highlighter-rouge">12345</code>和<code class="language-plaintext highlighter-rouge">6</code>来运行<code class="language-plaintext highlighter-rouge">show_bytes</code>，我们会得到结果 <code class="language-plaintext highlighter-rouge">31 32 33 34 35 00</code>.</p>
 
-<h3 id="布尔代数简介">布尔代数简介</h3>
+<h2 id="布尔代数简介">布尔代数简介</h2>
 
 <p>最简单的布尔代数是在二元集合{0,1}上定义的:</p>
 <ol>
@@ -82,7 +82,7 @@
 
 <p>以上布尔运算可以扩展到<strong>位向量</strong>的运算，其中位向量就是固定长度为w，由0和1组成的串，它一个很有用的应用就是表示有限集合。</p>
 
-<h4 id="c语言中的位级运算">C语言中的位级运算</h4>
+<h3 id="c语言中的位级运算">C语言中的位级运算</h3>
 
 <p>位级运算的一个常见用法就是<strong>掩码运算</strong>，例如：</p>
 <ol>
@@ -102,11 +102,11 @@
 
 <p><strong>三个二元位级运算都具有交换律和结合律。</strong></p>
 
-<h4 id="c语言中的逻辑运算">C语言中的逻辑运算</h4>
+<h3 id="c语言中的逻辑运算">C语言中的逻辑运算</h3>
 
 <p>逻辑运算有三种: <code class="language-plaintext highlighter-rouge">&amp;&amp;</code>, <code class="language-plaintext highlighter-rouge">||</code>, <code class="language-plaintext highlighter-rouge">!</code>，注意别和位级运算混淆即可，另外<code class="language-plaintext highlighter-rouge">&amp;&amp;</code>和<code class="language-plaintext highlighter-rouge">||</code>具有短路性。</p>
 
-<h4 id="c语言中的移位运算">C语言中的移位运算</h4>
+<h3 id="c语言中的移位运算">C语言中的移位运算</h3>
 
 <p>对于一个位表示为$[x_{w-1},x_{w-2},\ldots,x_0]$的操作数$x$，左移运算<code class="language-plaintext highlighter-rouge">x&lt;&lt;k</code>使得$x$向左移动$k$位，丢弃最高的$k$位，并在右端补上$k$个0。并且<strong>移位运算从左到右是可结合的。</strong></p>
 
@@ -122,9 +122,9 @@
   <li>加减法的优先级比移位运算要高，因此在拿不准的时候记得加括号。</li>
 </ol>
 
-<h3 id="整数表示">整数表示</h3>
+<h2 id="整数表示">整数表示</h2>
 
-<h4 id="整数编码">整数编码</h4>
+<h3 id="整数编码">整数编码</h3>
 
 <p>对于位向量$\mathbf{x} = [x_{w-1},x_{w-2},\ldots,x_0]$,无符号数编码定义为
 \(\text{B2U}_w(\mathbf{x}) = \sum\limits_{i=0}^{w-1} x_i 2^i\)</p>
@@ -141,7 +141,7 @@
   <li>-1和 UMax 有同样的位表示，即一个全1的串。</li>
 </ol>
 
-<h4 id="有符号数和无符号数的转换">有符号数和无符号数的转换</h4>
+<h3 id="有符号数和无符号数的转换">有符号数和无符号数的转换</h3>
 
 <ol>
   <li>对于满足$\text{TMin}_w \leq x \leq \text{TMax}_w$的$x$有，</li>
@@ -198,7 +198,7 @@
 </code></pre>
 <p>因为在某些编译器中可能会把-2147482648认为是正数，这里不深究，了解即可。</p>
 
-<h4 id="扩展一个数字的位表示">扩展一个数字的位表示</h4>
+<h3 id="扩展一个数字的位表示">扩展一个数字的位表示</h3>
 
 <ol>
   <li>
@@ -222,7 +222,7 @@ show_bytes( (byte_pointer)&amp;uy, sizeof(unsigned));
 </code></pre>
 <p>这表明<strong>当short转换成unsigned时，我们先要改变大小，然后再完成有符号到无符号的转换</strong>，即<code class="language-plaintext highlighter-rouge">(unsigned)sx</code>等价于<code class="language-plaintext highlighter-rouge">(unsigned)(int)sx</code>而不是<code class="language-plaintext highlighter-rouge">(unsigned)(unsigned short)sx</code>。</p>
 
-<h4 id="截断数字">截断数字</h4>
+<h3 id="截断数字">截断数字</h3>
 
 <p>截断一个数字可能会改变它的值，这也是溢出的一种形式。</p>
 
@@ -239,9 +239,9 @@ show_bytes( (byte_pointer)&amp;uy, sizeof(unsigned));
 
 <p>其实<strong>两个操作在位级别上是相同的，只是最后按照不同编码表示而已</strong>。</p>
 
-<h3 id="整数运算">整数运算</h3>
+<h2 id="整数运算">整数运算</h2>
 
-<h4 id="整数加法">整数加法</h4>
+<h3 id="整数加法">整数加法</h3>
 
 <ol>
   <li>对于满足$0\leq x,y &lt; 2^w$的整数$x,\ y$ 有:</li>
@@ -327,7 +327,7 @@ show_bytes( (byte_pointer)&amp;uy, sizeof(unsigned));
 </code></pre>
 <p>当 $x&gt;0,\ y = \text{TMin}_w$ 时，$-y = \text{TMin}_w$，此时一正一负判断为不溢出，然而实际是溢出的。</p>
 
-<h4 id="整数乘法">整数乘法</h4>
+<h3 id="整数乘法">整数乘法</h3>
 
 <ol>
   <li>对于满足$0\leq x,y &lt; 2^w$的整数$x,\ y$ 有:</li>
@@ -375,7 +375,7 @@ show_bytes( (byte_pointer)&amp;uy, sizeof(unsigned));
   <li>可证明 $q=y$当且仅当 $r=t=0$.</li>
 </ol>
 
-<h5 id="乘以常数">乘以常数</h5>
+<h3 id="乘以常数">乘以常数</h3>
 
 <ol>
   <li>C中变量x和k有无符号数$x$和$k$，且$0\leq k &lt; w$，则有<code class="language-plaintext highlighter-rouge">x&lt;&lt;k</code>得到数值 $x *_w^u 2^k$.</li>
@@ -388,7 +388,7 @@ show_bytes( (byte_pointer)&amp;uy, sizeof(unsigned));
   <li><code class="language-plaintext highlighter-rouge">(x&lt;&lt;(n+1)) - (x&lt;&lt;m)</code></li>
 </ol>
 
-<h5 id="除以2的幂">除以2的幂</h5>
+<h3 id="除以2的幂">除以2的幂</h3>
 
 <ol>
   <li>C中变量x和k有无符号数$x$和$k$，且$0\leq k &lt; w$，则有<code class="language-plaintext highlighter-rouge">x&gt;&gt;k</code>得到数值 $\lfloor x/2^k \rfloor$.</li>
@@ -409,7 +409,7 @@ x = (x + bias) &gt;&gt; 4;
 </code></pre>
 <p><strong>注意这里利用了算术右移以及掩码的性质。</strong></p>
 
-<h4 id="一些c语言interger-puzzles">一些C语言Interger puzzles</h4>
+<h3 id="一些c语言interger-puzzles">一些C语言Interger puzzles</h3>
 
 <ol>
   <li>$x&lt;0 \nRightarrow(x*2)&lt;0$</li>
