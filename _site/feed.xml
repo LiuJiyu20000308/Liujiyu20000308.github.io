@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-11-24T21:53:08+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">CSAPP-1:信息的表示和处理</title><link href="http://localhost:4000/2023/11/24/CSAPP-1/" rel="alternate" type="text/html" title="CSAPP-1:信息的表示和处理" /><published>2023-11-24T14:23:00+08:00</published><updated>2023-11-24T14:23:00+08:00</updated><id>http://localhost:4000/2023/11/24/CSAPP-1</id><content type="html" xml:base="http://localhost:4000/2023/11/24/CSAPP-1/"><![CDATA[<h2 id="信息的表示和处理">信息的表示和处理</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-11-24T21:55:39+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">CSAPP-1:信息的表示和处理</title><link href="http://localhost:4000/2023/11/24/CSAPP-1/" rel="alternate" type="text/html" title="CSAPP-1:信息的表示和处理" /><published>2023-11-24T14:23:00+08:00</published><updated>2023-11-24T14:23:00+08:00</updated><id>http://localhost:4000/2023/11/24/CSAPP-1</id><content type="html" xml:base="http://localhost:4000/2023/11/24/CSAPP-1/"><![CDATA[<h2 id="信息的表示和处理">信息的表示和处理</h2>
 
 <h3 id="信息存储">信息存储</h3>
 
@@ -421,16 +421,7 @@ x = (x + bias) &gt;&gt; 4;
   <li>$x&gt;0 \&amp;\&amp; y&gt;0 \nRightarrow x+y &gt; 0 $</li>
   <li>$x\geq 0 \Rightarrow -x\leq 0$</li>
   <li>$x\leq 0 \nRightarrow -x \geq 0$</li>
-  <li>
-    <table>
-      <tbody>
-        <tr>
-          <td>$(x</td>
-          <td>-x)»31 == -1$ 当$x\neq 0$的情况下成立</td>
-        </tr>
-      </tbody>
-    </table>
-  </li>
+  <li>$(x \vert -x)»31 == -1$ 当$x\neq 0$的情况下成立</li>
   <li>$ux»3 == ux/8$</li>
   <li>$x»3 == x/8$ 当$x$为负数的时候不成立</li>
   <li>$x\&amp; (x-1)!=0$当$x==2^k$的时候不成立</li>
