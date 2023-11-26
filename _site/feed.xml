@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-11-24T23:12:00+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">CSAPP-1:信息的表示和处理</title><link href="http://localhost:4000/2023/11/24/CSAPP-1/" rel="alternate" type="text/html" title="CSAPP-1:信息的表示和处理" /><published>2023-11-24T14:23:00+08:00</published><updated>2023-11-24T14:23:00+08:00</updated><id>http://localhost:4000/2023/11/24/CSAPP-1</id><content type="html" xml:base="http://localhost:4000/2023/11/24/CSAPP-1/"><![CDATA[<h1 id="信息的表示和处理">信息的表示和处理</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-11-27T01:17:42+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">CSAPP-1:信息的表示和处理</title><link href="http://localhost:4000/2023/11/24/CSAPP-1/" rel="alternate" type="text/html" title="CSAPP-1:信息的表示和处理" /><published>2023-11-24T14:23:00+08:00</published><updated>2023-11-24T14:23:00+08:00</updated><id>http://localhost:4000/2023/11/24/CSAPP-1</id><content type="html" xml:base="http://localhost:4000/2023/11/24/CSAPP-1/"><![CDATA[<h1 id="信息的表示和处理">信息的表示和处理</h1>
 
 <h2 id="信息存储">信息存储</h2>
 
@@ -427,4 +427,145 @@ x = (x + bias) &gt;&gt; 4;
   <li>$x\&amp; (x-1)!=0$当$x==2^k$的时候不成立</li>
   <li>$x+y == ux + uy$</li>
   <li>$x * \sim y + uy*ux == -x$</li>
+</ol>
+
+<h2 id="浮点数">浮点数</h2>
+
+<h3 id="ieee浮点表示">IEEE浮点表示</h3>
+
+<p>IEEE浮点标准用 $V=(-1)^s\times M \times 2^E$的形式来表示一个数：</p>
+<ol>
+  <li><strong>符号(sign)</strong>: $s$决定这个数是负数$(s=1)还是正数$(s=0)$，而对于数值0的符号位解释作为特殊情况处理。</li>
+  <li><strong>尾数(significand)</strong>: $M$是一个二进制小数，它的范围是$[1, 2-\epsilon]$或者是$[0, 1-\epsilon]$。</li>
+  <li><strong>阶码(exponent)</strong>: $E$的作用是对浮点数加权，这个权重是2的$E$次幂（可能是负数）。</li>
+</ol>
+
+<p>由此将浮点数的位分为三个字段，分别对这些值进行编码：</p>
+<ol>
+  <li>一个单独的符号位$s$编码符号$s$，</li>
+  <li>$k$位的阶码字段exp$=e_{k-1}\ldots e_0$编码阶数$E$，</li>
+  <li>$n$位小数字段frac$=f_{n-1}\ldots f_0$编码尾数$M$，但是编码出来的值也依赖于阶码字段的值是否为0.</li>
+</ol>
+
+<p>在单精度浮点格式中，$s$,exp,frac字段分别为1位，$k=8$位，$n=23$位；在双精度浮点格式中，$s$,exp,frac字段分别为1位，$k=11$位，$n=52$位。</p>
+
+<div align="center"> <img src="/pic/IEEE.png" width="500" /> </div>
+
+<p>给定位表示，根据exp的值，被编码的值分为三种情况：</p>
+<ol>
+  <li>
+    <p><strong>规格化的值</strong>：
+ 当exp的位模式既不全为0，也不全为1的时候，称为规格化的值，阶码字段被解释为<strong>偏置(<em>bias</em>)形式</strong>表示的有符号整数，阶码的值为$\mathbf{E=e-bias}$，其中$e$是无符号数，其位表示为$e_{k-1}\ldots e_1e_0$(1-254,1-2046)，而<em>bias</em>是一个等于$2^{k-1}-1$(127,1023)的偏置值。
+ 由此产生的指数取值范围对于单精度是$[-126,127]$，对于双精度为$[-1022,1023]$。</p>
+
+    <p>小数字段frac被解释为描述小数值$0\leq f &lt; 1$，其二进制表示为$0.f_{n-1}\ldots f_1f_0$，尾数定义为$\mathbf{M=1+f}$，这样也叫做<strong>隐含的以1开头的表示(implied leading 1)</strong>，这样我们就可以轻松获得一个额外精度位。</p>
+  </li>
+  <li>
+    <p><strong>非规格化的值</strong>
+ 当阶码域全为0时，所表示的数是非规格化形式，在这种情况下，阶码值为$\mathbf{E=1-Bias}$，而尾数值为$\mathbf{M=f}$，也就是不包含隐含的开头的1。</p>
+
+    <p>这种数有两个用途：</p>
+    <ol>
+      <li>提供了一种表示0的方法，因为使用规格化数必须使$M\geq 1$,因此我们不能表示0，此时有+0.0和-0.0，在一些数值运算下被认为是不同的。</li>
+      <li>非规格化数也用来表示那些非常接近于0.0的数，他们提供了一种属性称为<em>逐渐下溢</em>，其中，可能的数值分布均匀地接近于0.0.</li>
+    </ol>
+  </li>
+  <li>
+    <p><strong>特殊值</strong>
+当阶码全为1时，如果小数域全为0，表示的则是无穷；如果小数域非零，表示的则是NaN，通常一些运算的结果不能是实数或者无穷的时候就会返回NaN。</p>
+  </li>
+</ol>
+
+<p>下图是三种情况的位表示图例：</p>
+<div align="center"> <img src="/pic/IEEEcate.png" width="500" /> </div>
+
+<h4 id="数字示例">数字示例</h4>
+
+<p>假如我们有8位格式，阶码位$k=4$位，尾数位$n=3$位，则偏置量为$2^{4-1}-1=7$，部分可能结果如下：</p>
+<div align="center"> <img src="/pic/IEEEexample.png" width="700" /> </div>
+
+<p>可以观察到<strong>最大非规格数和最小规格化数之间的平滑转变</strong>，这归功于我们对<strong>非规格化数$E$的定义</strong>。另外，阶数越高，两个数之间的间距越大。</p>
+
+<p>还可以发现，假如我们将浮点数的位表达式解释为无符号整数，那么对于所有正数而言，<strong>它们就是升序排列的</strong>，负数正好相反，IEEE这样设计就是为了浮点数能够使用整数排序函数来进行排序。</p>
+
+<p>这里举一些特殊的值：</p>
+<ol>
+  <li>值+0.0总有一个全为0的位表示。</li>
+  <li>最小的正非规格化值的位表示是最低有效位为1而其他所有位为0构成的，此时尾码值$M=f=2^{-n}$，阶码值$E=-2^{k-1}+2$，因此$V=2^{-n-2^{k-1}+2}$。</li>
+  <li>最大的正非规格化值的位表示是全为0的阶码字段和最低有效位为1而其他所有位为0构成的，此时尾码值$M=f=1-2^{-n}$，阶码值$E=-2^{k-1}+2$，因此$V=(1-2^{-n})\times 2^{-2^{k-1}+2}$。</li>
+  <li>最小的正规格化值的位模式的阶码的最低有效位为1，其他为0，此时尾码值$M=1$，阶码值为$E=-2^{k-1}+2$，因此$V=2^{-2^{k-1}+2}$。</li>
+  <li>最大的正规格化值的位模式的阶码的最低有效位为0，其他为1，此时尾码值$M=2-2^{-n}$，阶码值为$E=2^{k-1}-1$，因此$V=(2-2^{-n})\times 2^{2^{k-1}-1} = 2^{2^{k-1}}(1-2^{-n-1})$。</li>
+  <li>值1.0的位表示的阶码字段除了最高有效位为0外，其他位均为1，尾码字段均为0，此时$M=1,E=0$。</li>
+</ol>
+
+<p>例子：12345具有二进制表示[11000000111001] = $1.1000000111001_2\times 2^{12}$，此时我们丢掉开头的1，并且在末尾加10个0，来构造小数字段，得到二进制表示[10000001110010000000000]，位构造阶码字段，我们用13加上偏置值127得到140，二进制表示为[10001100]，再加上符号位0，就得到了二进制的浮点数表示[0 10001100 10000001110010000000000],观察到整数值二进制[11000000111001]，正好对应于等于1的最高有效位之前（这就是隐含的开头1）。</p>
+
+<p><strong>对于一个具有$n$位小数的浮点格式，不能准确描述的最小正整数为$2^{n+1}+1$</strong>：当表示到$2^{n+1}$之后，下一个数为$2^{n+1}+2^{n+1}\times 2^{-n}=2^{n+1}+10$。</p>
+
+<h3 id="舍入">舍入</h3>
+
+<p>舍入共有四种形式：向偶数舍入、向零舍入、向上舍入、向下舍入。</p>
+
+<p>向偶数舍入可以叫做“四舍六入五留双”，例如，可以将1.234999舍入为1.23，1.235001舍入为1.24，1.235000舍入为1.24，因为4是偶数。</p>
+
+<p>同样的，向偶数舍入可以应用到二进制小数上，我们将最低有效位的值0认为是偶数，1认为是奇数。一般来说，只有形如XXXXX.YYYY10000的二进制位模式才会向偶数舍入，其中最右边的Y是被舍入的位置。</p>
+
+<p>例：</p>
+<ol>
+  <li>$10.010_2\Rightarrow 10.0$</li>
+  <li>$10.011_2\Rightarrow 10.1$</li>
+  <li>$10.110_2\Rightarrow 11.0$</li>
+  <li>$11.001_2\Rightarrow 11.0$</li>
+</ol>
+
+<h3 id="浮点运算">浮点运算</h3>
+
+<p>前面我们看到了整数加法形成了阿贝尔群，实数的加法同样如此，但是我们要考虑舍入的影响。我们定义$x+^f y = \text{Round}(x+y)$。</p>
+
+<p>加法运算过程：$(-1)^{s_1}M_12^{E_1} +^f (-1)^{s_2}M_2 2^{E_2} \rightarrow (-1)^sM2^E(E_1\geq E_2)$:</p>
+<ol>
+  <li>$S,M$位对齐后的加法，$E=E_1$.</li>
+  <li>如果$M\geq 2$，$M$右移一位，$E$加1.</li>
+  <li>如果$M&lt;1$，$M$左移$k$位，$E$减$k$.</li>
+  <li>如果$E$超出范围则溢出，</li>
+  <li>舍入到frac精度范围。</li>
+</ol>
+
+<p>可以看到它有以下性质：</p>
+<ol>
+  <li>运算是可交换的，即$x+^f y = y +^f x$，</li>
+  <li>运算是<strong>不可结合</strong>的，例如$(3,14+1e10)-1e10=0.0,\ 3.14+(1e10-1e10)=3.14$，</li>
+  <li>大多数值在浮点加法下存在逆元，但是无穷和NaN是例外，</li>
+  <li>浮点加法满足单调性：如果$a\geq b$，那么除了NaN，对于任何$x$的值都有$x+a\geq x+b$。<strong>整数加法是不具备这个性质的</strong>，</li>
+  <li>0是加法的单位元。</li>
+</ol>
+
+<p>浮点数乘法的定义也是类似的$x\times^fy=\text{Round}(x\times y)$，浮点乘法有以下性质：</p>
+<ol>
+  <li>乘法是封闭的，是可交换的，有乘法单位元1.0，</li>
+  <li>不可结合的，例如$(1e20<em>1e20)</em>1e-20$为正无穷，而$1e20<em>(1e20</em>1e-20)$为$1e20$.</li>
+  <li>对于加法没有分配性，例如$1e20<em>1e20-1e20</em>1e20$会得到NaN，</li>
+  <li>对于任何$a,b,c$，并且都不为NaN，则乘法也满足单调性。</li>
+</ol>
+
+<h3 id="c语言中的浮点数">C语言中的浮点数</h3>
+
+<ol>
+  <li>int转换为double，数字不会溢出但是可能被舍入。</li>
+  <li>int或float转换为double，能够保留精确数值。</li>
+  <li>double转换成float，可能会溢出，也可能会舍入。</li>
+  <li>float或double转换为int，如果没有溢出的话，<strong>值会向零舍入</strong>。</li>
+</ol>
+
+<p>例子：x,f,d分别为int, float, double.</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">x==(int)(double)x</code></li>
+  <li><code class="language-plaintext highlighter-rouge">x!=(int)(float)x</code></li>
+  <li><code class="language-plaintext highlighter-rouge">d != (double)(float)d</code></li>
+  <li><code class="language-plaintext highlighter-rouge">f == (float)(double)f</code></li>
+  <li><code class="language-plaintext highlighter-rouge">f == -(-f)</code></li>
+  <li><code class="language-plaintext highlighter-rouge">1.0/2 = 1/2.0</code></li>
+  <li><code class="language-plaintext highlighter-rouge">d*d&gt;=0</code></li>
+  <li><code class="language-plaintext highlighter-rouge">(f+d)-f != d</code>：浮点加法不存在结合律（后面的-f无法移动到前边）</li>
+  <li><code class="language-plaintext highlighter-rouge">d&gt;f =&gt; -d &lt; -f</code></li>
 </ol>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="CSAPP" /><summary type="html"><![CDATA[信息的表示和处理]]></summary></entry><entry><title type="html">A Good start</title><link href="http://localhost:4000/2023/11/04/A-good-start/" rel="alternate" type="text/html" title="A Good start" /><published>2023-11-04T21:43:00+08:00</published><updated>2023-11-04T21:43:00+08:00</updated><id>http://localhost:4000/2023/11/04/A-good-start</id><content type="html" xml:base="http://localhost:4000/2023/11/04/A-good-start/"><![CDATA[<p>之后会在这个主页上更新自己学习的总结。</p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="life" /><summary type="html"><![CDATA[之后会在这个主页上更新自己学习的总结。]]></summary></entry></feed>
