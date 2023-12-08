@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CSAPP-1:家庭作业以及Data Lab要点 | Liujiyu’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="CSAPP-1:家庭作业以及Data Lab要点" />
+<meta name="author" content="liujiyu" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="信息存储" />
+<meta property="og:description" content="信息存储" />
+<link rel="canonical" href="http://localhost:4000/2023/11/24/CSAPP-hm1/" />
+<meta property="og:url" content="http://localhost:4000/2023/11/24/CSAPP-hm1/" />
+<meta property="og:site_name" content="Liujiyu’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-11-24T14:23:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CSAPP-1:家庭作业以及Data Lab要点" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2023-11-24T14:23:00+08:00","datePublished":"2023-11-24T14:23:00+08:00","description":"信息存储","headline":"CSAPP-1:家庭作业以及Data Lab要点","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/11/24/CSAPP-hm1/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2023/11/24/CSAPP-hm1/"}</script>
+<!-- End Jekyll SEO tag -->
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } });
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+                       });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+</head>
+
+
+  <body>
+
+    <div class="container pure-g"><div class="sidebar-left pure-u-1 pure-u-md-1-4" style="background-color: rgb(40, 73, 77); color: rgb(255, 255, 255); background-image: url(/bg.jpg);"><header class="masthead">
+  <div class="avatar"><img src="/head.jpg" class="avatar-image" alt="liujiyu">
+    </div>
+  <div class="masthead-title">
+    <a href="/" title="Home">Liujiyu's blog</a>
+  </div>
+  <div class="masthead-tagline">
+    <small>learn & record</small>
+  </div><nav class="navigation">
+    <ul class="navigation-list"><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/">Blog</a>
+      </li><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/about/">About</a>
+      </li></ul>
+  </nav><div class="social pure-menu pure-menu-horizontal">
+      <ul class="social-icons pure-menu-list">
+      <li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="mailto://liujiyu@zju.edu.cn">
+            <i class="fas fa-envelope" title="Email"></i>
+          </a>
+        </li><li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="https://github.com/Liujiyu20000308">
+            <i class="fab fa-github" title="GitHub"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+</header>
+</div>
+
+      <div class="content pure-u-1 pure-u-md-1-2"><main>
+  <article class="post">
+  <h1 class="post-title">CSAPP-1:家庭作业以及Data Lab要点</h1>
+  <div class="post-meta"><time datetime="2023-11-24T14:23:00+08:00" itemprop="datePublished">24 Nov 2023</time></div>
+
+  <h2 id="信息存储">信息存储</h2>
+
+<ol>
+  <li>
+    <p>将一个$w$位的字中的字节0(最低位)开始编号，并将参数$x$的字节$i$替换为字节$b$，<strong>要考虑大小端</strong>：</p>
+
+    <pre><code class="language-C"> unsigned replace_byte(unsigned x, int i, unsigned char b)
+ {
+     unsigned int *p = &amp;x;
+     unsigned char *v = (unsigned char *) p;
+        
+     if (is_little_endian())
+         v[i] = b;
+     else 
+         v[sizeof(unsigned) - i - 1] = b;
+        
+     return *p;
+ }
+
+ int is_little_endian(void)
+ {
+     int n = 1;
+     int *p = &amp;n;
+     int *v = (void *) p;
+        
+     if (*v == 0x01)
+         return 1;
+     else
+         return 0;
+ }
+</code></pre>
+  </li>
+  <li>判断表达式是否满足以下任一条件： <strong>通过逻辑反的判断来确保任何结果都是对的</strong>
+    <ol>
+      <li>$x$的任何位都为1                <code class="language-plaintext highlighter-rouge">!(x ^ 0xffffffff)</code></li>
+      <li>$x$的任何位都为0                <code class="language-plaintext highlighter-rouge">!(x ^ 0x0)</code></li>
+      <li>$x$的最低有效字节的位都为1       <code class="language-plaintext highlighter-rouge">!((x &amp; 0xff) ^ 0xff)</code></li>
+      <li>$x$的最低有效字节的位都为0       <code class="language-plaintext highlighter-rouge">!((x &amp; 0xff) ^ 0x0)</code></li>
+    </ol>
+  </li>
+  <li>
+    <p>判断机器是否为算术右移：</p>
+
+    <pre><code class="language-C"> int int_shifts_are_arithmetic()
+ {
+     int n = -1;
+     int shifts = (n&gt;&gt;2);
+     return shifts == n;
+ }
+</code></pre>
+  </li>
+  <li>
+    <p>用算术右移来完成逻辑右移以及用逻辑右移完成算术右移，后面其他操作不能包含右移和除法。
+在实现算术右移的时候注意 <strong>如何判断x的最高位是否为1</strong></p>
+
+    <pre><code class="language-C"> // 算术右移到逻辑右移
+ unsigned srl(unsigned x, int k)
+ {
+     /* perform shift arithmetically */
+     unsigned xsra = (int) x &gt;&gt; k;
+        
+     int mask = -1;
+        
+     mask = mask &lt;&lt; ((sizeof(int) &lt;&lt; 3) - k);
+     return ~mask &amp; xsra;
+ }
+
+ unsigned sra(int x, int k)
+ {
+     /* perform shift logically */
+     int xsrl = (unsigned) x &gt;&gt; k;
+        
+     unsigned mask = 1;
+     int *p = &amp;x;
+     char *temp = (void *) p;
+        
+     // 判断x的最高位是否为1
+     int h = (((mask &lt;&lt; 7) &amp; temp[sizeof(int) - 1]) == 128);
+        
+     h = (-h) &lt;&lt; ((sizeof(int) &lt;&lt; 3) - k);
+     return h | xsrl;
+ }
+</code></pre>
+  </li>
+  <li>
+    <p>判断是否$x$的任一奇数位为1：<code class="language-plaintext highlighter-rouge">!(x &amp; 0x55555555)</code>. <strong>这里要用<code class="language-plaintext highlighter-rouge">&amp;</code>是因为避免$x$偶数位的影响。</strong></p>
+  </li>
+  <li>
+    <p>判断$x$的位表示中是否有奇数个1：</p>
+
+    <pre><code class="language-C"> int odd_ones(unsigned x)
+ {
+     x ^= x &gt;&gt; 1;
+     x ^= x &gt;&gt; 2;
+     x ^= x &gt;&gt; 4;
+     x ^= x &gt;&gt; 8;
+     x ^= x &gt;&gt; 16;
+     return x &amp; 0x1;
+ }
+</code></pre>
+
+    <p>第一次异或的结果，第$i$个位置上是1代表原数中第$i$位和第$i+1$位有一个为1，也就是奇数个1。也就是说，某个位为1，代表从它开始向左连续两位中1的个数是奇数（异或的本质）。第二次异或，就是两位两位的比较了，比如，若结果第6位为1，那么代表上一次的结果的第6位和第8位有奇数个1，也就是原数中第6,7,8,9位中有奇数个1。
+ <strong>整个过程就是不断的压缩信息。</strong></p>
+  </li>
+  <li>
+    <p>得到暗示x最左侧的1的掩码，例如<code class="language-plaintext highlighter-rouge">0xFF00 -&gt; 0x8000</code></p>
+
+    <pre><code class="language-C"> int leftmost_one(unsigned int x)
+ {
+     unsigned int base = 0x80000000;
+     while(base)
+     {
+         if((x &amp; base))
+             break;
+         base &gt;&gt;= 1;
+     }
+ }
+</code></pre>
+
+    <p>这样做可以返回<code class="language-plaintext highlighter-rouge">0x8000</code>，但是没有涉及到掩码：</p>
+
+    <pre><code class="language-C"> int leftmost_one(unsigned x)
+ {
+     x |= x &gt;&gt; 1;
+     x |= x &gt;&gt; 2;
+     x |= x &gt;&gt; 4;
+     x |= x &gt;&gt; 8;
+     x |= x &gt;&gt; 16;
+     return (x &amp; (~(x &gt;&gt; 1)));
+ }
+</code></pre>
+
+    <p>假设此时的字长$w$ = 8，假设 <code class="language-plaintext highlighter-rouge">x = 00010110</code>，首先<strong>前五步将$x$最左侧的1的右侧全置为1</strong>，得到<code class="language-plaintext highlighter-rouge">0x00011111</code>，在此基础上右移一位再取反就可以得到掩码了。</p>
+  </li>
+  <li>
+    <p>得到最低侧$n$位均为1的值：<code class="language-plaintext highlighter-rouge">-1 &gt;&gt; (w-n)</code><strong>注意当$n=w$的情况，此时右移$n$位的实际操作是不变</strong></p>
+  </li>
+  <li>
+    <p>将$x$的最高$n$位交换到末尾，例如: <code class="language-plaintext highlighter-rouge">n=4, x=0x12345678 -&gt; 0x23456781</code></p>
+
+    <pre><code class="language-C"> unsigned rotate_left(unsigned x, int n)
+ {
+     int w = sizeof(int) &lt;&lt; 3;
+     unsigned temp = x &gt;&gt; (w - n - 1) &gt;&gt; 1;
+        
+     return (x &lt;&lt; n) + temp;
+ }
+</code></pre>
+  </li>
+  <li>
+    <p>判断一个数能否用$n$位补码来表示：</p>
+
+    <p><strong>正数需要要求第$n$位不为1，例如2是无法用2位来表示的。</strong>
+<strong>负数要求$n$到$w$位均为1才可以。</strong></p>
+
+    <pre><code class="language-C">int fits_bits(int x, int n)
+{
+    int neg = x &gt;&gt; (n - 1); //考虑算术右移
+    int pos = x &gt;&gt; (n - 1); 
+    return neg == -1 || pos == 0;
+}
+</code></pre>
+  </li>
+  <li>$a^k$表示$a$重复$k$次，假设一个$w$位的类型，如何不适用$w$得到以下数值
+    <ol>
+      <li>$1^{w-k}0^{k}$:             <code class="language-plaintext highlighter-rouge">(-1) &lt;&lt; k</code></li>
+      <li>$0^{w-k-j}1^k0^j$:          <code class="language-plaintext highlighter-rouge">a = -1 &lt;&lt; (k-j), b = -1 &lt;&lt; j,  ~(a|~b)</code></li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="整数运算">整数运算</h2>
+
+<ol>
+  <li>
+    <p>符号整数饱和加法（正溢出返回TMax，负溢出返回TMin）以及对应的判断减法是否溢出（<strong>注意y=TMin的情况</strong>）</p>
+
+    <pre><code class="language-C"> int asturating_add(int x, int y)
+ {
+     int sum = x + y;
+     int w = sizeof(int) &lt;&lt; 3;
+        
+     // x, y, sum的最高位
+     int h_x = (unsigned) x &gt;&gt; (w - 1);
+     int h_y = (unsigned) y &gt;&gt; (w - 1);
+     int h_sum = (unsigned) sum &gt;&gt; (w - 1);
+        
+     // neg = 1 表示负溢出， pos = 1 表示正溢出
+     int neg = h_x &amp;&amp; h_y &amp;&amp; !h_sum;
+     int pos = !h_x &amp;&amp; !h_y &amp;&amp; h_sum;
+        
+     return (-neg &amp; INT_MIN) + (-pos &amp; INT_MAX);
+ }
+
+ int tsub_ok(int x, int y)
+ {
+     if(y == INT_MIN){
+         return x &lt; 0;
+     }
+     int temp = asturating_add(x, -y);
+     return temp != INT_MIN &amp;&amp; temp != INT_MAX;
+ }
+</code></pre>
+  </li>
+  <li>
+    <p>假设我们已有用于计算$x$和$y$采用补码形式下$x\cdot y$的高$w$位的函数</p>
+
+    <pre><code class="language-C"> int signed_high_prod(int x, int y);
+</code></pre>
+    <p>现在计算无符号变量$x\cdot y$的高$w$位：</p>
+
+    <p>这里用到$x’\cdot y’ = x\cdot y + (x_{w-1}y+y_{w-1}x)2^w + x_{w-1}y_{w-1}2^{2w}$.</p>
+
+    <pre><code class="language-C"> int signed_high_prod(int x, int y) 
+ {
+ int64_t mul = (int64_t) x * y;
+ return mul &gt;&gt; 32;
+ }
+
+ unsigned unsigned_high_prod(unsigned x, unsigned y)
+ {
+     int w = sizeof(int) &lt;&lt; 3;
+     int x_highest_bit = x &gt;&gt; w - 1;
+     int y_highest_bit = y &gt;&gt; w - 1;
+     return signed_high_prod(x, y) + (-y_highest_bit &amp; x) + (-x_highest_bit &amp; y);
+ }
+</code></pre>
+  </li>
+  <li>
+    <p>实现<code class="language-plaintext highlighter-rouge">calloc</code>函数为一个数组分配内存，该数组有nmemb个元素，每个元素size字节：<strong>判断是否发生溢出！</strong></p>
+
+    <pre><code class="language-C"> void *calloc(size_t nmemb, size_t size)
+ {
+     if (nmemb == 0 || size == 0)
+         return NULL;
+     size_t bytes = nmemb * size;
+     if (nmemb == bytes / size) // 判断是否溢出
+     {
+         void* ptr = malloc(bytes);
+         memset(ptr, 0, bytes);
+         return ptr;
+     }
+     return NULL;
+ }
+</code></pre>
+  </li>
+  <li>
+    <p>实现整数除以2的幂数：
+<strong>如何不适用判断来做到合理偏置（-1\0 &amp; mask）</strong></p>
+
+    <pre><code class="language-C"> int divide_power2(int x, int k)
+ {
+     int sign = (x &amp; INT_MIN) == INT_MIN;
+     int mask = (1 &lt;&lt; k) - 1;
+     int bias = -sign &amp; mask;
+        
+     return (x + bias) &gt;&gt; k;
+ }
+</code></pre>
+  </li>
+  <li>
+    <p>对于整数参数$x$，分两种方式计算$3*x/4$的值：1.会出现溢出；2.向零舍入，不会溢出。
+<strong>不溢出就需要用更大的类型来存储，计算完毕后再进行舍入。</strong></p>
+
+    <pre><code class="language-C"> int mul3div4(int x)
+ {
+     int result = (x &lt;&lt; 1) + x;
+     return divide_power2(result, 2);
+ }
+
+ int threefourths(int x)
+ {
+     int64_t result = ((int64_t) x &lt;&lt; 1) + x;
+     int sign = (x &amp; INT_MIN) == INT_MIN;
+     int mask = (1 &lt;&lt; 2) - 1;
+     int bias = -sign &amp; mask;
+     return (result + bias) &gt;&gt; 2;
+ }
+
+</code></pre>
+  </li>
+</ol>
+
+<h2 id="浮点数运算">浮点数运算</h2>
+
+<ol>
+  <li>实现浮点数小于号判断（假设两个参数都不是NaN）：
+    <ol>
+      <li>+0.0等于-0.0</li>
+      <li>考虑NaN（默认比任何数都大）</li>
+      <li>考虑正负号</li>
+      <li>正数升序，负数降序（正负无穷也可以按照此规律）</li>
+    </ol>
+
+    <pre><code class="language-C"> unsigned f2u(float x) 
+ {
+ return *(unsigned*)&amp;x;
+ }
+
+ int float_le(float x, float y) 
+ {
+ unsigned ux = f2u(x);
+ unsigned uy = f2u(y);
+
+ unsigned sx = ux &gt;&gt; 31;
+ unsigned sy = uy &gt;&gt; 31;
+    
+ return (ux &lt;&lt; 1 == 0 &amp;&amp; uy &lt;&lt; 1 == 0) ||
+         (sx &gt; sy) ||
+         (sx &amp;&amp; sy &amp;&amp; ux &gt;= uy) ||
+         (!sx &amp;&amp; !sy &amp;&amp; ux &lt;= uy);
+ }
+</code></pre>
+  </li>
+  <li>
+    <p>实现$2^x$的浮点表示：</p>
+
+    <pre><code class="language-C"> float u2f(unsigned u)
+ {
+     return *(float *) &amp;u;
+ }
+ float fpwr2(int x)
+ {
+     /* Result exponent and fraction */
+     unsigned exp, frac;
+     unsigned u;
+     if (x &lt; -126 - 23)
+     {
+         /* Too small. Return 0.0 */
+         exp = 0;
+         frac = 0;
+     }
+     else if (x &lt; -126)
+     {
+         /* Denormalized result */
+         exp = 0;
+         frac = 1 &lt;&lt; (23 + x + 126);
+     }
+     else if (x &lt; 128)
+     {
+         /* Normalized result. */
+         exp = x + 127;
+         frac = 0;
+     }
+     else
+     {
+         /* Too big. Return +oo */
+         exp = 255;
+         frac = 0;
+     }
+     /* Pack exp and frac into 32 bits */
+     u = exp &lt;&lt; 23 | frac;
+     return u2f(u);
+ }
+</code></pre>
+  </li>
+  <li>
+    <p>实现对一个浮点数求相反数：
+ <strong>关键是符号，阶码，尾码的获取与重组</strong></p>
+
+    <pre><code class="language-C"> typedef unsigned float_bits;
+    
+ /* Compute -f. If f is NaN, then return f. */
+ float_bits float_negate(float_bits f)
+ {
+     float_bits sign, exp, frac;
+        
+     sign = f &gt;&gt; 31;
+     exp = f &gt;&gt; 23 &amp; 0xff;
+     frac = f &amp; 0x7fffff;
+        
+     if (exp == 0xff &amp;&amp; frac)
+         return f;
+     else
+         return (~sign &lt;&lt; 31) | (exp &lt;&lt; 23) | frac;
+ }
+</code></pre>
+  </li>
+  <li>
+    <p>实现浮点数绝对值函数：</p>
+
+    <pre><code class="language-C"> float_bits float_absval(float_bits f)
+ {
+     float_bits exp, frac;
+        
+     exp = f &gt;&gt; 23 &amp; 0xff;
+     frac = f &amp; 0x7fffff;
+        
+     if (exp == 0xff &amp;&amp; frac)
+         return f;
+     else
+         return 0 &lt;&lt; 31 | (exp &lt;&lt; 23) | frac;
+ }
+</code></pre>
+  </li>
+  <li>实现$2.0*f$：
+    <ol>
+      <li>考虑NaN</li>
+      <li>考虑非规格化： <strong>frac左移一位就相当于exp最低位有1</strong></li>
+      <li>考虑2f溢出的情况，即exp=0xff或0xff-1</li>
+      <li>考虑规格化</li>
+    </ol>
+
+    <pre><code class="language-C"> float_bits float_twice(float_bits f)
+ {
+     float_bits sign, exp, frac;
+        
+     sign = f &gt;&gt; 31;
+     exp = f &gt;&gt; 23 &amp; 0xff;
+     frac = f &amp; 0x7fffff;
+        
+     if (exp == 0xff &amp;&amp; frac)
+         return f;
+        
+     if (exp == 0)  // 非规格化的值
+         frac &lt;&lt;= 1;
+     else if (exp == 0xff - 1)  //无穷大时
+     {
+         frac = 0;
+         exp = 0xff;
+     }
+     else
+         exp += 1;
+        
+     return (sign &lt;&lt; 31) | (exp &lt;&lt; 23) | frac;
+ }
+</code></pre>
+  </li>
+  <li>实现$0.5*f$：
+    <ol>
+      <li>考虑NaN</li>
+      <li>考虑非规格化时的舍入 <strong>学习如何向偶数舍入（只有11的情况才需要+1）</strong></li>
+      <li>考虑exp=1 <strong>抛开符号位，整体右移一位再舍入</strong></li>
+      <li>考虑其他规格化情况</li>
+    </ol>
+
+    <pre><code class="language-C"> float_bits float_half(float_bits f)
+ {
+     float_bits sign, exp, frac, rest;
+        
+     sign = f &gt;&gt; 31;
+     exp = f &gt;&gt; 23 &amp; 0xff;
+     frac = f &amp; 0x7fffff;
+     rest = f &amp; 0x7FFFFFFF;
+        
+     if (exp == 0xff)
+         return f;
+        
+     /* 向偶数舍入
+     * round to even, we care about last 2 bits of frac
+     *
+     * 00 =&gt; 0 just &gt;&gt;1
+     * 01 =&gt; 0 (round to even) just &gt;&gt;1
+     * 10 =&gt; 1 just &gt;&gt;1
+     * 11 =&gt; 1 + 1 (round to even) just &gt;&gt;1 and plus 1
+     */
+     int addition = (frac &amp; 0x3) == 0x3;
+
+     if (exp == 0) {
+         /* Denormalized */
+         frac &gt;&gt;= 1;
+         frac += addition;
+     } else if (exp == 1) {
+         /* Normalized to denormalized */
+         rest &gt;&gt;= 1;
+         rest += addition;
+         exp = rest &gt;&gt; 23 &amp; 0xFF;
+         frac = rest &amp; 0x7FFFFF;
+     } else {
+         /* Normalized */
+         exp -= 1;
+     }
+
+     return (sign &lt;&lt; 31) | (exp &lt;&lt; 23) | frac;
+ }
+</code></pre>
+  </li>
+  <li>实现float到int的转换，向零舍入，如果超出表示范围则返回0x80000000：
+    <ol>
+      <li>考虑溢出或者NaN（<strong>int 最大只能表示$2^{31}$</strong>）</li>
+      <li>当exp &lt; bias时，浮点数f的绝对值小于1，直接返回0</li>
+      <li>此时bias &lt;= exp &lt; 31+bias, 即 0 &lt;= E &lt; 31 时，由于浮点数小数部分只有23位，此时分为两种情况：
+        <ol>
+          <li>E &gt; 23 时，rest 左移 E-23位</li>
+          <li>E &lt;= 23 时，rest 右移 23-E位（<strong>将精确数字舍去一部分就是向零舍入</strong>）</li>
+        </ol>
+      </li>
+    </ol>
+
+    <pre><code class="language-C"> int float_f2i(float_bits f)
+ {
+     float_bits sign, exp, frac;
+     float_bits M, E, bias;
+        
+     sign = f &gt;&gt; 31;
+     exp = f &gt;&gt; 23 &amp; 0xff;
+     frac = f &amp; 0x7fffff;
+     bias = 0x7f;
+        
+     if (exp&gt;= 31 + bias || exp == 0xff)  // overflow or f is NaN
+         return 0x80000000;
+     else if (exp &lt; bias)  // 结果小于1
+         return 0;
+     else
+     {
+         M = frac | 0x800000;
+         E = exp - bias;
+         if (E &gt; 23)
+             return pow(-1, sign) * (M &lt;&lt; (E - 23));
+         else
+             return pow(-1, sign) * (M &gt;&gt; (23 - E));
+     }
+ }
+</code></pre>
+  </li>
+  <li>实现int到float的转换：
+    <ol>
+      <li>0直接返回</li>
+      <li>如果是负数，先确定sign，然后取反+1获得其绝对值</li>
+      <li><strong>算出最左侧的1在第k位，则exp = k+bias</strong></li>
+      <li>如果k &gt; 23，<strong>需要考虑如何舍入</strong>：
+        <ol>
+          <li>截断的部分大于截断的一半，向上舍入</li>
+          <li>截断的部分等于截断的一半，向偶数舍入 <strong>i&amp;hide == hide是判断某一位是否为1，与判断符号数是否是负数一样</strong></li>
+          <li>截断的部分小于截断的一半，向下舍入</li>
+        </ol>
+      </li>
+    </ol>
+
+    <pre><code class="language-C"> float_bits float_i2f(int i)
+ {
+         unsigned sign, exp, frac;
+         unsigned leftmost, rightmost, t;
+
+         if (i == 0)
+                 return i;
+
+         sign = (i &amp; INT_MIN) == INT_MIN;
+         if (sign)
+                 i = ~i + 1;
+         for (rightmost = 1, t = INT_MIN; (t &amp; i) != t; t &gt;&gt;= 1)
+                 rightmost++;
+         leftmost = (sizeof(int) &lt;&lt; 3) - rightmost; //最左侧的1的位置
+         exp = leftmost + 127;
+
+         int shift;
+         if (leftmost &gt; 23) { // 考虑舍入
+                 shift = leftmost - 23;
+                 int mask = ((1 &lt;&lt; shift) - 1) &amp; i;
+                 int half = 1 &lt;&lt; (shift - 1);
+                 int hide = 1 &lt;&lt; shift;
+                 //mask == half时只有舍入位为1时才加1
+                 int round = mask&gt;half || (mask==half &amp;&amp; (i&amp;hide)==hide); 
+                 frac = (i &gt;&gt; shift) &amp; 0x7FFFFF; //考虑算术右移的影响
+                 if (frac == 0x7FFFFF &amp;&amp; round == 1) //+1有可能导致进位
+                         frac = 0, exp++;
+                 else
+                         frac += round;
+         } else { // 补满23位
+                 shift = 23 - leftmost;
+                 frac = (i &lt;&lt; shift) &amp; 0x7FFFFF;
+         }
+
+         return (sign &lt;&lt; 31) | (exp &lt;&lt; 23) | frac;
+ }
+</code></pre>
+  </li>
+</ol>
+
+
+  
+    
+      <div class="post-tags-section">
+  <i class="post-tags-icon fas fa-tags"></i>
+  <ul class="post-tags"><li>
+        <a class="post-tag" href="/tags/#csapp">csapp</a></li></ul>
+</div>
+
+  
+
+  
+</article>
+
+
+<aside class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="/2023/12/07/CSAPP-2/">
+          CSAPP-2:程序的机器级表示
+          <small><time datetime="2023-12-07T16:23:00+08:00">07 Dec 2023</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2023/11/24/CSAPP-1/">
+          CSAPP-1:信息的表示和处理
+          <small><time datetime="2023-11-24T14:23:00+08:00">24 Nov 2023</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2023/11/04/A-good-start/">
+          A Good start
+          <small><time datetime="2023-11-04T21:43:00+08:00">04 Nov 2023</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+</main>
+
+<footer class="footer"><small>
+    &copy; 2023 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
+  </small>
+</footer>
+</div>
+      <div class="sidebar-right pure-u-1 pure-u-md-1-4">
+<div  class="toc-wrapper">
+  <h2 class="toc-title">Table of Contents</h2>
+    <nav class="toc-nav">
+      <ul class="toc">
+  <li><a href="#信息存储">信息存储</a></li>
+  <li><a href="#整数运算">整数运算</a></li>
+  <li><a href="#浮点数运算">浮点数运算</a></li>
+</ul>
+
+  </nav>
+</div>
+
+</div>
+    </div>
+
+    <script async src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  function strip(str, remove) {
+    while (str.length > 0 && remove.indexOf(str.charAt(0)) != -1) {
+      str = str.substr(1);
+    }
+    while (str.length > 0 && remove.indexOf(str.charAt(str.length - 1)) != -1) {
+      str = str.substr(0, str.length - 1);
+    }
+    return str;
+  }
+
+  function scroll() {
+    console.log('scroll');
+    window.scrollTo({
+      left: 0, 
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+    sessionStorage.removeItem('forceCheckScroll');
+  }
+
+  const forceCheckScroll = sessionStorage.getItem('forceCheckScroll') === 'true';
+  const checkScroll = strip(window.location.pathname, '/') !== strip('', '/');
+
+  if (forceCheckScroll || checkScroll) {
+    const maxWidth = "(max-width: 48rem)";
+    const result = window.matchMedia(maxWidth);
+    if (result.matches) {
+      scroll();
+    } else {
+      result.addListener((match) => {
+        if (match.media == maxWidth) {
+          if (match.matches) {
+            scroll();
+          }
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>

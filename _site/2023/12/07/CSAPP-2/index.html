@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CSAPP-2:程序的机器级表示 | Liujiyu’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="CSAPP-2:程序的机器级表示" />
+<meta name="author" content="liujiyu" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="程序的机器级表示" />
+<meta property="og:description" content="程序的机器级表示" />
+<link rel="canonical" href="http://localhost:4000/2023/12/07/CSAPP-2/" />
+<meta property="og:url" content="http://localhost:4000/2023/12/07/CSAPP-2/" />
+<meta property="og:site_name" content="Liujiyu’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-12-07T16:23:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CSAPP-2:程序的机器级表示" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2023-12-07T16:23:00+08:00","datePublished":"2023-12-07T16:23:00+08:00","description":"程序的机器级表示","headline":"CSAPP-2:程序的机器级表示","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/12/07/CSAPP-2/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2023/12/07/CSAPP-2/"}</script>
+<!-- End Jekyll SEO tag -->
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } });
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+                       });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+</head>
+
+
+  <body>
+
+    <div class="container pure-g"><div class="sidebar-left pure-u-1 pure-u-md-1-4" style="background-color: rgb(40, 73, 77); color: rgb(255, 255, 255); background-image: url(/bg.jpg);"><header class="masthead">
+  <div class="avatar"><img src="/head.jpg" class="avatar-image" alt="liujiyu">
+    </div>
+  <div class="masthead-title">
+    <a href="/" title="Home">Liujiyu's blog</a>
+  </div>
+  <div class="masthead-tagline">
+    <small>learn & record</small>
+  </div><nav class="navigation">
+    <ul class="navigation-list"><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/">Blog</a>
+      </li><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/about/">About</a>
+      </li></ul>
+  </nav><div class="social pure-menu pure-menu-horizontal">
+      <ul class="social-icons pure-menu-list">
+      <li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="mailto://liujiyu@zju.edu.cn">
+            <i class="fas fa-envelope" title="Email"></i>
+          </a>
+        </li><li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="https://github.com/Liujiyu20000308">
+            <i class="fab fa-github" title="GitHub"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+</header>
+</div>
+
+      <div class="content pure-u-1 pure-u-md-1-2"><main>
+  <article class="post">
+  <h1 class="post-title">CSAPP-2:程序的机器级表示</h1>
+  <div class="post-meta"><time datetime="2023-12-07T16:23:00+08:00" itemprop="datePublished">7 Dec 2023</time></div>
+
+  <h1 id="程序的机器级表示">程序的机器级表示</h1>
+
+<h2 id="程序编码概论">程序编码概论</h2>
+
+<h3 id="术语介绍">术语介绍</h3>
+
+<p>假设一个C程序有两个文件p1.c和p2.c，我们使用gcc编译这些代码，会经过以下步骤：</p>
+<ol>
+  <li><strong>C预处理</strong>扩展源代码，插入所有用#include命令指定的文件，并扩展所有用#define声明指定的宏；</li>
+  <li><strong>编译器</strong>产生两个源文件的<strong>汇编代码</strong>，名字分别为p1.s和p2.s；</li>
+  <li><strong>汇编器</strong>将汇编代码转化为二进制<strong>目标代码</strong>文件p1.o和p2.o；</li>
+  <li><strong>链接器</strong>将目标代码文件和实现库函数的代码合并，并产生最终的可执行文件p。</li>
+</ol>
+
+<p>代码形式分为两种：</p>
+<ol>
+  <li>机器代码：byte-level的文件，包括目标代码以及可执行代码文件，目标代码中包含所有指令的二进制表示，但是还没有填入全局值的地址。</li>
+  <li>汇编代码：是机器代码的文字表述。</li>
+</ol>
+
+<p>对于机器级编程来说，有两种抽象尤为重要：</p>
+<ol>
+  <li>第一种是由 <strong>指令集体系结构或指令集架构(Instruction Set Architecture, ISA)</strong> 来定义机器级程序的格式和行为，它定义了处理器状态、指令的格式以及每条指令对状态的影响。大多数ISA，包括x86-64，将程序的行为描述成好像每条指令都是按顺序执行的。</li>
+  <li>第二种是机器级程序使用的内存地址是虚拟地址，提供的内存模型看上去是一个非常大的字节数组，存储器系统的实际实现是将多个硬件存储器和操作系统软件组合起来，在后面第九章会讲到。</li>
+</ol>
+
+<p>在整个编译过程中，编译器会完成大部分的工作，将C语言提供的相对抽象的执行模型表示的程序转化为汇编代码，其主要特点是它用可读性更好的文本格式表示。</p>
+
+<p>x86-64的机器代码和C代码差别非常大，一些通常对C语言程序员隐藏的处理器状态都是可见的：</p>
+<ol>
+  <li><strong>程序计数器</strong>(通常称为PC，在x86-64中用%rip表示)给出将要执行的下一条指令在内存中的地址。</li>
+  <li><strong>整数寄存器文件</strong>包含16个命名的位置，分别存储64位的值。这些寄存器可以存储地址或整数数据。有的寄存器被用来记录重要的程序状态，而其他的寄存器用来保存临时数据，例如过程的参数和局部变量或返回值。</li>
+  <li><strong>条件码寄存器</strong>保存着最近执行的算术或逻辑指令的状态信息</li>
+  <li>一组<strong>向量寄存器</strong>可以存放一个或多个整数或浮点数值。</li>
+</ol>
+
+<p>虽然C语言提供了模型，可以在内存中声明和分配各种数据类型的对象，但是机器代码只是简单地将内存看成一个很大的按字节寻址的数组，<strong>C语言中的聚合数据类型，例如数组和结构不存在于机器级代码</strong>，即使对于标量数据类型，汇编代码也不区分符号数与无符号数，不区分各种类型的指针，甚至不区分指针和整数。</p>
+
+<p>程序内存包含：程序的可执行机器代码，操作系统需要的一些信息，用来管理过程调用和返回的运行时栈，以及用户分配的内存块。程序内存用虚拟地址来寻址，例如x86-64的虚拟地址是由64位的字来表示的，操作系统负责管理虚拟地址空间，将虚拟地址翻译成实际处理器内存中的物理地址。</p>
+
+<p>一条机器指令只执行一个非常基本的操作，编译器必须产生这些指令的序列，从而实现程序结构。</p>
+
+<h3 id="代码示例">代码示例</h3>
+
+<p>假设我们写了一个C语言代码mstore.c</p>
+
+<pre><code class="language-C">long mult2(long, long);
+
+void multstore(long x, long y, long *dest) {
+    long t = mult2(x,y);
+    *dest = t;
+}
+</code></pre>
+
+<p>使用gcc命令<code class="language-plaintext highlighter-rouge">gcc -Og -S mstore.c</code>可以产生汇编代码文件，包含以下几行：</p>
+
+<pre><code class="language-asm">multstore:
+    pushq   %rbx
+    movq    %rdx, %rbx
+    call    mult2
+    movq    %rax, (%rbx)
+    popq    %rbx
+    ret
+</code></pre>
+
+<p>如果我们使用命令<code class="language-plaintext highlighter-rouge">gcc -Og -c mstore.c</code>，可以产生目标代码文件，它是二进制格式的，可以利用GDB命令<code class="language-plaintext highlighter-rouge">(gdb) x/14xb mulstore</code>查看。由此可见，机器对产生这些指令的源代码一无所知。</p>
+
+<p>要查看机器代码文件的内容，有一类称为 <strong>反汇编器(disassembler)</strong>的程序非常有用，这些程序根据机器代码产生一种类似于汇编代码的格式，在Linux系统中可以使用<code class="language-plaintext highlighter-rouge">objdump -d mstore.o</code>命令实现，结果如下：</p>
+
+<pre><code class="language-asm">0000000000000000 &lt;multstore&gt;:
+    0:  53                  push    %rbx
+    1:  48  89  d3          mov     %rdx, %rbx
+    4： e8  00  00  00  00  callq   9 &lt;multstore+0x9&gt;
+    9:  48  89  03          mov    %rax, (%rbx)
+    c:  5b                  pop    %rbx
+    d:  c3                  retq
+</code></pre>
+
+<p>其中一些关于机器代码和他的反汇编表示特性值得注意：</p>
+<ol>
+  <li>x86-64的指令长度从1到15个字节不等。</li>
+  <li>设计指令格式的方式是从某个给定位置开始，可以将字节唯一解码成机器指令。例如，只有<code class="language-plaintext highlighter-rouge">pushq %rbx</code>是以字节值53开头的。</li>
+  <li>反汇编器只是基于机器代码文件中的字节序列来确定汇编代码，它无需访问源代码或汇编代码。</li>
+  <li>反汇编器使用的指令命令规则与gcc生成的汇编代码有细微差别，它省略了后缀的大小指示符。</li>
+  <li>源程序所有名称在汇编代码级别完全消失，变成了寄存器或内存的某个位置。</li>
+</ol>
+
+<p>链接器的任务之一就是为函数调用找到匹配的函数的可执行代码的位置，将代码的地址移到不同的地址范围中并在callq指令调用中填入需要使用的地址；另外，它也会插入一些nop指令使得函数代码变为16字节，使得就存储器系统性能而言，能更好地放置下一个代码块。</p>
+
+<h4 id="数据格式">数据格式</h4>
+
+<p>由于是从16位体系结构扩展到现在的，Intel用术语 <strong>字(word)</strong>来表示16位(2字节)数据类型，称32位为 <strong>双字(double words)</strong>，称64位为 <strong>四字(quad words)</strong>，下图给出了语言基本数据类型对应的x86-64表示。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>C声明</td>
+      <td>Intel数据类型</td>
+      <td>汇编代码后缀</td>
+      <td>大小（字节）</td>
+    </tr>
+    <tr>
+      <td>char</td>
+      <td>字节</td>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>short</td>
+      <td>字</td>
+      <td>w</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>int</td>
+      <td>双字</td>
+      <td>l</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>long</td>
+      <td>四字</td>
+      <td>q</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>char*</td>
+      <td>四字</td>
+      <td>q</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td>单精度</td>
+      <td>s</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>double</td>
+      <td>双精度</td>
+      <td>l</td>
+      <td>8</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="访问信息">访问信息</h3>
+
+<p>一个x86-64的CPU包含一组16个存储64位值的 <strong>通用目的寄存器</strong>，用于存储整数数据和指针，如下图所示。</p>
+
+<div align="center"> <img src="/pic/register.png" width="500" /> </div>
+
+<p>最初的8086中有8个16位的寄存器，即图中的%ax到%sp，它们的名字反映了不同的用途，分别是accumulate, base, counter, data, source index, destination index, base pointer, stack pointer.</p>
+
+<p>目前它们已经和过去的功能几乎毫无关系，只是保留了名字。新扩充的8个寄存器则命名为%r8到%r15。</p>
+
+<p>图中嵌套的方框表明，指令可以对这些寄存器的低位字节存放的不同大小的数据进行操作。当指令以寄存器为目标时，对于生成小于8字节结果的指令，有两个规则：</p>
+<ol>
+  <li>生成1字节和2字节数字的指令会保持剩下的字节不变，</li>
+  <li>生成4字节数字的指令会把高位4个字节置为0。</li>
+</ol>
+
+<p>在常见的程序里，不同的寄存器扮演着不同的角色，有一组标准的变成规范控制着如何使用寄存器来管理栈、传递函数参数、从函数返回值以及存储局部和临时数据。</p>
+
+<h4 id="操作数指示符">操作数指示符</h4>
+
+<p>大多数指令有一个或多个 <strong>操作数(operand)</strong>，指示出执行一个操作要使用的源数据值以及放置结果的目的为止。<strong>源数据值可以以常数形式给出，或是寄存器或内存中读出，结果可以存放在寄存器或者内存中。</strong>因此，操作数分为3种类型：</p>
+<ol>
+  <li><strong>立即数(immediate)</strong>用来表示常数值，书写方式为$后面跟一个用C表示法表示的整数，例如<code class="language-plaintext highlighter-rouge">$-557, $0x1F</code></li>
+  <li><strong>寄存器(register)</strong>表示某个寄存器的内容，我们用符号 $r_a$ 来表示任意寄存器a，用引用 $R[r_a]$ 表示它的值，这是将寄存器集合看成一个数组 $R$，用寄存器标识符作为索引。</li>
+  <li><strong>内存引用</strong>，它会根据计算出来的地址访问某个内存位置，我们用符号$M_b[Addr]$ 表示对存储在内存中从地址Addr开始$b$个字节值的引用。</li>
+</ol>
+
+<p>如下图所示，有多种不同的寻址模式，允许不同形式的内存引用。其中最底部的 $Imm(r_b,r_i,s)$ 为最常用的形式，这里基址寄存器 $r_b$ 可以是任意寄存器，变址寄存器 $r_i$ 可以是除 \%rsp 外的任意寄存器，s必须为1、2、4或者8。<strong>有效地址被计算为</strong> $Imm+ R[r_b]+R[r_i]\cdot s$。</p>
+
+<div align="center"> <img src="/pic/Mem.png" width="600" /> </div>
+
+<h4 id="数据传送指令">数据传送指令</h4>
+
+<p>最简单形式的数据传送指令为MOV类，这类指令把数据从源位置复制到目的位置，如下图所示：</p>
+<div align="center"> <img src="/pic/MOV.png" width="400" /> </div>
+
+<p>源操作数指定的值可以是立即数，也可以存储在寄存器或者内存中。目的操作数指定一个位置，要么是一个寄存器，要么是一个内存地址。 <strong>x86-64限制传送指令的两操作数不能都指向内存为止</strong>，如果想这样做需要先将源值加载到寄存器然后再写入目的位置。</p>
+
+<p>大多数情况中MOV指令只会更新目的操作数指定的那些寄存器字节或内存位置，唯一的例外是 <strong><code class="language-plaintext highlighter-rouge">movl</code>指令以寄存器作为目的时，它会把该寄存器的高位4字节设置为0。</strong>这是由于x86-64惯例为任何为寄存器生成32位值的指令都会把高位设置为0。</p>
+
+<p>另外，常规的<code class="language-plaintext highlighter-rouge">movq</code>指令以立即数为源操作数时，只能表示32位补码数字再将其扩展到64位的值，<strong><code class="language-plaintext highlighter-rouge">movabsq</code>指令能够以任意64位立即数值作为源操作数，并且只能以寄存器作为目的。</strong></p>
+
+<p>下面两个图记录的是另外两类数据移动指令，在将较小的源值复制到较大的目的时使用。</p>
+
+<div align="center"> <img src="/pic/MOVZ.png" width="500" /> </div>
+
+<div align="center"> <img src="/pic/MOVS.png" width="500" /> </div>
+
+<p>注意到并没有一条明确的指令把4字节源值扩展到8字节目的，因为这个可以依靠<code class="language-plaintext highlighter-rouge">movl</code>指令实现。</p>
+
+<p>例子：
+|    |    |
+| – | – |
+| <code class="language-plaintext highlighter-rouge">movabsq $0x0011223344556677, %rax</code> | %rax = 0x0011223344556677 |
+| <code class="language-plaintext highlighter-rouge">movb $-1, %al</code>  | %rax = 0x00112233445566FF |
+| <code class="language-plaintext highlighter-rouge">movw $-1, %ax</code>  | %rax = 0x001122334455FFFF |
+| <code class="language-plaintext highlighter-rouge">movl $-1, %eax</code> | %rax = 0x00000000FFFFFFFF |
+| <code class="language-plaintext highlighter-rouge">movq $-1, %rax</code> | %rax = 0xFFFFFFFFFFFFFFFF |</p>
+
+<p>反例：
+|       |       |
+| –    | –    |
+| <code class="language-plaintext highlighter-rouge">movb $0xF, (%ebx)</code>   | <strong>内存引用要用4字节寄存器</strong>  |
+| <code class="language-plaintext highlighter-rouge">movl %rax, (%rsp)</code>   | <code class="language-plaintext highlighter-rouge">movl</code>改为<code class="language-plaintext highlighter-rouge">movq</code>，<strong>MOV指令以源操作数字长为准</strong> |
+| <code class="language-plaintext highlighter-rouge">movb (%rax), 4(%rsp)</code>| <strong>两操作数不能同时为内存引用</strong> |
+| <code class="language-plaintext highlighter-rouge">movb %al,  %sl</code>      | 不存在%sl这个寄存器 |
+| <code class="language-plaintext highlighter-rouge">movb %rax, $0x123</code>   | 立即数不能作为目的地址，去掉$是可以的 |
+| <code class="language-plaintext highlighter-rouge">movb %eax, %rdx</code>     | 从小到大需要扩展 |
+| <code class="language-plaintext highlighter-rouge">movb %si, 8(%rbp)</code>   | <code class="language-plaintext highlighter-rouge">movb</code>改为<code class="language-plaintext highlighter-rouge">movw</code> |</p>
+
+<p>注释：</p>
+<ol>
+  <li>从小字长复制到大字长寄存器或内存都需要扩展；</li>
+  <li>MOV指令一定确保能将源操作数完整地传送；</li>
+  <li>从大字长类型内存复制到小字长内存需要先利用寄存器存值，再用寄存器的低位传递到小字长类型的内存中；
+例子：
+    <ol>
+      <li><code class="language-plaintext highlighter-rouge">int *sp, char *dp, *dp = (char) *sp</code>
+        <pre><code class="language-ams">  movl    (%rdi), %eax
+  movb    %al, (%rsi)
+</code></pre>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">char *sp, int *dp, *dp = (int) *sp</code>
+        <pre><code class="language-ams">  movsbl    (%rdi), %eax
+  movl    %eax, (%rsi)
+</code></pre>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<h4 id="压入和弹出栈数据">压入和弹出栈数据</h4>
+
+<p>栈遵循后进先出的原则，弹出的值永远是最近被压入而且仍然在栈中的值。栈可以实现为一个数组，总是从数组的一端插入和删除元素，称为栈顶。</p>
+
+<p>在x86-64中栈存放在内存的某个区域，如下图所示，栈向下增长。对栈可以进行两个操作：</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">pushq %rbp</code>指令首先将栈指针减8，然后将值写入新的栈顶位置，等价于
+    <pre><code class="language-ams"> subq    $8, %rsp
+ movq    %rbp, (%rsp)
+</code></pre>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">popq</code>指令首先从栈顶位置读出数据，再将栈指针加8，等价于
+    <pre><code class="language-ams"> movq    (%rsp), %rax
+ addq    $8, %rsp
+</code></pre>
+  </li>
+</ol>
+
+<div align="center"> <img src="/pic/PushPop.png" width="500" /> </div>
+
+<div align="center"> <img src="/pic/StackOp.png" width="500" /> </div>
+
+<h3 id="算术和逻辑操作">算术和逻辑操作</h3>
+
+<p>操作指令主要分为四组：加载有效地址、一元操作、二元操作和移位，如下图所示：</p>
+
+<div align="center"> <img src="/pic/amsArith.png" width="400" /> </div>
+
+<h4 id="加载有效地址">加载有效地址</h4>
+
+<p>加载有效地址(load effective address)指令<code class="language-plaintext highlighter-rouge">leaq</code>实际上是<code class="language-plaintext highlighter-rouge">movq</code>指令的变形，它的指令形式是从内存读数据到寄存器，但 <strong>实际上它根本没有引用该内存，而是将有效地址写入到目的操作数</strong>。另外，他也可以简洁地表述普通的算术操作，例如，如果寄存器\%rdx存有 $x$，那么<code class="language-plaintext highlighter-rouge">leaq 7(%rdx,%rdx,4), %rax</code>就是将寄存器 \%rax的值设置为 $5x+7$。</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">leaq</code>指令的目的操作数必须是一个寄存器</strong>，下面将<code class="language-plaintext highlighter-rouge">movq,leaq</code>与数组进行类比：</p>
+
+<p><code class="language-plaintext highlighter-rouge">movq</code>相当于<code class="language-plaintext highlighter-rouge">array[i]</code>，<code class="language-plaintext highlighter-rouge">movq (%rdi,%rsi,8), %rbp</code>是将源内存地址的值传给\%rbp；
+<code class="language-plaintext highlighter-rouge">leaq</code>相当于<code class="language-plaintext highlighter-rouge">&amp;array[i]</code>，<code class="language-plaintext highlighter-rouge">leaq (%rdi,%rsi,8), %rbp</code>是将源内存地址直接传给\%rbp。</p>
+
+<h4 id="一元和二元操作">一元和二元操作</h4>
+
+<p>二元操作的第二个操作数既是源又是目的，类似于<code class="language-plaintext highlighter-rouge">x-=y</code>，第一个操作数可以是立即数、寄存器或者内存，第二个操作数可以是寄存器或者内存， <strong>当第二个操作数为内存时，处理器必须从内存读出值，执行操作，再把结果写回内存。</strong></p>
+
+<h4 id="移位操作">移位操作</h4>
+
+<p><strong>移位量可以是一个立即数，或者放在单字节寄存器\%cl中。</strong>(这些指令很特别，因为只允许以这个特定的寄存器为操作数。)</p>
+
+<p>原则上来说1个字节的移位量使得移位量的编码范围可以达到 $2^8-1=255$，<strong>移位操作对 $w$ 位长的数据值进行操作，移位量是由\%cl寄存器的低m位决定的，这里 $2^m=w$，高位会被忽略。</strong></p>
+
+<p>例如，当寄存器\%cl的十六进制的值为0xFF时，指令<code class="language-plaintext highlighter-rouge">salb</code>会左移7位，而指令<code class="language-plaintext highlighter-rouge">salw</code>会左移15位，<code class="language-plaintext highlighter-rouge">salq</code>会左移63位。</p>
+
+<p>移位操作的目的操作数可以是一个寄存器或是一个内存位置。</p>
+
+<h4 id="特殊的算术操作">特殊的算术操作</h4>
+
+<p>两个64位有符号或无符号整数相乘需要128位来表示，Intel把16字节的数称为 <strong>八字(oct word)</strong>，下图为支持两个64位数字的全128位乘积和除法的指令：</p>
+
+<div align="center"> <img src="/pic/64ArithOp.png" width="500" /> </div>
+
+<p><code class="language-plaintext highlighter-rouge">imulq</code>指令有两种不同形式:</p>
+<ol>
+  <li>一种是前面的双操作数乘法指令，实现了前一章的操作 $\times_{64}^u, \times_{64}^t$；</li>
+  <li>另外一种是上图中的单操作数乘法指令—-一个是无符号数乘法(<code class="language-plaintext highlighter-rouge">mulq</code>)，而另一个是补码乘法(<code class="language-plaintext highlighter-rouge">imulq</code>)，<strong>这两种指令都要求都要求一个参数必须在寄存器\%rax中，而另一个作为指令的源操作数给出，最后乘积存放在寄存器\%rdx(高64位)和\%rax(低64位)中。</strong> 例：
+    <pre><code class="language-C">typedef unsigned __int128 uint128_t;
+void store_uprod(uint128_t *dest, uint64_t x, uint64_t y){
+ *dest = x * (uint128_t) y;
+}
+</code></pre>
+  </li>
+</ol>
+
+<p>GCC生成的汇编代码如下：</p>
+<pre><code class="language-asm">% dest in %rdi, x in %rsi, y in %rdx
+store_uprod:
+    movq    %rsi, %rax          Copy x to multiplicand
+    mulq    %rdx                Multiply by y
+    movq    %rax, (%rdi)        Store lower 8 bytes at dest
+    movq    %rdx, 8(%rdi)       Store upper 8 bytes at dest+8
+</code></pre>
+<p><strong>因为我们针对的是小端法机器，所以高位字节存储在大地址。</strong></p>
+
+<p>类似的，有符号除法指令<code class="language-plaintext highlighter-rouge">idivl</code>将寄存器\%rdx(高64位)和\%rax(低64位)中的128位数作为被除数，而 <strong>除数作为指令的操作数给出，指令将商存在寄存器\%rax中，将余数存在寄存器\%rdx中。</strong></p>
+
+<p>对于大多数64位除法应用来说，被除数也常常是64位的值，这个时候值应该存在\%rax中，<strong>\%rdx的位应该设置为0(无符号运算)或者\%rax的符号位(有符号运算)，这个操作可以用<code class="language-plaintext highlighter-rouge">cqto</code>完成。</strong> 以有符号64位整数除法运算为例：</p>
+
+<pre><code class="language-C">void remdiv(long x, long y, long *qp, long *rp){
+    long q = x/y;
+    long r = x%y;
+    *qp = q;
+    *rp = r;
+}
+</code></pre>
+
+<p>GCC编译得到如下汇编代码：</p>
+
+<pre><code class="language-asm">% x in %rdi, y in %rsi, qp in %rdx, rp in %rcx
+remdiv:
+    movq    %rdx, %r8
+    movq    %rdi, %rax
+    cqto
+    idivq   %rsi
+    movq    %rax, (%r8)
+    movq    %rdx, (%rcx)
+    ret
+</code></pre>
+
+<p>上述代码中，必须先把qp保存到另一个寄存器中，因为除法操作需要使用。</p>
+
+<p>再考虑无符号64位数的除法：</p>
+
+<pre><code class="language-C">void remdiv(unsigned long x, unsigned long y,
+            unsigned long *qp, unsigned long *rp){
+    unsigned long q = x/y;
+    unsigned long r = x%y;
+    *qp = q;
+    *rp = r;
+}
+</code></pre>
+
+<p>GCC编译得到如下汇编代码：</p>
+
+<pre><code class="language-asm">% x in %rdi, y in %rsi, qp in %rdx, rp in %rcx
+remdiv:
+    movq    %rdx, %r8
+    movq    %rdi, %rax
+    movl    $0, %edx
+    divq   %rsi
+    movq    %rax, (%r8)
+    movq    %rdx, (%rcx)
+    ret
+</code></pre>
+
+
+  
+    
+      <div class="post-tags-section">
+  <i class="post-tags-icon fas fa-tags"></i>
+  <ul class="post-tags"><li>
+        <a class="post-tag" href="/tags/#csapp">csapp</a></li><li>
+        <a class="post-tag" href="/tags/#汇编">汇编</a></li></ul>
+</div>
+
+  
+
+  
+</article>
+
+
+<aside class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="/2023/11/24/CSAPP-hm1/">
+          CSAPP-1:家庭作业以及Data Lab要点
+          <small><time datetime="2023-11-24T14:23:00+08:00">24 Nov 2023</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2023/11/24/CSAPP-1/">
+          CSAPP-1:信息的表示和处理
+          <small><time datetime="2023-11-24T14:23:00+08:00">24 Nov 2023</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2023/11/04/A-good-start/">
+          A Good start
+          <small><time datetime="2023-11-04T21:43:00+08:00">04 Nov 2023</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+</main>
+
+<footer class="footer"><small>
+    &copy; 2023 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
+  </small>
+</footer>
+</div>
+      <div class="sidebar-right pure-u-1 pure-u-md-1-4">
+<div  class="toc-wrapper">
+  <h2 class="toc-title">Table of Contents</h2>
+    <nav class="toc-nav">
+      <ul class="toc">
+  <li><a href="#程序编码概论">程序编码概论</a>
+    <ul>
+      <li><a href="#术语介绍">术语介绍</a></li>
+      <li><a href="#代码示例">代码示例</a></li>
+      <li><a href="#访问信息">访问信息</a></li>
+      <li><a href="#算术和逻辑操作">算术和逻辑操作</a></li>
+    </ul>
+  </li>
+</ul>
+
+  </nav>
+</div>
+
+</div>
+    </div>
+
+    <script async src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  function strip(str, remove) {
+    while (str.length > 0 && remove.indexOf(str.charAt(0)) != -1) {
+      str = str.substr(1);
+    }
+    while (str.length > 0 && remove.indexOf(str.charAt(str.length - 1)) != -1) {
+      str = str.substr(0, str.length - 1);
+    }
+    return str;
+  }
+
+  function scroll() {
+    console.log('scroll');
+    window.scrollTo({
+      left: 0, 
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+    sessionStorage.removeItem('forceCheckScroll');
+  }
+
+  const forceCheckScroll = sessionStorage.getItem('forceCheckScroll') === 'true';
+  const checkScroll = strip(window.location.pathname, '/') !== strip('', '/');
+
+  if (forceCheckScroll || checkScroll) {
+    const maxWidth = "(max-width: 48rem)";
+    const result = window.matchMedia(maxWidth);
+    if (result.matches) {
+      scroll();
+    } else {
+      result.addListener((match) => {
+        if (match.media == maxWidth) {
+          if (match.matches) {
+            scroll();
+          }
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>
