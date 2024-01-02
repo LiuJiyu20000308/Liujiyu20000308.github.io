@@ -7,22 +7,22 @@
   <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
   <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>A Good start | Liujiyu’s blog</title>
+<title>CSAPP-2-3:程序的机器级运行过程 | Liujiyu’s blog</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="A Good start" />
+<meta property="og:title" content="CSAPP-2-3:程序的机器级运行过程" />
 <meta name="author" content="liujiyu" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="之后会在这个主页上更新自己学习的总结。" />
-<meta property="og:description" content="之后会在这个主页上更新自己学习的总结。" />
-<link rel="canonical" href="http://localhost:4000/2023/11/04/A-good-start/" />
-<meta property="og:url" content="http://localhost:4000/2023/11/04/A-good-start/" />
+<meta name="description" content="程序的机器级表示" />
+<meta property="og:description" content="程序的机器级表示" />
+<link rel="canonical" href="http://localhost:4000/2024/01/02/CSAPP-2-3/" />
+<meta property="og:url" content="http://localhost:4000/2024/01/02/CSAPP-2-3/" />
 <meta property="og:site_name" content="Liujiyu’s blog" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2023-11-04T21:43:00+08:00" />
+<meta property="article:published_time" content="2024-01-02T16:23:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="A Good start" />
+<meta property="twitter:title" content="CSAPP-2-3:程序的机器级运行过程" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2023-11-04T21:43:00+08:00","datePublished":"2023-11-04T21:43:00+08:00","description":"之后会在这个主页上更新自己学习的总结。","headline":"A Good start","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/11/04/A-good-start/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2023/11/04/A-good-start/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-01-02T16:23:00+08:00","datePublished":"2024-01-02T16:23:00+08:00","description":"程序的机器级表示","headline":"CSAPP-2-3:程序的机器级运行过程","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/01/02/CSAPP-2-3/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/01/02/CSAPP-2-3/"}</script>
 <!-- End Jekyll SEO tag -->
 <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
 <script type="text/x-mathjax-config">
@@ -75,10 +75,12 @@
 
       <div class="content pure-u-1 pure-u-md-1-2"><main>
   <article class="post">
-  <h1 class="post-title">A Good start</h1>
-  <div class="post-meta"><time datetime="2023-11-04T21:43:00+08:00" itemprop="datePublished">4 Nov 2023</time></div>
+  <h1 class="post-title">CSAPP-2-3:程序的机器级运行过程</h1>
+  <div class="post-meta"><time datetime="2024-01-02T16:23:00+08:00" itemprop="datePublished">2 Jan 2024</time></div>
 
-  <p>之后会在这个主页上更新自己学习的总结。</p>
+  <h1 id="程序的机器级表示">程序的机器级表示</h1>
+
+<h2 id="过程">过程</h2>
 
 
   
@@ -86,7 +88,8 @@
       <div class="post-tags-section">
   <i class="post-tags-icon fas fa-tags"></i>
   <ul class="post-tags"><li>
-        <a class="post-tag" href="/tags/#life">life</a></li></ul>
+        <a class="post-tag" href="/tags/#csapp">csapp</a></li><li>
+        <a class="post-tag" href="/tags/#汇编">汇编</a></li></ul>
 </div>
 
   
@@ -100,13 +103,6 @@
   <ul class="related-posts">
     
       <li>
-        <a href="/2024/01/02/CSAPP-2-3/">
-          CSAPP-2-3:程序的机器级运行过程
-          <small><time datetime="2024-01-02T16:23:00+08:00">02 Jan 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
         <a href="/2024/01/02/CSAPP-2-2/">
           CSAPP-2-2:程序的机器级运行控制
           <small><time datetime="2024-01-02T10:23:00+08:00">02 Jan 2024</time></small>
@@ -117,6 +113,13 @@
         <a href="/2023/12/07/CSAPP-2-1/">
           CSAPP-2-1:程序的机器级表示
           <small><time datetime="2023-12-07T16:23:00+08:00">07 Dec 2023</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2023/11/24/CSAPP-hm1/">
+          CSAPP-1:家庭作业以及Data Lab要点
+          <small><time datetime="2023-11-24T14:23:00+08:00">24 Nov 2023</time></small>
         </a>
       </li>
     
@@ -136,7 +139,9 @@
 <div  class="toc-wrapper">
   <h2 class="toc-title">Table of Contents</h2>
     <nav class="toc-nav">
-      
+      <ul class="toc">
+  <li><a href="#过程">过程</a></li>
+</ul>
 
   </nav>
 </div>

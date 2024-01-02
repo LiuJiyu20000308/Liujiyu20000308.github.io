@@ -7,22 +7,22 @@
   <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
   <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>CSAPP-2:程序的机器级表示 | Liujiyu’s blog</title>
+<title>CSAPP-2-1:程序的机器级表示 | Liujiyu’s blog</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="CSAPP-2:程序的机器级表示" />
+<meta property="og:title" content="CSAPP-2-1:程序的机器级表示" />
 <meta name="author" content="liujiyu" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="程序的机器级表示" />
 <meta property="og:description" content="程序的机器级表示" />
-<link rel="canonical" href="http://localhost:4000/2023/12/07/CSAPP-2/" />
-<meta property="og:url" content="http://localhost:4000/2023/12/07/CSAPP-2/" />
+<link rel="canonical" href="http://localhost:4000/2023/12/07/CSAPP-2-1/" />
+<meta property="og:url" content="http://localhost:4000/2023/12/07/CSAPP-2-1/" />
 <meta property="og:site_name" content="Liujiyu’s blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2023-12-07T16:23:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="CSAPP-2:程序的机器级表示" />
+<meta property="twitter:title" content="CSAPP-2-1:程序的机器级表示" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2023-12-07T16:23:00+08:00","datePublished":"2023-12-07T16:23:00+08:00","description":"程序的机器级表示","headline":"CSAPP-2:程序的机器级表示","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/12/07/CSAPP-2/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2023/12/07/CSAPP-2/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2023-12-07T16:23:00+08:00","datePublished":"2023-12-07T16:23:00+08:00","description":"程序的机器级表示","headline":"CSAPP-2-1:程序的机器级表示","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/12/07/CSAPP-2-1/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2023/12/07/CSAPP-2-1/"}</script>
 <!-- End Jekyll SEO tag -->
 <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
 <script type="text/x-mathjax-config">
@@ -75,7 +75,7 @@
 
       <div class="content pure-u-1 pure-u-md-1-2"><main>
   <article class="post">
-  <h1 class="post-title">CSAPP-2:程序的机器级表示</h1>
+  <h1 class="post-title">CSAPP-2-1:程序的机器级表示</h1>
   <div class="post-meta"><time datetime="2023-12-07T16:23:00+08:00" itemprop="datePublished">7 Dec 2023</time></div>
 
   <h1 id="程序的机器级表示">程序的机器级表示</h1>
@@ -120,7 +120,7 @@
 
 <p>一条机器指令只执行一个非常基本的操作，编译器必须产生这些指令的序列，从而实现程序结构。</p>
 
-<h3 id="代码示例">代码示例</h3>
+<h4 id="代码示例">代码示例</h4>
 
 <p>假设我们写了一个C语言代码mstore.c</p>
 
@@ -167,7 +167,7 @@ void multstore(long x, long y, long *dest) {
 
 <p>链接器的任务之一就是为函数调用找到匹配的函数的可执行代码的位置，将代码的地址移到不同的地址范围中并在callq指令调用中填入需要使用的地址；另外，它也会插入一些nop指令使得函数代码变为16字节，使得就存储器系统性能而言，能更好地放置下一个代码块。</p>
 
-<h4 id="数据格式">数据格式</h4>
+<h2 id="数据格式">数据格式</h2>
 
 <p>由于是从16位体系结构扩展到现在的，Intel用术语 <strong>字(word)</strong>来表示16位(2字节)数据类型，称32位为 <strong>双字(double words)</strong>，称64位为 <strong>四字(quad words)</strong>，下图给出了语言基本数据类型对应的x86-64表示。</p>
 
@@ -232,11 +232,11 @@ void multstore(long x, long y, long *dest) {
   </tbody>
 </table>
 
-<h3 id="访问信息">访问信息</h3>
+<h2 id="访问信息">访问信息</h2>
 
 <p>一个x86-64的CPU包含一组16个存储64位值的 <strong>通用目的寄存器</strong>，用于存储整数数据和指针，如下图所示。</p>
 
-<div align="center"> <img src="/pic/register.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/register.png" width="500" /> </div>
 
 <p>最初的8086中有8个16位的寄存器，即图中的%ax到%sp，它们的名字反映了不同的用途，分别是accumulate, base, counter, data, source index, destination index, base pointer, stack pointer.</p>
 
@@ -250,7 +250,7 @@ void multstore(long x, long y, long *dest) {
 
 <p>在常见的程序里，不同的寄存器扮演着不同的角色，有一组标准的变成规范控制着如何使用寄存器来管理栈、传递函数参数、从函数返回值以及存储局部和临时数据。</p>
 
-<h4 id="操作数指示符">操作数指示符</h4>
+<h3 id="操作数指示符">操作数指示符</h3>
 
 <p>大多数指令有一个或多个 <strong>操作数(operand)</strong>，指示出执行一个操作要使用的源数据值以及放置结果的目的为止。<strong>源数据值可以以常数形式给出，或是寄存器或内存中读出，结果可以存放在寄存器或者内存中。</strong>因此，操作数分为3种类型：</p>
 <ol>
@@ -261,12 +261,12 @@ void multstore(long x, long y, long *dest) {
 
 <p>如下图所示，有多种不同的寻址模式，允许不同形式的内存引用。其中最底部的 $Imm(r_b,r_i,s)$ 为最常用的形式，这里基址寄存器 $r_b$ 可以是任意寄存器，变址寄存器 $r_i$ 可以是除 \%rsp 外的任意寄存器，s必须为1、2、4或者8。<strong>有效地址被计算为</strong> $Imm+ R[r_b]+R[r_i]\cdot s$。</p>
 
-<div align="center"> <img src="/pic/Mem.png" width="600" /> </div>
+<div align="center"> <img src="/pic/CSAPP/Mem.png" width="600" /> </div>
 
-<h4 id="数据传送指令">数据传送指令</h4>
+<h3 id="数据传送指令">数据传送指令</h3>
 
 <p>最简单形式的数据传送指令为MOV类，这类指令把数据从源位置复制到目的位置，如下图所示：</p>
-<div align="center"> <img src="/pic/MOV.png" width="400" /> </div>
+<div align="center"> <img src="/pic/CSAPP/MOV.png" width="400" /> </div>
 
 <p>源操作数指定的值可以是立即数，也可以存储在寄存器或者内存中。目的操作数指定一个位置，要么是一个寄存器，要么是一个内存地址。 <strong>x86-64限制传送指令的两操作数不能都指向内存为止</strong>，如果想这样做需要先将源值加载到寄存器然后再写入目的位置。</p>
 
@@ -276,31 +276,85 @@ void multstore(long x, long y, long *dest) {
 
 <p>下面两个图记录的是另外两类数据移动指令，在将较小的源值复制到较大的目的时使用。</p>
 
-<div align="center"> <img src="/pic/MOVZ.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/MOVZ.png" width="500" /> </div>
 
-<div align="center"> <img src="/pic/MOVS.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/MOVS.png" width="500" /> </div>
 
 <p>注意到并没有一条明确的指令把4字节源值扩展到8字节目的，因为这个可以依靠<code class="language-plaintext highlighter-rouge">movl</code>指令实现。</p>
 
-<p>例子：
-|    |    |
-| – | – |
-| <code class="language-plaintext highlighter-rouge">movabsq $0x0011223344556677, %rax</code> | %rax = 0x0011223344556677 |
-| <code class="language-plaintext highlighter-rouge">movb $-1, %al</code>  | %rax = 0x00112233445566FF |
-| <code class="language-plaintext highlighter-rouge">movw $-1, %ax</code>  | %rax = 0x001122334455FFFF |
-| <code class="language-plaintext highlighter-rouge">movl $-1, %eax</code> | %rax = 0x00000000FFFFFFFF |
-| <code class="language-plaintext highlighter-rouge">movq $-1, %rax</code> | %rax = 0xFFFFFFFFFFFFFFFF |</p>
+<p>例子：</p>
 
-<p>反例：
-|       |       |
-| –    | –    |
-| <code class="language-plaintext highlighter-rouge">movb $0xF, (%ebx)</code>   | <strong>内存引用要用4字节寄存器</strong>  |
-| <code class="language-plaintext highlighter-rouge">movl %rax, (%rsp)</code>   | <code class="language-plaintext highlighter-rouge">movl</code>改为<code class="language-plaintext highlighter-rouge">movq</code>，<strong>MOV指令以源操作数字长为准</strong> |
-| <code class="language-plaintext highlighter-rouge">movb (%rax), 4(%rsp)</code>| <strong>两操作数不能同时为内存引用</strong> |
-| <code class="language-plaintext highlighter-rouge">movb %al,  %sl</code>      | 不存在%sl这个寄存器 |
-| <code class="language-plaintext highlighter-rouge">movb %rax, $0x123</code>   | 立即数不能作为目的地址，去掉$是可以的 |
-| <code class="language-plaintext highlighter-rouge">movb %eax, %rdx</code>     | 从小到大需要扩展 |
-| <code class="language-plaintext highlighter-rouge">movb %si, 8(%rbp)</code>   | <code class="language-plaintext highlighter-rouge">movb</code>改为<code class="language-plaintext highlighter-rouge">movw</code> |</p>
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movabsq $0x0011223344556677, %rax</code></td>
+      <td>%rax = 0x0011223344556677</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movb $-1, %al</code></td>
+      <td>%rax = 0x00112233445566FF</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movw $-1, %ax</code></td>
+      <td>%rax = 0x001122334455FFFF</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movl $-1, %eax</code></td>
+      <td>%rax = 0x00000000FFFFFFFF</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movq $-1, %rax</code></td>
+      <td>%rax = 0xFFFFFFFFFFFFFFFF</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>反例：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movb $0xF, (%ebx)</code></td>
+      <td><strong>内存引用要用4字寄存器</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movl %rax, (%rsp)</code></td>
+      <td><code class="language-plaintext highlighter-rouge">movl</code>改为<code class="language-plaintext highlighter-rouge">movq</code>，<strong>MOV指令以源操作数字长为准</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movw (%rax), 4(%rsp)</code></td>
+      <td><strong>两操作数不能同时为内存引用</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movb %al,  %sl</code></td>
+      <td>不存在%sl这个寄存器</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movq %rax, $0x123</code></td>
+      <td>立即数不能作为目的地址，去掉$是可以的</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movl %eax, %rdx</code></td>
+      <td><strong>两寄存器的大小必须一致</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movb %si, 8(%rbp)</code></td>
+      <td><code class="language-plaintext highlighter-rouge">movb</code>改为<code class="language-plaintext highlighter-rouge">movw</code></td>
+    </tr>
+  </tbody>
+</table>
 
 <p>注释：</p>
 <ol>
@@ -323,7 +377,7 @@ void multstore(long x, long y, long *dest) {
   </li>
 </ol>
 
-<h4 id="压入和弹出栈数据">压入和弹出栈数据</h4>
+<h3 id="压入和弹出栈数据">压入和弹出栈数据</h3>
 
 <p>栈遵循后进先出的原则，弹出的值永远是最近被压入而且仍然在栈中的值。栈可以实现为一个数组，总是从数组的一端插入和删除元素，称为栈顶。</p>
 
@@ -341,17 +395,17 @@ void multstore(long x, long y, long *dest) {
   </li>
 </ol>
 
-<div align="center"> <img src="/pic/PushPop.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/PushPop.png" width="500" /> </div>
 
-<div align="center"> <img src="/pic/StackOp.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/StackOp.png" width="500" /> </div>
 
-<h3 id="算术和逻辑操作">算术和逻辑操作</h3>
+<h2 id="算术和逻辑操作">算术和逻辑操作</h2>
 
 <p>操作指令主要分为四组：加载有效地址、一元操作、二元操作和移位，如下图所示：</p>
 
-<div align="center"> <img src="/pic/amsArith.png" width="400" /> </div>
+<div align="center"> <img src="/pic/CSAPP/amsArith.png" width="400" /> </div>
 
-<h4 id="加载有效地址">加载有效地址</h4>
+<h3 id="加载有效地址">加载有效地址</h3>
 
 <p>加载有效地址(load effective address)指令<code class="language-plaintext highlighter-rouge">leaq</code>实际上是<code class="language-plaintext highlighter-rouge">movq</code>指令的变形，它的指令形式是从内存读数据到寄存器，但 <strong>实际上它根本没有引用该内存，而是将有效地址写入到目的操作数</strong>。另外，他也可以简洁地表述普通的算术操作，例如，如果寄存器\%rdx存有 $x$，那么<code class="language-plaintext highlighter-rouge">leaq 7(%rdx,%rdx,4), %rax</code>就是将寄存器 \%rax的值设置为 $5x+7$。</p>
 
@@ -360,11 +414,11 @@ void multstore(long x, long y, long *dest) {
 <p><code class="language-plaintext highlighter-rouge">movq</code>相当于<code class="language-plaintext highlighter-rouge">array[i]</code>，<code class="language-plaintext highlighter-rouge">movq (%rdi,%rsi,8), %rbp</code>是将源内存地址的值传给\%rbp；
 <code class="language-plaintext highlighter-rouge">leaq</code>相当于<code class="language-plaintext highlighter-rouge">&amp;array[i]</code>，<code class="language-plaintext highlighter-rouge">leaq (%rdi,%rsi,8), %rbp</code>是将源内存地址直接传给\%rbp。</p>
 
-<h4 id="一元和二元操作">一元和二元操作</h4>
+<h3 id="一元和二元操作">一元和二元操作</h3>
 
 <p>二元操作的第二个操作数既是源又是目的，类似于<code class="language-plaintext highlighter-rouge">x-=y</code>，第一个操作数可以是立即数、寄存器或者内存，第二个操作数可以是寄存器或者内存， <strong>当第二个操作数为内存时，处理器必须从内存读出值，执行操作，再把结果写回内存。</strong></p>
 
-<h4 id="移位操作">移位操作</h4>
+<h3 id="移位操作">移位操作</h3>
 
 <p><strong>移位量可以是一个立即数，或者放在单字节寄存器\%cl中。</strong>(这些指令很特别，因为只允许以这个特定的寄存器为操作数。)</p>
 
@@ -374,11 +428,11 @@ void multstore(long x, long y, long *dest) {
 
 <p>移位操作的目的操作数可以是一个寄存器或是一个内存位置。</p>
 
-<h4 id="特殊的算术操作">特殊的算术操作</h4>
+<h3 id="特殊的算术操作">特殊的算术操作</h3>
 
 <p>两个64位有符号或无符号整数相乘需要128位来表示，Intel把16字节的数称为 <strong>八字(oct word)</strong>，下图为支持两个64位数字的全128位乘积和除法的指令：</p>
 
-<div align="center"> <img src="/pic/64ArithOp.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/64ArithOp.png" width="500" /> </div>
 
 <p><code class="language-plaintext highlighter-rouge">imulq</code>指令有两种不同形式:</p>
 <ol>
@@ -474,23 +528,23 @@ remdiv:
   <ul class="related-posts">
     
       <li>
+        <a href="/2024/01/02/CSAPP-2-3/">
+          CSAPP-2-3:程序的机器级运行过程
+          <small><time datetime="2024-01-02T16:23:00+08:00">02 Jan 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/01/02/CSAPP-2-2/">
+          CSAPP-2-2:程序的机器级运行控制
+          <small><time datetime="2024-01-02T10:23:00+08:00">02 Jan 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
         <a href="/2023/11/24/CSAPP-hm1/">
           CSAPP-1:家庭作业以及Data Lab要点
           <small><time datetime="2023-11-24T14:23:00+08:00">24 Nov 2023</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2023/11/24/CSAPP-1/">
-          CSAPP-1:信息的表示和处理
-          <small><time datetime="2023-11-24T14:23:00+08:00">24 Nov 2023</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2023/11/04/A-good-start/">
-          A Good start
-          <small><time datetime="2023-11-04T21:43:00+08:00">04 Nov 2023</time></small>
         </a>
       </li>
     
@@ -501,7 +555,7 @@ remdiv:
 </main>
 
 <footer class="footer"><small>
-    &copy; 2023 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    &copy; 2023&nbsp;-&nbsp;2024 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
     Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
   </small>
 </footer>
@@ -514,9 +568,22 @@ remdiv:
   <li><a href="#程序编码概论">程序编码概论</a>
     <ul>
       <li><a href="#术语介绍">术语介绍</a></li>
-      <li><a href="#代码示例">代码示例</a></li>
-      <li><a href="#访问信息">访问信息</a></li>
-      <li><a href="#算术和逻辑操作">算术和逻辑操作</a></li>
+    </ul>
+  </li>
+  <li><a href="#数据格式">数据格式</a></li>
+  <li><a href="#访问信息">访问信息</a>
+    <ul>
+      <li><a href="#操作数指示符">操作数指示符</a></li>
+      <li><a href="#数据传送指令">数据传送指令</a></li>
+      <li><a href="#压入和弹出栈数据">压入和弹出栈数据</a></li>
+    </ul>
+  </li>
+  <li><a href="#算术和逻辑操作">算术和逻辑操作</a>
+    <ul>
+      <li><a href="#加载有效地址">加载有效地址</a></li>
+      <li><a href="#一元和二元操作">一元和二元操作</a></li>
+      <li><a href="#移位操作">移位操作</a></li>
+      <li><a href="#特殊的算术操作">特殊的算术操作</a></li>
     </ul>
   </li>
 </ul>

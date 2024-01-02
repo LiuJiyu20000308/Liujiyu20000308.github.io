@@ -88,7 +88,7 @@
 
 <p>每台计算机都有一个<strong>字长(word size)</strong>，指明指针数据的标准大小(normal size)，对于一个字长为 $w$ 的机器而言，虚拟地址的范围为 $0\sim 2^w-1$，程序最多访问 $2^w$ 个字节。</p>
 
-<div align="center"> <img src="/pic/WordSize.png" width="300" /> </div>
+<div align="center"> <img src="/pic/CSAPP/WordSize.png" width="300" /> </div>
 <center><p>基本C数据类型的典型大小(以字节为单位)</p></center>
 
 <h3 id="寻址和字节顺序">寻址和字节顺序</h3>
@@ -99,7 +99,7 @@
 </ol>
 
 <p>假设变量 $x$ 类型为int，位于地址0x100处，十六进制的值为0x01234567，下图表示两种方法排列表示的规则：</p>
-<div align="center"> <img src="/pic/LHEndian.png" width="600" /> </div>
+<div align="center"> <img src="/pic/CSAPP/LHEndian.png" width="600" /> </div>
 
 <p>对于大多数情况下，及其所使用的字节顺序是完全不可见的，但在一些情况下，字节顺序会成为问题：</p>
 <ol>
@@ -141,7 +141,7 @@
     <p>在不同机器上得到的结果并不相同，如下图所示：</p>
   </li>
 </ol>
-<div align="center"> <img src="/pic/Show_Bytes.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/Show_Bytes.png" width="500" /> </div>
 <p>这里注意每输出一次都是两位十六进制数，因为一个字节是8Bit，对应两位十六进制数。</p>
 
 <h3 id="字符串表示">字符串表示</h3>
@@ -158,7 +158,7 @@
   <li>布尔运算 ^ 对应于逻辑运算异或(Exlusive or)，在命题逻辑中用符号用 $\oplus$ 表示。
 具体规则如下图所示：</li>
 </ol>
-<div align="center"> <img src="/pic/Boolean.png" width="400" /> </div>
+<div align="center"> <img src="/pic/CSAPP/Boolean.png" width="400" /> </div>
 
 <p>以上布尔运算可以扩展到<strong>位向量</strong>的运算，其中位向量就是固定长度为w，由0和1组成的串，它一个很有用的应用就是表示有限集合。</p>
 
@@ -245,7 +245,7 @@
 <p>当 $u&gt;\text{TMax}_w$ 时，$u$的最高位有效数字为1，转化为补码表示就相当于最高位权重从+1变为-1，因此少了 $2^w$，反之同理，越靠近0的负数映射为越大的无符号数。</p>
 
 <p>另外，可以证明U2T和T2U两个函数都是双射，两个函数的行为如下图所示：</p>
-<div align="center"> <img src="/pic/U2T_T2U.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/U2T_T2U.png" width="500" /> </div>
 
 <p>在C语言中允许两者之间相互转换，主要有四种情况：</p>
 <ol>
@@ -622,7 +622,7 @@ x = (x + bias) &gt;&gt; 4;
 
 <p>在单精度浮点格式中，$s$,exp,frac字段分别为1位，$k=8$位，$n=23$位；在双精度浮点格式中，$s$,exp,frac字段分别为1位，$k=11$位，$n=52$位。</p>
 
-<div align="center"> <img src="/pic/IEEE.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/IEEE.png" width="500" /> </div>
 
 <p>给定位表示，根据exp的值，被编码的值分为三种情况：</p>
 <ol>
@@ -650,12 +650,12 @@ x = (x + bias) &gt;&gt; 4;
 </ol>
 
 <p>下图是三种情况的位表示图例：</p>
-<div align="center"> <img src="/pic/IEEEcate.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/IEEEcate.png" width="500" /> </div>
 
 <h4 id="数字示例">数字示例</h4>
 
 <p>假如我们有8位格式，阶码位 $k=4$ 位，尾数位 $n=3$ 位，则偏置量为 $2^{4-1}-1=7$，部分可能结果如下：</p>
-<div align="center"> <img src="/pic/IEEEexample.png" width="700" /> </div>
+<div align="center"> <img src="/pic/CSAPP/IEEEexample.png" width="700" /> </div>
 
 <p>可以观察到<strong>最大非规格数和最小规格化数之间的平滑转变</strong>，这归功于我们对<strong>非规格化数$E$的定义</strong>。另外，阶数越高，两个数之间的间距越大。</p>
 
@@ -774,23 +774,23 @@ x = (x + bias) &gt;&gt; 4;
   <ul class="related-posts">
     
       <li>
-        <a href="/2023/12/07/CSAPP-2/">
-          CSAPP-2:程序的机器级表示
+        <a href="/2024/01/02/CSAPP-2-3/">
+          CSAPP-2-3:程序的机器级运行过程
+          <small><time datetime="2024-01-02T16:23:00+08:00">02 Jan 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/01/02/CSAPP-2-2/">
+          CSAPP-2-2:程序的机器级运行控制
+          <small><time datetime="2024-01-02T10:23:00+08:00">02 Jan 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2023/12/07/CSAPP-2-1/">
+          CSAPP-2-1:程序的机器级表示
           <small><time datetime="2023-12-07T16:23:00+08:00">07 Dec 2023</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2023/11/24/CSAPP-hm1/">
-          CSAPP-1:家庭作业以及Data Lab要点
-          <small><time datetime="2023-11-24T14:23:00+08:00">24 Nov 2023</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2023/11/04/A-good-start/">
-          A Good start
-          <small><time datetime="2023-11-04T21:43:00+08:00">04 Nov 2023</time></small>
         </a>
       </li>
     
@@ -801,7 +801,7 @@ x = (x + bias) &gt;&gt; 4;
 </main>
 
 <footer class="footer"><small>
-    &copy; 2023 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    &copy; 2023&nbsp;-&nbsp;2024 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
     Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
   </small>
 </footer>

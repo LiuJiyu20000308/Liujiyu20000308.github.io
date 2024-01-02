@@ -1,4 +1,306 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-12-09T00:00:59+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">CSAPP-2:程序的机器级表示</title><link href="http://localhost:4000/2023/12/07/CSAPP-2/" rel="alternate" type="text/html" title="CSAPP-2:程序的机器级表示" /><published>2023-12-07T16:23:00+08:00</published><updated>2023-12-07T16:23:00+08:00</updated><id>http://localhost:4000/2023/12/07/CSAPP-2</id><content type="html" xml:base="http://localhost:4000/2023/12/07/CSAPP-2/"><![CDATA[<h1 id="程序的机器级表示">程序的机器级表示</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-01-02T19:53:14+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">CSAPP-2-3:程序的机器级运行过程</title><link href="http://localhost:4000/2024/01/02/CSAPP-2-3/" rel="alternate" type="text/html" title="CSAPP-2-3:程序的机器级运行过程" /><published>2024-01-02T16:23:00+08:00</published><updated>2024-01-02T16:23:00+08:00</updated><id>http://localhost:4000/2024/01/02/CSAPP-2-3</id><content type="html" xml:base="http://localhost:4000/2024/01/02/CSAPP-2-3/"><![CDATA[<h1 id="程序的机器级表示">程序的机器级表示</h1>
+
+<h2 id="过程">过程</h2>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="CSAPP" /><category term="汇编" /><summary type="html"><![CDATA[程序的机器级表示]]></summary></entry><entry><title type="html">CSAPP-2-2:程序的机器级运行控制</title><link href="http://localhost:4000/2024/01/02/CSAPP-2-2/" rel="alternate" type="text/html" title="CSAPP-2-2:程序的机器级运行控制" /><published>2024-01-02T10:23:00+08:00</published><updated>2024-01-02T10:23:00+08:00</updated><id>http://localhost:4000/2024/01/02/CSAPP-2-2</id><content type="html" xml:base="http://localhost:4000/2024/01/02/CSAPP-2-2/"><![CDATA[<h1 id="程序的机器级表示">程序的机器级表示</h1>
+
+<h2 id="控制">控制</h2>
+
+<p>C语言程序中存在有条件的执行语句，例如<strong>条件语句、循环语句和分支语句</strong>，机器代码提供两种基本的低级机制来实现有条件的行为：<strong>测试数据值，然后根据测试的结果来改变控制流或者数据流，</strong></p>
+
+<h3 id="条件码">条件码</h3>
+
+<p>除了整数寄存器，CPU还维护着一组<strong>单个位</strong>的<strong>条件码(condition code)寄存器</strong>，它们描述了最近的算术或者逻辑操作的属性，最常用的条件码有：</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">CF</code>：进位标志。最近的操作使最高位产生了进位，可用来检查无符号操作的溢出。</li>
+  <li><code class="language-plaintext highlighter-rouge">ZF</code>：零标志。最近的操作得出的结果为0。</li>
+  <li><code class="language-plaintext highlighter-rouge">SF</code>：符号标志。最近的操作得到的结果为负数。</li>
+  <li><code class="language-plaintext highlighter-rouge">OF</code>：溢出标志。最近的操作导致一个补码溢出—-正溢出或负溢出。</li>
+</ol>
+
+<p>例如，假设我们用一条ADD指令完成<code class="language-plaintext highlighter-rouge">t=a+b</code>的功能，则会根据下面的C表达式来设置条件码：</p>
+
+<div align="center"> <img src="/pic/CSAPP/ConditionExm.png" width="400" /> </div>
+
+<p>注意有几个特殊情况：</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">leaq</code>指令<strong>不会改变任何条件码</strong>，除此之外，所有一元二元指令都会设置条件码。</li>
+  <li>对于逻辑操作，例如<code class="language-plaintext highlighter-rouge">XOR</code>，<strong>进位标志和溢出标志</strong>会设置为0。</li>
+  <li>对于移位操作，<strong>进位标志</strong>将设置为<strong>最后一个</strong>被移除的位，而<strong>溢出标志</strong>设置为0。</li>
+  <li><code class="language-plaintext highlighter-rouge">INC</code>和<code class="language-plaintext highlighter-rouge">DEC</code>会设置<strong>溢出和零标志</strong>，但不会改变<strong>进位标志</strong>。</li>
+</ol>
+
+<p>除了算术和逻辑操作，还有两类指令会设置条件码，它们只设置条件码而不改变任何其他寄存器：</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">CMP</code>指令根据两个操作数之差来设置条件码。除了不更新目的寄存器之外，行为与<code class="language-plaintext highlighter-rouge">SUB</code>指令一致，常用来比较大小。</li>
+  <li><code class="language-plaintext highlighter-rouge">TEST</code>指令与<code class="language-plaintext highlighter-rouge">AND</code>指令的行为一样，除了不改变目的寄存器的值。典型的用法是两个操作数是一样的，或者其中操作数是一个掩码用来指示哪些位应该被测试（例如，<code class="language-plaintext highlighter-rouge">testq %rax,%rax</code>用来检查<code class="language-plaintext highlighter-rouge">%rax</code>是负数、零还是正数）。</li>
+</ol>
+
+<div align="center"> <img src="/pic/CSAPP/CMP&amp;TEST.png" width="400" /> </div>
+
+<h3 id="访问条件码">访问条件码</h3>
+
+<p>条件码通常不会直接读取，常见的使用方法有三种：</p>
+
+<ol>
+  <li>可以根据条件码的某种组合，将一个字节设置为0或1。</li>
+  <li>可以条件跳转到程序的某个其他的部分。</li>
+  <li>可以有条件的传送数据。</li>
+</ol>
+
+<p>针对第一种情况，我们将这一整类指令称为<code class="language-plaintext highlighter-rouge">SET</code>指令，它们的区别就在于他们考虑的条件码组合是什么，此时后缀表示<strong>不同的条件</strong>而不是操作数大小。</p>
+
+<div align="center"> <img src="/pic/CSAPP/SET.png" width="500" /> </div>
+
+<p>一个<code class="language-plaintext highlighter-rouge">SET</code>指令的目的操作数是低位单字节寄存器之一，或者是一个字节的内存为止，指针会将这个字节设置成0或1。为了得到一个32位或64位结果，<strong>必须对高位清零</strong>，例如<code class="language-plaintext highlighter-rouge">a&lt;b</code>的指令序列如下：</p>
+
+<div align="center"> <img src="/pic/CSAPP/SETExm.png" width="400" /> </div>
+
+<p>虽然所有的算术和逻辑操作都会设置条件码，但是所有<code class="language-plaintext highlighter-rouge">SET</code>指令的描述都适用的情况是：执行比较命令，根据计算<code class="language-plaintext highlighter-rouge">t=a-b</code>设置条件码。</p>
+
+<p>考虑<code class="language-plaintext highlighter-rouge">setl</code>指令测试一个有符号比较，当没有发生溢出时（OF设置为0的时候表示无溢出），我们有当 $ a-_w^tb&lt;0 $时有 $a&lt;b$，将SF设置为1可以表明这一点，而当$ a-_w^tb\geq 0 $时有 $a&lt;geq b$，此时SF将置为0，因此有上表<code class="language-plaintext highlighter-rouge">setl</code>的效果，并且由<code class="language-plaintext highlighter-rouge">setl</code>可以推导出其他三个。</p>
+
+<p>对于无符号比较的测试，当 $a&lt;b$时，<code class="language-plaintext highlighter-rouge">CMP</code>指令会设置进位标志，因而无符号比较使用的是进位标志和零标志的结合。</p>
+
+<h3 id="跳转指令">跳转指令</h3>
+
+<p>正常执行的情况下，指令会一条一条按顺序执行下去，跳转指令会导致执行切换到另一个全新的位置。在汇编代码中，这些跳转的目的地<strong>通常用一个标号(label)指明</strong>，例如：</p>
+
+<div align="center"> <img src="/pic/CSAPP/jmpExm.png" width="400" /> </div>
+
+<p>在产生目标代码文件时，汇编器会确定所有带标号指令的地址，并将<strong>跳转目标</strong>（目的指令的地址）编码为跳转指令的一部分。</p>
+
+<p>下图列举了不同的跳转指令，<code class="language-plaintext highlighter-rouge">jmp</code>为无条件跳转，他可以是直接跳转，即跳转目标是作为指令的一部分编码的，也可以是间接跳转，即跳转目标是从寄存器或内存位置中读出的，例如 <code class="language-plaintext highlighter-rouge">jmp *&amp;rax</code>是用寄存器中的值作为跳转目标，<code class="language-plaintext highlighter-rouge">jmp *(%rax)</code>以<code class="language-plaintext highlighter-rouge">%rax</code>中的值作为读地址，再从内存中读出跳转目标。</p>
+
+<div align="center"> <img src="/pic/CSAPP/jmp.png" width="500" /> </div>
+
+<h3 id="跳转指令的编码">跳转指令的编码</h3>
+
+<p>在汇编代码中，跳转指令用符号标号书写，汇编器及后来的链接器会产生跳转目标的适当编码。跳转指令有几种不同的编码，但最常用的都是 <strong>PC相对的(PC-relative)。</strong> 也就是，它们会将 <strong>目标指令的地址与紧跟在跳转指令后面那条指令的地址之间的差作为编码。</strong> 这些地址偏移量可以编码为1,2,4个字节。第二种编码方法就是给出“绝对”地址，用4个字节直接指定目标，汇编器和链接器会选择会选择适当的跳转目的编码。</p>
+
+<p>下面是一个PC相对寻址的例子，第2行的<code class="language-plaintext highlighter-rouge">jmp</code>指令向前跳转到更高的地址，第7行的<code class="language-plaintext highlighter-rouge">jg</code>指令向后跳转到更低的地址：</p>
+
+<div align="center"> <img src="/pic/CSAPP/PCjmpExm.png" width="200" /> </div>
+<div align="center"> <img src="/pic/CSAPP/PCjmpExm2.png" width="300" /> </div>
+
+<p>每个16进制两位数都是1个字节，第二行中跳转目标指明为 <code class="language-plaintext highlighter-rouge">loop+0x5+0x3</code>，第五行中为<code class="language-plaintext highlighter-rouge">loop+0xd-0x8</code>，都是下一条指令的地址的相对位置。</p>
+
+<h3 id="用条件控制实现条件分支">用条件控制实现条件分支</h3>
+
+<p>C语言中的if-else语句的通用形式模板如下：</p>
+
+<pre><code class="language-C">if (test-expr)
+    then-statement
+else
+    else-statement
+</code></pre>
+
+<p>汇编实现如下：</p>
+
+<div align="center"> <img src="/pic/CSAPP/IfElse.png" width="200" /> </div>
+
+<p>我们可以使用goto风格代码来更好地理解，这里注意汇编中条件跳转的参数与C语言中是相反的：</p>
+
+<div align="center"> <img src="/pic/CSAPP/ifElseC.png" width="500" /> </div>
+
+<p>还有一个例子：</p>
+
+<pre><code class="language-C">void cond(long a, long *p){
+    if(p &amp;&amp; a&gt;*p)
+        *p=a;
+}
+</code></pre>
+
+<p>汇编语言为</p>
+<pre><code class="language-asm">cond:
+    testq %rdi, %rdi
+    jz .L2
+    cmpq %rsi, (%rdi)
+    jle .L2
+    movq %rsi, (%rdi)
+.L2:
+    ret 
+</code></pre>
+
+<p>由于&amp;&amp;有短路性质，所以一个if语句在汇编中却有两个条件分支。</p>
+
+<h3 id="用条件传送来实现条件分支">用条件传送来实现条件分支</h3>
+
+<p>实现条件操作的传统方法是 通过使用<strong>控制</strong>的条件转移，当条件满足时程序沿着一条执行路径执行，否则走另一条路径。这种机制简单通用但是可能会低效。</p>
+
+<p>一个替代的策略是使用<strong>数据</strong>的条件转移，这种方法计算一个条件操作的两种结果，然后再根据条件是否满足从中选取一个。下面是一个例子，注意也是求相反的结果：</p>
+
+<div align="center"> <img src="/pic/CSAPP/cmovExm.png" width="500" /> </div>
+
+<p>首先了解一下现代处理器如何运行，处理器通过使用流水线来获得高性能，一条指令的处理要经过一系列的阶段，例如从内存读指令，确定指令，从内存读数据，执行运算，写数据，更新计数器等。这种方法通过重叠连续指令来获得高性能，例如在取一条指令的同时执行前一条命令的算术运算。那就要实现确定要执行的指令序列才能保持流水线充满待执行的指令。</p>
+
+<p>当机器遇到条件跳转的时候，处理器会采用非常精密的分支预测逻辑来猜测每条跳转指令是否会执行，如果猜错了就要求处理器丢掉它为该跳转指令后所有指令已做的工作，再从正确的位置处填充流水线，这会导致性能严重下降。</p>
+
+<p>下面是一些可用的条件传送指令，源和目的的值可以是16、32、64位，但不支持单字节的条件传送。<strong>无条件传送需要将操作数长度显式编码在指令名中，但条件传送中汇编器可以从目标寄存器的名字来推断操作数长度，因此可以使用同一个名字。</strong></p>
+
+<div align="center"> <img src="/pic/CSAPP/cmov.png" width="500" /> </div>
+
+<p>同条件跳转不同，处理器无需预测测试结果就可以执行条件传送，<strong>在下一章会讨论它的实现。</strong></p>
+
+<p>但是不是所有的条件表达式都可以用条件传送来编译：</p>
+
+<ol>
+  <li>如果这两个表达式中的任意一个可能产生错误条件或者副作用，就会导致非法的行为：
+ 例如，考虑下面这个C函数
+    <pre><code class="language-C"> long cread(long *xp){
+     return (xp ? *xp : 0);
+ }
+</code></pre>
+    <p>对应的条件传送如下：</p>
+    <pre><code class="language-asm"> xp in register %rdi.
+ cread:
+     movq (%rdi), %rax
+     testq %rdi, %rdi
+     movl $0, %edx
+     cmove %rdx, %rax
+     ret
+</code></pre>
+    <p>此时会出现间接引用空指针的错误。</p>
+  </li>
+  <li>如果两个操作都需要花费大量的运算，那就不会使用条件传送。</li>
+  <li>执行任意分支可能会改变程序其他部分的状态时不会使用条件传送，例如
+    <pre><code class="language-C"> val = x&gt;0 ? x*=7 : x+=3;
+</code></pre>
+  </li>
+</ol>
+
+<p>下面是除以2的幂次的例子：</p>
+
+<div align="center"> <img src="/pic/CSAPP/divide8.png" width="300" /> </div>
+
+<p>通过右移来实现，如果x小于0需要加$2^k-1$再进行右移。</p>
+
+<h3 id="循环">循环</h3>
+
+<p>C语言三中循环： do-while, while 和 for：</p>
+
+<ol>
+  <li><strong>do-while循环：</strong>
+ do-while循环的通用形式为：
+    <pre><code class="language-asm"> do
+     body-statement
+     while(test-expr)
+</code></pre>
+
+    <p>汇编形式为：</p>
+    <pre><code class="language-asm"> loop:
+     body-statement
+     t = test-expr
+     if (t)
+         goto loop
+</code></pre>
+    <p>下面是阶乘计算的例子：</p>
+    <div align="center"> <img src="/pic/CSAPP/dowhile.png" width="500" /> </div>
+  </li>
+  <li><strong>while循环：</strong>
+ while语句有两种生成方法：
+    <ol>
+      <li>
+        <p>第一种称之为jump to middle，这个是GCC带优化命令选项<code class="language-plaintext highlighter-rouge">-Og</code>时采用的翻译方法，可以翻译为：</p>
+
+        <pre><code class="language-asm"> goto test;
+ loop:
+     body-statement
+ test:
+     t = test-expr;
+     if (t)
+         goto loop;
+</code></pre>
+        <div align="center"> <img src="/pic/CSAPP/while1.png" width="500" /> </div>
+      </li>
+      <li>
+        <p>第二种翻译方法称为guarded-do，首先用条件分支，如果初始条件不成立就跳过循环，把代码变换为do-while循环，这是采用较高优化等级<code class="language-plaintext highlighter-rouge">-O1</code>才会采用的策略：</p>
+
+        <pre><code class="language-asm"> t = test-expr
+ if (t)
+     goto done;
+ loop:
+     body-statement;
+     t = test-expr;
+     if(t)
+         goto loop;
+ done:
+     ret
+</code></pre>
+        <div align="center"> <img src="/pic/CSAPP/while2.png" width="500" /> </div>
+        <div align="center"> <img src="/pic/CSAPP/while3.png" width="300" /> </div>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p><strong>for循环：</strong>
+ for循环的通用形式为</p>
+
+    <pre><code class="language-asm"> for(init-expr; test-expr; update-expr)
+     body-statement
+</code></pre>
+
+    <p>这样一个循环的行为与下面这段代码的行为一样：</p>
+
+    <pre><code class="language-asm"> init-expr;
+ while (test-expr) {
+     body-statement
+     update-expr;
+ }
+</code></pre>
+    <p>再利用while循环翻译为汇编语言。</p>
+
+    <div align="center"> <img src="/pic/CSAPP/while2.png" width="500" /> </div>
+
+    <pre><code class="language-C"> long fun_b(unsigned long x){
+     long val = 0;
+     long i;
+     for(i = 64; i!=0; i--){
+         val = (val &lt;&lt; 1) | (x &amp; 1);
+         x &gt;&gt;= 1;
+     }
+     return val;
+ }
+</code></pre>
+
+    <p>汇编代码为：</p>
+    <pre><code class="language-asm"> fun_b:
+     movl $64, %edx
+     movl $0. &amp;eax
+ .L10:
+     movq %rdi, %rcx
+     andl $1, %ecx
+     addq %rax, %rax
+     orq %rcx, %rax
+     shrq $1, %rdi
+     subq $1, %rdx
+     jne .L10
+     rep; ret
+</code></pre>
+
+    <p>因为64不为0，所有初始测试直接被忽略了。这个函数的行为是将x的位反过来，只需每次取x的最低位放进val低位，每次val左移，x右移。</p>
+  </li>
+</ol>
+
+<h3 id="switch语句">switch语句</h3>
+
+<p>switch语句不仅提高了C代码的可读性，而且通过使用<strong>跳转表</strong>使得实现更加高效。跳转表是一个数组，表项i是一个代码段的地址，当开关索引值等于i时程序采用对应的动作。它的优点在于：执行开关语句的时间与开关情况的数量无关。当开关情况数量比较多并且值的跨度范围比较小时就会使用跳转表。</p>
+
+<div align="center"> <img src="/pic/CSAPP/switch1.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/switch2.png" width="400" /> </div>
+<p>这个例子中包括case label跨过一个不连续区域（101，105没有标号）、有多个标号（104，106）、有些情况会落入其他情况之中（102），因为没有break语句结尾。</p>
+
+<p>可以看到，编译器首先将n减去100，把取值范围移到0-6之间，创建一个新的程序变量index，注意它是<strong>无符号值</strong>，这样我们可以通过测试index是否大于6来判定index是否在0-6之间，如果小于0的话根据补码性质也还是大于6的。根据index值有五个不同的跳转位置，loc_A(.L3)，loc_B(.L5)，loc_C(.L6)，loc_D(.L7)，loc_def(.L8)，最后一个是默认的目的地址。</p>
+
+<p>执行switch语句的关键步骤是通过跳转表来访问代码位置，在汇编第五行以及goto代码中的第16行，<code class="language-plaintext highlighter-rouge">jmp</code>指令的操作数有前缀<code class="language-plaintext highlighter-rouge">*</code>，表明这是一个间接跳转，操作数指定一个内存为止，索引由寄存器%rsi给出，这个寄存器保存着index的值。</p>
+
+<p>C代码将跳转表声明为一个7个元素的数组，每个元素都是一个指向代码位置的指针，可以发现，对于重复情况的处理就是对4和6采用同样的代码标号，对于确实情况的处理就是对1和5采用默认情况的标号。对于fall through的情况就是对应的代码位置也是fall through的。</p>
+
+<p>在汇编中表示如下：</p>
+<div align="center"> <img src="/pic/CSAPP/switch3.png" width="400" /> </div>
+
+<p>其中<code class="language-plaintext highlighter-rouge">.rodata</code>为只读数据，其中包含一组7个四“字”（8个字节），每个字的值都是与指定的汇编代码标号相关联的指令地址。</p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="CSAPP" /><category term="汇编" /><summary type="html"><![CDATA[程序的机器级表示]]></summary></entry><entry><title type="html">CSAPP-2-1:程序的机器级表示</title><link href="http://localhost:4000/2023/12/07/CSAPP-2-1/" rel="alternate" type="text/html" title="CSAPP-2-1:程序的机器级表示" /><published>2023-12-07T16:23:00+08:00</published><updated>2023-12-07T16:23:00+08:00</updated><id>http://localhost:4000/2023/12/07/CSAPP-2-1</id><content type="html" xml:base="http://localhost:4000/2023/12/07/CSAPP-2-1/"><![CDATA[<h1 id="程序的机器级表示">程序的机器级表示</h1>
 
 <h2 id="程序编码概论">程序编码概论</h2>
 
@@ -40,7 +342,7 @@
 
 <p>一条机器指令只执行一个非常基本的操作，编译器必须产生这些指令的序列，从而实现程序结构。</p>
 
-<h3 id="代码示例">代码示例</h3>
+<h4 id="代码示例">代码示例</h4>
 
 <p>假设我们写了一个C语言代码mstore.c</p>
 
@@ -87,7 +389,7 @@ void multstore(long x, long y, long *dest) {
 
 <p>链接器的任务之一就是为函数调用找到匹配的函数的可执行代码的位置，将代码的地址移到不同的地址范围中并在callq指令调用中填入需要使用的地址；另外，它也会插入一些nop指令使得函数代码变为16字节，使得就存储器系统性能而言，能更好地放置下一个代码块。</p>
 
-<h4 id="数据格式">数据格式</h4>
+<h2 id="数据格式">数据格式</h2>
 
 <p>由于是从16位体系结构扩展到现在的，Intel用术语 <strong>字(word)</strong>来表示16位(2字节)数据类型，称32位为 <strong>双字(double words)</strong>，称64位为 <strong>四字(quad words)</strong>，下图给出了语言基本数据类型对应的x86-64表示。</p>
 
@@ -152,11 +454,11 @@ void multstore(long x, long y, long *dest) {
   </tbody>
 </table>
 
-<h3 id="访问信息">访问信息</h3>
+<h2 id="访问信息">访问信息</h2>
 
 <p>一个x86-64的CPU包含一组16个存储64位值的 <strong>通用目的寄存器</strong>，用于存储整数数据和指针，如下图所示。</p>
 
-<div align="center"> <img src="/pic/register.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/register.png" width="500" /> </div>
 
 <p>最初的8086中有8个16位的寄存器，即图中的%ax到%sp，它们的名字反映了不同的用途，分别是accumulate, base, counter, data, source index, destination index, base pointer, stack pointer.</p>
 
@@ -170,7 +472,7 @@ void multstore(long x, long y, long *dest) {
 
 <p>在常见的程序里，不同的寄存器扮演着不同的角色，有一组标准的变成规范控制着如何使用寄存器来管理栈、传递函数参数、从函数返回值以及存储局部和临时数据。</p>
 
-<h4 id="操作数指示符">操作数指示符</h4>
+<h3 id="操作数指示符">操作数指示符</h3>
 
 <p>大多数指令有一个或多个 <strong>操作数(operand)</strong>，指示出执行一个操作要使用的源数据值以及放置结果的目的为止。<strong>源数据值可以以常数形式给出，或是寄存器或内存中读出，结果可以存放在寄存器或者内存中。</strong>因此，操作数分为3种类型：</p>
 <ol>
@@ -181,12 +483,12 @@ void multstore(long x, long y, long *dest) {
 
 <p>如下图所示，有多种不同的寻址模式，允许不同形式的内存引用。其中最底部的 $Imm(r_b,r_i,s)$ 为最常用的形式，这里基址寄存器 $r_b$ 可以是任意寄存器，变址寄存器 $r_i$ 可以是除 \%rsp 外的任意寄存器，s必须为1、2、4或者8。<strong>有效地址被计算为</strong> $Imm+ R[r_b]+R[r_i]\cdot s$。</p>
 
-<div align="center"> <img src="/pic/Mem.png" width="600" /> </div>
+<div align="center"> <img src="/pic/CSAPP/Mem.png" width="600" /> </div>
 
-<h4 id="数据传送指令">数据传送指令</h4>
+<h3 id="数据传送指令">数据传送指令</h3>
 
 <p>最简单形式的数据传送指令为MOV类，这类指令把数据从源位置复制到目的位置，如下图所示：</p>
-<div align="center"> <img src="/pic/MOV.png" width="400" /> </div>
+<div align="center"> <img src="/pic/CSAPP/MOV.png" width="400" /> </div>
 
 <p>源操作数指定的值可以是立即数，也可以存储在寄存器或者内存中。目的操作数指定一个位置，要么是一个寄存器，要么是一个内存地址。 <strong>x86-64限制传送指令的两操作数不能都指向内存为止</strong>，如果想这样做需要先将源值加载到寄存器然后再写入目的位置。</p>
 
@@ -196,31 +498,85 @@ void multstore(long x, long y, long *dest) {
 
 <p>下面两个图记录的是另外两类数据移动指令，在将较小的源值复制到较大的目的时使用。</p>
 
-<div align="center"> <img src="/pic/MOVZ.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/MOVZ.png" width="500" /> </div>
 
-<div align="center"> <img src="/pic/MOVS.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/MOVS.png" width="500" /> </div>
 
 <p>注意到并没有一条明确的指令把4字节源值扩展到8字节目的，因为这个可以依靠<code class="language-plaintext highlighter-rouge">movl</code>指令实现。</p>
 
-<p>例子：
-|    |    |
-| – | – |
-| <code class="language-plaintext highlighter-rouge">movabsq $0x0011223344556677, %rax</code> | %rax = 0x0011223344556677 |
-| <code class="language-plaintext highlighter-rouge">movb $-1, %al</code>  | %rax = 0x00112233445566FF |
-| <code class="language-plaintext highlighter-rouge">movw $-1, %ax</code>  | %rax = 0x001122334455FFFF |
-| <code class="language-plaintext highlighter-rouge">movl $-1, %eax</code> | %rax = 0x00000000FFFFFFFF |
-| <code class="language-plaintext highlighter-rouge">movq $-1, %rax</code> | %rax = 0xFFFFFFFFFFFFFFFF |</p>
+<p>例子：</p>
 
-<p>反例：
-|       |       |
-| –    | –    |
-| <code class="language-plaintext highlighter-rouge">movb $0xF, (%ebx)</code>   | <strong>内存引用要用4字节寄存器</strong>  |
-| <code class="language-plaintext highlighter-rouge">movl %rax, (%rsp)</code>   | <code class="language-plaintext highlighter-rouge">movl</code>改为<code class="language-plaintext highlighter-rouge">movq</code>，<strong>MOV指令以源操作数字长为准</strong> |
-| <code class="language-plaintext highlighter-rouge">movb (%rax), 4(%rsp)</code>| <strong>两操作数不能同时为内存引用</strong> |
-| <code class="language-plaintext highlighter-rouge">movb %al,  %sl</code>      | 不存在%sl这个寄存器 |
-| <code class="language-plaintext highlighter-rouge">movb %rax, $0x123</code>   | 立即数不能作为目的地址，去掉$是可以的 |
-| <code class="language-plaintext highlighter-rouge">movb %eax, %rdx</code>     | 从小到大需要扩展 |
-| <code class="language-plaintext highlighter-rouge">movb %si, 8(%rbp)</code>   | <code class="language-plaintext highlighter-rouge">movb</code>改为<code class="language-plaintext highlighter-rouge">movw</code> |</p>
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movabsq $0x0011223344556677, %rax</code></td>
+      <td>%rax = 0x0011223344556677</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movb $-1, %al</code></td>
+      <td>%rax = 0x00112233445566FF</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movw $-1, %ax</code></td>
+      <td>%rax = 0x001122334455FFFF</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movl $-1, %eax</code></td>
+      <td>%rax = 0x00000000FFFFFFFF</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movq $-1, %rax</code></td>
+      <td>%rax = 0xFFFFFFFFFFFFFFFF</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>反例：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movb $0xF, (%ebx)</code></td>
+      <td><strong>内存引用要用4字寄存器</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movl %rax, (%rsp)</code></td>
+      <td><code class="language-plaintext highlighter-rouge">movl</code>改为<code class="language-plaintext highlighter-rouge">movq</code>，<strong>MOV指令以源操作数字长为准</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movw (%rax), 4(%rsp)</code></td>
+      <td><strong>两操作数不能同时为内存引用</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movb %al,  %sl</code></td>
+      <td>不存在%sl这个寄存器</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movq %rax, $0x123</code></td>
+      <td>立即数不能作为目的地址，去掉$是可以的</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movl %eax, %rdx</code></td>
+      <td><strong>两寄存器的大小必须一致</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">movb %si, 8(%rbp)</code></td>
+      <td><code class="language-plaintext highlighter-rouge">movb</code>改为<code class="language-plaintext highlighter-rouge">movw</code></td>
+    </tr>
+  </tbody>
+</table>
 
 <p>注释：</p>
 <ol>
@@ -243,7 +599,7 @@ void multstore(long x, long y, long *dest) {
   </li>
 </ol>
 
-<h4 id="压入和弹出栈数据">压入和弹出栈数据</h4>
+<h3 id="压入和弹出栈数据">压入和弹出栈数据</h3>
 
 <p>栈遵循后进先出的原则，弹出的值永远是最近被压入而且仍然在栈中的值。栈可以实现为一个数组，总是从数组的一端插入和删除元素，称为栈顶。</p>
 
@@ -261,17 +617,17 @@ void multstore(long x, long y, long *dest) {
   </li>
 </ol>
 
-<div align="center"> <img src="/pic/PushPop.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/PushPop.png" width="500" /> </div>
 
-<div align="center"> <img src="/pic/StackOp.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/StackOp.png" width="500" /> </div>
 
-<h3 id="算术和逻辑操作">算术和逻辑操作</h3>
+<h2 id="算术和逻辑操作">算术和逻辑操作</h2>
 
 <p>操作指令主要分为四组：加载有效地址、一元操作、二元操作和移位，如下图所示：</p>
 
-<div align="center"> <img src="/pic/amsArith.png" width="400" /> </div>
+<div align="center"> <img src="/pic/CSAPP/amsArith.png" width="400" /> </div>
 
-<h4 id="加载有效地址">加载有效地址</h4>
+<h3 id="加载有效地址">加载有效地址</h3>
 
 <p>加载有效地址(load effective address)指令<code class="language-plaintext highlighter-rouge">leaq</code>实际上是<code class="language-plaintext highlighter-rouge">movq</code>指令的变形，它的指令形式是从内存读数据到寄存器，但 <strong>实际上它根本没有引用该内存，而是将有效地址写入到目的操作数</strong>。另外，他也可以简洁地表述普通的算术操作，例如，如果寄存器\%rdx存有 $x$，那么<code class="language-plaintext highlighter-rouge">leaq 7(%rdx,%rdx,4), %rax</code>就是将寄存器 \%rax的值设置为 $5x+7$。</p>
 
@@ -280,11 +636,11 @@ void multstore(long x, long y, long *dest) {
 <p><code class="language-plaintext highlighter-rouge">movq</code>相当于<code class="language-plaintext highlighter-rouge">array[i]</code>，<code class="language-plaintext highlighter-rouge">movq (%rdi,%rsi,8), %rbp</code>是将源内存地址的值传给\%rbp；
 <code class="language-plaintext highlighter-rouge">leaq</code>相当于<code class="language-plaintext highlighter-rouge">&amp;array[i]</code>，<code class="language-plaintext highlighter-rouge">leaq (%rdi,%rsi,8), %rbp</code>是将源内存地址直接传给\%rbp。</p>
 
-<h4 id="一元和二元操作">一元和二元操作</h4>
+<h3 id="一元和二元操作">一元和二元操作</h3>
 
 <p>二元操作的第二个操作数既是源又是目的，类似于<code class="language-plaintext highlighter-rouge">x-=y</code>，第一个操作数可以是立即数、寄存器或者内存，第二个操作数可以是寄存器或者内存， <strong>当第二个操作数为内存时，处理器必须从内存读出值，执行操作，再把结果写回内存。</strong></p>
 
-<h4 id="移位操作">移位操作</h4>
+<h3 id="移位操作">移位操作</h3>
 
 <p><strong>移位量可以是一个立即数，或者放在单字节寄存器\%cl中。</strong>(这些指令很特别，因为只允许以这个特定的寄存器为操作数。)</p>
 
@@ -294,11 +650,11 @@ void multstore(long x, long y, long *dest) {
 
 <p>移位操作的目的操作数可以是一个寄存器或是一个内存位置。</p>
 
-<h4 id="特殊的算术操作">特殊的算术操作</h4>
+<h3 id="特殊的算术操作">特殊的算术操作</h3>
 
 <p>两个64位有符号或无符号整数相乘需要128位来表示，Intel把16字节的数称为 <strong>八字(oct word)</strong>，下图为支持两个64位数字的全128位乘积和除法的指令：</p>
 
-<div align="center"> <img src="/pic/64ArithOp.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/64ArithOp.png" width="500" /> </div>
 
 <p><code class="language-plaintext highlighter-rouge">imulq</code>指令有两种不同形式:</p>
 <ol>
@@ -381,7 +737,7 @@ remdiv:
 
 <p>每台计算机都有一个<strong>字长(word size)</strong>，指明指针数据的标准大小(normal size)，对于一个字长为 $w$ 的机器而言，虚拟地址的范围为 $0\sim 2^w-1$，程序最多访问 $2^w$ 个字节。</p>
 
-<div align="center"> <img src="/pic/WordSize.png" width="300" /> </div>
+<div align="center"> <img src="/pic/CSAPP/WordSize.png" width="300" /> </div>
 <center><p>基本C数据类型的典型大小(以字节为单位)</p></center>
 
 <h3 id="寻址和字节顺序">寻址和字节顺序</h3>
@@ -392,7 +748,7 @@ remdiv:
 </ol>
 
 <p>假设变量 $x$ 类型为int，位于地址0x100处，十六进制的值为0x01234567，下图表示两种方法排列表示的规则：</p>
-<div align="center"> <img src="/pic/LHEndian.png" width="600" /> </div>
+<div align="center"> <img src="/pic/CSAPP/LHEndian.png" width="600" /> </div>
 
 <p>对于大多数情况下，及其所使用的字节顺序是完全不可见的，但在一些情况下，字节顺序会成为问题：</p>
 <ol>
@@ -434,7 +790,7 @@ remdiv:
     <p>在不同机器上得到的结果并不相同，如下图所示：</p>
   </li>
 </ol>
-<div align="center"> <img src="/pic/Show_Bytes.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/Show_Bytes.png" width="500" /> </div>
 <p>这里注意每输出一次都是两位十六进制数，因为一个字节是8Bit，对应两位十六进制数。</p>
 
 <h3 id="字符串表示">字符串表示</h3>
@@ -451,7 +807,7 @@ remdiv:
   <li>布尔运算 ^ 对应于逻辑运算异或(Exlusive or)，在命题逻辑中用符号用 $\oplus$ 表示。
 具体规则如下图所示：</li>
 </ol>
-<div align="center"> <img src="/pic/Boolean.png" width="400" /> </div>
+<div align="center"> <img src="/pic/CSAPP/Boolean.png" width="400" /> </div>
 
 <p>以上布尔运算可以扩展到<strong>位向量</strong>的运算，其中位向量就是固定长度为w，由0和1组成的串，它一个很有用的应用就是表示有限集合。</p>
 
@@ -538,7 +894,7 @@ remdiv:
 <p>当 $u&gt;\text{TMax}_w$ 时，$u$的最高位有效数字为1，转化为补码表示就相当于最高位权重从+1变为-1，因此少了 $2^w$，反之同理，越靠近0的负数映射为越大的无符号数。</p>
 
 <p>另外，可以证明U2T和T2U两个函数都是双射，两个函数的行为如下图所示：</p>
-<div align="center"> <img src="/pic/U2T_T2U.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/U2T_T2U.png" width="500" /> </div>
 
 <p>在C语言中允许两者之间相互转换，主要有四种情况：</p>
 <ol>
@@ -915,7 +1271,7 @@ x = (x + bias) &gt;&gt; 4;
 
 <p>在单精度浮点格式中，$s$,exp,frac字段分别为1位，$k=8$位，$n=23$位；在双精度浮点格式中，$s$,exp,frac字段分别为1位，$k=11$位，$n=52$位。</p>
 
-<div align="center"> <img src="/pic/IEEE.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/IEEE.png" width="500" /> </div>
 
 <p>给定位表示，根据exp的值，被编码的值分为三种情况：</p>
 <ol>
@@ -943,12 +1299,12 @@ x = (x + bias) &gt;&gt; 4;
 </ol>
 
 <p>下图是三种情况的位表示图例：</p>
-<div align="center"> <img src="/pic/IEEEcate.png" width="500" /> </div>
+<div align="center"> <img src="/pic/CSAPP/IEEEcate.png" width="500" /> </div>
 
 <h4 id="数字示例">数字示例</h4>
 
 <p>假如我们有8位格式，阶码位 $k=4$ 位，尾数位 $n=3$ 位，则偏置量为 $2^{4-1}-1=7$，部分可能结果如下：</p>
-<div align="center"> <img src="/pic/IEEEexample.png" width="700" /> </div>
+<div align="center"> <img src="/pic/CSAPP/IEEEexample.png" width="700" /> </div>
 
 <p>可以观察到<strong>最大非规格数和最小规格化数之间的平滑转变</strong>，这归功于我们对<strong>非规格化数$E$的定义</strong>。另外，阶数越高，两个数之间的间距越大。</p>
 
