@@ -1,4 +1,305 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-07-31T09:01:33+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：二分查找和双指针法</title><link href="http://localhost:4000/2024/07/31/DS/" rel="alternate" type="text/html" title="Leetcode记录：二分查找和双指针法" /><published>2024-07-31T02:00:00+08:00</published><updated>2024-07-31T02:00:00+08:00</updated><id>http://localhost:4000/2024/07/31/DS</id><content type="html" xml:base="http://localhost:4000/2024/07/31/DS/"><![CDATA[<h2 id="二分查找">二分查找</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-01T10:05:36+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：模拟过程</title><link href="http://localhost:4000/2024/07/31/DS-2/" rel="alternate" type="text/html" title="Leetcode记录：模拟过程" /><published>2024-07-31T14:00:00+08:00</published><updated>2024-07-31T14:00:00+08:00</updated><id>http://localhost:4000/2024/07/31/DS-2</id><content type="html" xml:base="http://localhost:4000/2024/07/31/DS-2/"><![CDATA[<h3 id="螺旋矩阵">螺旋矩阵</h3>
+
+<p>给你一个正整数 <code class="language-plaintext highlighter-rouge">n</code> ，生成一个包含 <code class="language-plaintext highlighter-rouge">1</code> 到 <code class="language-plaintext highlighter-rouge">n^2</code> 所有元素，且元素按顺时针顺序螺旋排列的 <code class="language-plaintext highlighter-rouge">n x n</code> 正方形矩阵 <code class="language-plaintext highlighter-rouge">matrix</code> 。</p>
+
+<p>模拟顺时针画矩阵的过程:</p>
+<ol>
+  <li>填充上行从左到右</li>
+  <li>填充右列从上到下</li>
+  <li>填充下行从右到左</li>
+  <li>填充左列从下到上</li>
+  <li>由外向内一圈一圈这么画下去。</li>
+</ol>
+
+<p>可以发现这里的边界条件非常多，在一个循环中，如此多的边界条件，如果不按照固定规则来遍历，会有很多bug，因此求解本题依然是要坚持循环不变量原则：例如左闭右开，代码如下：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">generateMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">res</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span> <span class="c1">// 使用vector定义一个二维数组</span>
+    <span class="kt">int</span> <span class="n">startx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">starty</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 定义每循环一个圈的起始位置</span>
+    <span class="kt">int</span> <span class="n">loop</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// 每个圈循环几次，例如n为奇数3，那么loop = 1 只是循环一圈</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// 矩阵中间的位置，例如：n为3， 中间的位置就是(1，1)</span>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 用来给矩阵中每一个空格赋值</span>
+    <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 需要控制每一条边遍历的长度，每次循环右边界收缩一位</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">loop</span> <span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">startx</span><span class="p">;</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">starty</span><span class="p">;</span>
+
+        <span class="c1">// 下面开始的四个for就是模拟转了一圈</span>
+        <span class="c1">// 模拟填充上行从左到右(左闭右开)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="n">offset</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 模拟填充右列从上到下(左闭右开)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="n">offset</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 模拟填充下行从右到左(左闭右开)</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">starty</span><span class="p">;</span> <span class="n">j</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 模拟填充左列从下到上(左闭右开)</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">startx</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 第二圈开始的时候，起始位置要各自加1， 例如：第一圈起始位置是(0, 0)，第二圈起始位置是(1, 1)</span>
+        <span class="n">startx</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">starty</span><span class="o">++</span><span class="p">;</span>
+
+        <span class="c1">// offset 控制每一圈里每一条边遍历的长度</span>
+        <span class="n">offset</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 如果n为奇数的话，需要单独给矩阵最中间的位置赋值</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">mid</span><span class="p">][</span><span class="n">mid</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>也可以实时更新上下左右四个边界来判断：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">generateMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="n">ret</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">));</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span><span class="n">top</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="n">bottom</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">num</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">){</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">top</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span><span class="n">j</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+            <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">++</span><span class="n">top</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">top</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="n">bottom</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">--</span><span class="n">right</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">bottom</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="n">left</span><span class="p">;</span><span class="n">j</span><span class="o">--</span><span class="p">){</span>
+            <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">--</span><span class="n">bottom</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">bottom</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">top</span><span class="p">;</span><span class="n">i</span><span class="o">--</span><span class="p">){</span>
+            <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">++</span><span class="n">left</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[螺旋矩阵]]></summary></entry><entry><title type="html">Leetcode记录：滑动窗口和前缀和</title><link href="http://localhost:4000/2024/07/31/DS/" rel="alternate" type="text/html" title="Leetcode记录：滑动窗口和前缀和" /><published>2024-07-31T14:00:00+08:00</published><updated>2024-07-31T14:00:00+08:00</updated><id>http://localhost:4000/2024/07/31/DS</id><content type="html" xml:base="http://localhost:4000/2024/07/31/DS/"><![CDATA[<h2 id="滑动窗口">滑动窗口</h2>
+<p>滑动窗口算法的基本思想是维护一个窗口，通过移动窗口的两个边界来处理问题。</p>
+
+<p>具体来说，我们可以使用两个指针 <code class="language-plaintext highlighter-rouge">left</code> 和 <code class="language-plaintext highlighter-rouge">right</code> 分别表示滑动窗口的左右边界，然后通过不断移动右指针 <code class="language-plaintext highlighter-rouge">right</code> 来扩大窗口，同时根据问题的要求调整左指针 <code class="language-plaintext highlighter-rouge">left</code> 来缩小窗口。当右指针 <code class="language-plaintext highlighter-rouge">right</code> 扫描到字符串或数组的末尾时，算法的执行就完成了。</p>
+
+<p>在扩大或缩小窗口的过程中，可以记录下一些中间结果，例如最大值、最小值、子串长度等等，从而求解问题的最终答案。</p>
+
+<h3 id="适用问题">适用问题</h3>
+
+<p>滑动窗口算法可以用于解决一些字符串和数组问题，例如：</p>
+<ol>
+  <li>字符串匹配问题，例如 Leetcode 第 28 题和第 76 题；</li>
+  <li>最长子串或子数组问题，例如 Leetcode 第 3 题、第 209 题和第 424 题；</li>
+  <li>最小覆盖子串问题，例如 Leetcode 第 76 题；</li>
+  <li>字符串排列问题，例如 Leetcode 第 567 题；</li>
+  <li>求解字符串或数组中的一些性质，例如 Leetcode 第 438 题、第 567 题和第 1004 题等。</li>
+</ol>
+
+<h3 id="实现方法">实现方法</h3>
+<p>滑动窗口算法的实现方法相对简单，主要分为以下几个步骤：</p>
+<ol>
+  <li>初始化左右指针 $left$ 和 $right$，并根据问题的要求进行一些初始化操作。</li>
+  <li>不断移动右指针 $right$，直到出现不符合条件的情况，或者扫描到字符串或数组的末尾。</li>
+  <li>对于每个右指针位置 $i$，更新一些中间结果。</li>
+  <li>移动左指针 $left$，直到出现符合条件的情况，或者左右指针重合。</li>
+  <li>重复第 2 步至第 4 步，直到右指针扫描到字符串或数组的末尾。</li>
+</ol>
+
+<h4 id="示例1">示例1</h4>
+<p>Leetcode 206.【长度最小的子数组】
+给定一个含有 <code class="language-plaintext highlighter-rouge">n</code> 个正整数的数组和一个正整数 <code class="language-plaintext highlighter-rouge">target</code> 。找出该数组中满足其总和大于等于 <code class="language-plaintext highlighter-rouge">target</code> 的长度最小的 子数组<code class="language-plaintext highlighter-rouge">[numsl, numsl+1, ..., numsr-1, numsr]</code> ，并返回其长度。如果不存在符合条件的子数组，返回 0 。</p>
+
+<p>这道题之所以可以使用滑动窗口，很重要的一个原因是，<strong>在移动终止位置的时候，初始位置是不可逆的，初始位置只可能往后移动，而不用每次都从第零个元素开始。</strong> 代码实现如下：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">minSubArrayLen</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">INT32_MAX</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 滑动窗口数值之和</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 滑动窗口起始位置</span>
+        <span class="kt">int</span> <span class="n">subLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 滑动窗口的长度</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="c1">// 注意这里使用while，每次更新 i（起始位置），并不断比较子序列是否符合条件</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&gt;=</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">subLength</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 取子序列的长度</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">&lt;</span> <span class="n">subLength</span> <span class="o">?</span> <span class="n">result</span> <span class="o">:</span> <span class="n">subLength</span><span class="p">;</span>
+                <span class="n">sum</span> <span class="o">-=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span> <span class="c1">// 这里体现出滑动窗口的精髓之处，不断变更i（子序列的起始位置）</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1">// 如果result没有被赋值的话，就返回0，说明没有符合条件的子序列</span>
+        <span class="k">return</span> <span class="n">result</span> <span class="o">==</span> <span class="n">INT32_MAX</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="示例2">示例2</h4>
+
+<p>Leetcode 3.【无重复最长子串】
+给定一个字符串 <code class="language-plaintext highlighter-rouge">s</code> ，请你找出其中不含有重复字符的最长子串的长度。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span><span class="c1">//记录字符上一次出现的位置,字符为key，位置为value</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span><span class="c1">//i表示子串的起始位置，j表示子串的结束位置</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">!=</span> <span class="n">map</span><span class="p">.</span><span class="n">end</span><span class="p">()){</span><span class="c1">//如果字符上一次出现的位置在i之后，更新i</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">map</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span> <span class="n">i</span><span class="p">);</span><span class="c1">//map[s[j]]表示字符s[j]上一次出现的位置</span>
+        <span class="p">}</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span><span class="c1">//更新结果</span>
+        <span class="n">map</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>		<span class="c1">//更新字符s[j]上一次出现的位置</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="示例3">示例3</h4>
+<p>Leetcode 1004.【最大连续1的个数】</p>
+
+<p>给定一个二进制数组 <code class="language-plaintext highlighter-rouge">nums</code> 和一个整数 <code class="language-plaintext highlighter-rouge">k</code>，如果可以翻转最多 <code class="language-plaintext highlighter-rouge">k</code> 个<code class="language-plaintext highlighter-rouge">0</code> ，则返回数组中连续 <code class="language-plaintext highlighter-rouge">1</code> 的最大个数。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">longestOnes</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lsum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rsum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rsum</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">];</span> <span class="c1">//[0，right]中0的个数.</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">lsum</span> <span class="o">&lt;</span> <span class="n">rsum</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">lsum</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">];</span>
+            <span class="o">++</span><span class="n">left</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>该问题也可以用前缀和思路来考虑：要想快速判断一个区间内 <code class="language-plaintext highlighter-rouge">0</code> 的个数，我们可以考虑将数组中的 <code class="language-plaintext highlighter-rouge">0</code> 变成 <code class="language-plaintext highlighter-rouge">1</code>，<code class="language-plaintext highlighter-rouge">1</code> 变成 <code class="language-plaintext highlighter-rouge">0</code>。此时，我们对数组 A 求出前缀和，记为数组 <code class="language-plaintext highlighter-rouge">P</code>，那么 <code class="language-plaintext highlighter-rouge">[left,right]</code> 中包含不超过 <code class="language-plaintext highlighter-rouge">k</code> 个 <code class="language-plaintext highlighter-rouge">1</code>（注意这里就不是 <code class="language-plaintext highlighter-rouge">0</code> 了），当且仅当二者的前缀和之差：<code class="language-plaintext highlighter-rouge">P[right]−P[left−1]&lt;=k</code>.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">longestOnes</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">P</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">P</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">P</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">P</span><span class="p">[</span><span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">-</span> <span class="n">P</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+<p>其中 <code class="language-plaintext highlighter-rouge">lower_bound</code> 用于在有序序列中查找第一个大于或等于给定值的元素的位置（迭代器）。</p>
+
+<h4 id="90476待做">904，76待做</h4>
+
+<h2 id="前缀和">前缀和</h2>
+
+<p>前缀和算法（Prefix Sum）是一种用于快速计算数组元素之和的技术。它通过预先计算数组中每个位置前所有元素的累加和，将这些部分和存储在一个新的数组中，从而在需要计算某个区间的和时，可以通过简单的减法操作得到结果，而不必重新遍历整个区间。</p>
+
+<p>一维前缀和：给定一个整数数组 Array，请计算该数组在每个指定区间内元素的总和。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">presum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">presum</span> <span class="o">+=</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">presum</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+        <span class="k">else</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="n">a</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>二维前缀和：给你一个n行m列的矩阵A ，下标从1开始。请输出以 (x1, y1) 为左上角 , (x2,y2) 为右下角的子矩阵的和。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> 
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">arr</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+ 
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span> <span class="c1">//注意这一步.</span>
+ 
+    <span class="kt">int</span> <span class="n">x1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x1</span> <span class="o">&gt;&gt;</span> <span class="n">y1</span> <span class="o">&gt;&gt;</span> <span class="n">x2</span> <span class="o">&gt;&gt;</span> <span class="n">y2</span><span class="p">;)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">x2</span><span class="p">][</span><span class="n">y2</span><span class="p">]</span> <span class="o">-</span> <span class="n">dp</span><span class="p">[</span><span class="n">x1</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">y2</span><span class="p">]</span> <span class="o">-</span> <span class="n">dp</span><span class="p">[</span><span class="n">x2</span><span class="p">][</span><span class="n">y1</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dp</span><span class="p">[</span><span class="n">x1</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">y1</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+ 
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div align="center"> <img src="/pic/DS/2DPrefix_Sum.png" width="800" /> </div>
+
+<h4 id="示例1-1">示例1</h4>
+
+<p>Leetcode 238.【除自身以外数组的乘积】
+给你一个整数数组 <code class="language-plaintext highlighter-rouge">nums</code>，返回 数组 <code class="language-plaintext highlighter-rouge">answer</code> ，其中 <code class="language-plaintext highlighter-rouge">answer[i]</code> 等于 <code class="language-plaintext highlighter-rouge">nums</code> 中除 <code class="language-plaintext highlighter-rouge">nums[i]</code> 之外其余各元素的乘积。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">productExceptSelf</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">answer</span><span class="p">(</span><span class="n">length</span><span class="p">);</span>
+
+    <span class="c1">// answer[i] 表示索引 i 左侧所有元素的乘积</span>
+    <span class="c1">// 因为索引为 '0' 的元素左侧没有元素， 所以 answer[0] = 1</span>
+    <span class="n">answer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">answer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">answer</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="c1">// R 为右侧所有元素的乘积</span>
+    <span class="c1">// 刚开始右边没有元素，所以 R = 1</span>
+    <span class="kt">int</span> <span class="n">R</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 对于索引 i，左边的乘积为 answer[i]，右边的乘积为 R</span>
+        <span class="n">answer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">answer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">R</span><span class="p">;</span>
+        <span class="c1">// R 需要包含右边所有的乘积，所以计算下一个结果时需要将当前值乘到 R 上</span>
+        <span class="n">R</span> <span class="o">*=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">answer</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="示例2-1">示例2</h4>
+<p>Leetcode 560.【和为k的子数组】
+给你一个整数数组 <code class="language-plaintext highlighter-rouge">nums</code> 和一个整数 <code class="language-plaintext highlighter-rouge">k</code> ，请你统计并返回该数组中和为 <code class="language-plaintext highlighter-rouge">k</code> 的子数组的个数。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">subarraySum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">mp</span><span class="p">;</span>
+        <span class="n">mp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//注意！</span>
+        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pre</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">x</span><span class="o">:</span><span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">pre</span> <span class="o">+=</span> <span class="n">x</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">mp</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">pre</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">!=</span> <span class="n">mp</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="n">mp</span><span class="p">[</span><span class="n">pre</span> <span class="o">-</span> <span class="n">k</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="n">mp</span><span class="p">[</span><span class="n">pre</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">count</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[滑动窗口 滑动窗口算法的基本思想是维护一个窗口，通过移动窗口的两个边界来处理问题。]]></summary></entry><entry><title type="html">Leetcode记录：二分查找和双指针法</title><link href="http://localhost:4000/2024/07/31/DS/" rel="alternate" type="text/html" title="Leetcode记录：二分查找和双指针法" /><published>2024-07-31T02:00:00+08:00</published><updated>2024-07-31T02:00:00+08:00</updated><id>http://localhost:4000/2024/07/31/DS</id><content type="html" xml:base="http://localhost:4000/2024/07/31/DS/"><![CDATA[<h2 id="二分查找">二分查找</h2>
 
 <p>二分查找的前提为有序数组，同时要关注数组是否存在重复元素。</p>
 
@@ -274,7 +575,7 @@
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><category term="二分查找" /><category term="双指针法" /><summary type="html"><![CDATA[二分查找]]></summary></entry><entry><title type="html">CSAPP-2-3:程序的机器级运行过程</title><link href="http://localhost:4000/2024/01/02/CSAPP-2-3/" rel="alternate" type="text/html" title="CSAPP-2-3:程序的机器级运行过程" /><published>2024-01-02T16:23:00+08:00</published><updated>2024-01-02T16:23:00+08:00</updated><id>http://localhost:4000/2024/01/02/CSAPP-2-3</id><content type="html" xml:base="http://localhost:4000/2024/01/02/CSAPP-2-3/"><![CDATA[<h1 id="程序的机器级表示">程序的机器级表示</h1>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[二分查找]]></summary></entry><entry><title type="html">CSAPP-2-3:程序的机器级运行过程</title><link href="http://localhost:4000/2024/01/02/CSAPP-2-3/" rel="alternate" type="text/html" title="CSAPP-2-3:程序的机器级运行过程" /><published>2024-01-02T16:23:00+08:00</published><updated>2024-01-02T16:23:00+08:00</updated><id>http://localhost:4000/2024/01/02/CSAPP-2-3</id><content type="html" xml:base="http://localhost:4000/2024/01/02/CSAPP-2-3/"><![CDATA[<h1 id="程序的机器级表示">程序的机器级表示</h1>
 
 <h2 id="过程">过程</h2>
 
