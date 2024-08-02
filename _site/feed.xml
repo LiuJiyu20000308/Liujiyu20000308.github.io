@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-02T09:24:23+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：链表</title><link href="http://localhost:4000/2024/08/01/DS/" rel="alternate" type="text/html" title="Leetcode记录：链表" /><published>2024-08-01T14:00:00+08:00</published><updated>2024-08-01T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/01/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/01/DS/"><![CDATA[<h3 id="理解虚拟头结点">理解虚拟头结点</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-02T09:31:14+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：链表</title><link href="http://localhost:4000/2024/08/01/DS/" rel="alternate" type="text/html" title="Leetcode记录：链表" /><published>2024-08-01T14:00:00+08:00</published><updated>2024-08-01T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/01/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/01/DS/"><![CDATA[<h3 id="理解虚拟头结点">理解虚拟头结点</h3>
 
 <p>考虑单链表删除某一结点的操作，在单链表中移除头结点和移除其他节点的操作方式是不一样的，需要单独写一段逻辑来处理移除头结点的情况。此时就要使用到虚拟头结点，可以保证逻辑的一致性：</p>
 
@@ -477,6 +477,8 @@
         <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
     <span class="p">}</span>
 </code></pre></div></div>
+
+<p><strong>可以发现，滑动窗口和最大最小子数组或字符串问题关系密切，更新左窗口和更新length的先后顺序与最大还是最小问题相关</strong></p>
 
 <h2 id="前缀和">前缀和</h2>
 
