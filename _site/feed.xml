@@ -1,4 +1,180 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-01T10:05:36+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：模拟过程</title><link href="http://localhost:4000/2024/07/31/DS-2/" rel="alternate" type="text/html" title="Leetcode记录：模拟过程" /><published>2024-07-31T14:00:00+08:00</published><updated>2024-07-31T14:00:00+08:00</updated><id>http://localhost:4000/2024/07/31/DS-2</id><content type="html" xml:base="http://localhost:4000/2024/07/31/DS-2/"><![CDATA[<h3 id="螺旋矩阵">螺旋矩阵</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-02T09:24:23+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：链表</title><link href="http://localhost:4000/2024/08/01/DS/" rel="alternate" type="text/html" title="Leetcode记录：链表" /><published>2024-08-01T14:00:00+08:00</published><updated>2024-08-01T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/01/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/01/DS/"><![CDATA[<h3 id="理解虚拟头结点">理解虚拟头结点</h3>
+
+<p>考虑单链表删除某一结点的操作，在单链表中移除头结点和移除其他节点的操作方式是不一样的，需要单独写一段逻辑来处理移除头结点的情况。此时就要使用到虚拟头结点，可以保证逻辑的一致性：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ListNode</span><span class="o">*</span> <span class="nf">removeElements</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ListNode</span><span class="o">*</span> <span class="n">dummyHead</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 设置一个虚拟头结点</span>
+    <span class="n">dummyHead</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span> <span class="c1">// 将虚拟头结点指向head，这样方便后面做删除操作</span>
+    <span class="n">ListNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">dummyHead</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ListNode</span><span class="o">*</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="k">delete</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">dummyHead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="n">dummyHead</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="设计链表">设计链表</h3>
+
+<p>Leetcode 707.
+在链表类中实现这些功能：</p>
+
+<ol>
+  <li>get(index)：获取链表中第 index 个节点的值。如果索引无效，则返回-1。</li>
+  <li>addAtHead(val)：在链表的第一个元素之前添加一个值为 val 的节点。插入后，新节点将成为链表的第一个节点。</li>
+  <li>addAtTail(val)：将值为 val 的节点追加到链表的最后一个元素。</li>
+  <li>addAtIndex(index,val)：在链表中的第 index 个节点之前添加值为 val  的节点。如果 index 等于链表的长度，则该节点将附加到链表的末尾。如果 index 大于链表长度，则不会插入节点。如果index小于0，则在头部插入节点。</li>
+  <li>deleteAtIndex(index)：如果索引 index 有效，则删除链表中的第 index 个节点。</li>
+</ol>
+
+<p>可以发现，使用虚拟头结点之后可以减少逻辑判断.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyLinkedList</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="c1">// 定义链表节点结构体</span>
+    <span class="k">struct</span> <span class="nc">LinkedNode</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+        <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">next</span><span class="p">;</span>
+        <span class="n">LinkedNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span><span class="o">:</span><span class="n">val</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="n">next</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">){}</span>
+    <span class="p">};</span>
+
+    <span class="c1">// 初始化链表</span>
+    <span class="n">MyLinkedList</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">_dummyHead</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedNode</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 这里定义的头结点 是一个虚拟头结点，而不是真正的链表头结点</span>
+        <span class="n">_size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 获取到第index个节点数值，如果index是非法数值直接返回-1， 注意index是从0开始的，第0个节点就是头结点</span>
+    <span class="kt">int</span> <span class="n">get</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">||</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">_dummyHead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">index</span><span class="o">--</span><span class="p">){</span> <span class="c1">// 如果--index 就会陷入死循环</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 在链表最前面插入一个节点，插入完成后，新插入的节点为链表的新的头结点</span>
+    <span class="kt">void</span> <span class="n">addAtHead</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">newNode</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedNode</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+        <span class="n">newNode</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">_dummyHead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">_dummyHead</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">newNode</span><span class="p">;</span>
+        <span class="n">_size</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 在链表最后面添加一个节点</span>
+    <span class="kt">void</span> <span class="n">addAtTail</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">newNode</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedNode</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+        <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">_dummyHead</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">){</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">newNode</span><span class="p">;</span>
+        <span class="n">_size</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 在第index个节点之前插入一个新节点，例如index为0，那么新插入的节点为链表的新头节点。</span>
+    <span class="c1">// 如果index 等于链表的长度，则说明是新插入的节点为链表的尾结点</span>
+    <span class="c1">// 如果index大于链表的长度，则返回空</span>
+    <span class="c1">// 如果index小于0，则在头部插入节点</span>
+    <span class="kt">void</span> <span class="n">addAtIndex</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">index</span> <span class="o">&gt;</span> <span class="n">_size</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>        
+        <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">newNode</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedNode</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+        <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">_dummyHead</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">index</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">newNode</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">newNode</span><span class="p">;</span>
+        <span class="n">_size</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 删除第index个节点，如果index 大于等于链表的长度，直接return，注意index是从0开始的</span>
+    <span class="kt">void</span> <span class="n">deleteAtIndex</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="n">_size</span> <span class="o">||</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">_dummyHead</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">index</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span> <span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="c1">//delete命令指示释放了tmp指针原本所指的那部分内存，</span>
+        <span class="c1">//被delete后的指针tmp的值（地址）并非就是NULL，而是随机值。也就是被delete后，</span>
+        <span class="c1">//如果不再加上一句tmp=nullptr,tmp会成为乱指的野指针</span>
+        <span class="c1">//如果之后的程序不小心使用了tmp，会指向难以预想的内存空间</span>
+        <span class="n">tmp</span><span class="o">=</span><span class="nb">nullptr</span><span class="p">;</span>
+        <span class="n">_size</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 打印链表</span>
+    <span class="kt">void</span> <span class="n">printLinkedList</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">_dummyHead</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">_size</span><span class="p">;</span>
+    <span class="n">LinkedNode</span><span class="o">*</span> <span class="n">_dummyHead</span><span class="p">;</span>
+
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="反转链表">反转链表</h3>
+
+<p>Leetcode 206.
+给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。</p>
+
+<p>双指针法：</p>
+<div align="center"> <img src="/pic/DS/Leetcode206.gif" width="500" /> </div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ListNode</span><span class="o">*</span> <span class="nf">reverseList</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ListNode</span><span class="o">*</span> <span class="n">temp</span><span class="p">;</span> <span class="c1">// 保存cur的下一个节点</span>
+    <span class="n">ListNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+    <span class="n">ListNode</span><span class="o">*</span> <span class="n">pre</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>  <span class="c1">// 保存一下 cur的下一个节点，因为接下来要改变cur-&gt;next</span>
+        <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">pre</span><span class="p">;</span> <span class="c1">// 翻转操作</span>
+        <span class="c1">// 更新pre 和 cur指针</span>
+        <span class="n">pre</span> <span class="o">=</span> <span class="n">cur</span><span class="p">;</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">pre</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>递归法：让cur指向pre，然后再将cur与cur-&gt;next进行调换。本质上和双指针法相同。</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ListNode</span><span class="o">*</span> <span class="nf">reverse</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">pre</span><span class="p">,</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">cur</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">cur</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">pre</span><span class="p">;</span>
+    <span class="n">ListNode</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">pre</span><span class="p">;</span>
+    <span class="c1">// 可以和双指针法的代码进行对比，如下递归的写法，其实就是做了这两步</span>
+    <span class="c1">// pre = cur;</span>
+    <span class="c1">// cur = temp;</span>
+    <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="n">cur</span><span class="p">,</span><span class="n">temp</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">ListNode</span><span class="o">*</span> <span class="n">reverseList</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 和双指针法初始化是一样的逻辑</span>
+    <span class="c1">// ListNode* cur = head;</span>
+    <span class="c1">// ListNode* pre = NULL;</span>
+    <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">head</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[理解虚拟头结点]]></summary></entry><entry><title type="html">Leetcode记录：模拟过程</title><link href="http://localhost:4000/2024/07/31/DS-2/" rel="alternate" type="text/html" title="Leetcode记录：模拟过程" /><published>2024-07-31T14:00:00+08:00</published><updated>2024-07-31T14:00:00+08:00</updated><id>http://localhost:4000/2024/07/31/DS-2</id><content type="html" xml:base="http://localhost:4000/2024/07/31/DS-2/"><![CDATA[<h3 id="螺旋矩阵">螺旋矩阵</h3>
 
 <p>给你一个正整数 <code class="language-plaintext highlighter-rouge">n</code> ，生成一个包含 <code class="language-plaintext highlighter-rouge">1</code> 到 <code class="language-plaintext highlighter-rouge">n^2</code> 所有元素，且元素按顺时针顺序螺旋排列的 <code class="language-plaintext highlighter-rouge">n x n</code> 正方形矩阵 <code class="language-plaintext highlighter-rouge">matrix</code> 。</p>
 
@@ -196,7 +372,111 @@
 </code></pre></div></div>
 <p>其中 <code class="language-plaintext highlighter-rouge">lower_bound</code> 用于在有序序列中查找第一个大于或等于给定值的元素的位置（迭代器）。</p>
 
-<h4 id="90476待做">904，76待做</h4>
+<h4 id="示例4-等二刷用优化再做一遍">示例4 等二刷用优化再做一遍</h4>
+<p>Leetcode 76.【最小覆盖子串】
+给你一个字符串 <code class="language-plaintext highlighter-rouge">s</code> 、一个字符串 <code class="language-plaintext highlighter-rouge">t</code> 。返回 <code class="language-plaintext highlighter-rouge">s</code> 中涵盖 <code class="language-plaintext highlighter-rouge">t</code> 所有字符的最小子串。如果 <code class="language-plaintext highlighter-rouge">s</code> 中不存在涵盖 <code class="language-plaintext highlighter-rouge">t</code> 所有字符的子串，则返回空字符串 <code class="language-plaintext highlighter-rouge">""</code> 。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ori</span><span class="p">,</span> <span class="n">cnt</span><span class="p">;</span>
+    
+<span class="kt">bool</span> <span class="nf">check</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="n">p</span> <span class="o">:</span> <span class="n">ori</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">first</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">string</span> <span class="n">minWindow</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">string</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span> <span class="n">c</span> <span class="o">:</span> <span class="n">t</span><span class="p">){</span>
+        <span class="n">ori</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">INT_MAX</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+    <span class="kt">int</span> <span class="n">ansLeft</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">right</span> <span class="o">&lt;=</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ori</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="o">++</span><span class="n">right</span><span class="p">])</span> <span class="o">!=</span> <span class="n">ori</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">cnt</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">]]</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">check</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">left</span> <span class="o">&lt;=</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">){</span>
+                <span class="n">ansLeft</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ori</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">])</span><span class="o">!=</span> <span class="n">ori</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">cnt</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">right</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">length</span> <span class="o">==</span> <span class="n">INT_MAX</span> <span class="o">?</span> <span class="s">""</span> <span class="o">:</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">ansLeft</span><span class="p">,</span> <span class="n">length</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>注意更新右端窗口及cnt的时候先移动左端窗口，更新length，最后再right++.</p>
+
+<p><strong>优化算法：</strong> 用一个变量 less 维护目前子串中有 less 种字母的出现次数小于 t 中字母的出现次数。具体来说（注意下面算法中的 less 变量）：</p>
+
+<ol>
+  <li>初始化 ansLeft=−1, ansRight=m，用来记录最短子串的左右端点，其中 m 是 s 的长度。</li>
+  <li>用一个哈希表（或者数组）cntT 统计 t 中每个字母的出现次数。</li>
+  <li>初始化 left=0，以及一个空哈希表（或者数组）cntS，用来统计 s 子串中每个字母的出现次数。</li>
+  <li>初始化 less 为 t 中的不同字母个数。</li>
+  <li>遍历 s，设当前枚举的子串右端点为 right，把字母 c=s[right] 的出现次数加一。加一后，如果 cntS[c]=cntT[c]，说明 c 的出现次数满足要求，把 less 减一。</li>
+  <li>如果 less=0，说明 cntS 中的每个字母及其出现次数都大于等于 cntT 中的字母出现次数，那么： 如果 right−left &lt; ansRight−ansLeft，说明我们找到了更短的子串，更新 ansLeft=left, ansRight=right。</li>
+  <li>把字母 x=s[left] 的出现次数减一。减一前，如果 cntS[x]=cntT[x]，说明 x 的出现次数不满足要求，把 less 加一。</li>
+  <li>左端点右移，即 left 加一。</li>
+  <li>重复上述三步，直到 less&gt;0，即 cntS 有字母的出现次数小于 cntT 中该字母的出现次数为止。</li>
+  <li>最后，如果 ansLeft&lt;0，说明没有找到符合要求的子串，返回空字符串，否则返回下标 ansLeft 到下标 ansRight 之间的子串。</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">minWindow</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">string</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">ans_left</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ans_right</span> <span class="o">=</span> <span class="n">m</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">less</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">cnt_s</span><span class="p">[</span><span class="mi">128</span><span class="p">]{},</span> <span class="n">cnt_t</span><span class="p">[</span><span class="mi">128</span><span class="p">]{};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">less</span> <span class="o">+=</span> <span class="n">cnt_t</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">++</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 有 less 种字母的出现次数 &lt; t 中的字母出现次数</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">right</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 移动子串右端点</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">];</span> <span class="c1">// 右端点字母（移入子串）</span>
+            <span class="n">less</span> <span class="o">-=</span> <span class="o">++</span><span class="n">cnt_s</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="n">cnt_t</span><span class="p">[</span><span class="n">c</span><span class="p">];</span> <span class="c1">// c 的出现次数从 &lt; 变成 &gt;=</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">less</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 涵盖：所有字母的出现次数都是 &gt;=</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">ans_right</span> <span class="o">-</span> <span class="n">ans_left</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 找到更短的子串</span>
+                    <span class="n">ans_left</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span> <span class="c1">// 记录此时的左右端点</span>
+                    <span class="n">ans_right</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="kt">char</span> <span class="n">x</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="o">++</span><span class="p">];</span> <span class="c1">// 左端点字母（移出子串）</span>
+                <span class="n">less</span> <span class="o">+=</span> <span class="n">cnt_s</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">--</span> <span class="o">==</span> <span class="n">cnt_t</span><span class="p">[</span><span class="n">x</span><span class="p">];</span> <span class="c1">// x 的出现次数从 &gt;= 变成 &lt;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans_left</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="s">""</span> <span class="o">:</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">ans_left</span><span class="p">,</span> <span class="n">ans_right</span> <span class="o">-</span> <span class="n">ans_left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+<h4 id="示例5">示例5</h4>
+<p>Leetcode 904.【水果成篮】
+实质上就是找最多包含$k$个元素的连续最长子数组。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">totalFruit</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">fruits</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">fruits</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">cnt</span><span class="p">[</span><span class="n">fruits</span><span class="p">[</span><span class="n">right</span><span class="p">]];</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">cnt</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">cnt</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">fruits</span><span class="p">[</span><span class="n">left</span><span class="p">]);</span>
+                <span class="o">--</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cnt</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="o">++</span><span class="n">left</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
 
 <h2 id="前缀和">前缀和</h2>
 
@@ -225,7 +505,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>二维前缀和：给你一个n行m列的矩阵A ，下标从1开始。请输出以 (x1, y1) 为左上角 , (x2,y2) 为右下角的子矩阵的和。</p>
+<p>二维前缀和：给你一个n行m列的矩阵A ，<strong>下标从1开始。</strong> 请输出以 (x1, y1) 为左上角 , (x2,y2) 为右下角的子矩阵的和。</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> 
 <span class="p">{</span>
@@ -299,7 +579,7 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">count</span><span class="p">;</span>
     <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[滑动窗口 滑动窗口算法的基本思想是维护一个窗口，通过移动窗口的两个边界来处理问题。]]></summary></entry><entry><title type="html">Leetcode记录：二分查找和双指针法</title><link href="http://localhost:4000/2024/07/31/DS/" rel="alternate" type="text/html" title="Leetcode记录：二分查找和双指针法" /><published>2024-07-31T02:00:00+08:00</published><updated>2024-07-31T02:00:00+08:00</updated><id>http://localhost:4000/2024/07/31/DS</id><content type="html" xml:base="http://localhost:4000/2024/07/31/DS/"><![CDATA[<h2 id="二分查找">二分查找</h2>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[滑动窗口 滑动窗口算法的基本思想是维护一个窗口，通过移动窗口的两个边界来处理问题。]]></summary></entry><entry><title type="html">Leetcode记录：二分查找和双指针法</title><link href="http://localhost:4000/2024/07/30/DS/" rel="alternate" type="text/html" title="Leetcode记录：二分查找和双指针法" /><published>2024-07-30T02:00:00+08:00</published><updated>2024-07-30T02:00:00+08:00</updated><id>http://localhost:4000/2024/07/30/DS</id><content type="html" xml:base="http://localhost:4000/2024/07/30/DS/"><![CDATA[<h2 id="二分查找">二分查找</h2>
 
 <p>二分查找的前提为有序数组，同时要关注数组是否存在重复元素。</p>
 

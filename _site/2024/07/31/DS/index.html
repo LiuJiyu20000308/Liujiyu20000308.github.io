@@ -190,7 +190,111 @@
 </code></pre></div></div>
 <p>其中 <code class="language-plaintext highlighter-rouge">lower_bound</code> 用于在有序序列中查找第一个大于或等于给定值的元素的位置（迭代器）。</p>
 
-<h4 id="90476待做">904，76待做</h4>
+<h4 id="示例4-等二刷用优化再做一遍">示例4 等二刷用优化再做一遍</h4>
+<p>Leetcode 76.【最小覆盖子串】
+给你一个字符串 <code class="language-plaintext highlighter-rouge">s</code> 、一个字符串 <code class="language-plaintext highlighter-rouge">t</code> 。返回 <code class="language-plaintext highlighter-rouge">s</code> 中涵盖 <code class="language-plaintext highlighter-rouge">t</code> 所有字符的最小子串。如果 <code class="language-plaintext highlighter-rouge">s</code> 中不存在涵盖 <code class="language-plaintext highlighter-rouge">t</code> 所有字符的子串，则返回空字符串 <code class="language-plaintext highlighter-rouge">""</code> 。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ori</span><span class="p">,</span> <span class="n">cnt</span><span class="p">;</span>
+    
+<span class="kt">bool</span> <span class="nf">check</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="n">p</span> <span class="o">:</span> <span class="n">ori</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">first</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">string</span> <span class="n">minWindow</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">string</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span> <span class="n">c</span> <span class="o">:</span> <span class="n">t</span><span class="p">){</span>
+        <span class="n">ori</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">INT_MAX</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+    <span class="kt">int</span> <span class="n">ansLeft</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">right</span> <span class="o">&lt;=</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ori</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="o">++</span><span class="n">right</span><span class="p">])</span> <span class="o">!=</span> <span class="n">ori</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">cnt</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">]]</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">check</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">left</span> <span class="o">&lt;=</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">){</span>
+                <span class="n">ansLeft</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ori</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">])</span><span class="o">!=</span> <span class="n">ori</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">cnt</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">right</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">length</span> <span class="o">==</span> <span class="n">INT_MAX</span> <span class="o">?</span> <span class="s">""</span> <span class="o">:</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">ansLeft</span><span class="p">,</span> <span class="n">length</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>注意更新右端窗口及cnt的时候先移动左端窗口，更新length，最后再right++.</p>
+
+<p><strong>优化算法：</strong> 用一个变量 less 维护目前子串中有 less 种字母的出现次数小于 t 中字母的出现次数。具体来说（注意下面算法中的 less 变量）：</p>
+
+<ol>
+  <li>初始化 ansLeft=−1, ansRight=m，用来记录最短子串的左右端点，其中 m 是 s 的长度。</li>
+  <li>用一个哈希表（或者数组）cntT 统计 t 中每个字母的出现次数。</li>
+  <li>初始化 left=0，以及一个空哈希表（或者数组）cntS，用来统计 s 子串中每个字母的出现次数。</li>
+  <li>初始化 less 为 t 中的不同字母个数。</li>
+  <li>遍历 s，设当前枚举的子串右端点为 right，把字母 c=s[right] 的出现次数加一。加一后，如果 cntS[c]=cntT[c]，说明 c 的出现次数满足要求，把 less 减一。</li>
+  <li>如果 less=0，说明 cntS 中的每个字母及其出现次数都大于等于 cntT 中的字母出现次数，那么： 如果 right−left &lt; ansRight−ansLeft，说明我们找到了更短的子串，更新 ansLeft=left, ansRight=right。</li>
+  <li>把字母 x=s[left] 的出现次数减一。减一前，如果 cntS[x]=cntT[x]，说明 x 的出现次数不满足要求，把 less 加一。</li>
+  <li>左端点右移，即 left 加一。</li>
+  <li>重复上述三步，直到 less&gt;0，即 cntS 有字母的出现次数小于 cntT 中该字母的出现次数为止。</li>
+  <li>最后，如果 ansLeft&lt;0，说明没有找到符合要求的子串，返回空字符串，否则返回下标 ansLeft 到下标 ansRight 之间的子串。</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">minWindow</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">string</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">ans_left</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ans_right</span> <span class="o">=</span> <span class="n">m</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">less</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">cnt_s</span><span class="p">[</span><span class="mi">128</span><span class="p">]{},</span> <span class="n">cnt_t</span><span class="p">[</span><span class="mi">128</span><span class="p">]{};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">less</span> <span class="o">+=</span> <span class="n">cnt_t</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">++</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 有 less 种字母的出现次数 &lt; t 中的字母出现次数</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">right</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 移动子串右端点</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">];</span> <span class="c1">// 右端点字母（移入子串）</span>
+            <span class="n">less</span> <span class="o">-=</span> <span class="o">++</span><span class="n">cnt_s</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="n">cnt_t</span><span class="p">[</span><span class="n">c</span><span class="p">];</span> <span class="c1">// c 的出现次数从 &lt; 变成 &gt;=</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">less</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 涵盖：所有字母的出现次数都是 &gt;=</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">ans_right</span> <span class="o">-</span> <span class="n">ans_left</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 找到更短的子串</span>
+                    <span class="n">ans_left</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span> <span class="c1">// 记录此时的左右端点</span>
+                    <span class="n">ans_right</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="kt">char</span> <span class="n">x</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="o">++</span><span class="p">];</span> <span class="c1">// 左端点字母（移出子串）</span>
+                <span class="n">less</span> <span class="o">+=</span> <span class="n">cnt_s</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">--</span> <span class="o">==</span> <span class="n">cnt_t</span><span class="p">[</span><span class="n">x</span><span class="p">];</span> <span class="c1">// x 的出现次数从 &gt;= 变成 &lt;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans_left</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="s">""</span> <span class="o">:</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">ans_left</span><span class="p">,</span> <span class="n">ans_right</span> <span class="o">-</span> <span class="n">ans_left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+<h4 id="示例5">示例5</h4>
+<p>Leetcode 904.【水果成篮】
+实质上就是找最多包含$k$个元素的连续最长子数组。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">totalFruit</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">fruits</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">fruits</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">cnt</span><span class="p">[</span><span class="n">fruits</span><span class="p">[</span><span class="n">right</span><span class="p">]];</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">cnt</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">cnt</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">fruits</span><span class="p">[</span><span class="n">left</span><span class="p">]);</span>
+                <span class="o">--</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cnt</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="o">++</span><span class="n">left</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
 
 <h2 id="前缀和">前缀和</h2>
 
@@ -219,7 +323,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>二维前缀和：给你一个n行m列的矩阵A ，下标从1开始。请输出以 (x1, y1) 为左上角 , (x2,y2) 为右下角的子矩阵的和。</p>
+<p>二维前缀和：给你一个n行m列的矩阵A ，<strong>下标从1开始。</strong> 请输出以 (x1, y1) 为左上角 , (x2,y2) 为右下角的子矩阵的和。</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> 
 <span class="p">{</span>
@@ -315,6 +419,13 @@
   <ul class="related-posts">
     
       <li>
+        <a href="/2024/08/01/DS/">
+          Leetcode记录：链表
+          <small><time datetime="2024-08-01T14:00:00+08:00">01 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
         <a href="/2024/07/31/DS-2/">
           Leetcode记录：模拟过程
           <small><time datetime="2024-07-31T14:00:00+08:00">31 Jul 2024</time></small>
@@ -322,16 +433,9 @@
       </li>
     
       <li>
-        <a href="/2024/07/31/DS/">
+        <a href="/2024/07/30/DS/">
           Leetcode记录：二分查找和双指针法
-          <small><time datetime="2024-07-31T02:00:00+08:00">31 Jul 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2024/01/02/CSAPP-2-3/">
-          CSAPP-2-3:程序的机器级运行过程
-          <small><time datetime="2024-01-02T16:23:00+08:00">02 Jan 2024</time></small>
+          <small><time datetime="2024-07-30T02:00:00+08:00">30 Jul 2024</time></small>
         </a>
       </li>
     
