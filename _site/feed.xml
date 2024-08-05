@@ -1,4 +1,134 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-05T06:42:37+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：哈希表</title><link href="http://localhost:4000/2024/08/03/DS/" rel="alternate" type="text/html" title="Leetcode记录：哈希表" /><published>2024-08-03T14:00:00+08:00</published><updated>2024-08-03T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/03/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/03/DS/"><![CDATA[<h2 id="哈希表-hash-table">哈希表 (Hash Table)</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-06T05:48:18+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：哈希表</title><link href="http://localhost:4000/2024/08/04/DS/" rel="alternate" type="text/html" title="Leetcode记录：哈希表" /><published>2024-08-04T14:00:00+08:00</published><updated>2024-08-04T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/04/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/04/DS/"><![CDATA[<h3 id="续哈希表例题">续哈希表例题</h3>
+
+<h4 id="四数之和-i">四数之和 I</h4>
+<p>Leetcode 454. 给你四个整数数组 <code class="language-plaintext highlighter-rouge">nums1</code>,<code class="language-plaintext highlighter-rouge">nums2</code>,<code class="language-plaintext highlighter-rouge">nums3</code> 和 <code class="language-plaintext highlighter-rouge">nums4</code> ，数组长度都是 <code class="language-plaintext highlighter-rouge">n</code> ，请你计算有多少个元组 <code class="language-plaintext highlighter-rouge">(i, j, k, l)</code> 能满足：</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">0 &lt;= i, j, k, l &lt; n</code></li>
+  <li><code class="language-plaintext highlighter-rouge">nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0</code></li>
+</ol>
+
+<p>可以将四个数组分成两部分，A 和 B 为一组，C 和 D 为另外一组。
+对于 A 和 B，我们使用二重循环对它们进行遍历，得到所有 A[i]+B[j] 的值并存入哈希映射中。对于哈希映射中的每个键值对，每个键表示一种 A[i]+B[j]，对应的值为 A[i]+B[j] 出现的次数。
+对于 C 和 D，我们同样使用二重循环对它们进行遍历。当遍历到 C[k]+D[l] 时，如果 −(C[k]+D[l]) 出现在哈希映射中，那么将 −(C[k]+D[l]) 对应的值累加进答案中。最终即可得到满足 A[i]+B[j]+C[k]+D[l]=0 的四元组数目:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">fourSumCount</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">B</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">C</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">D</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">countAB</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">:</span> <span class="n">A</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="o">:</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">countAB</span><span class="p">[</span><span class="n">u</span> <span class="o">+</span> <span class="n">v</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">:</span> <span class="n">C</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="o">:</span> <span class="n">D</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">countAB</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="o">-</span><span class="n">u</span> <span class="o">-</span> <span class="n">v</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">countAB</span><span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="o">-</span> <span class="n">v</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>如果是要求不重复的话，利用哈希表将会很困难：</p>
+
+<h3 id="三数之和">三数之和</h3>
+<p>Leetcode 15. 给你一个整数数组 <code class="language-plaintext highlighter-rouge">nums</code> ，判断是否存在三元组 <code class="language-plaintext highlighter-rouge">[nums[i], nums[j], nums[k]]</code> 满足 <code class="language-plaintext highlighter-rouge">i != j、i != k</code> 且 <code class="language-plaintext highlighter-rouge">j != k</code> ，同时还满足 <code class="language-plaintext highlighter-rouge">nums[i] + nums[j] + nums[k] == 0</code> 。请你返回所有和为 <code class="language-plaintext highlighter-rouge">0</code> 且<strong>不重复</strong>的三元组.</p>
+
+<p>「不重复」的本质是需要保证：</p>
+<ol>
+  <li>第二重循环枚举到的元素不小于当前第一重循环枚举到的元素；</li>
+  <li>第三重循环枚举到的元素不小于当前第二重循环枚举到的元素。</li>
+</ol>
+
+<p>也就是说，我们枚举的三元组 <code class="language-plaintext highlighter-rouge">(a,b,c)</code> 满足 <code class="language-plaintext highlighter-rouge">a≤b≤c</code>，保证了只有 <code class="language-plaintext highlighter-rouge">(a,b,c)</code> 这个顺序会被枚举到，而 <code class="language-plaintext highlighter-rouge">(b,a,c)、(c,b,a)</code> 等等这些不会，这样就减少了重复。要实现这一点，我们可以将数组中的元素从小到大进行排序，随后使用普通的三重循环就可以满足上面的要求。
+同时，对于每一重循环而言，相邻两次枚举的元素不能相同，否则也会造成重复。</p>
+
+<p>如果我们固定了前两重循环枚举到的元素 a 和 b，那么只有唯一的 c 满足 a+b+c=0。当第二重循环往后枚举一个元素 b’时，由于 b’&gt;b，那么满足 a+b’+c‘=0 的 c’一定有 c’&lt; c，即 c’在数组中一定出现在 c 的左侧。也就是说，我们可以从小到大枚举 b，同时从大到小枚举 c，也就是<strong>双指针</strong>的思想，这样就将三重循环降低为二重循环了。</p>
+
+<p><strong>在代码实现中一定要注意需要在哪里去重，否则可能会出现一些算例不会ac的情况。</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">threeSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">!=</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
+                <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
+                <span class="n">right</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">],</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]});</span>
+                <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+                <span class="k">while</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">)</span>
+                    <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+                <span class="n">right</span><span class="o">--</span><span class="p">;</span>
+                <span class="k">while</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">right</span> <span class="o">&gt;</span> <span class="n">left</span><span class="p">)</span>
+                    <span class="n">right</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="四数之和">四数之和</h3>
+
+<p>给你一个由 n 个整数组成的数组 <code class="language-plaintext highlighter-rouge">nums</code> ，和一个目标值 <code class="language-plaintext highlighter-rouge">target</code> 。请你找出并返回满足下述全部条件且不重复的四元组 <code class="language-plaintext highlighter-rouge">[nums[a], nums[b], nums[c], nums[d]]</code>（若两个四元组元素一一对应，则认为两个四元组重复）：</p>
+
+<ol>
+  <li>0 &lt;= a, b, c, d &lt; n</li>
+  <li>a、b、c 和 d 互不相同</li>
+  <li>nums[a] + nums[b] + nums[c] + nums[d] == target</li>
+</ol>
+
+<p>求解思路和三数之和一模一样：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">fourSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">)</span> 
+        <span class="k">return</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">{};</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">){</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">j</span><span class="o">&gt;</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">){</span>
+                <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">];</span>
+                <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">];</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="n">c</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">)</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="n">c</span><span class="o">+</span><span class="n">d</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span>
+                    <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+                <span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="n">c</span><span class="o">+</span><span class="n">d</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span>
+                    <span class="n">right</span><span class="o">--</span><span class="p">;</span>
+                <span class="k">else</span><span class="p">{</span>
+                    <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">});</span>
+                    <span class="n">right</span><span class="o">--</span><span class="p">;</span>
+                    <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+                    <span class="k">while</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">right</span><span class="o">--</span><span class="p">;</span>
+                    <span class="k">while</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[续哈希表例题]]></summary></entry><entry><title type="html">Leetcode记录：哈希表</title><link href="http://localhost:4000/2024/08/03/DS/" rel="alternate" type="text/html" title="Leetcode记录：哈希表" /><published>2024-08-03T14:00:00+08:00</published><updated>2024-08-03T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/03/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/03/DS/"><![CDATA[<h2 id="哈希表-hash-table">哈希表 (Hash Table)</h2>
 
 <h3 id="理论基础">理论基础</h3>
 
@@ -248,7 +378,7 @@
         <span class="p">}</span>
         <span class="n">hashtable</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="p">{};</span>
+    <span class="k">return</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">};</span>
 <span class="p">}</span>
 </code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[哈希表 (Hash Table)]]></summary></entry><entry><title type="html">Leetcode记录：链表</title><link href="http://localhost:4000/2024/08/01/DS/" rel="alternate" type="text/html" title="Leetcode记录：链表" /><published>2024-08-01T14:00:00+08:00</published><updated>2024-08-01T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/01/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/01/DS/"><![CDATA[<h3 id="理解虚拟头结点">理解虚拟头结点</h3>
 
@@ -2807,571 +2937,4 @@ x = (x + bias) &gt;&gt; 4;
   <li><code class="language-plaintext highlighter-rouge">(dx+dy)+dz == dx+(dy+dz)</code> <strong>正确</strong>，因为三个int相加不会出现舍入误差</li>
   <li><code class="language-plaintext highlighter-rouge">(dx*dy)*dz == dx*(dy*dz)</code> <strong>正确</strong></li>
   <li><code class="language-plaintext highlighter-rouge">dx/dx == dz/dz</code> <strong>错误</strong>，当dx为0，dz不为0的时候不相等。</li>
-</ol>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="CSAPP" /><summary type="html"><![CDATA[信息的表示和处理]]></summary></entry><entry><title type="html">CSAPP-1:家庭作业以及Data Lab要点</title><link href="http://localhost:4000/2023/11/24/CSAPP-hm1/" rel="alternate" type="text/html" title="CSAPP-1:家庭作业以及Data Lab要点" /><published>2023-11-24T14:23:00+08:00</published><updated>2023-11-24T14:23:00+08:00</updated><id>http://localhost:4000/2023/11/24/CSAPP-hm1</id><content type="html" xml:base="http://localhost:4000/2023/11/24/CSAPP-hm1/"><![CDATA[<h2 id="信息存储">信息存储</h2>
-
-<ol>
-  <li>
-    <p>将一个$w$位的字中的字节0(最低位)开始编号，并将参数$x$的字节$i$替换为字节$b$，<strong>要考虑大小端</strong>：</p>
-
-    <pre><code class="language-C"> unsigned replace_byte(unsigned x, int i, unsigned char b)
- {
-     unsigned int *p = &amp;x;
-     unsigned char *v = (unsigned char *) p;
-        
-     if (is_little_endian())
-         v[i] = b;
-     else 
-         v[sizeof(unsigned) - i - 1] = b;
-        
-     return *p;
- }
-
- int is_little_endian(void)
- {
-     int n = 1;
-     int *p = &amp;n;
-     int *v = (void *) p;
-        
-     if (*v == 0x01)
-         return 1;
-     else
-         return 0;
- }
-</code></pre>
-  </li>
-  <li>判断表达式是否满足以下任一条件： <strong>通过逻辑反的判断来确保任何结果都是对的</strong>
-    <ol>
-      <li>$x$的任何位都为1                <code class="language-plaintext highlighter-rouge">!(x ^ 0xffffffff)</code></li>
-      <li>$x$的任何位都为0                <code class="language-plaintext highlighter-rouge">!(x ^ 0x0)</code></li>
-      <li>$x$的最低有效字节的位都为1       <code class="language-plaintext highlighter-rouge">!((x &amp; 0xff) ^ 0xff)</code></li>
-      <li>$x$的最低有效字节的位都为0       <code class="language-plaintext highlighter-rouge">!((x &amp; 0xff) ^ 0x0)</code></li>
-    </ol>
-  </li>
-  <li>
-    <p>判断机器是否为算术右移：</p>
-
-    <pre><code class="language-C"> int int_shifts_are_arithmetic()
- {
-     int n = -1;
-     int shifts = (n&gt;&gt;2);
-     return shifts == n;
- }
-</code></pre>
-  </li>
-  <li>
-    <p>用算术右移来完成逻辑右移以及用逻辑右移完成算术右移，后面其他操作不能包含右移和除法。
-在实现算术右移的时候注意 <strong>如何判断x的最高位是否为1</strong></p>
-
-    <pre><code class="language-C"> // 算术右移到逻辑右移
- unsigned srl(unsigned x, int k)
- {
-     /* perform shift arithmetically */
-     unsigned xsra = (int) x &gt;&gt; k;
-        
-     int mask = -1;
-        
-     mask = mask &lt;&lt; ((sizeof(int) &lt;&lt; 3) - k);
-     return ~mask &amp; xsra;
- }
-
- unsigned sra(int x, int k)
- {
-     /* perform shift logically */
-     int xsrl = (unsigned) x &gt;&gt; k;
-        
-     unsigned mask = 1;
-     int *p = &amp;x;
-     char *temp = (void *) p;
-        
-     // 判断x的最高位是否为1
-     int h = (((mask &lt;&lt; 7) &amp; temp[sizeof(int) - 1]) == 128);
-        
-     h = (-h) &lt;&lt; ((sizeof(int) &lt;&lt; 3) - k);
-     return h | xsrl;
- }
-</code></pre>
-  </li>
-  <li>
-    <p>判断是否$x$的任一奇数位为1：<code class="language-plaintext highlighter-rouge">!(x &amp; 0x55555555)</code>. <strong>这里要用<code class="language-plaintext highlighter-rouge">&amp;</code>是因为避免$x$偶数位的影响。</strong></p>
-  </li>
-  <li>
-    <p>判断$x$的位表示中是否有奇数个1：</p>
-
-    <pre><code class="language-C"> int odd_ones(unsigned x)
- {
-     x ^= x &gt;&gt; 1;
-     x ^= x &gt;&gt; 2;
-     x ^= x &gt;&gt; 4;
-     x ^= x &gt;&gt; 8;
-     x ^= x &gt;&gt; 16;
-     return x &amp; 0x1;
- }
-</code></pre>
-
-    <p>第一次异或的结果，第$i$个位置上是1代表原数中第$i$位和第$i+1$位有一个为1，也就是奇数个1。也就是说，某个位为1，代表从它开始向左连续两位中1的个数是奇数（异或的本质）。第二次异或，就是两位两位的比较了，比如，若结果第6位为1，那么代表上一次的结果的第6位和第8位有奇数个1，也就是原数中第6,7,8,9位中有奇数个1。
- <strong>整个过程就是不断的压缩信息。</strong></p>
-  </li>
-  <li>
-    <p>得到暗示x最左侧的1的掩码，例如<code class="language-plaintext highlighter-rouge">0xFF00 -&gt; 0x8000</code></p>
-
-    <pre><code class="language-C"> int leftmost_one(unsigned int x)
- {
-     unsigned int base = 0x80000000;
-     while(base)
-     {
-         if((x &amp; base))
-             break;
-         base &gt;&gt;= 1;
-     }
- }
-</code></pre>
-
-    <p>这样做可以返回<code class="language-plaintext highlighter-rouge">0x8000</code>，但是没有涉及到掩码：</p>
-
-    <pre><code class="language-C"> int leftmost_one(unsigned x)
- {
-     x |= x &gt;&gt; 1;
-     x |= x &gt;&gt; 2;
-     x |= x &gt;&gt; 4;
-     x |= x &gt;&gt; 8;
-     x |= x &gt;&gt; 16;
-     return (x &amp; (~(x &gt;&gt; 1)));
- }
-</code></pre>
-
-    <p>假设此时的字长$w$ = 8，假设 <code class="language-plaintext highlighter-rouge">x = 00010110</code>，首先<strong>前五步将$x$最左侧的1的右侧全置为1</strong>，得到<code class="language-plaintext highlighter-rouge">0x00011111</code>，在此基础上右移一位再取反就可以得到掩码了。</p>
-  </li>
-  <li>
-    <p>得到最低侧$n$位均为1的值：<code class="language-plaintext highlighter-rouge">-1 &gt;&gt; (w-n)</code><strong>注意当$n=w$的情况，此时右移$n$位的实际操作是不变</strong></p>
-  </li>
-  <li>
-    <p>将$x$的最高$n$位交换到末尾，例如: <code class="language-plaintext highlighter-rouge">n=4, x=0x12345678 -&gt; 0x23456781</code></p>
-
-    <pre><code class="language-C"> unsigned rotate_left(unsigned x, int n)
- {
-     int w = sizeof(int) &lt;&lt; 3;
-     unsigned temp = x &gt;&gt; (w - n - 1) &gt;&gt; 1;
-        
-     return (x &lt;&lt; n) + temp;
- }
-</code></pre>
-  </li>
-  <li>
-    <p>判断一个数能否用$n$位补码来表示：</p>
-
-    <p><strong>正数需要要求第$n$位不为1，例如2是无法用2位来表示的。</strong>
-<strong>负数要求$n$到$w$位均为1才可以。</strong></p>
-
-    <pre><code class="language-C">int fits_bits(int x, int n)
-{
-    int neg = x &gt;&gt; (n - 1); //考虑算术右移
-    int pos = x &gt;&gt; (n - 1); 
-    return neg == -1 || pos == 0;
-}
-</code></pre>
-  </li>
-  <li>$a^k$表示$a$重复$k$次，假设一个$w$位的类型，如何不适用$w$得到以下数值
-    <ol>
-      <li>$1^{w-k}0^{k}$:             <code class="language-plaintext highlighter-rouge">(-1) &lt;&lt; k</code></li>
-      <li>$0^{w-k-j}1^k0^j$:          <code class="language-plaintext highlighter-rouge">a = -1 &lt;&lt; (k-j), b = -1 &lt;&lt; j,  ~(a|~b)</code></li>
-    </ol>
-  </li>
-</ol>
-
-<h2 id="整数运算">整数运算</h2>
-
-<ol>
-  <li>
-    <p>符号整数饱和加法（正溢出返回TMax，负溢出返回TMin）以及对应的判断减法是否溢出（<strong>注意y=TMin的情况</strong>）</p>
-
-    <pre><code class="language-C"> int asturating_add(int x, int y)
- {
-     int sum = x + y;
-     int w = sizeof(int) &lt;&lt; 3;
-        
-     // x, y, sum的最高位
-     int h_x = (unsigned) x &gt;&gt; (w - 1);
-     int h_y = (unsigned) y &gt;&gt; (w - 1);
-     int h_sum = (unsigned) sum &gt;&gt; (w - 1);
-        
-     // neg = 1 表示负溢出， pos = 1 表示正溢出
-     int neg = h_x &amp;&amp; h_y &amp;&amp; !h_sum;
-     int pos = !h_x &amp;&amp; !h_y &amp;&amp; h_sum;
-        
-     return (-neg &amp; INT_MIN) + (-pos &amp; INT_MAX);
- }
-
- int tsub_ok(int x, int y)
- {
-     if(y == INT_MIN){
-         return x &lt; 0;
-     }
-     int temp = asturating_add(x, -y);
-     return temp != INT_MIN &amp;&amp; temp != INT_MAX;
- }
-</code></pre>
-  </li>
-  <li>
-    <p>假设我们已有用于计算$x$和$y$采用补码形式下$x\cdot y$的高$w$位的函数</p>
-
-    <pre><code class="language-C"> int signed_high_prod(int x, int y);
-</code></pre>
-    <p>现在计算无符号变量$x\cdot y$的高$w$位：</p>
-
-    <p>这里用到$x’\cdot y’ = x\cdot y + (x_{w-1}y+y_{w-1}x)2^w + x_{w-1}y_{w-1}2^{2w}$.</p>
-
-    <pre><code class="language-C"> int signed_high_prod(int x, int y) 
- {
- int64_t mul = (int64_t) x * y;
- return mul &gt;&gt; 32;
- }
-
- unsigned unsigned_high_prod(unsigned x, unsigned y)
- {
-     int w = sizeof(int) &lt;&lt; 3;
-     int x_highest_bit = x &gt;&gt; w - 1;
-     int y_highest_bit = y &gt;&gt; w - 1;
-     return signed_high_prod(x, y) + (-y_highest_bit &amp; x) + (-x_highest_bit &amp; y);
- }
-</code></pre>
-  </li>
-  <li>
-    <p>实现<code class="language-plaintext highlighter-rouge">calloc</code>函数为一个数组分配内存，该数组有nmemb个元素，每个元素size字节：<strong>判断是否发生溢出！</strong></p>
-
-    <pre><code class="language-C"> void *calloc(size_t nmemb, size_t size)
- {
-     if (nmemb == 0 || size == 0)
-         return NULL;
-     size_t bytes = nmemb * size;
-     if (nmemb == bytes / size) // 判断是否溢出
-     {
-         void* ptr = malloc(bytes);
-         memset(ptr, 0, bytes);
-         return ptr;
-     }
-     return NULL;
- }
-</code></pre>
-  </li>
-  <li>
-    <p>实现整数除以2的幂数：
-<strong>如何不适用判断来做到合理偏置（-1\0 &amp; mask）</strong></p>
-
-    <pre><code class="language-C"> int divide_power2(int x, int k)
- {
-     int sign = (x &amp; INT_MIN) == INT_MIN;
-     int mask = (1 &lt;&lt; k) - 1;
-     int bias = -sign &amp; mask;
-        
-     return (x + bias) &gt;&gt; k;
- }
-</code></pre>
-  </li>
-  <li>
-    <p>对于整数参数$x$，分两种方式计算$3*x/4$的值：1.会出现溢出；2.向零舍入，不会溢出。
-<strong>不溢出就需要用更大的类型来存储，计算完毕后再进行舍入。</strong></p>
-
-    <pre><code class="language-C"> int mul3div4(int x)
- {
-     int result = (x &lt;&lt; 1) + x;
-     return divide_power2(result, 2);
- }
-
- int threefourths(int x)
- {
-     int64_t result = ((int64_t) x &lt;&lt; 1) + x;
-     int sign = (x &amp; INT_MIN) == INT_MIN;
-     int mask = (1 &lt;&lt; 2) - 1;
-     int bias = -sign &amp; mask;
-     return (result + bias) &gt;&gt; 2;
- }
-
-</code></pre>
-  </li>
-</ol>
-
-<h2 id="浮点数运算">浮点数运算</h2>
-
-<ol>
-  <li>实现浮点数小于号判断（假设两个参数都不是NaN）：
-    <ol>
-      <li>+0.0等于-0.0</li>
-      <li>考虑NaN（默认比任何数都大）</li>
-      <li>考虑正负号</li>
-      <li>正数升序，负数降序（正负无穷也可以按照此规律）</li>
-    </ol>
-
-    <pre><code class="language-C"> unsigned f2u(float x) 
- {
- return *(unsigned*)&amp;x;
- }
-
- int float_le(float x, float y) 
- {
- unsigned ux = f2u(x);
- unsigned uy = f2u(y);
-
- unsigned sx = ux &gt;&gt; 31;
- unsigned sy = uy &gt;&gt; 31;
-    
- return (ux &lt;&lt; 1 == 0 &amp;&amp; uy &lt;&lt; 1 == 0) ||
-         (sx &gt; sy) ||
-         (sx &amp;&amp; sy &amp;&amp; ux &gt;= uy) ||
-         (!sx &amp;&amp; !sy &amp;&amp; ux &lt;= uy);
- }
-</code></pre>
-  </li>
-  <li>
-    <p>实现$2^x$的浮点表示：</p>
-
-    <pre><code class="language-C"> float u2f(unsigned u)
- {
-     return *(float *) &amp;u;
- }
- float fpwr2(int x)
- {
-     /* Result exponent and fraction */
-     unsigned exp, frac;
-     unsigned u;
-     if (x &lt; -126 - 23)
-     {
-         /* Too small. Return 0.0 */
-         exp = 0;
-         frac = 0;
-     }
-     else if (x &lt; -126)
-     {
-         /* Denormalized result */
-         exp = 0;
-         frac = 1 &lt;&lt; (23 + x + 126);
-     }
-     else if (x &lt; 128)
-     {
-         /* Normalized result. */
-         exp = x + 127;
-         frac = 0;
-     }
-     else
-     {
-         /* Too big. Return +oo */
-         exp = 255;
-         frac = 0;
-     }
-     /* Pack exp and frac into 32 bits */
-     u = exp &lt;&lt; 23 | frac;
-     return u2f(u);
- }
-</code></pre>
-  </li>
-  <li>
-    <p>实现对一个浮点数求相反数：
- <strong>关键是符号，阶码，尾码的获取与重组</strong></p>
-
-    <pre><code class="language-C"> typedef unsigned float_bits;
-    
- /* Compute -f. If f is NaN, then return f. */
- float_bits float_negate(float_bits f)
- {
-     float_bits sign, exp, frac;
-        
-     sign = f &gt;&gt; 31;
-     exp = f &gt;&gt; 23 &amp; 0xff;
-     frac = f &amp; 0x7fffff;
-        
-     if (exp == 0xff &amp;&amp; frac)
-         return f;
-     else
-         return (~sign &lt;&lt; 31) | (exp &lt;&lt; 23) | frac;
- }
-</code></pre>
-  </li>
-  <li>
-    <p>实现浮点数绝对值函数：</p>
-
-    <pre><code class="language-C"> float_bits float_absval(float_bits f)
- {
-     float_bits exp, frac;
-        
-     exp = f &gt;&gt; 23 &amp; 0xff;
-     frac = f &amp; 0x7fffff;
-        
-     if (exp == 0xff &amp;&amp; frac)
-         return f;
-     else
-         return 0 &lt;&lt; 31 | (exp &lt;&lt; 23) | frac;
- }
-</code></pre>
-  </li>
-  <li>实现$2.0*f$：
-    <ol>
-      <li>考虑NaN</li>
-      <li>考虑非规格化： <strong>frac左移一位就相当于exp最低位有1</strong></li>
-      <li>考虑2f溢出的情况，即exp=0xff或0xff-1</li>
-      <li>考虑规格化</li>
-    </ol>
-
-    <pre><code class="language-C"> float_bits float_twice(float_bits f)
- {
-     float_bits sign, exp, frac;
-        
-     sign = f &gt;&gt; 31;
-     exp = f &gt;&gt; 23 &amp; 0xff;
-     frac = f &amp; 0x7fffff;
-        
-     if (exp == 0xff &amp;&amp; frac)
-         return f;
-        
-     if (exp == 0)  // 非规格化的值
-         frac &lt;&lt;= 1;
-     else if (exp == 0xff - 1)  //无穷大时
-     {
-         frac = 0;
-         exp = 0xff;
-     }
-     else
-         exp += 1;
-        
-     return (sign &lt;&lt; 31) | (exp &lt;&lt; 23) | frac;
- }
-</code></pre>
-  </li>
-  <li>实现$0.5*f$：
-    <ol>
-      <li>考虑NaN</li>
-      <li>考虑非规格化时的舍入 <strong>学习如何向偶数舍入（只有11的情况才需要+1）</strong></li>
-      <li>考虑exp=1 <strong>抛开符号位，整体右移一位再舍入</strong></li>
-      <li>考虑其他规格化情况</li>
-    </ol>
-
-    <pre><code class="language-C"> float_bits float_half(float_bits f)
- {
-     float_bits sign, exp, frac, rest;
-        
-     sign = f &gt;&gt; 31;
-     exp = f &gt;&gt; 23 &amp; 0xff;
-     frac = f &amp; 0x7fffff;
-     rest = f &amp; 0x7FFFFFFF;
-        
-     if (exp == 0xff)
-         return f;
-        
-     /* 向偶数舍入
-     * round to even, we care about last 2 bits of frac
-     *
-     * 00 =&gt; 0 just &gt;&gt;1
-     * 01 =&gt; 0 (round to even) just &gt;&gt;1
-     * 10 =&gt; 1 just &gt;&gt;1
-     * 11 =&gt; 1 + 1 (round to even) just &gt;&gt;1 and plus 1
-     */
-     int addition = (frac &amp; 0x3) == 0x3;
-
-     if (exp == 0) {
-         /* Denormalized */
-         frac &gt;&gt;= 1;
-         frac += addition;
-     } else if (exp == 1) {
-         /* Normalized to denormalized */
-         rest &gt;&gt;= 1;
-         rest += addition;
-         exp = rest &gt;&gt; 23 &amp; 0xFF;
-         frac = rest &amp; 0x7FFFFF;
-     } else {
-         /* Normalized */
-         exp -= 1;
-     }
-
-     return (sign &lt;&lt; 31) | (exp &lt;&lt; 23) | frac;
- }
-</code></pre>
-  </li>
-  <li>实现float到int的转换，向零舍入，如果超出表示范围则返回0x80000000：
-    <ol>
-      <li>考虑溢出或者NaN（<strong>int 最大只能表示$2^{31}$</strong>）</li>
-      <li>当exp &lt; bias时，浮点数f的绝对值小于1，直接返回0</li>
-      <li>此时bias &lt;= exp &lt; 31+bias, 即 0 &lt;= E &lt; 31 时，由于浮点数小数部分只有23位，此时分为两种情况：
-        <ol>
-          <li>E &gt; 23 时，rest 左移 E-23位</li>
-          <li>E &lt;= 23 时，rest 右移 23-E位（<strong>将精确数字舍去一部分就是向零舍入</strong>）</li>
-        </ol>
-      </li>
-    </ol>
-
-    <pre><code class="language-C"> int float_f2i(float_bits f)
- {
-     float_bits sign, exp, frac;
-     float_bits M, E, bias;
-        
-     sign = f &gt;&gt; 31;
-     exp = f &gt;&gt; 23 &amp; 0xff;
-     frac = f &amp; 0x7fffff;
-     bias = 0x7f;
-        
-     if (exp&gt;= 31 + bias || exp == 0xff)  // overflow or f is NaN
-         return 0x80000000;
-     else if (exp &lt; bias)  // 结果小于1
-         return 0;
-     else
-     {
-         M = frac | 0x800000;
-         E = exp - bias;
-         if (E &gt; 23)
-             return pow(-1, sign) * (M &lt;&lt; (E - 23));
-         else
-             return pow(-1, sign) * (M &gt;&gt; (23 - E));
-     }
- }
-</code></pre>
-  </li>
-  <li>实现int到float的转换：
-    <ol>
-      <li>0直接返回</li>
-      <li>如果是负数，先确定sign，然后取反+1获得其绝对值</li>
-      <li><strong>算出最左侧的1在第k位，则exp = k+bias</strong></li>
-      <li>如果k &gt; 23，<strong>需要考虑如何舍入</strong>：
-        <ol>
-          <li>截断的部分大于截断的一半，向上舍入</li>
-          <li>截断的部分等于截断的一半，向偶数舍入 <strong>i&amp;hide == hide是判断某一位是否为1，与判断符号数是否是负数一样</strong></li>
-          <li>截断的部分小于截断的一半，向下舍入</li>
-        </ol>
-      </li>
-    </ol>
-
-    <pre><code class="language-C"> float_bits float_i2f(int i)
- {
-         unsigned sign, exp, frac;
-         unsigned leftmost, rightmost, t;
-
-         if (i == 0)
-                 return i;
-
-         sign = (i &amp; INT_MIN) == INT_MIN;
-         if (sign)
-                 i = ~i + 1;
-         for (rightmost = 1, t = INT_MIN; (t &amp; i) != t; t &gt;&gt;= 1)
-                 rightmost++;
-         leftmost = (sizeof(int) &lt;&lt; 3) - rightmost; //最左侧的1的位置
-         exp = leftmost + 127;
-
-         int shift;
-         if (leftmost &gt; 23) { // 考虑舍入
-                 shift = leftmost - 23;
-                 int mask = ((1 &lt;&lt; shift) - 1) &amp; i;
-                 int half = 1 &lt;&lt; (shift - 1);
-                 int hide = 1 &lt;&lt; shift;
-                 //mask == half时只有舍入位为1时才加1
-                 int round = mask&gt;half || (mask==half &amp;&amp; (i&amp;hide)==hide); 
-                 frac = (i &gt;&gt; shift) &amp; 0x7FFFFF; //考虑算术右移的影响
-                 if (frac == 0x7FFFFF &amp;&amp; round == 1) //+1有可能导致进位
-                         frac = 0, exp++;
-                 else
-                         frac += round;
-         } else { // 补满23位
-                 shift = 23 - leftmost;
-                 frac = (i &lt;&lt; shift) &amp; 0x7FFFFF;
-         }
-
-         return (sign &lt;&lt; 31) | (exp &lt;&lt; 23) | frac;
- }
-</code></pre>
-  </li>
-</ol>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="CSAPP" /><summary type="html"><![CDATA[信息存储]]></summary></entry></feed>
+</ol>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="CSAPP" /><summary type="html"><![CDATA[信息的表示和处理]]></summary></entry></feed>
