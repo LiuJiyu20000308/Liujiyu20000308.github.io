@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-06T05:48:18+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：哈希表</title><link href="http://localhost:4000/2024/08/04/DS/" rel="alternate" type="text/html" title="Leetcode记录：哈希表" /><published>2024-08-04T14:00:00+08:00</published><updated>2024-08-04T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/04/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/04/DS/"><![CDATA[<h3 id="续哈希表例题">续哈希表例题</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-06T12:32:51+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：哈希表例题</title><link href="http://localhost:4000/2024/08/04/DS/" rel="alternate" type="text/html" title="Leetcode记录：哈希表例题" /><published>2024-08-04T14:00:00+08:00</published><updated>2024-08-04T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/04/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/04/DS/"><![CDATA[<h3 id="续哈希表例题">续哈希表例题</h3>
 
 <h4 id="四数之和-i">四数之和 I</h4>
 <p>Leetcode 454. 给你四个整数数组 <code class="language-plaintext highlighter-rouge">nums1</code>,<code class="language-plaintext highlighter-rouge">nums2</code>,<code class="language-plaintext highlighter-rouge">nums3</code> 和 <code class="language-plaintext highlighter-rouge">nums4</code> ，数组长度都是 <code class="language-plaintext highlighter-rouge">n</code> ，请你计算有多少个元组 <code class="language-plaintext highlighter-rouge">(i, j, k, l)</code> 能满足：</p>
@@ -30,7 +30,7 @@
 </code></pre></div></div>
 <p>如果是要求不重复的话，利用哈希表将会很困难：</p>
 
-<h3 id="三数之和">三数之和</h3>
+<h4 id="三数之和">三数之和</h4>
 <p>Leetcode 15. 给你一个整数数组 <code class="language-plaintext highlighter-rouge">nums</code> ，判断是否存在三元组 <code class="language-plaintext highlighter-rouge">[nums[i], nums[j], nums[k]]</code> 满足 <code class="language-plaintext highlighter-rouge">i != j、i != k</code> 且 <code class="language-plaintext highlighter-rouge">j != k</code> ，同时还满足 <code class="language-plaintext highlighter-rouge">nums[i] + nums[j] + nums[k] == 0</code> 。请你返回所有和为 <code class="language-plaintext highlighter-rouge">0</code> 且<strong>不重复</strong>的三元组.</p>
 
 <p>「不重复」的本质是需要保证：</p>
@@ -73,7 +73,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h3 id="四数之和">四数之和</h3>
+<h4 id="四数之和">四数之和</h4>
 
 <p>给你一个由 n 个整数组成的数组 <code class="language-plaintext highlighter-rouge">nums</code> ，和一个目标值 <code class="language-plaintext highlighter-rouge">target</code> 。请你找出并返回满足下述全部条件且不重复的四元组 <code class="language-plaintext highlighter-rouge">[nums[a], nums[b], nums[c], nums[d]]</code>（若两个四元组元素一一对应，则认为两个四元组重复）：</p>
 
@@ -1027,6 +1027,92 @@
 </code></pre></div></div>
 
 <p><strong>可以发现，滑动窗口和最大最小子数组或字符串问题关系密切，更新左窗口和更新length的先后顺序与最大还是最小问题相关</strong></p>
+
+<h4 id="找出字符串中所有字母的异位词">找出字符串中所有字母的异位词</h4>
+
+<p>Leetcode 438. 给定两个字符串 s 和 p，找到 s 中所有 p 的 异位词 的子串，返回这些子串的起始索引。不考虑答案输出的顺序。</p>
+
+<p>我们可以在字符串 s 中构造一个长度为与字符串 p 的长度相同的滑动窗口，并在滑动中维护窗口中每种字母的数量；当窗口中每种字母的数量与字符串 p 中每种字母的数量相同时，则说明当前窗口为字符串 p 的异位词。</p>
+
+<p>在此基础上，我们不再分别统计滑动窗口和字符串 p 中每种字母的数量，而是统计滑动窗口和字符串 p 中每种字母数量的差；并引入变量 differ 来记录当前窗口与字符串 p 中数量不同的字母的个数，并在滑动窗口的过程中维护它。<strong>在判断滑动窗口中每种字母的数量与字符串 p 中每种字母的数量是否相同时，只需要判断 differ 是否为零即可</strong>。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">findAnagrams</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">string</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">sLen</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">pLen</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">sLen</span> <span class="o">&lt;</span> <span class="n">pLen</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">{};</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">count</span><span class="p">(</span><span class="mi">26</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pLen</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="o">++</span><span class="n">count</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">];</span>
+        <span class="o">--</span><span class="n">count</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">differ</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">count</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="o">++</span><span class="n">differ</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">differ</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">sLen</span><span class="o">-</span><span class="n">pLen</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">count</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
+            <span class="o">--</span><span class="n">differ</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">count</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="o">++</span><span class="n">differ</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">--</span><span class="n">count</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">];</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">count</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">pLen</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+            <span class="o">--</span><span class="n">differ</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">count</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">pLen</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="o">++</span><span class="n">differ</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">++</span><span class="n">count</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">pLen</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">];</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">differ</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<h4 id="串联所有单词的子串">串联所有单词的子串</h4>
+<p>Leetcode 30. 给定一个字符串 s 和一个字符串数组 words。 words中所有字符串长度相同。
+s 中的<strong>串联子串</strong>是指一个包含 words 中所有字符串以任意顺序排列连接起来的子串。返回所有串联子串在 s 中的开始索引。</p>
+
+<p>和上一道题十分类似，只不过字符变成了单词，记 words 的长度为 m，words 中每个单词的长度为 n，s 的长度为 ls。首先需要将 s 划分为单词组，每个单词的大小均为 n （首尾除外）。这样的划分方法有 n 种，即先删去前 i （i=0∼n−1）个字母后，将剩下的字母进行划分，如果末尾有不到 n 个字母也删去。对这 n 种划分得到的单词数组分别使用滑动窗口对 words 进行类似于「字母异位词」的搜寻。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">findSubstring</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">words</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">(),</span> <span class="n">ls</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">m</span> <span class="o">*</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="n">ls</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">differ</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">differ</span><span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)];</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">word</span><span class="o">:</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">differ</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">differ</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">word</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">ls</span> <span class="o">-</span> <span class="n">m</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">start</span> <span class="o">+=</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="o">!=</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">string</span> <span class="n">word</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="n">differ</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">differ</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">word</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="n">word</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">differ</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">differ</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">word</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">differ</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">res</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <h2 id="前缀和">前缀和</h2>
 
