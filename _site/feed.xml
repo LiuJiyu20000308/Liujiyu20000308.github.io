@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-06T12:32:51+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：哈希表例题</title><link href="http://localhost:4000/2024/08/04/DS/" rel="alternate" type="text/html" title="Leetcode记录：哈希表例题" /><published>2024-08-04T14:00:00+08:00</published><updated>2024-08-04T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/04/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/04/DS/"><![CDATA[<h3 id="续哈希表例题">续哈希表例题</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-06T14:24:36+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：哈希表例题</title><link href="http://localhost:4000/2024/08/04/DS/" rel="alternate" type="text/html" title="Leetcode记录：哈希表例题" /><published>2024-08-04T14:00:00+08:00</published><updated>2024-08-04T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/04/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/04/DS/"><![CDATA[<h3 id="续哈希表例题">续哈希表例题</h3>
 
 <h4 id="四数之和-i">四数之和 I</h4>
 <p>Leetcode 454. 给你四个整数数组 <code class="language-plaintext highlighter-rouge">nums1</code>,<code class="language-plaintext highlighter-rouge">nums2</code>,<code class="language-plaintext highlighter-rouge">nums3</code> 和 <code class="language-plaintext highlighter-rouge">nums4</code> ，数组长度都是 <code class="language-plaintext highlighter-rouge">n</code> ，请你计算有多少个元组 <code class="language-plaintext highlighter-rouge">(i, j, k, l)</code> 能满足：</p>
@@ -1114,6 +1114,11 @@ s 中的<strong>串联子串</strong>是指一个包含 words 中所有字符串
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h4 id="字符串的排列">字符串的排列</h4>
+
+<p>Leetcode 567. 给你两个字符串 s1 和 s2 ，写一个函数来判断 s2 是否包含 s1 的排列。如果是，返回 true ；否则，返回 false 。</p>
+
+<p>用前面的方法直接解决。</p>
 <h2 id="前缀和">前缀和</h2>
 
 <p>前缀和算法（Prefix Sum）是一种用于快速计算数组元素之和的技术。它通过预先计算数组中每个位置前所有元素的累加和，将这些部分和存储在一个新的数组中，从而在需要计算某个区间的和时，可以通过简单的减法操作得到结果，而不必重新遍历整个区间。</p>
