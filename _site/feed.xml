@@ -1,4 +1,162 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-06T14:24:36+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：哈希表例题</title><link href="http://localhost:4000/2024/08/04/DS/" rel="alternate" type="text/html" title="Leetcode记录：哈希表例题" /><published>2024-08-04T14:00:00+08:00</published><updated>2024-08-04T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/04/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/04/DS/"><![CDATA[<h3 id="续哈希表例题">续哈希表例题</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-07T12:00:39+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：字符串例题</title><link href="http://localhost:4000/2024/08/06/DS/" rel="alternate" type="text/html" title="Leetcode记录：字符串例题" /><published>2024-08-06T14:00:00+08:00</published><updated>2024-08-06T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/06/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/06/DS/"><![CDATA[<h3 id="反转字符串">反转字符串</h3>
+
+<p>编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 s 的形式给出。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">reverseString</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">;</span> <span class="o">++</span><span class="n">left</span><span class="p">,</span> <span class="o">--</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="反转字符串-1">反转字符串</h3>
+
+<p>给定一个字符串 s 和一个整数 k，从字符串开头算起，每计数至 2k 个字符，就反转这 2k 字符中的前 k 个字符。
+如果剩余字符少于 k 个，则将剩余字符全部反转。如果剩余字符小于 2k 但大于或等于 k 个，则反转前 k 个字符，其余字符保持原样。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseStr</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="替换数字">替换数字</h3>
+
+<p>给定一个字符串 s，它包含小写字母和数字字符，请编写一个函数，将字符串中的字母字符保持不变，而将每个数字字符替换为number。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">sOldIndex</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 统计数字的个数</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">'9'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1">// 扩充字符串s的大小，也就是将每个数字替换成"number"之后的大小</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="n">count</span> <span class="o">*</span> <span class="mi">5</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">sNewIndex</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="c1">// 从后往前将数字替换为"number"</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">sOldIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">sOldIndex</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">sOldIndex</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">'9'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'r'</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'e'</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'b'</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'m'</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'u'</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'n'</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">sOldIndex</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="n">sOldIndex</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>       
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="反转字符串中的字母">反转字符串中的字母</h3>
+
+<p>Leetcode 151. 给你一个字符串 s ，请你反转字符串中 单词 的顺序。</p>
+
+<p>单词 是由非空格字符组成的字符串。s 中使用至少一个空格将字符串中的 单词 分隔开。返回单词顺序颠倒且单词之间用单个空格连接的结果字符串。</p>
+
+<p>注意：输入字符串s中<strong>可能会存在前导空格、尾随空格或者单词间的多个空格。</strong> 返回的结果字符串中，单词间应当仅用单个空格分隔，且不包含任何额外的空格。</p>
+
+<p>一种最直观的方法是双指针法，从后向前依次寻找每个单词的首和尾：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 使用双指针</span>
+    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">res</span><span class="p">;</span>
+    <span class="c1">// 除去尾部空格</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span> <span class="o">&amp;&amp;</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">m</span><span class="o">--</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span> <span class="c1">// n是另一个指针</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="n">m</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="s">" "</span><span class="p">;</span> <span class="c1">// 获取单词并加上空格</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="n">m</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">res</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 忽略最后一位的空格</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>也可以原地进行操作，首先先将字符串翻转，再去从头开始填充每个单词：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 反转整个字符串</span>
+    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">start</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 填一个空白字符然后将idx移动到下一个单词的开头位置</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">s</span><span class="p">[</span><span class="n">idx</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">' '</span><span class="p">;</span>
+
+            <span class="c1">// 循环遍历至单词的末尾</span>
+            <span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">end</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> 
+                <span class="n">s</span><span class="p">[</span><span class="n">idx</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">end</span><span class="o">++</span><span class="p">];</span>
+            <span class="c1">// 此时idx和end都指向单词的末尾的后一个位置</span>
+            <span class="c1">// 反转整个单词</span>
+            <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">idx</span> <span class="o">-</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">),</span> <span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">idx</span><span class="p">);</span>
+
+            <span class="c1">// 更新start，去找下一个单词</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">idx</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>还有一种办法是利用双端队列，由于双端队列支持从队列头部插入的方法，因此我们可以沿着字符串一个一个单词处理，然后将单词压入队列的头部，再将队列转成字符串即可。</p>
+
+<p>这里用的是<code class="language-plaintext highlighter-rouge">std::deque</code>，是一个双端队列，支持<code class="language-plaintext highlighter-rouge">push_back,push_front,pop_back,pop_front</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">queue</code>是FIFO，<code class="language-plaintext highlighter-rouge">stack</code>是LIFO,它们只支持<code class="language-plaintext highlighter-rouge">push,pop</code>.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="c1">// 去掉字符串开头的空白字符</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="o">++</span><span class="n">left</span><span class="p">;</span>
+
+    <span class="c1">// 去掉字符串末尾的空白字符</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="o">--</span><span class="n">right</span><span class="p">;</span>
+
+    <span class="n">deque</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">word</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">word</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 将单词 push 到队列的头部</span>
+            <span class="n">d</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">move</span><span class="p">(</span><span class="n">word</span><span class="p">));</span>
+            <span class="n">word</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">word</span> <span class="o">+=</span> <span class="n">c</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">++</span><span class="n">left</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">d</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">move</span><span class="p">(</span><span class="n">word</span><span class="p">));</span>
+    
+    <span class="n">string</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">d</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">ans</span> <span class="o">+=</span> <span class="n">d</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+        <span class="n">d</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">d</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="n">ans</span> <span class="o">+=</span> <span class="sc">' '</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[反转字符串]]></summary></entry><entry><title type="html">Leetcode记录：哈希表例题</title><link href="http://localhost:4000/2024/08/04/DS/" rel="alternate" type="text/html" title="Leetcode记录：哈希表例题" /><published>2024-08-04T14:00:00+08:00</published><updated>2024-08-04T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/04/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/04/DS/"><![CDATA[<h3 id="续哈希表例题">续哈希表例题</h3>
 
 <h4 id="四数之和-i">四数之和 I</h4>
 <p>Leetcode 454. 给你四个整数数组 <code class="language-plaintext highlighter-rouge">nums1</code>,<code class="language-plaintext highlighter-rouge">nums2</code>,<code class="language-plaintext highlighter-rouge">nums3</code> 和 <code class="language-plaintext highlighter-rouge">nums4</code> ，数组长度都是 <code class="language-plaintext highlighter-rouge">n</code> ，请你计算有多少个元组 <code class="language-plaintext highlighter-rouge">(i, j, k, l)</code> 能满足：</p>
@@ -2354,678 +2512,4 @@ remdiv:
     movq    %rax, (%r8)
     movq    %rdx, (%rcx)
     ret
-</code></pre>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="CSAPP" /><category term="汇编" /><summary type="html"><![CDATA[程序的机器级表示]]></summary></entry><entry><title type="html">CSAPP-1:信息的表示和处理</title><link href="http://localhost:4000/2023/11/24/CSAPP-1/" rel="alternate" type="text/html" title="CSAPP-1:信息的表示和处理" /><published>2023-11-24T14:23:00+08:00</published><updated>2023-11-24T14:23:00+08:00</updated><id>http://localhost:4000/2023/11/24/CSAPP-1</id><content type="html" xml:base="http://localhost:4000/2023/11/24/CSAPP-1/"><![CDATA[<h1 id="信息的表示和处理">信息的表示和处理</h1>
-
-<h2 id="信息存储">信息存储</h2>
-
-<h3 id="基本概念">基本概念</h3>
-
-<p><strong>位(bit)</strong> 为计算机方位内存中单独的位，<strong>字节(byte)</strong> 为计算机中最小的可寻址的内存单位，大多数计算机使用8-Bit的字节。机器级程序将内存视为一个非常大的字节数，称为<strong>虚拟内存(virtual memory)</strong>。内存的每个字节都由一个唯一的数字来标识，被称为它的<strong>地址(address)</strong>，所有可能地址的集合被称为<strong>虚拟地址空间</strong>。</p>
-
-<p>每台计算机都有一个<strong>字长(word size)</strong>，指明指针数据的标准大小(normal size)，对于一个字长为 $w$ 的机器而言，虚拟地址的范围为 $0\sim 2^w-1$，程序最多访问 $2^w$ 个字节。</p>
-
-<div align="center"> <img src="/pic/CSAPP/WordSize.png" width="300" /> </div>
-<center><p>基本C数据类型的典型大小(以字节为单位)</p></center>
-
-<h3 id="寻址和字节顺序">寻址和字节顺序</h3>
-<p>在几乎所有的机器上，多字节对象都被存储为连续的字节，但排列表示一个对象的字节有两种通用规则：</p>
-<ol>
-  <li>最低有效字节在前面的方式称为<strong>小端法(little endian)</strong>，大多数Intel兼容机，Android和IOS都只用小端模式，</li>
-  <li>最高有效字节在前面的方式称为<strong>大端法(big endian)</strong>，网络传送数据时要求使用大端法规则。</li>
-</ol>
-
-<p>假设变量 $x$ 类型为int，位于地址0x100处，十六进制的值为0x01234567，下图表示两种方法排列表示的规则：</p>
-<div align="center"> <img src="/pic/CSAPP/LHEndian.png" width="600" /> </div>
-
-<p>对于大多数情况下，及其所使用的字节顺序是完全不可见的，但在一些情况下，字节顺序会成为问题：</p>
-<ol>
-  <li>当小端法机器产生的数据被发送到大端法机器时，接收程序会发现字节反序，为避免这类问题，网络应用程序的代码编写必须遵守大端法规则（<strong>见11章</strong>）。</li>
-  <li>当阅读表示整数数据的字节序列时字节顺序很重要，这通常发生在检查机器级程序时，例如阅读反汇编器生成的代码时（<strong>见3章</strong>）。</li>
-  <li>
-    <p>当编写规避正常的类型系统的程序时字节顺序变得重要，例如：我们将byte_pointer定义为一个指向类型为unsigned char的对象的指针，这样一个字节指针引用一个字节序列，其中每一个字节都被认为是一个非负整数，</p>
-
-    <pre><code class="language-C"> typedef unsigned char *byte_pointer;
-
- void show_bytes(byte_pointer start, size_t len) {
-     size_t i;
-     for (i = 0; i &lt; len; i++)
-     printf(" %.2x", start[i]);
-     printf("\n");
- }
-
- void show_int(int x) {
-     show_bytes((byte_pointer) &amp;x, sizeof(int)); 
- }
-
- void show_float(float x) {
-     show_bytes((byte_pointer) &amp;x, sizeof(float)); 
- }
-
- void show_pointer(void *x) {
-     show_bytes((byte_pointer) &amp;x, sizeof(void *));
- }
-
- void test_show_bytes(int val) {
-     int ival = val;
-     float fval = (float) ival;
-     int *pval = &amp;ival;
-     show_int(ival);
-     show_float(fval);
-     show_pointer(pval);
- }
-</code></pre>
-    <p>在不同机器上得到的结果并不相同，如下图所示：</p>
-  </li>
-</ol>
-<div align="center"> <img src="/pic/CSAPP/Show_Bytes.png" width="500" /> </div>
-<p>这里注意每输出一次都是两位十六进制数，因为一个字节是8Bit，对应两位十六进制数。</p>
-
-<h3 id="字符串表示">字符串表示</h3>
-
-<p>C语言中字符串被编码为一个以null(其值为0)字符结尾的字符数组，例如我们以参数<code class="language-plaintext highlighter-rouge">12345</code>和<code class="language-plaintext highlighter-rouge">6</code>来运行<code class="language-plaintext highlighter-rouge">show_bytes</code>，我们会得到结果 <code class="language-plaintext highlighter-rouge">31 32 33 34 35 00</code>.</p>
-
-<h2 id="布尔代数简介">布尔代数简介</h2>
-
-<p>最简单的布尔代数是在二元集合{0,1}上定义的:</p>
-<ol>
-  <li>布尔运算 $\sim$ 对应于逻辑运算 <code class="language-plaintext highlighter-rouge">NOT</code>，在命题逻辑中用符号 $\lnot$ 表示，</li>
-  <li>布尔运算 $\And$ 对应于逻辑运算 <code class="language-plaintext highlighter-rouge">AND</code>，在命题逻辑中用符号 $\land$ 表示，</li>
-  <li>布尔运算 $\vert$ 对应于逻辑运算 <code class="language-plaintext highlighter-rouge">OR</code>，在命题逻辑中用符号 $\lor$ 表示，</li>
-  <li>布尔运算 ^ 对应于逻辑运算异或(Exlusive or)，在命题逻辑中用符号用 $\oplus$ 表示。
-具体规则如下图所示：</li>
-</ol>
-<div align="center"> <img src="/pic/CSAPP/Boolean.png" width="400" /> </div>
-
-<p>以上布尔运算可以扩展到<strong>位向量</strong>的运算，其中位向量就是固定长度为w，由0和1组成的串，它一个很有用的应用就是表示有限集合。</p>
-
-<h3 id="c语言中的位级运算">C语言中的位级运算</h3>
-
-<p>位级运算的一个常见用法就是<strong>掩码运算</strong>，例如：</p>
-<ol>
-  <li>掩码<code class="language-plaintext highlighter-rouge">0xFF</code>表示一个字的低位字节，位级运算<code class="language-plaintext highlighter-rouge">x &amp; 0xFF</code>生成一个由 $x$ 的最低有效字节组成的值，而其他的字节都被置为0，</li>
-  <li>位级运算<code class="language-plaintext highlighter-rouge">x | 0xFF</code>将x的最低有效字节设为1，其他字节保持不变，</li>
-  <li><code class="language-plaintext highlighter-rouge">x ^ 0xFFFFFFFF</code>等价于<code class="language-plaintext highlighter-rouge">~x</code>，<code class="language-plaintext highlighter-rouge">x ^ 0</code>不发生改变，</li>
-  <li><code class="language-plaintext highlighter-rouge">x ^ ~0xFF</code>使得x最低有效字节不变，其他位都取补。</li>
-  <li><strong>注意是最低有效字节，8位，所以是0xFF。</strong></li>
-</ol>
-
-<p>关于异或运算还有两点注意：</p>
-<ol>
-  <li><code class="language-plaintext highlighter-rouge">x ^ y = (x &amp; ~y) | (~x &amp; y)</code>.</li>
-  <li><code class="language-plaintext highlighter-rouge">a ^ a = 0</code>.</li>
-  <li><code class="language-plaintext highlighter-rouge">y = x^y, x = x^y, y = x^y</code>即可做到不需要第三个位置就可以交换 $x$ 和 $y$ 的值。</li>
-  <li><code class="language-plaintext highlighter-rouge">!(x^y)</code>满足当 $x,y$ 相等时返回1，否则返回0。</li>
-</ol>
-
-<p><strong>三个二元位级运算都具有交换律和结合律。</strong></p>
-
-<h3 id="c语言中的逻辑运算">C语言中的逻辑运算</h3>
-
-<p>逻辑运算有三种: <code class="language-plaintext highlighter-rouge">&amp;&amp;</code>, <code class="language-plaintext highlighter-rouge">||</code>, <code class="language-plaintext highlighter-rouge">!</code>，注意别和位级运算混淆即可，另外<code class="language-plaintext highlighter-rouge">&amp;&amp;</code>和<code class="language-plaintext highlighter-rouge">||</code>具有短路性。</p>
-
-<h3 id="c语言中的移位运算">C语言中的移位运算</h3>
-
-<p>对于一个位表示为 $[x_{w-1},x_{w-2},\ldots,x_0]$ 的操作数 $x$，左移运算<code class="language-plaintext highlighter-rouge">x&lt;&lt;k</code>使得 $x$ 向左移动 $k$ 位，丢弃最高的 $k$ 位，并在右端补上 $k$ 个0。并且<strong>移位运算从左到右是可结合的。</strong></p>
-
-<p>相应地，右移运算<code class="language-plaintext highlighter-rouge">x&gt;&gt;k</code>分为两种:</p>
-<ol>
-  <li>对无符号数使用逻辑右移，即在左端补 $k$ 个0，得到 $[0,\ldots,0,x_{w-1},\ldots,x_k]$ .</li>
-  <li>对有符号数使用算术右移，即在左端补 $k$ 个最高有效位的值，得到 $[x_{w-1},\ldots,x_{w-1},x_{w-1},x_{w-2},\ldots,x_{k}]$.</li>
-</ol>
-
-<p>注意:</p>
-<ol>
-  <li>对于一个 $w$ 位组成的数据类型，当 $k\geq w$ 很大的时候，实际上的位移量就是<code class="language-plaintext highlighter-rouge">k mod w</code>位。</li>
-  <li>加减法的优先级比移位运算要高，因此在拿不准的时候记得加括号。</li>
-</ol>
-
-<h2 id="整数表示">整数表示</h2>
-
-<h3 id="整数编码">整数编码</h3>
-
-<p>对于位向量 $\mathbf{x} = [x_{w-1},x_{w-2},\ldots,x_0]$, 无符号数编码定义为
-\(\text{B2U}_w(\mathbf{x}) = \sum\limits_{i=0}^{w-1} x_i 2^i\)</p>
-
-<p>补码编码的定义为 \(\text{B2T}_w(\mathbf{x}) = -x_{w-1}2^{w-1} - \sum\limits_{i=0}^{w-2} x_i 2^i\)</p>
-
-<p>可以证明当 $0\leq x \leq 2^w-1$ 时，无符号数编码是唯一的，
-当 $\text{TMin}_w = -2^{w-1} \leq x \leq 2^{w-1}-1 = \text{TMax}_w$ 时，补码编码是唯一的。</p>
-
-<p>关于这些数字，有几点值得注意：</p>
-<ol>
-  <li>补码的范围是不对称的，即 <code class="language-plaintext highlighter-rouge">|TMin| = |TMax| + 1</code>，</li>
-  <li>最大的无符号数刚好比补码的最大数的两倍大1，即<code class="language-plaintext highlighter-rouge">UMax = 2TMax +1</code>，</li>
-  <li>-1和 UMax 有同样的位表示，即一个全1的串。</li>
-</ol>
-
-<h3 id="有符号数和无符号数的转换">有符号数和无符号数的转换</h3>
-
-<ol>
-  <li>对于满足 $\text{TMin}_w \leq x \leq \text{TMax}_w$ 的 $x$ 有，</li>
-</ol>
-
-\[\text{T2U}_w(x) = \begin{cases}
-    x+2^w ,\quad &amp;x &lt; 0 \\
-    x,\quad &amp;x \geq 0    
-\end{cases}\]
-
-<ol>
-  <li>对于满足 $0 \leq u \leq \text{UMax}_w$ 的$u$有，</li>
-</ol>
-
-\[\text{U2T}_w(u) = \begin{cases}
-    u-2^w ,\quad &amp; u &gt; \text{TMax}_w \\
-    u,\quad &amp; u \leq \text{TMax}_w   
-\end{cases}\]
-
-<p>当 $u&gt;\text{TMax}_w$ 时，$u$的最高位有效数字为1，转化为补码表示就相当于最高位权重从+1变为-1，因此少了 $2^w$，反之同理，越靠近0的负数映射为越大的无符号数。</p>
-
-<p>另外，可以证明U2T和T2U两个函数都是双射，两个函数的行为如下图所示：</p>
-<div align="center"> <img src="/pic/CSAPP/U2T_T2U.png" width="500" /> </div>
-
-<p>在C语言中允许两者之间相互转换，主要有四种情况：</p>
-<ol>
-  <li>显示的强制类型转换就会导致转换发生，例如
-    <pre><code class="language-C"> int tx; 
- unsigned ux; 
- tx = (int)ux;
-</code></pre>
-  </li>
-  <li>一种类型的表达式被赋值给另外一种类型的变量，例如
-    <pre><code class="language-C"> tx = ux;
-</code></pre>
-  </li>
-  <li>当用printf输出数值时，分别用<code class="language-plaintext highlighter-rouge">%d</code>,<code class="language-plaintext highlighter-rouge">%u</code>和`%x%表示有符号十进制、无符号十进制和十六进制格式输出一个数字，例如
-    <pre><code class="language-C"> int x = -1;
- printf("x = %u = %d\n", x, x); \\ x = 4294967295 = -1.
-</code></pre>
-  </li>
-  <li><strong>当执行一个两侧分别为有符号和无符号数的运算时，会隐式地将有符号数转换为无符号数</strong>，例如
-    <ol>
-      <li><code class="language-plaintext highlighter-rouge">-1 &lt; 0U</code>是错误的，</li>
-      <li><code class="language-plaintext highlighter-rouge">-1 &gt; (unsigned)-2</code>是正确的，</li>
-      <li><code class="language-plaintext highlighter-rouge">2147483647 &gt; (int)2147483648U</code>是正确的。</li>
-    </ol>
-  </li>
-</ol>
-
-<p>在C头文件<code class="language-plaintext highlighter-rouge">limit.h</code>中是这样定义TMin和TMax的：</p>
-<pre><code class="language-C">#define INT_MAX 2147483647
-#define INT_MIN (-INT_MAX - 1)
-</code></pre>
-<p>因为在某些编译器中可能会把-2147482648认为是正数，这里不深究，了解即可。</p>
-
-<h3 id="扩展一个数字的位表示">扩展一个数字的位表示</h3>
-
-<ol>
-  <li>
-    <p>宽度为 $w$ 的位向量 $\mathbf{u} = [u_{w-1},\ldots,u_0]$ 扩展到 $w’$ 位的 $\mathbf{u}’ = [0,\ldots,0,u_{w-1},\ldots,u_0]$，则有
-\(\text{B2U}_w(\mathbf{u}) == \text{B2U}_{w'}(\mathbf{u}')\)</p>
-  </li>
-  <li>
-    <p>宽度为 $w$ 的位向量 $\mathbf{x} = [x_{w-1},\ldots,x_0]$ 扩展到 $w’$ 位的 $\mathbf{x}’ = [x_{w-1},\ldots,x_{w-1},x_{w-1},\ldots,x_0]$，则有
-\(\text{B2T}_w(\mathbf{x}) == \text{B2T}_{w'}(\mathbf{x}')\)</p>
-  </li>
-</ol>
-
-<p>举个例子，有符号数<code class="language-plaintext highlighter-rouge">1001 -&gt; -7</code>，扩展到8位时<code class="language-plaintext highlighter-rouge">11111001 -&gt; -7</code>，因为 \(-2^{p+k}+2^{p+k-1}+\ldots+2^p = -2^p.\)</p>
-
-<p>值得注意的是，从一个数据大小到另一个数据大小的转换，以及无符号和有符号之间的转换的相对顺序能够影响一个程序的行为，例如</p>
-
-<pre><code class="language-C">short sx = -12345;
-unsigned uy = sx; /* Mystery! */
-printf("uy = %u:\t", uy);
-show_bytes( (byte_pointer)&amp;uy, sizeof(unsigned));
-\\ uy = 4294954951: ff ff cf c7.
-</code></pre>
-
-<p>这表明<strong>当short转换成unsigned时，我们先要改变大小，然后再完成有符号到无符号的转换</strong>，即<code class="language-plaintext highlighter-rouge">(unsigned)sx</code>等价于<code class="language-plaintext highlighter-rouge">(unsigned)(int)sx</code>而不是<code class="language-plaintext highlighter-rouge">(unsigned)(unsigned short)sx</code>。</p>
-
-<h3 id="截断数字">截断数字</h3>
-
-<p>截断一个数字可能会改变它的值，这也是溢出的一种形式。</p>
-
-<ol>
-  <li>
-    <p>令 $\mathbf{x} = [x_{w-1},\ldots,x_0]$，将其阶段为k位有 $\mathbf{x}’ = [x_{k-1},\ldots,x_0]$, 
-记 $x=\text{B2U}<em>w(\mathbf{x}), x’ = \text{B2U}</em>{k}(\mathbf{x}’)$， 则有 $x’ = x\mod\ 2^k$.</p>
-  </li>
-  <li>
-    <p>令 $\mathbf{x} = [x_{w-1},\ldots,x_0]$，将其阶段为k位有 $\mathbf{x}’ = [x_{k-1},\ldots,x_0]$, 
-记 $x=\text{B2U}<em>w(\mathbf{x}), x’ = \text{B2T}</em>{k}(\mathbf{x}’)$, 则有 $x’ = \text{U2T}_k(x\mod\ 2^k)$.</p>
-  </li>
-</ol>
-
-<p>其实<strong>两个操作在位级别上是相同的，只是最后按照不同编码表示而已</strong>。</p>
-
-<h2 id="整数运算">整数运算</h2>
-
-<h3 id="整数加法">整数加法</h3>
-
-<ol>
-  <li>对于满足 $0\leq x,y &lt; 2^w$ 的整数 $x,\ y$ 有:</li>
-</ol>
-
-\[x+_w^u y = \begin{cases}
-    x+y,\quad &amp;x+y&lt;2^w\quad &amp;\text{正常} \\
-    x+y - 2^w,\quad &amp;2^w \leq x+y &lt; 2^{w+1}\quad &amp;\text{溢出}
-\end{cases}\]
-
-<ol>
-  <li>对于满足 $-2^{w-1} \leq x,y \leq 2^{w-1}-1$ 的整数 $x,\ y$，有:</li>
-</ol>
-
-\[x +_w^t y = \begin{cases}
-    x + y - 2^w, \quad &amp; 2^{w-1}\leq x+y \quad &amp;\text{正溢出} \\
-    x + y, \quad &amp; -2^{w-1} \leq x+y &lt; 2^{w-1} \quad &amp;\text{正常} \\
-    x + y + 2^w, \quad &amp; x+y &lt; -2^{w-1} \quad &amp;\text{负溢出}
-\end{cases}\]
-
-<p>负溢出的情况下截断后最高位有效数字必为0，否则就不会出现溢出了。</p>
-
-<p>这里值得注意的是<strong>补码加法与无符号数加法有相同的位级表示</strong>，用数学语言表示就是</p>
-
-\[x +_w^t y = \text{U2T}_w(\text{T2U}_w(x) +_w^u \text{T2U}_w(y)) = \text{U2T}_w[(x+y) mod 2^w]\]
-
-<p>这样计算机就可以用同一个算法进行加法，之后的乘法也是如此。</p>
-
-<p>另外，<strong>模数加法形成了阿贝尔群</strong>，它是可交换的并且可结合的，存在单位元0，并且每个元素有一个加法逆元（<strong>位级操作上为取反后+1</strong>）：</p>
-<ol>
-  <li>对于满足 $0\leq x&lt; 2^w$ 的整数 $x$ 有:</li>
-</ol>
-
-\[-_w^u x = \begin{cases}
-    x, \quad &amp; x=0 \\
-    2^w-x, \quad &amp; x&gt;0
-\end{cases}\]
-
-<ol>
-  <li>对于满足 $-2^{w-1} \leq x\leq 2^{w-1}-1$ 的整数 $x$，有:</li>
-</ol>
-
-\[-_w^t x = \begin{cases}
-    \text{TMin}_x, \quad &amp; x = \text{TMin}_w \\
-    -x, \quad &amp; x &gt; \text{TMin}_w
-\end{cases}\]
-
-<p>判断是否出现溢出的方法如下:</p>
-<ol>
-  <li>
-    <p>对于在范围 $0\leq x,y \leq \text{UMax}_w$ 的 $x,\ y$, 令 $s=x +_w^u y$，则计算发生溢出当且仅当 $s&lt;x$(或者等价地$s&lt;y$)。</p>
-  </li>
-  <li>
-    <p>对于在范围 $\text{TMin}_w \leq x,y \leq \text{TMax}_w$的 $x,\ y$, 令$s=x +_w^t y$，则</p>
-    <ol>
-      <li>发生正溢出当且仅当 $x&gt;0,y&gt;0,s\leq 0$，</li>
-      <li>发生负溢出当且仅当 $x&lt;0,y&lt;0,s\geq 0$.</li>
-    </ol>
-  </li>
-</ol>
-
-<p>对于补码而言，判断是否发生溢出的代码如下：</p>
-
-<pre><code class="language-C">int tadd_ok(int x, int y){
-    int sum = x + y;
-    int neg_over = x &lt; 0 &amp;&amp; y &lt; 0 &amp;&amp; sum &gt;=0;
-    int pos_over = x &gt;= 0 &amp;&amp; y &gt;= 0 &amp;&amp; sum &lt; 0;
-    return !neg_over &amp;&amp; !pos_over;
-}
-</code></pre>
-
-<p>注意以下写法是不对的：</p>
-
-<pre><code class="language-C">int tadd_ok(int x, int y){
-    int sum = x + y;
-    return (sum - x == y) &amp;&amp; (sum -y == x);
-}
-</code></pre>
-
-<p>因为模数加法构成阿贝尔群，$(x+y-x)$ 的结果永远都是$y$.</p>
-
-<p>虽然我们现在可以判断加法是否溢出，我们是无法直接简单地通过加法来判断减法是否溢出的：</p>
-
-<pre><code class="language-C">int tsub_ok(int x, int y){
-    return tadd_ok(x, -y);
-}
-</code></pre>
-
-<p>当 $x&gt;0,\ y = \text{TMin}_w$ 时，$-y = \text{TMin}_w$，此时一正一负判断为不溢出，然而实际是溢出的。</p>
-
-<h3 id="整数乘法">整数乘法</h3>
-
-<ol>
-  <li>
-    <p>对于满足 $0\leq x,y &lt; 2^w$ 的整数$x,\ y$ 有:</p>
-
-\[x *_w^u y = (x\cdot y)\ \text{mod}\ 2^w.\]
-  </li>
-  <li>
-    <p>对于满足 $-2^{w-1} \leq x,y \leq 2^{w-1}-1$的整数$x,\ y$，有:</p>
-
-\[x *_w^t y = \text{U2T}_w((x\cdot y)\ \text{mod}\ 2^w).\]
-  </li>
-</ol>
-
-<p>无符号和补码乘法的位级操作是等价的，即给定长度为$w$的位向量 $\mathbf{x}, \mathbf{y}$，用补码形式来定义整数 $x,y$，用无符号形式来定义整数 $x’, y’$，则有</p>
-
-\[\text{T2B}_w(x *_w^t y) = \text{U2B}_w(x' *_w^u y').\]
-
-<p>检测整数乘法是否溢出的代码如下：</p>
-
-<pre><code class="language-C">int tmult_ok(int x, int y){
-    // first way:
-    int p = x * y;
-    return !x || p/x == y;
-
-    // second way:
-    int64_t p = x*y;
-    return p == (int)p;
-}
-</code></pre>
-
-<p>证明思路如下：</p>
-<ol>
-  <li>$x$和$y$的乘积可以写作 $x\cdot y = p + t2^w$, 计算溢出当且仅当 $t\neq 0$.</li>
-  <li>
-    <table>
-      <tbody>
-        <tr>
-          <td>$p$ 可以写作 $p = xq +r$，其中 $</td>
-          <td>r</td>
-          <td>&lt;</td>
-          <td>x</td>
-          <td>$.</td>
-        </tr>
-      </tbody>
-    </table>
-  </li>
-  <li>可证明 $q=y$ 当且仅当 $r=t=0$.</li>
-</ol>
-
-<p><strong>在分配内存的时候尤其要注意溢出的情况，由此会产生很多安全漏洞！</strong></p>
-
-<h3 id="乘以常数">乘以常数</h3>
-
-<ol>
-  <li>C中变量x和k有无符号数$x$和$k$，且 $0\leq k &lt; w$，则有<code class="language-plaintext highlighter-rouge">x&lt;&lt;k</code>得到数值 $x *_w^u 2^k$.</li>
-  <li>C中变量x和k有补码值$x$和无符号数$k$，且 $0\leq k &lt; w$，则有<code class="language-plaintext highlighter-rouge">x&lt;&lt;k</code>得到数值 $x *_w^t 2^k$.</li>
-</ol>
-
-<p>对于某个常数$K$，编译器会将$K$的二进制表达为一组01序列: $[(0\ldots 0)(1\ldots 1)(0\ldots 0)\ldots(1\ldots 1)]$，考虑一组从位置$n$到位置$m$的连续的1，我们可以用下面两种不同形式的一种来计算这些位对乘积的影响：</p>
-<ol>
-  <li><code class="language-plaintext highlighter-rouge">(x&lt;&lt;n) + (x&lt;&lt;(n-1)) + ... + (x&lt;&lt;m)</code></li>
-  <li><code class="language-plaintext highlighter-rouge">(x&lt;&lt;(n+1)) - (x&lt;&lt;m)</code></li>
-</ol>
-
-<p>例：</p>
-<ol>
-  <li><code class="language-plaintext highlighter-rouge">x*17 == (x&lt;&lt;4) + x</code></li>
-  <li><code class="language-plaintext highlighter-rouge">x*(-7) == x - (x &lt;&lt; 3)</code></li>
-  <li><code class="language-plaintext highlighter-rouge">x*60 == (x&lt;&lt;6) + (x&lt;&lt;2)</code></li>
-  <li><code class="language-plaintext highlighter-rouge">x*-112 == (x&lt;&lt;4) - (x&lt;&lt;7)</code></li>
-</ol>
-
-<h3 id="除以2的幂">除以2的幂</h3>
-
-<ol>
-  <li>C中变量x和k有无符号数$x$和$k$，且 $0\leq k &lt; w$，则有<code class="language-plaintext highlighter-rouge">x&gt;&gt;k</code>得到数值 $\lfloor x/2^k \rfloor$.</li>
-  <li>C中变量x和k有补码值$x$和无符号数$k$，且 $0\leq k &lt; w$，则有<code class="language-plaintext highlighter-rouge">x&gt;&gt;k</code>得到数值 $\lfloor x/2^k \rfloor$.</li>
-</ol>
-
-<p>然而对于负数而言，移位会导致结果向下舍入，但我们更希望向零舍入，此时我们利用<strong>偏移(biasing)</strong>的方法来进行修正：</p>
-
-<p>C中变量x和k有补码值$x$和无符号数$k$，且 $0\leq k &lt; w$，则有<code class="language-plaintext highlighter-rouge">(x+ (1&lt;&lt;k) - 1) &gt;&gt; k</code>得到数值 $\lceil x/2^k \rceil$.</p>
-
-<p>这里利用了性质：对于整数 $x,y(y&gt;0)$，有 $\rceil x/y \rceil = \rfloor (x+y-1)/y \lfloor.$ 由此我们可以写出C语言计算 $x/2^k$的代码</p>
-
-<pre><code class="language-C">(x &lt; 0 ? x + (1&lt;&lt;k) - 1 : x) &gt;&gt; k
-</code></pre>
-
-<p>例题：写一个函数计算$x/16$:</p>
-
-<pre><code class="language-C">int bias = (x &gt;&gt; 31) &amp; 0xF;
-x = (x + bias) &gt;&gt; 4;
-</code></pre>
-
-<p><strong>注意这里利用了算术右移以及掩码的性质。</strong></p>
-
-<h3 id="一些c语言interger-puzzles">一些C语言Interger puzzles</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th> </th>
-      <th> </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1. $x&lt;0 \nRightarrow(x*2)&lt;0$</td>
-      <td>可能会出现溢出</td>
-    </tr>
-    <tr>
-      <td>2. $ux \geq 0$</td>
-      <td>正确</td>
-    </tr>
-    <tr>
-      <td>3. $x \&amp; 7 == 7 \Rightarrow (x«30)&lt;0$</td>
-      <td>正确</td>
-    </tr>
-    <tr>
-      <td>4. $ux &gt; -1$是错的</td>
-      <td>隐含的int转换为unsigned</td>
-    </tr>
-    <tr>
-      <td>5. $x&gt;y \nRightarrow -x&lt;-y$，注意TMin的情况</td>
-      <td>-(Tmin)=TMin</td>
-    </tr>
-    <tr>
-      <td>6. $x*x\geq 0$是错的</td>
-      <td>可能会出现溢出</td>
-    </tr>
-    <tr>
-      <td>7. $x&gt;0 \&amp;\&amp; y&gt;0 \nRightarrow x+y &gt; 0 $</td>
-      <td>可能会出现溢出</td>
-    </tr>
-    <tr>
-      <td>8. $x\geq 0 \Rightarrow -x\leq 0$</td>
-      <td>正确</td>
-    </tr>
-    <tr>
-      <td>9. $x\leq 0 \nRightarrow -x \geq 0$</td>
-      <td>TMin</td>
-    </tr>
-    <tr>
-      <td>10. $(x \vert -x)»31 == -1$ 当$x\neq 0$的情况下成立</td>
-      <td>正确</td>
-    </tr>
-    <tr>
-      <td>11. $ux»3 == ux/8$</td>
-      <td>正确</td>
-    </tr>
-    <tr>
-      <td>12. $x»3 == x/8$ 当$x$为负数的时候不成立</td>
-      <td>正确</td>
-    </tr>
-    <tr>
-      <td>13. $x\&amp; (x-1)!=0$当$x==2^k$的时候不成立</td>
-      <td>正确</td>
-    </tr>
-    <tr>
-      <td>14. $x+y == ux + uy$</td>
-      <td>正确，隐含转换</td>
-    </tr>
-    <tr>
-      <td>15. $x * \sim y + uy*ux == -x$</td>
-      <td>~y=-y-1,模数加乘具有交换性</td>
-    </tr>
-    <tr>
-      <td>16. $(x&lt;y) == (-x&gt;-y)$</td>
-      <td>注意y=TMin</td>
-    </tr>
-    <tr>
-      <td>17. $((x+y)«4)+y-x = 17<em>y+15</em>x$</td>
-      <td><strong>正确</strong>，模数加乘具有交换性</td>
-    </tr>
-    <tr>
-      <td>18. $(ux-uy) == -(unsigned)(y-x)$</td>
-      <td><strong>正确</strong></td>
-    </tr>
-    <tr>
-      <td>19. $((x»2)«2) \leq x$</td>
-      <td><strong>正确</strong></td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="浮点数">浮点数</h2>
-
-<h3 id="ieee浮点表示">IEEE浮点表示</h3>
-
-<p>IEEE浮点标准用 $V=(-1)^s\times M \times 2^E$ 的形式来表示一个数：</p>
-<ol>
-  <li><strong>符号(sign)</strong>: $s$ 决定这个数是负数$(s=1)还是正数 $(s=0)$，而对于数值0的符号位解释作为特殊情况处理。</li>
-  <li><strong>尾数(significand)</strong>: $M$是一个二进制小数，它的范围是 $[1, 2-\epsilon]$或者是 $[0, 1-\epsilon]$。</li>
-  <li><strong>阶码(exponent)</strong>: $E$的作用是对浮点数加权，这个权重是2的$E$次幂（可能是负数）。</li>
-</ol>
-
-<p>由此将浮点数的位分为三个字段，分别对这些值进行编码：</p>
-<ol>
-  <li>一个单独的符号位 $s$ 编码符号 $s$，</li>
-  <li>$k$ 位的阶码字段exp $=e_{k-1}\ldots e_0$ 编码阶数 $E$，</li>
-  <li>$n$ 位小数字段frac $=f_{n-1}\ldots f_0$ 编码尾数 $M$，但是编码出来的值也依赖于阶码字段的值是否为0.</li>
-</ol>
-
-<p>在单精度浮点格式中，$s$,exp,frac字段分别为1位，$k=8$位，$n=23$位；在双精度浮点格式中，$s$,exp,frac字段分别为1位，$k=11$位，$n=52$位。</p>
-
-<div align="center"> <img src="/pic/CSAPP/IEEE.png" width="500" /> </div>
-
-<p>给定位表示，根据exp的值，被编码的值分为三种情况：</p>
-<ol>
-  <li>
-    <p><strong>规格化的值</strong>：
- 当exp的位模式既不全为0，也不全为1的时候，称为规格化的值，阶码字段被解释为<strong>偏置(<em>bias</em>)形式</strong>表示的有符号整数，阶码的值为 $\mathbf{E=e-bias}$，其中 $e$ 是无符号数，其位表示为 $e_{k-1}\ldots e_1e_0$(1-254,1-2046)，而<em>bias</em>是一个等于 $2^{k-1}-1$ (127,1023)的偏置值。
- 由此产生的指数取值范围对于单精度是 $[-126,127]$，对于双精度为 $[-1022,1023]$。</p>
-
-    <p>小数字段frac被解释为描述小数值 $0\leq f &lt; 1$，其二进制表示为 $0.f_{n-1}\ldots f_1f_0$，尾数定义为 $\mathbf{M=1+f}$，这样也叫做<strong>隐含的以1开头的表示(implied leading 1)</strong>，这样我们就可以轻松获得一个额外精度位。</p>
-  </li>
-  <li>
-    <p><strong>非规格化的值</strong>
- 当阶码域全为0时，所表示的数是非规格化形式，在这种情况下，阶码值为$\mathbf{E=1-Bias}$，而尾数值为 $\mathbf{M=f}$，也就是不包含隐含的开头的1。</p>
-
-    <p>这种数有两个用途：</p>
-    <ol>
-      <li>提供了一种表示0的方法，因为使用规格化数必须使 $M\geq 1$,因此我们不能表示0，此时有+0.0和-0.0，在一些数值运算下被认为是不同的。</li>
-      <li>非规格化数也用来表示那些非常接近于0.0的数，他们提供了一种属性称为<em>逐渐下溢</em>，其中，可能的数值分布均匀地接近于0.0.</li>
-    </ol>
-  </li>
-  <li>
-    <p><strong>特殊值</strong>
-当阶码全为1时，如果小数域全为0，表示的则是无穷；如果小数域非零，表示的则是NaN，通常一些运算的结果不能是实数或者无穷的时候就会返回NaN。</p>
-  </li>
-</ol>
-
-<p>下图是三种情况的位表示图例：</p>
-<div align="center"> <img src="/pic/CSAPP/IEEEcate.png" width="500" /> </div>
-
-<h4 id="数字示例">数字示例</h4>
-
-<p>假如我们有8位格式，阶码位 $k=4$ 位，尾数位 $n=3$ 位，则偏置量为 $2^{4-1}-1=7$，部分可能结果如下：</p>
-<div align="center"> <img src="/pic/CSAPP/IEEEexample.png" width="700" /> </div>
-
-<p>可以观察到<strong>最大非规格数和最小规格化数之间的平滑转变</strong>，这归功于我们对<strong>非规格化数$E$的定义</strong>。另外，阶数越高，两个数之间的间距越大。</p>
-
-<p>还可以发现，假如我们将浮点数的位表达式解释为无符号整数，那么对于所有正数而言，<strong>它们就是升序排列的</strong>，负数正好相反，IEEE这样设计就是为了浮点数能够使用整数排序函数来进行排序。</p>
-
-<p>这里举一些特殊的值：</p>
-<ol>
-  <li>值+0.0总有一个全为0的位表示。</li>
-  <li>最小的正非规格化值的位表示是最低有效位为1而其他所有位为0构成的，此时尾码值$M=f=2^{-n}$，阶码值 $E=-2^{k-1}+2$，因此 $V=2^{-n-2^{k-1}+2}$。</li>
-  <li>最大的正非规格化值的位表示是全为0的阶码字段和最低有效位为1而其他所有位为0构成的，此时尾码值 $M=f=1-2^{-n}$，阶码值 $E=-2^{k-1}+2$，因此 $V=(1-2^{-n})\times 2^{-2^{k-1}+2}$。</li>
-  <li>最小的正规格化值的位模式的阶码的最低有效位为1，其他为0，此时尾码值$M=1$，阶码值为 $E=-2^{k-1}+2$，因此 $V=2^{-2^{k-1}+2}$。</li>
-  <li>最大的正规格化值的位模式的阶码的最低有效位为0，其他为1，此时尾码值 $M=2-2^{-n}$，阶码值为 $E=2^{k-1}-1$，因此 $V=(2-2^{-n})\times 2^{2^{k-1}-1} = 2^{2^{k-1}}(1-2^{-n-1})$。</li>
-  <li>值1.0的位表示的阶码字段除了最高有效位为0外，其他位均为1，尾码字段均为0，此时 $M=1,E=0$。</li>
-</ol>
-
-<p>例子：12345具有二进制表示[11000000111001] = $1.1000000111001_2\times 2^{12}$，此时我们丢掉开头的1，并且在末尾加10个0，来构造小数字段，得到二进制表示[10000001110010000000000]，位构造阶码字段，我们用13加上偏置值127得到140，二进制表示为[10001100]，再加上符号位0，就得到了二进制的浮点数表示[0 10001100 10000001110010000000000],观察到整数值二进制[11000000111001]，正好对应于等于1的最高有效位之前（这就是隐含的开头1）。</p>
-
-<p><strong>对于一个具有$n$位小数的浮点格式，不能准确描述的最小正整数为 $2^{n+1}+1$</strong>：当表示到 $2^{n+1}$ 之后，下一个数为 $2^{n+1}+2^{n+1}\times 2^{-n}=2^{n+1}+10$。</p>
-
-<p><strong>能够被准确描述的最大奇整数位 $2^{n+1}-1$</strong>。</p>
-
-<h3 id="舍入">舍入</h3>
-
-<p>舍入共有四种形式：向偶数舍入、向零舍入、向上舍入、向下舍入。</p>
-
-<p>向偶数舍入可以叫做“四舍六入五留双”，例如，可以将1.234999舍入为1.23，1.235001舍入为1.24，1.235000舍入为1.24，因为4是偶数。</p>
-
-<p>同样的，向偶数舍入可以应用到二进制小数上，我们将最低有效位的值0认为是偶数，1认为是奇数。一般来说，只有形如XXXXX.YYYY10000的二进制位模式才会向偶数舍入，其中最右边的Y是被舍入的位置。</p>
-
-<p>例：</p>
-<ol>
-  <li>$10.010_2\Rightarrow 10.0$</li>
-  <li>$10.011_2\Rightarrow 10.1$</li>
-  <li>$10.110_2\Rightarrow 11.0$</li>
-  <li>$11.001_2\Rightarrow 11.0$</li>
-</ol>
-
-<h3 id="浮点运算">浮点运算</h3>
-
-<p>前面我们看到了整数加法形成了阿贝尔群，实数的加法同样如此，但是我们要考虑舍入的影响。我们定义 $x+^f y = \text{Round}(x+y)$。</p>
-
-<p>加法运算过程：$(-1)^{s_1}M_12^{E_1} +^f (-1)^{s_2}M_2 2^{E_2} \rightarrow (-1)^sM2^E(E_1\geq E_2)$:</p>
-<ol>
-  <li>$S,M$位对齐后的加法，$E=E_1$.</li>
-  <li>如果$M\geq 2$，$M$右移一位，$E$加1.</li>
-  <li>如果$M&lt;1$，$M$左移$k$位，$E$减$k$.</li>
-  <li>如果$E$超出范围则溢出，</li>
-  <li>舍入到frac精度范围。</li>
-</ol>
-
-<p>可以看到它有以下性质：</p>
-<ol>
-  <li>运算是可交换的，即$x+^f y = y +^f x$，</li>
-  <li>运算是<strong>不可结合</strong>的，例如$(3,14+1e10)-1e10=0.0,\ 3.14+(1e10-1e10)=3.14$，</li>
-  <li>大多数值在浮点加法下存在逆元，但是无穷和NaN是例外，</li>
-  <li>浮点加法满足单调性：如果$a\geq b$，那么除了NaN，对于任何$x$的值都有$x+a\geq x+b$。<strong>整数加法是不具备这个性质的</strong>，</li>
-  <li>0是加法的单位元。</li>
-</ol>
-
-<p>浮点数乘法的定义也是类似的$x\times^fy=\text{Round}(x\times y)$，浮点乘法有以下性质：</p>
-<ol>
-  <li>乘法是封闭的，是可交换的，有乘法单位元1.0，</li>
-  <li>不可结合的，例如$(1e20<em>1e20)</em>1e-20$为正无穷，而$1e20<em>(1e20</em>1e-20)$为$1e20$.</li>
-  <li>对于加法没有分配性，例如$1e20<em>1e20-1e20</em>1e20$会得到NaN，</li>
-  <li>对于任何$a,b,c$，并且都不为NaN，则乘法也满足单调性。</li>
-</ol>
-
-<h3 id="c语言中的浮点数">C语言中的浮点数</h3>
-
-<ol>
-  <li>int转换为double，数字不会溢出但是可能被舍入。</li>
-  <li>int或float转换为double，能够保留精确数值。</li>
-  <li>double转换成float，可能会溢出，也可能会舍入。</li>
-  <li>float或double转换为int，如果没有溢出的话，<strong>值会向零舍入</strong>。</li>
-</ol>
-
-<p>例子：x,f,d分别为int, float, double.</p>
-<ol>
-  <li><code class="language-plaintext highlighter-rouge">x==(int)(double)x</code></li>
-  <li><code class="language-plaintext highlighter-rouge">x!=(int)(float)x</code></li>
-  <li><code class="language-plaintext highlighter-rouge">d != (double)(float)d</code></li>
-  <li><code class="language-plaintext highlighter-rouge">f == (float)(double)f</code></li>
-  <li><code class="language-plaintext highlighter-rouge">f == -(-f)</code></li>
-  <li><code class="language-plaintext highlighter-rouge">1.0/2 = 1/2.0</code></li>
-  <li><code class="language-plaintext highlighter-rouge">d*d&gt;=0</code></li>
-  <li><code class="language-plaintext highlighter-rouge">(f+d)-f != d</code>：浮点加法不存在结合律（后面的-f无法移动到前边）</li>
-  <li><code class="language-plaintext highlighter-rouge">d&gt;f =&gt; -d &lt; -f</code></li>
-</ol>
-
-<p>x,y,z为int，dx,dy,dz = (double)x,y,z.</p>
-<ol>
-  <li><code class="language-plaintext highlighter-rouge">(float) x == (float)dx</code>  dx保留了x的所有精度，所以转化为float是一样的。</li>
-  <li><code class="language-plaintext highlighter-rouge">dx-dy == (double)(x-y)</code> <strong>错误</strong>，x-y有可能会溢出</li>
-  <li><code class="language-plaintext highlighter-rouge">(dx+dy)+dz == dx+(dy+dz)</code> <strong>正确</strong>，因为三个int相加不会出现舍入误差</li>
-  <li><code class="language-plaintext highlighter-rouge">(dx*dy)*dz == dx*(dy*dz)</code> <strong>正确</strong></li>
-  <li><code class="language-plaintext highlighter-rouge">dx/dx == dz/dz</code> <strong>错误</strong>，当dx为0，dz不为0的时候不相等。</li>
-</ol>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="CSAPP" /><summary type="html"><![CDATA[信息的表示和处理]]></summary></entry></feed>
+</code></pre>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="CSAPP" /><category term="汇编" /><summary type="html"><![CDATA[程序的机器级表示]]></summary></entry></feed>

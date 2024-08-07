@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Leetcode记录：字符串例题 | Liujiyu’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Leetcode记录：字符串例题" />
+<meta name="author" content="liujiyu" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="反转字符串" />
+<meta property="og:description" content="反转字符串" />
+<link rel="canonical" href="http://localhost:4000/2024/08/06/DS/" />
+<meta property="og:url" content="http://localhost:4000/2024/08/06/DS/" />
+<meta property="og:site_name" content="Liujiyu’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-08-06T14:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Leetcode记录：字符串例题" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-08-06T14:00:00+08:00","datePublished":"2024-08-06T14:00:00+08:00","description":"反转字符串","headline":"Leetcode记录：字符串例题","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/08/06/DS/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/08/06/DS/"}</script>
+<!-- End Jekyll SEO tag -->
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } });
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+                       });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+</head>
+
+
+  <body>
+
+    <div class="container pure-g"><div class="sidebar-left pure-u-1 pure-u-md-1-4" style="background-color: rgb(40, 73, 77); color: rgb(255, 255, 255); background-image: url(/bg.jpg);"><header class="masthead">
+  <div class="avatar"><img src="/head.jpg" class="avatar-image" alt="liujiyu">
+    </div>
+  <div class="masthead-title">
+    <a href="/" title="Home">Liujiyu's blog</a>
+  </div>
+  <div class="masthead-tagline">
+    <small>learn & record</small>
+  </div><nav class="navigation">
+    <ul class="navigation-list"><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/">Blog</a>
+      </li><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/about/">About</a>
+      </li></ul>
+  </nav><div class="social pure-menu pure-menu-horizontal">
+      <ul class="social-icons pure-menu-list">
+      <li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="mailto://liujiyu@zju.edu.cn">
+            <i class="fas fa-envelope" title="Email"></i>
+          </a>
+        </li><li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="https://github.com/Liujiyu20000308">
+            <i class="fab fa-github" title="GitHub"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+</header>
+</div>
+
+      <div class="content pure-u-1 pure-u-md-1-2"><main>
+  <article class="post">
+  <h1 class="post-title">Leetcode记录：字符串例题</h1>
+  <div class="post-meta"><time datetime="2024-08-06T14:00:00+08:00" itemprop="datePublished">6 Aug 2024</time></div>
+
+  <h3 id="反转字符串">反转字符串</h3>
+
+<p>编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 s 的形式给出。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">reverseString</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">;</span> <span class="o">++</span><span class="n">left</span><span class="p">,</span> <span class="o">--</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="反转字符串-1">反转字符串</h3>
+
+<p>给定一个字符串 s 和一个整数 k，从字符串开头算起，每计数至 2k 个字符，就反转这 2k 字符中的前 k 个字符。
+如果剩余字符少于 k 个，则将剩余字符全部反转。如果剩余字符小于 2k 但大于或等于 k 个，则反转前 k 个字符，其余字符保持原样。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseStr</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="替换数字">替换数字</h3>
+
+<p>给定一个字符串 s，它包含小写字母和数字字符，请编写一个函数，将字符串中的字母字符保持不变，而将每个数字字符替换为number。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">sOldIndex</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 统计数字的个数</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">'9'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1">// 扩充字符串s的大小，也就是将每个数字替换成"number"之后的大小</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="n">count</span> <span class="o">*</span> <span class="mi">5</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">sNewIndex</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="c1">// 从后往前将数字替换为"number"</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">sOldIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">sOldIndex</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">sOldIndex</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">'9'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'r'</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'e'</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'b'</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'m'</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'u'</span><span class="p">;</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'n'</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">sOldIndex</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="n">sOldIndex</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>       
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="反转字符串中的字母">反转字符串中的字母</h3>
+
+<p>Leetcode 151. 给你一个字符串 s ，请你反转字符串中 单词 的顺序。</p>
+
+<p>单词 是由非空格字符组成的字符串。s 中使用至少一个空格将字符串中的 单词 分隔开。返回单词顺序颠倒且单词之间用单个空格连接的结果字符串。</p>
+
+<p>注意：输入字符串s中<strong>可能会存在前导空格、尾随空格或者单词间的多个空格。</strong> 返回的结果字符串中，单词间应当仅用单个空格分隔，且不包含任何额外的空格。</p>
+
+<p>一种最直观的方法是双指针法，从后向前依次寻找每个单词的首和尾：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 使用双指针</span>
+    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">res</span><span class="p">;</span>
+    <span class="c1">// 除去尾部空格</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span> <span class="o">&amp;&amp;</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">m</span><span class="o">--</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span> <span class="c1">// n是另一个指针</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="n">m</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="s">" "</span><span class="p">;</span> <span class="c1">// 获取单词并加上空格</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="n">m</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">res</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 忽略最后一位的空格</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>也可以原地进行操作，首先先将字符串翻转，再去从头开始填充每个单词：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 反转整个字符串</span>
+    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">start</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 填一个空白字符然后将idx移动到下一个单词的开头位置</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">s</span><span class="p">[</span><span class="n">idx</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">' '</span><span class="p">;</span>
+
+            <span class="c1">// 循环遍历至单词的末尾</span>
+            <span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">end</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> 
+                <span class="n">s</span><span class="p">[</span><span class="n">idx</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">end</span><span class="o">++</span><span class="p">];</span>
+            <span class="c1">// 此时idx和end都指向单词的末尾的后一个位置</span>
+            <span class="c1">// 反转整个单词</span>
+            <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">idx</span> <span class="o">-</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">),</span> <span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">idx</span><span class="p">);</span>
+
+            <span class="c1">// 更新start，去找下一个单词</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">idx</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>还有一种办法是利用双端队列，由于双端队列支持从队列头部插入的方法，因此我们可以沿着字符串一个一个单词处理，然后将单词压入队列的头部，再将队列转成字符串即可。</p>
+
+<p>这里用的是<code class="language-plaintext highlighter-rouge">std::deque</code>，是一个双端队列，支持<code class="language-plaintext highlighter-rouge">push_back,push_front,pop_back,pop_front</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">queue</code>是FIFO，<code class="language-plaintext highlighter-rouge">stack</code>是LIFO,它们只支持<code class="language-plaintext highlighter-rouge">push,pop</code>.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="c1">// 去掉字符串开头的空白字符</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="o">++</span><span class="n">left</span><span class="p">;</span>
+
+    <span class="c1">// 去掉字符串末尾的空白字符</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="o">--</span><span class="n">right</span><span class="p">;</span>
+
+    <span class="n">deque</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">word</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">word</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 将单词 push 到队列的头部</span>
+            <span class="n">d</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">move</span><span class="p">(</span><span class="n">word</span><span class="p">));</span>
+            <span class="n">word</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">word</span> <span class="o">+=</span> <span class="n">c</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">++</span><span class="n">left</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">d</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">move</span><span class="p">(</span><span class="n">word</span><span class="p">));</span>
+    
+    <span class="n">string</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">d</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">ans</span> <span class="o">+=</span> <span class="n">d</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+        <span class="n">d</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">d</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="n">ans</span> <span class="o">+=</span> <span class="sc">' '</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+  
+    
+      <div class="post-tags-section">
+  <i class="post-tags-icon fas fa-tags"></i>
+  <ul class="post-tags"><li>
+        <a class="post-tag" href="/tags/#数据结构与算法">数据结构与算法</a></li></ul>
+</div>
+
+  
+
+  
+</article>
+
+
+<aside class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="/2024/08/04/DS/">
+          Leetcode记录：哈希表例题
+          <small><time datetime="2024-08-04T14:00:00+08:00">04 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/08/03/DS/">
+          Leetcode记录：哈希表
+          <small><time datetime="2024-08-03T14:00:00+08:00">03 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/08/01/DS/">
+          Leetcode记录：链表
+          <small><time datetime="2024-08-01T14:00:00+08:00">01 Aug 2024</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+</main>
+
+<footer class="footer"><small>
+    &copy; 2023&nbsp;-&nbsp;2024 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
+  </small>
+</footer>
+</div>
+      <div class="sidebar-right pure-u-1 pure-u-md-1-4">
+<div  class="toc-wrapper">
+  <h2 class="toc-title">Table of Contents</h2>
+    <nav class="toc-nav">
+      <ul class="toc">
+  <li><a href="#反转字符串">反转字符串</a></li>
+  <li><a href="#反转字符串-1">反转字符串</a></li>
+  <li><a href="#替换数字">替换数字</a></li>
+  <li><a href="#反转字符串中的字母">反转字符串中的字母</a></li>
+</ul>
+
+  </nav>
+</div>
+
+</div>
+    </div>
+
+    <script async src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  function strip(str, remove) {
+    while (str.length > 0 && remove.indexOf(str.charAt(0)) != -1) {
+      str = str.substr(1);
+    }
+    while (str.length > 0 && remove.indexOf(str.charAt(str.length - 1)) != -1) {
+      str = str.substr(0, str.length - 1);
+    }
+    return str;
+  }
+
+  function scroll() {
+    console.log('scroll');
+    window.scrollTo({
+      left: 0, 
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+    sessionStorage.removeItem('forceCheckScroll');
+  }
+
+  const forceCheckScroll = sessionStorage.getItem('forceCheckScroll') === 'true';
+  const checkScroll = strip(window.location.pathname, '/') !== strip('', '/');
+
+  if (forceCheckScroll || checkScroll) {
+    const maxWidth = "(max-width: 48rem)";
+    const result = window.matchMedia(maxWidth);
+    if (result.matches) {
+      scroll();
+    } else {
+      result.addListener((match) => {
+        if (match.media == maxWidth) {
+          if (match.matches) {
+            scroll();
+          }
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>
