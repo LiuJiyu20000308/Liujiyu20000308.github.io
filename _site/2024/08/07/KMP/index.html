@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Leetcode记录：KMP算法 | Liujiyu’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Leetcode记录：KMP算法" />
+<meta name="author" content="liujiyu" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="找出字符串中第一个匹配的下标 Leetcode 28. 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回 -1 。" />
+<meta property="og:description" content="找出字符串中第一个匹配的下标 Leetcode 28. 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回 -1 。" />
+<link rel="canonical" href="http://localhost:4000/2024/08/07/KMP/" />
+<meta property="og:url" content="http://localhost:4000/2024/08/07/KMP/" />
+<meta property="og:site_name" content="Liujiyu’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-08-07T14:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Leetcode记录：KMP算法" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-08-07T14:00:00+08:00","datePublished":"2024-08-07T14:00:00+08:00","description":"找出字符串中第一个匹配的下标 Leetcode 28. 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回 -1 。","headline":"Leetcode记录：KMP算法","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/08/07/KMP/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/08/07/KMP/"}</script>
+<!-- End Jekyll SEO tag -->
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } });
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+                       });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+</head>
+
+
+  <body>
+
+    <div class="container pure-g"><div class="sidebar-left pure-u-1 pure-u-md-1-4" style="background-color: rgb(40, 73, 77); color: rgb(255, 255, 255); background-image: url(/bg.jpg);"><header class="masthead">
+  <div class="avatar"><img src="/head.jpg" class="avatar-image" alt="liujiyu">
+    </div>
+  <div class="masthead-title">
+    <a href="/" title="Home">Liujiyu's blog</a>
+  </div>
+  <div class="masthead-tagline">
+    <small>learn & record</small>
+  </div><nav class="navigation">
+    <ul class="navigation-list"><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/">Blog</a>
+      </li><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/about/">About</a>
+      </li></ul>
+  </nav><div class="social pure-menu pure-menu-horizontal">
+      <ul class="social-icons pure-menu-list">
+      <li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="mailto://liujiyu@zju.edu.cn">
+            <i class="fas fa-envelope" title="Email"></i>
+          </a>
+        </li><li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="https://github.com/Liujiyu20000308">
+            <i class="fab fa-github" title="GitHub"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+</header>
+</div>
+
+      <div class="content pure-u-1 pure-u-md-1-2"><main>
+  <article class="post">
+  <h1 class="post-title">Leetcode记录：KMP算法</h1>
+  <div class="post-meta"><time datetime="2024-08-07T14:00:00+08:00" itemprop="datePublished">7 Aug 2024</time></div>
+
+  <h3 id="找出字符串中第一个匹配的下标">找出字符串中第一个匹配的下标</h3>
+<p>Leetcode 28. 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回 -1 。</p>
+
+<p>这道题可以暴力枚举：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">strStr</span><span class="p">(</span><span class="n">string</span> <span class="n">haystack</span><span class="p">,</span> <span class="n">string</span> <span class="n">needle</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">hLen</span> <span class="o">=</span> <span class="n">haystack</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">nLen</span> <span class="o">=</span> <span class="n">needle</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">hLen</span> <span class="o">&lt;</span> <span class="n">nLen</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">hLen</span> <span class="o">-</span> <span class="n">nLen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">start</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">haystack</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">==</span> <span class="n">needle</span><span class="p">[</span><span class="mi">0</span><span class="p">]){</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nLen</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">haystack</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">start</span><span class="p">]</span> <span class="o">!=</span> <span class="n">needle</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="n">nLen</span><span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">haystack</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">start</span><span class="p">]</span> <span class="o">==</span> <span class="n">needle</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">return</span> <span class="n">start</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>但是复杂度为$O(mn),m=hLen,n=nLen$.</p>
+
+<h2 id="kmp算法">KMP算法</h2>
+
+<p>KMP的经典思想就是:<strong>当出现字符串不匹配时，可以记录一部分之前已经匹配的文本内容，利用这些信息避免从头再去做匹配。</strong> 所以如何记录已经匹配的文本内容，是KMP的重点，也是后续要讲的next数组肩负的重任。
+next数组就是一个前缀表（prefix table）。前缀表是用来<strong>回退</strong>的，它记录了模式串与主串(文本串)不匹配的时候，模式串应该从哪里开始重新匹配。</p>
+
+<h3 id="前缀表">前缀表</h3>
+
+<p>为了清楚地了解前缀表的来历，我们来举一个例子：要在文本串：aabaabaafa 中查找是否出现过一个模式串：aabaaf。</p>
+
+<div align="center"> <img src="/pic/DS/KMP1.gif" width="400" /> </div>
+
+<p>可以看出，文本串中第六个字符b和模式串的第六个字符f不匹配了。如果暴力匹配，发现不匹配，此时就要从头匹配了。
+但如果使用前缀表，就不会从头匹配，而是从上次已经匹配的内容开始匹配，找到了模式串中第三个字符b继续开始匹配。
+此时就要问了<strong>前缀表是如何记录的呢</strong>？首先要知道前缀表的任务是当前位置匹配失败，找到之前已经匹配上的位置，再重新匹配，此也意味着在某个字符失配时，前缀表会告诉你下一步匹配中，模式串应该跳到哪个位置。</p>
+
+<p>那么什么是前缀表：<strong>记录下标i之前（包括i）的字符串中，有多大长度的相同前缀后缀。</strong> 其中，字符串的前缀是指<strong>不包含最后一个字符的所有以第一个字符开头的连续子串</strong>。后缀是指<strong>不包含第一个字符的所有以最后一个字符结尾的连续子串</strong>。对于字符串”abcab”，它有”a” “ab” “abc” “abca” 这样四个前缀，有”b” “ab” “cab” “bcab” 这样四个后缀。</p>
+
+<p>回顾一下，刚刚匹配的过程在下标5的地方遇到不匹配，模式串是指向f，然后就找到了下标2，指向b，继续匹配：如图：</p>
+
+<div align="center"> <img src="/pic/DS/KMP2.png" width="300" /> </div>
+
+<p><strong>下标5之前这部分的字符串（也就是字符串aabaa）的最长相等的前缀 和 后缀字符串是 子字符串aa ，因为找到了最长相等的前缀和后缀，匹配失败的位置是后缀子串的后面，那么我们找到与其相同的前缀的后面重新匹配就可以了。</strong>
+所以前缀表具有告诉我们当前位置匹配失败，跳到之前已经匹配过的地方的能力。</p>
+
+<h3 id="如何计算前缀表">如何计算前缀表</h3>
+<p>接下来就要说一说怎么计算前缀表。</p>
+<ol>
+  <li>长度为前1个字符的子串a，最长相同前后缀的长度为0。（注意字符串的前缀是指不包含最后一个字符的所有以第一个字符开头的连续子串；后缀是指不包含第一个字符的所有以最后一个字符结尾的连续子串。）</li>
+  <li>长度为前2个字符的子串aa，最长相同前后缀的长度为1。</li>
+  <li>长度为前3个字符的子串aab，最长相同前后缀的长度为0。</li>
+  <li>以此类推： 长度为前4个字符的子串aaba，最长相同前后缀的长度为1。 长度为前5个字符的子串aabaa，最长相同前后缀的长度为2。 长度为前6个字符的子串aabaaf，最长相同前后缀的长度为0。</li>
+</ol>
+
+<p>那么把求得的最长相同前后缀的长度就是对应前缀表的元素，如图：</p>
+<div align="center"> <img src="/pic/DS/KMP3.png" width="400" /> </div>
+
+<p>可以看出模式串与前缀表对应位置的数字表示的就是：下标i之前（包括i）的字符串中，有多大长度的相同前缀后缀。
+再来看一下如何利用 前缀表找到 当字符不匹配的时候应该指针应该移动的位置。如动画所示：</p>
+<div align="center"> <img src="/pic/DS/KMP4.gif" width="400" /> </div>
+
+<p>找到的不匹配的位置， 那么此时我们要看它的前一个字符的前缀表的数值是多少。前一个字符的前缀表的数值是2， 所以把下标移动到下标2的位置继续比配。最后就在文本串中找到了和模式串匹配的子串了。</p>
+
+<h3 id="前缀表与next数组">前缀表与next数组</h3>
+
+<p>很多KMP算法的实现都是使用next数组来做回退操作，那么next数组与前缀表有什么关系呢？next数组就可以是前缀表，但是很多实现都是把前缀表统一减一（右移一位，初始位置为-1）之后作为next数组。</p>
+
+<p>其实这并不涉及到KMP的原理，而是具体实现，next数组既可以就是前缀表，也可以是前缀表统一减一（右移一位，初始位置为-1）。</p>
+
+<h3 id="使用next数组来匹配">使用next数组来匹配</h3>
+
+<p>以下我们以前缀表统一减一之后的next数组来做演示。
+有了next数组，就可以根据next数组来 匹配文本串s，和模式串t了。注意next数组是新前缀表（旧前缀表统一减一了）。</p>
+
+<p>匹配过程动画如下：</p>
+<div align="center"> <img src="/pic/DS/KMP5.gif" width="400" /> </div>
+
+<h3 id="构造next数组">构造next数组</h3>
+
+<p><strong>next[i] 等于满足下述要求的 x 的最大值：s[0:i] 具有长度为 x+1 的完全相同的前缀和后缀。</strong>
+构造next数组其实就是计算模式串s，前缀表的过程。 主要有如下三步：</p>
+<ol>
+  <li>初始化
+ 定义两个指针i和j，j指向前缀末尾位置，i指向后缀末尾位置。然后还要对next数组进行初始化赋值：
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+ <span class="n">next</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>处理前后缀不相同的情况
+ 如果 s[i] 与 s[j+1] 不相同，也就是遇到前后缀末尾不相同的情况，就要向前回退，找<code class="language-plaintext highlighter-rouge">s.substr(0,i)</code>更小长度的相同前后缀。因为
+ <code class="language-plaintext highlighter-rouge">s.substr(0,j+1) == substr(i-j-1,j+1)</code>，
+ <code class="language-plaintext highlighter-rouge">s.substr(0,next[j]+1) = s.substr(j-next[j],next[j]+1)</code>
+ <code class="language-plaintext highlighter-rouge">=s.substr(i-next[j]-1,next[j]+1)</code>
+ 所以，s[i] 与 s[j+1] 不相同，就要找 j+1前一个元素在next数组里的值（就是next[j]）。</li>
+  <li>处理前后缀相同的情况
+ 如果 s[i] 与 s[j + 1] 相同，那么就同时向后移动i 和j 说明找到了相同的前后缀，同时还要将j（前缀的长度）赋给next[i], 因为next[i]要记录相同前后缀的长度。</li>
+</ol>
+
+<p>总体程序如下:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">getNext</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">next</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">next</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 注意i从1开始</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 前后缀不相同了</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">next</span><span class="p">[</span><span class="n">j</span><span class="p">];</span> <span class="c1">// 向前回退</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 找到相同的前后缀</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span> <span class="c1">// 将j（前缀的长度）赋给next[i]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="使用next数组来做匹配">使用next数组来做匹配</h3>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// 因为next数组里记录的起始位置为-1</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 注意i就从0开始</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 不匹配</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">next</span><span class="p">[</span><span class="n">j</span><span class="p">];</span> <span class="c1">// j 寻找之前匹配的位置</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 匹配，j和i同时向后移动</span>
+        <span class="n">j</span><span class="o">++</span><span class="p">;</span> <span class="c1">// i的增加在for循环里</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span> <span class="c1">// 文本串s里出现了模式串t</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>总体代码如下：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">getNext</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">next</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">next</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 注意i从1开始</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 前后缀不相同了</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">next</span><span class="p">[</span><span class="n">j</span><span class="p">];</span> <span class="c1">// 向前回退</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 找到相同的前后缀</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span> <span class="c1">// 将j（前缀的长度）赋给next[i]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">strStr</span><span class="p">(</span><span class="n">string</span> <span class="n">haystack</span><span class="p">,</span> <span class="n">string</span> <span class="n">needle</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">needle</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">next</span><span class="p">(</span><span class="n">needle</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+    <span class="n">getNext</span><span class="p">(</span><span class="o">&amp;</span><span class="n">next</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">needle</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// // 因为next数组里记录的起始位置为-1</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">haystack</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 注意i就从0开始</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">haystack</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">needle</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 不匹配</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">next</span><span class="p">[</span><span class="n">j</span><span class="p">];</span> <span class="c1">// j 寻找之前匹配的位置</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">haystack</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">needle</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 匹配，j和i同时向后移动</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span> <span class="c1">// i的增加在for循环里</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="p">(</span><span class="n">needle</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span> <span class="c1">// 文本串s里出现了模式串t</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">needle</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="重复的子字符串">重复的子字符串</h2>
+<p>Leetcode 459. 给定一个非空的字符串 s ，检查是否可以通过由它的一个子串重复多次构成。</p>
+
+<p>除了暴力枚举之外还有一种方法：我们将两个 s 连在一起，并移除第一个和最后一个字符。如果 s 是该字符串的子串，那么 s 就满足题目要求。</p>
+
+<p><strong>证明：</strong>
+如果长度为 $n$ 的字符串 <code class="language-plaintext highlighter-rouge">s</code> 是字符串 <code class="language-plaintext highlighter-rouge">t=s+s</code> 的子串，并且 <code class="language-plaintext highlighter-rouge">s</code> 在 <code class="language-plaintext highlighter-rouge">t</code> 中的起始位置不为 $0$ 或 $n$，那么 <code class="language-plaintext highlighter-rouge">s</code> 就满足题目的要求。证明过程如下：</p>
+
+<p>我们设 <code class="language-plaintext highlighter-rouge">s</code> 在 <code class="language-plaintext highlighter-rouge">t</code> 中的起始位置为 $i\in(0,n)$。也就是说，<code class="language-plaintext highlighter-rouge">t</code> 中从位置 $i$ 开始的 $n$ 个连续的字符，恰好就是字符串<code class="language-plaintext highlighter-rouge">s</code>。那么我们有：</p>
+
+\[s[0:n−1]=t[i:n+i−1].\]
+
+<p>由于 <code class="language-plaintext highlighter-rouge">t</code> 是由两个 <code class="language-plaintext highlighter-rouge">s</code> 拼接而成的，我们可以将 $t[i:n+i−1]$ 分成位置 $n−1$ 左侧和右侧两部分：</p>
+
+\[s[0:n−i−1]=t[i:n−1],\]
+
+\[s[n−i:n−1]=t[n:n+i−1]=t[0:i−1]\]
+
+<p>每一部分都可以对应回 <code class="language-plaintext highlighter-rouge">s</code>：</p>
+
+\[s[0:n−i−1]=s[i:n−1],\]
+
+\[s[n−i:n−1]=s[0:i−1]\]
+
+<p>这说明，s 是一个 <strong>可旋转</strong> 的字符串：将 <code class="language-plaintext highlighter-rouge">s</code> 的前 $i$ 个字符保持顺序，移动到 <code class="language-plaintext highlighter-rouge">s</code> 的末尾，得到的新字符串与 <code class="language-plaintext highlighter-rouge">s</code> 相同。也就是说，在模 $n$ 的意义下，$s[j]=s[j+i]$ 对于任意的 $j$ 恒成立。
+如果我们不断地连写这个等式：</p>
+
+<p>\(s[j]=s[j+i]=s[j+2i]=s[j+3i]=\ldots\)
+那么所有满足 $j_0 =j+ki$ 的位置 $j_0$ 都有 $s[j]=s[j_0]$，$j$ 和 $j_0$ 在模 $i$ 的意义下等价。由于我们已经在模 $n$ 的意义下讨论这个问题，因此 $j$ 和 $j_0$ 在模 $gcd(n,i)$ 的意义下等价，其中 gcd 表示最大公约数。也就是说，字符串 <code class="language-plaintext highlighter-rouge">s</code> 中的两个位置如果在模 $gcd(n,i)$ 的意义下等价，那么它们对应的字符必然是相同的。</p>
+
+<p>由于 $gcd(n,i)$ 一定是 $n$ 的约数，那么字符串 <code class="language-plaintext highlighter-rouge">s</code> 一定可以由其长度为 $gcd(n,i)$ 的前缀重复构成。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">repeatedSubstringPattern</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="n">s</span><span class="p">).</span><span class="n">find</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>我们也可以采用KMP算法来替换库函数:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">kmp</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">query</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">pattern</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">query</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">fail</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">fail</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">pattern</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">pattern</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">fail</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pattern</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">pattern</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">fail</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">match</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">match</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">pattern</span><span class="p">[</span><span class="n">match</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">query</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">fail</span><span class="p">[</span><span class="n">match</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pattern</span><span class="p">[</span><span class="n">match</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">query</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="o">++</span><span class="n">match</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">match</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">repeatedSubstringPattern</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">kmp</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>在正确性证明部分，如果我们设 $i$ 为最小的起始位置，那么一定有 $gcd(n,i)=i$，即 $n$ 是 $i$ 的倍数。这说明字符串 <code class="language-plaintext highlighter-rouge">s</code> 是由长度为 $i$ 的前缀重复构成；</p>
+
+<p>由于 <code class="language-plaintext highlighter-rouge">fail[n−1]</code> 表示 <code class="language-plaintext highlighter-rouge">s</code> 具有长度为<code class="language-plaintext highlighter-rouge">fail[n−1]+1</code>的完全相同的（且最长的）前缀和后缀。那么对于满足题目要求的字符串，一定有 <code class="language-plaintext highlighter-rouge">fail[n−1]=n−i−1</code>，即 <code class="language-plaintext highlighter-rouge">i=n−fail[n−1]−1</code>；
+对于不满足题目要求的字符串，$n$ 一定不是 <code class="language-plaintext highlighter-rouge">n−fail[n−1]−1</code> 的倍数。上述所有的结论都可以很容易地使用反证法证出。因此，我们在预处理出 <code class="language-plaintext highlighter-rouge">fail</code> 数组后，只需要判断 $n$ 是否为 <code class="language-plaintext highlighter-rouge">n−fail[n−1]−1</code> 的倍数即可。</p>
+
+<p>更直观的图如下：</p>
+
+<div align="center"> <img src="/pic/DS/Leetcode459.png" width="400" /> </div>
+
+<p>也就是说只要最长相等前后缀有重叠，并且总长度是后缀不包含的子串长度的倍数，就满足题目要求。</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">getNext</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">next</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">){</span>
+    <span class="n">next</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">next</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="n">repeatedSubstringPattern</span> <span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">next</span><span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()];</span>
+    <span class="n">getNext</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">next</span><span class="p">[</span><span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">len</span> <span class="o">%</span> <span class="p">(</span><span class="n">len</span> <span class="o">-</span> <span class="p">(</span><span class="n">next</span><span class="p">[</span><span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+  
+    
+      <div class="post-tags-section">
+  <i class="post-tags-icon fas fa-tags"></i>
+  <ul class="post-tags"><li>
+        <a class="post-tag" href="/tags/#数据结构与算法">数据结构与算法</a></li></ul>
+</div>
+
+  
+
+  
+</article>
+
+
+<aside class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="/2024/08/06/DS/">
+          Leetcode记录：字符串例题
+          <small><time datetime="2024-08-06T14:00:00+08:00">06 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/08/04/DS/">
+          Leetcode记录：哈希表例题
+          <small><time datetime="2024-08-04T14:00:00+08:00">04 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/08/03/DS/">
+          Leetcode记录：哈希表
+          <small><time datetime="2024-08-03T14:00:00+08:00">03 Aug 2024</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+</main>
+
+<footer class="footer"><small>
+    &copy; 2023&nbsp;-&nbsp;2024 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
+  </small>
+</footer>
+</div>
+      <div class="sidebar-right pure-u-1 pure-u-md-1-4">
+<div  class="toc-wrapper">
+  <h2 class="toc-title">Table of Contents</h2>
+    <nav class="toc-nav">
+      <ul class="toc">
+  <li><a href="#找出字符串中第一个匹配的下标">找出字符串中第一个匹配的下标</a></li>
+  <li><a href="#前缀表">前缀表</a></li>
+  <li><a href="#如何计算前缀表">如何计算前缀表</a></li>
+  <li><a href="#前缀表与next数组">前缀表与next数组</a></li>
+  <li><a href="#使用next数组来匹配">使用next数组来匹配</a></li>
+  <li><a href="#构造next数组">构造next数组</a></li>
+  <li><a href="#使用next数组来做匹配">使用next数组来做匹配</a></li>
+</ul>
+
+  </nav>
+</div>
+
+</div>
+    </div>
+
+    <script async src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  function strip(str, remove) {
+    while (str.length > 0 && remove.indexOf(str.charAt(0)) != -1) {
+      str = str.substr(1);
+    }
+    while (str.length > 0 && remove.indexOf(str.charAt(str.length - 1)) != -1) {
+      str = str.substr(0, str.length - 1);
+    }
+    return str;
+  }
+
+  function scroll() {
+    console.log('scroll');
+    window.scrollTo({
+      left: 0, 
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+    sessionStorage.removeItem('forceCheckScroll');
+  }
+
+  const forceCheckScroll = sessionStorage.getItem('forceCheckScroll') === 'true';
+  const checkScroll = strip(window.location.pathname, '/') !== strip('', '/');
+
+  if (forceCheckScroll || checkScroll) {
+    const maxWidth = "(max-width: 48rem)";
+    const result = window.matchMedia(maxWidth);
+    if (result.matches) {
+      scroll();
+    } else {
+      result.addListener((match) => {
+        if (match.media == maxWidth) {
+          if (match.matches) {
+            scroll();
+          }
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>

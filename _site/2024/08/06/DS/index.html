@@ -196,6 +196,39 @@
     <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></div>
+<p>更直观的写法为：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">reverse</span><span class="p">(</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">){</span> <span class="c1">//翻转，区间写法：左闭右闭 []</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">,</span> <span class="n">j</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">removeExtraSpaces</span><span class="p">(</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span><span class="c1">//去除所有空格并在相邻单词之间添加空格, 快慢指针。</span>
+        <span class="kt">int</span> <span class="n">slow</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>   <span class="c1">//整体思想参考https://programmercarl.com/0027.移除元素.html</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//遇到非空格就处理，即删除所有空格。</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">slow</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">s</span><span class="p">[</span><span class="n">slow</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">' '</span><span class="p">;</span> <span class="c1">//手动控制空格，给单词之间添加空格。slow != 0说明不是第一个单词，需要在单词前添加空格。</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//补上该单词，遇到空格说明单词结束。</span>
+                    <span class="n">s</span><span class="p">[</span><span class="n">slow</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">slow</span><span class="p">);</span> <span class="c1">//slow的大小即为去除多余空格后的大小。</span>
+    <span class="p">}</span>
+
+    <span class="n">string</span> <span class="n">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">removeExtraSpaces</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="c1">//去除多余空格，保证单词之间之只有一个空格，且字符串首尾没空格。</span>
+        <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//removeExtraSpaces后保证第一个单词的开始下标一定是0。</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">||</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//到达空格或者串尾，说明一个单词结束。进行翻转。</span>
+                <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//翻转，注意是左闭右闭 []的翻转。</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//更新下一个单词的开始下标start</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
 
 <p>还有一种办法是利用双端队列，由于双端队列支持从队列头部插入的方法，因此我们可以沿着字符串一个一个单词处理，然后将单词压入队列的头部，再将队列转成字符串即可。</p>
 
@@ -238,6 +271,30 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="右旋字符串">右旋字符串</h3>
+
+<p>字符串的右旋转操作是把字符串尾部的若干个字符转移到字符串的前面。给定一个字符串 s 和一个正整数 k，请编写一个函数，将字符串中的后面 k 个字符移到字符串的前面，实现字符串的右旋转操作。要求不额外使用空间。</p>
+
+<p>进行三次翻转即可：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span><span class="cpf">&lt;algorithm&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="c1">//获取长度</span>
+
+    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span> <span class="c1">// 整体反转</span>
+    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">n</span><span class="p">);</span> <span class="c1">// 先反转前一段，长度n</span>
+    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span> <span class="c1">// 再反转后一段</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span> 
+</code></pre></div></div>
+<p><strong>左旋转和右旋转的思路是一样的。</strong></p>
+
+
 
   
     
@@ -258,6 +315,13 @@
   <ul class="related-posts">
     
       <li>
+        <a href="/2024/08/07/KMP/">
+          Leetcode记录：KMP算法
+          <small><time datetime="2024-08-07T14:00:00+08:00">07 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
         <a href="/2024/08/04/DS/">
           Leetcode记录：哈希表例题
           <small><time datetime="2024-08-04T14:00:00+08:00">04 Aug 2024</time></small>
@@ -268,13 +332,6 @@
         <a href="/2024/08/03/DS/">
           Leetcode记录：哈希表
           <small><time datetime="2024-08-03T14:00:00+08:00">03 Aug 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2024/08/01/DS/">
-          Leetcode记录：链表
-          <small><time datetime="2024-08-01T14:00:00+08:00">01 Aug 2024</time></small>
         </a>
       </li>
     
@@ -299,6 +356,7 @@
   <li><a href="#反转字符串-1">反转字符串</a></li>
   <li><a href="#替换数字">替换数字</a></li>
   <li><a href="#反转字符串中的字母">反转字符串中的字母</a></li>
+  <li><a href="#右旋字符串">右旋字符串</a></li>
 </ul>
 
   </nav>
