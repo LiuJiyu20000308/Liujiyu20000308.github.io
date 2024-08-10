@@ -244,6 +244,119 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="中缀表达式转换为后缀表达式">中缀表达式转换为后缀表达式</h3>
+
+<p>中缀表达式转换为后缀表达式（逆波兰表达式）的过程可以通过使用一个操作符栈和输出队列来实现。转换过程如下：</p>
+
+<ol>
+  <li>初始化：创建一个空的操作符栈和一个空的输出队列。</li>
+  <li>从左到右扫描中缀表达式的每个符号：
+    <ol>
+      <li>如果当前符号是操作数（数字或变量），则将其直接添加到输出队列中。</li>
+      <li>如果当前符号是左括号 (，则将其压入操作符栈。</li>
+      <li>如果当前符号是右括号 )，则将栈顶的操作符弹出并添加到输出队列中，直到遇到左括号为止。此时，将左括号从栈中弹出并丢弃。</li>
+      <li>如果当前符号是操作符（如 +, -, *, / 等），则：
+        <ol>
+          <li>如果操作符栈为空，或者栈顶为左括号 (，则直接将当前操作符压入栈。</li>
+          <li>如果当前操作符的优先级高于栈顶操作符的优先级，也将当前操作符压入栈。</li>
+          <li>否则，将栈顶操作符弹出并添加到输出队列中，重复上述步骤，直到当前操作符可以压入栈为止。</li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li>表达式扫描完成后：将栈中剩余的所有操作符依次弹出并添加到输出队列中。</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stack&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cctype&gt;</span><span class="cp">
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="c1">// 判断操作符优先级</span>
+<span class="kt">int</span> <span class="nf">precedence</span><span class="p">(</span><span class="kt">char</span> <span class="n">op</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">'+'</span> <span class="o">||</span> <span class="n">op</span> <span class="o">==</span> <span class="sc">'-'</span><span class="p">)</span> 
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">'*'</span> <span class="o">||</span> <span class="n">op</span> <span class="o">==</span> <span class="sc">'/'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">'^'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 判断是否为操作符</span>
+<span class="kt">bool</span> <span class="n">isOperator</span><span class="p">(</span><span class="kt">char</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'+'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'-'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'*'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'/'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'^'</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 中缀表达式转后缀表达式</span>
+<span class="n">string</span> <span class="n">infixToPostfix</span><span class="p">(</span><span class="n">string</span> <span class="n">infix</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">postfix</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
+    
+    <span class="k">for</span><span class="p">(</span><span class="kt">char</span><span class="o">&amp;</span> <span class="n">c</span> <span class="o">:</span> <span class="n">infix</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">isdigit</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">||</span> <span class="n">isalpha</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">postfix</span> <span class="o">+=</span> <span class="n">c</span><span class="p">;</span>  <span class="c1">// 如果是操作数，直接添加到后缀表达式中</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'('</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>  <span class="c1">// 左括号直接压栈</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">')'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 右括号，弹出直到遇到左括号</span>
+            <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">s</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">'('</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">postfix</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+                <span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span> <span class="c1">// 弹出左括号</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">isOperator</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="p">{</span>
+            <span class="c1">// 操作符，考虑优先级</span>
+            <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">s</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">precedence</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">())</span> <span class="o">&gt;=</span> <span class="n">precedence</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">postfix</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+                <span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// 将剩余的操作符全部弹出</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">s</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">postfix</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">postfix</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="逆波兰表达式后缀表达式">逆波兰表达式（后缀表达式）</h3>
+
+<p>Leetcode 150. 给你一个字符串数组 tokens ，表示一个根据 逆波兰表示法 表示的算术表达式。请你计算该表达式。返回一个表示表达式值的整数。</p>
+
+<p>和删除重复项问题十分类似，使用栈即可。</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">evalRPN</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">tokens</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;</span> <span class="n">st</span><span class="p">;</span> 
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tokens</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"+"</span> <span class="o">||</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"-"</span> <span class="o">||</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"*"</span> <span class="o">||</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"/"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">long</span> <span class="kt">long</span> <span class="n">num1</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="n">st</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="kt">long</span> <span class="kt">long</span> <span class="n">num2</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="n">st</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"+"</span><span class="p">)</span> <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">num2</span> <span class="o">+</span> <span class="n">num1</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"-"</span><span class="p">)</span> <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">num2</span> <span class="o">-</span> <span class="n">num1</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"*"</span><span class="p">)</span> <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">num2</span> <span class="o">*</span> <span class="n">num1</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"/"</span><span class="p">)</span> <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">num2</span> <span class="o">/</span> <span class="n">num1</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">stoll</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+    <span class="n">st</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span> <span class="c1">// 把栈里最后一个元素弹出（其实不弹出也没事）</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="睡醒再更新">睡醒再更新</h3>
+
 
   
     
@@ -307,6 +420,9 @@
       <li><a href="#用队列实现栈">用队列实现栈</a></li>
       <li><a href="#有效的括号">有效的括号</a></li>
       <li><a href="#删除字符串中的所有相邻重复项">删除字符串中的所有相邻重复项</a></li>
+      <li><a href="#中缀表达式转换为后缀表达式">中缀表达式转换为后缀表达式</a></li>
+      <li><a href="#逆波兰表达式后缀表达式">逆波兰表达式（后缀表达式）</a></li>
+      <li><a href="#睡醒再更新">睡醒再更新</a></li>
     </ul>
   </li>
 </ul>
