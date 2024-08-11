@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Leetcode记录：单调队列 | Liujiyu’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Leetcode记录：单调队列" />
+<meta name="author" content="liujiyu" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="单调队列" />
+<meta property="og:description" content="单调队列" />
+<link rel="canonical" href="http://localhost:4000/2024/08/09/Queue/" />
+<meta property="og:url" content="http://localhost:4000/2024/08/09/Queue/" />
+<meta property="og:site_name" content="Liujiyu’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-08-09T14:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Leetcode记录：单调队列" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-08-09T14:00:00+08:00","datePublished":"2024-08-09T14:00:00+08:00","description":"单调队列","headline":"Leetcode记录：单调队列","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/08/09/Queue/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/08/09/Queue/"}</script>
+<!-- End Jekyll SEO tag -->
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } });
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+                       });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+</head>
+
+
+  <body>
+
+    <div class="container pure-g"><div class="sidebar-left pure-u-1 pure-u-md-1-4" style="background-color: rgb(40, 73, 77); color: rgb(255, 255, 255); background-image: url(/bg.jpg);"><header class="masthead">
+  <div class="avatar"><img src="/head.jpg" class="avatar-image" alt="liujiyu">
+    </div>
+  <div class="masthead-title">
+    <a href="/" title="Home">Liujiyu's blog</a>
+  </div>
+  <div class="masthead-tagline">
+    <small>learn & record</small>
+  </div><nav class="navigation">
+    <ul class="navigation-list"><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/">Blog</a>
+      </li><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/about/">About</a>
+      </li></ul>
+  </nav><div class="social pure-menu pure-menu-horizontal">
+      <ul class="social-icons pure-menu-list">
+      <li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="mailto://liujiyu@zju.edu.cn">
+            <i class="fas fa-envelope" title="Email"></i>
+          </a>
+        </li><li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="https://github.com/Liujiyu20000308">
+            <i class="fab fa-github" title="GitHub"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+</header>
+</div>
+
+      <div class="content pure-u-1 pure-u-md-1-2"><main>
+  <article class="post">
+  <h1 class="post-title">Leetcode记录：单调队列</h1>
+  <div class="post-meta"><time datetime="2024-08-09T14:00:00+08:00" itemprop="datePublished">9 Aug 2024</time></div>
+
+  <h2 id="单调队列">单调队列</h2>
+
+<p>队列和双端队列这里不再赘述，对应的数据结构是queue和deque，前者只支持输出队首和插入队尾，但后者支持双端的输出和插入。deque支持迭代器但queue和stack不支持迭代器。</p>
+
+<p>单调队列是一个限制<strong>只能队尾插入</strong>，但是<strong>可以两端删除</strong>的双端队列。单调队列存储的元素值，是<strong>从队首到队尾呈单调性</strong>的（要么单调递增，要么单调递减）。对于求解最大值的问题，则需要维护一个<strong>单调递减</strong>的队列。</p>
+
+<h3 id="获取队首元素">获取队首元素</h3>
+<p>由于单调队列是单调递减的，所以队首元素最大，直接$O(1)$获取队首元素。</p>
+
+<h3 id="删除">删除</h3>
+<p>删除分为队首删除和队尾删除。队首删除即直接队首元素出队，$O(1)$即可完成操作。<strong>队尾删除一般是配合队尾插入进行的。</strong></p>
+
+<h3 id="插入">插入</h3>
+
+<p>在进行队尾插入的时候，我们往往需要明白一个重要的点，就是需要保证它<strong>单调递减</strong>的性质，所以如果队尾元素$\leq$插入元素，则<strong>当前的队尾元素是需要执行删除操作的</strong>（也就是上文提到的队尾删除），直到满足队尾元素$&gt;$插入元素，才能真正执行插入操作。</p>
+
+<p>这样才能保证，执行队尾插入后，单调队列仍然是<strong>单调递减</strong>的。插入过程，虽然伴随着元素的删除，但是每个元素至多被插入一次和删除一次，所以均摊时间复杂度还是$O(1)$的。</p>
+
+<h3 id="性质">性质</h3>
+<ol>
+  <li>保序性
+ 由于单调队列执行插入的时候，一定是从队尾进行插入，所以单调队列中的数据，从队首到队尾的顺序，一定是和原序列严格保序的；</li>
+  <li><strong>下标存储</strong>
+ 为了让单调队列的数据足够干净，在单调队列中，一般存储 原序列的下标 即可，而不需要存储原序列的值，根据保序性，存储的下标一定是单调递增的；</li>
+  <li>单调性
+ 单调队列中的元素是 原序列的下标，对应到原序列时，根据求解问题的不同，<strong>当需要求最大值时，它是单调递减的；当需要求最小值时，它是单调递增的</strong>；</li>
+</ol>
+
+<p><strong>单调队列的典型应用是在滑动窗口中寻找最大/最小值的问题。</strong></p>
+
+<h4 id="滑动窗口最大值">滑动窗口最大值</h4>
+
+<p>Leetcode 239. 给你一个整数数组nums，有一个大小为k的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的k个数字。滑动窗口每次只向右移动一位。返回 滑动窗口中的最大值。
+<strong>重要的是单调性分析：</strong>
+如果当前的滑动窗口中有两个下标 $i$ 和 $j$，其中 $i$ 在 $j$ 的左侧($i&lt;j$)，并且 $i$ 对应的元素不大于 $j$ 对应的元素($nums[i]\leq nums[j]$),当滑动窗口向右移动时，只要 $i$ 还在窗口中，那么 $j$ 一定也还在窗口中，这是 $i$ 在 $j$ 的左侧所保证的。因此，由于 $nums[j]$ 的存在，$nums[i]$ 一定不会是滑动窗口中的最大值了，我们可以将 $nums[i]$ 永久地移除。</p>
+
+<p>因此我们可以使用一个队列存储所有还没有被移除的下标。在队列中，这些下标按照从小到大的顺序被存储，并且它们在数组 nums 中对应的值是严格单调递减的。因为如果队列中有两个相邻的下标，它们对应的值相等或者递增，那么令前者为 $i$，后者为 $j$，就对应了上面所说的情况，即 $nums[i]$ 会被移除，这就产生了矛盾。</p>
+
+<p>当滑动窗口向右移动时，我们需要把一个新的元素放入队列中。为了保持队列的性质，我们会不断地将新的元素与队尾的元素相比较，<strong>如果前者大于等于后者，那么队尾的元素就可以被永久地移除，我们将其弹出队列</strong>。我们需要不断地进行此项操作，直到队列为空或者新的元素小于队尾的元素。</p>
+
+<p>由于队列中下标对应的元素是严格单调递减的，因此此时队首下标对应的元素就是滑动窗口中的最大值。但此时的最大值可能在滑动窗口左边界的左侧，并且随着窗口向右移动，它永远不可能出现在滑动窗口中了。<strong>因此我们还需要不断从队首弹出元素，直到队首元素在窗口中为止。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">maxSlidingWindow</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="n">deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">[</span><span class="n">q</span><span class="p">.</span><span class="n">back</span><span class="p">()])</span> <span class="p">{</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="p">{</span><span class="n">nums</span><span class="p">[</span><span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">()]};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">[</span><span class="n">q</span><span class="p">.</span><span class="n">back</span><span class="p">()])</span> <span class="p">{</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">()]);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="和至少为k的最短子数组">和至少为k的最短子数组</h4>
+
+<p>Leetcode 862. 给你一个整数数组 nums 和一个整数 k ，找出 nums 中和至少为 k 的 最短非空子数组 ，并返回该子数组的长度。如果不存在这样的 子数组 ，返回 -1 。
+<strong>单调性分析：</strong>
+首先要使用前缀和处理，对于边界情况 $preSumArr[0] = 0$。而从数组 $nums$ 下标 $i$ 开始长为 $m$ 的子数组的和就可以根据 $preSumArr[i+m]−preSumArr[i]$ 快速计算得到。</p>
+
+<p>遍历 $preSumArr$ 数组，访问过的前缀和先暂存在某种集合 $q$ 中。根据前缀和数组的性质，后访问到的某个前缀和 $preSumArr[j]$ 减去之前访问到的某个前缀和 $preSumArr<a href="j&gt;i">i</a>$ 即为 $nums$ 中某段子数组的和。因此，每次访问到某个前缀和 $preSumArr[j]$ 时，可以用它尝试减去集合 $q$ 中所有已经访问过的前缀和。当某个 $q$ 中的前缀和 $preSumArr[i]$，第一次出现 $preSumArr[j]−preSumArr[i]\geq k$ 时，这个下标 $i$ 就找到了以它为起点的最短子数组的长度 $j−i$。此时，可以将它从 $q$ 中移除，<strong>后续即使还有以它为起点的满足条件的子数组，长度也会大于当前的长度。</strong></p>
+
+<p>当一个前缀和 $preSumArr[j]$ 试减完 $q$ 中的元素时，需要将它也放入 $q$ 中。将它放入 $q$ 前， $q$ 中可能存在比 $preSumArr[j]$ 大的元素，而这些元素和 $preSumArr[j]$ 一样，只能作为再后续访问到的某个前缀和 $preSumArr[h]$ 的减数。而作为减数时，更大的值只会让不等式 $preSumArr[h]−preSumArr[i]\geq k$ 更难满足。即使都满足，后访问到的值也可以带来更短的长度。 因此，<strong>在把 $preSumArr[j]$ 放入 $q$ 时，需要将 $q$ 中大于等于 $preSumArr[j]$ 的值也都移除。</strong></p>
+
+<p>接下来考虑 $q$ 的性质。我们会往 $q$ 中增加和删除元素。每次增加一个元素 $curSum$ 前，先根据不等式删除一部分元素（也可能不删），然后再删除 $q$ 中所有大于等于 $curSum$ 的元素，<strong>这样每次加进去的元素都会是 $q$ 中的唯一最大值，使得 $q$ 中的元素是按照添加顺序严格单调递增的。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">shortestSubarray</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span> <span class="n">preSumArr</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">preSumArr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">preSumArr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">qu</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">long</span> <span class="n">curSum</span> <span class="o">=</span> <span class="n">preSumArr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">qu</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">curSum</span> <span class="o">-</span> <span class="n">preSumArr</span><span class="p">[</span><span class="n">qu</span><span class="p">.</span><span class="n">front</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">qu</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+            <span class="n">qu</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">qu</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">preSumArr</span><span class="p">[</span><span class="n">qu</span><span class="p">.</span><span class="n">back</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">curSum</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">qu</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">qu</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">?</span> <span class="n">res</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+  
+    
+      <div class="post-tags-section">
+  <i class="post-tags-icon fas fa-tags"></i>
+  <ul class="post-tags"><li>
+        <a class="post-tag" href="/tags/#数据结构与算法">数据结构与算法</a></li></ul>
+</div>
+
+  
+
+  
+</article>
+
+
+<aside class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="/2024/08/10/Sort/">
+          Leetcode记录：排序算法
+          <small><time datetime="2024-08-10T14:00:00+08:00">10 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/08/08/DS/">
+          Leetcode记录：栈和队列
+          <small><time datetime="2024-08-08T14:00:00+08:00">08 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/08/07/KMP/">
+          Leetcode记录：KMP算法
+          <small><time datetime="2024-08-07T14:00:00+08:00">07 Aug 2024</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+</main>
+
+<footer class="footer"><small>
+    &copy; 2023&nbsp;-&nbsp;2024 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
+  </small>
+</footer>
+</div>
+      <div class="sidebar-right pure-u-1 pure-u-md-1-4">
+<div  class="toc-wrapper">
+  <h2 class="toc-title">Table of Contents</h2>
+    <nav class="toc-nav">
+      <ul class="toc">
+  <li><a href="#单调队列">单调队列</a>
+    <ul>
+      <li><a href="#获取队首元素">获取队首元素</a></li>
+      <li><a href="#删除">删除</a></li>
+      <li><a href="#插入">插入</a></li>
+      <li><a href="#性质">性质</a></li>
+    </ul>
+  </li>
+</ul>
+
+  </nav>
+</div>
+
+</div>
+    </div>
+
+    <script async src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  function strip(str, remove) {
+    while (str.length > 0 && remove.indexOf(str.charAt(0)) != -1) {
+      str = str.substr(1);
+    }
+    while (str.length > 0 && remove.indexOf(str.charAt(str.length - 1)) != -1) {
+      str = str.substr(0, str.length - 1);
+    }
+    return str;
+  }
+
+  function scroll() {
+    console.log('scroll');
+    window.scrollTo({
+      left: 0, 
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+    sessionStorage.removeItem('forceCheckScroll');
+  }
+
+  const forceCheckScroll = sessionStorage.getItem('forceCheckScroll') === 'true';
+  const checkScroll = strip(window.location.pathname, '/') !== strip('', '/');
+
+  if (forceCheckScroll || checkScroll) {
+    const maxWidth = "(max-width: 48rem)";
+    const result = window.matchMedia(maxWidth);
+    if (result.matches) {
+      scroll();
+    } else {
+      result.addListener((match) => {
+        if (match.media == maxWidth) {
+          if (match.matches) {
+            scroll();
+          }
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>

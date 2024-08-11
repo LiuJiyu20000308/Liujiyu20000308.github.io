@@ -96,20 +96,20 @@
 
 <p>接下来介绍的栈和队列也是SGI STL里面的数据结构， 知道了使用版本，才知道对应的底层实现。</p>
 
-<p>栈提供 push 和 pop 等接口，所有元素必须符合<strong>先进后出规则</strong>，所以栈不提供走访功能，也<strong>不提供迭代器</strong>(iterator)。 不像是set 或者map 提供迭代器iterator来遍历所有元素。栈是以底层容器完成其所有的工作，对外提供统一的接口，底层容器是可插拔的（也就是说我们可以控制使用哪种容器来实现栈的功能）。所以STL中栈往往不被归类为容器，而被归类为<strong>container adapter（容器适配器）。</strong></p>
+<p>栈(stack) 提供 push 和 pop 等接口，所有元素必须符合<strong>先进后出规则</strong>，所以栈不提供走访功能，也<strong>不提供迭代器</strong>(iterator)。 不像是set 或者map 提供迭代器iterator来遍历所有元素。栈是以底层容器完成其所有的工作，对外提供统一的接口，底层容器是可插拔的（也就是说我们可以控制使用哪种容器来实现栈的功能）。所以STL中栈往往不被归类为容器，而被归类为<strong>container adapter（容器适配器）。</strong></p>
 
-<p>那么问题来了，STL 中栈是用什么容器实现的？从下图中可以看出，栈的内部结构，栈的底层实现可以是vector，deque，list，只要支持push_back,pop_back都是可以的， 主要就是数组和链表的底层实现。</p>
+<p>那么问题来了，STL 中栈是用什么容器实现的？从下图中可以看出，栈的内部结构，栈的底层实现可以是vector，deque，list，<strong>只要支持back,push_back,pop_back都是可以的</strong>， 主要就是数组和链表的底层实现。</p>
 
 <div align="center"> <img src="/pic/DS/Stack1.png" width="400" /> </div>
 
 <p>我们常用的SGI STL，如果没有指定底层实现的话，默认是以deque为缺省情况下栈的底层结构。deque是一个双向队列，只要封住一段，只开通另一端就可以实现栈的逻辑了。SGI STL中 队列底层实现缺省情况下一样使用deque实现的。我们也可以指定vector为栈的底层实现，初始化语句如下：</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">third</span><span class="p">;</span>  <span class="c1">// 使用vector为底层容器的栈</span>
 </code></pre></div></div>
-<p>队列中先进先出的数据结构，同样不允许有遍历行为，不提供迭代器, SGI STL中队列一样是以deque为缺省情况下的底部结构，底部结构需支持pop_front和push_back。也可以指定list 为起底层实现，初始化queue的语句如下：</p>
+<p>队列中先进先出的数据结构，同样不允许有遍历行为，不提供迭代器, SGI STL中队列一样是以deque为缺省情况下的底部结构，<strong>底部结构需支持front,pop_front和push_back</strong>。也可以指定list 为起底层实现，初始化queue的语句如下：</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">third</span><span class="p">;</span> <span class="c1">// 定义以list为底层容器的队列</span>
 </code></pre></div></div>
 
-<p>priority_queue也是容器适配器，它类似于最大堆(max heap)，给定某个严格弱排序后。它的第一个元素永远是最大的。</p>
+<p>priority_queue也是容器适配器，<strong>同样也不支持iterator</strong>。它类似于最大堆(max heap)，给定某个严格弱排序后。它的top永远是最大的，<strong>数组内部是从小到大排列的，它能pop最大的元素是因为它使用的底层函数是pop_back()。</strong></p>
 
 <h3 id="用栈实现队列">用栈实现队列</h3>
 
@@ -355,7 +355,28 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h3 id="睡醒再更新">睡醒再更新</h3>
+<h3 id="前k个高频元素">前k个高频元素</h3>
+
+<p>Leetcode 347. 给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。</p>
+
+<p>直接使用priority_queue即可，它的实现类似于堆排序，每次返回的是最大的元素。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">topKFrequent</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">mp</span><span class="p">;</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pq</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="p">)</span>
+        <span class="n">mp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">mp</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span> <span class="o">!=</span><span class="n">mp</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">){</span>
+        <span class="n">pq</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">,</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">second</span><span class="p">);</span>
+        <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 
   
@@ -377,23 +398,23 @@
   <ul class="related-posts">
     
       <li>
+        <a href="/2024/08/10/Sort/">
+          Leetcode记录：排序算法
+          <small><time datetime="2024-08-10T14:00:00+08:00">10 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/08/09/Queue/">
+          Leetcode记录：单调队列
+          <small><time datetime="2024-08-09T14:00:00+08:00">09 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
         <a href="/2024/08/07/KMP/">
           Leetcode记录：KMP算法
           <small><time datetime="2024-08-07T14:00:00+08:00">07 Aug 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2024/08/06/DS/">
-          Leetcode记录：字符串例题
-          <small><time datetime="2024-08-06T14:00:00+08:00">06 Aug 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2024/08/04/DS/">
-          Leetcode记录：哈希表例题
-          <small><time datetime="2024-08-04T14:00:00+08:00">04 Aug 2024</time></small>
         </a>
       </li>
     
@@ -422,7 +443,7 @@
       <li><a href="#删除字符串中的所有相邻重复项">删除字符串中的所有相邻重复项</a></li>
       <li><a href="#中缀表达式转换为后缀表达式">中缀表达式转换为后缀表达式</a></li>
       <li><a href="#逆波兰表达式后缀表达式">逆波兰表达式（后缀表达式）</a></li>
-      <li><a href="#睡醒再更新">睡醒再更新</a></li>
+      <li><a href="#前k个高频元素">前k个高频元素</a></li>
     </ul>
   </li>
 </ul>
