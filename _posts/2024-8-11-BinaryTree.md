@@ -307,7 +307,7 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 }
 ```
 
-迭代法如下：
+迭代法如下，这样做很多人也叫先序遍历以及dfs：
 ```cpp
 void order(TreeNode* cur, vector<vector<int>>& result, int depth)
 {
