@@ -12,8 +12,8 @@
 <meta property="og:title" content="Leetcode记录：二叉树例题" />
 <meta name="author" content="liujiyu" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="二叉树属性" />
-<meta property="og:description" content="二叉树属性" />
+<meta name="description" content="层序遍历 每道题都可以很简单地用层序遍历解答，以下只是放一些其他思路。" />
+<meta property="og:description" content="层序遍历 每道题都可以很简单地用层序遍历解答，以下只是放一些其他思路。" />
 <link rel="canonical" href="http://localhost:4000/2024/08/12/BT/" />
 <meta property="og:url" content="http://localhost:4000/2024/08/12/BT/" />
 <meta property="og:site_name" content="Liujiyu’s blog" />
@@ -22,7 +22,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Leetcode记录：二叉树例题" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-08-12T14:00:00+08:00","datePublished":"2024-08-12T14:00:00+08:00","description":"二叉树属性","headline":"Leetcode记录：二叉树例题","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/08/12/BT/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/08/12/BT/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-08-12T14:00:00+08:00","datePublished":"2024-08-12T14:00:00+08:00","description":"层序遍历 每道题都可以很简单地用层序遍历解答，以下只是放一些其他思路。","headline":"Leetcode记录：二叉树例题","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/08/12/BT/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/08/12/BT/"}</script>
 <!-- End Jekyll SEO tag -->
 <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
 <script type="text/x-mathjax-config">
@@ -78,9 +78,186 @@
   <h1 class="post-title">Leetcode记录：二叉树例题</h1>
   <div class="post-meta"><time datetime="2024-08-12T14:00:00+08:00" itemprop="datePublished">12 Aug 2024</time></div>
 
-  <h2 id="二叉树属性">二叉树属性</h2>
+  <h2 id="层序遍历">层序遍历</h2>
+<p>每道题都可以很简单地用层序遍历解答，以下只是放一些其他思路。</p>
 
-<h3 id="对称二叉树">对称二叉树</h3>
+<h4 id="二叉树的右视图">二叉树的右视图</h4>
+<p>Leetcode 199.给定一个二叉树的 根节点 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。</p>
+
+<p>我们对树进行<strong>深度优先搜索</strong>，在搜索过程中，我们总是先访问右子树。那么对于每一层来说，我们在这层见到的第一个结点一定是最右边的结点。这样一来，我们可以存储在每个深度访问的第一个结点，一旦我们知道了树的层数，就可以得到最终的结果数组：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">rightSideView</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">rightmostValueAtDepth</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">max_depth</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">stack</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*&gt;</span> <span class="n">nodeStack</span><span class="p">;</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">depthStack</span><span class="p">;</span>
+    <span class="n">nodeStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="n">depthStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">nodeStack</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">nodeStack</span><span class="p">.</span><span class="n">top</span><span class="p">();</span><span class="n">nodeStack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="n">depthStack</span><span class="p">.</span><span class="n">top</span><span class="p">();</span><span class="n">depthStack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 维护二叉树的最大深度</span>
+            <span class="n">max_depth</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">depth</span><span class="p">);</span>
+
+            <span class="c1">// 如果不存在对应深度的节点我们才插入</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rightmostValueAtDepth</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">depth</span><span class="p">)</span> <span class="o">==</span> <span class="n">rightmostValueAtDepth</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">rightmostValueAtDepth</span><span class="p">[</span><span class="n">depth</span><span class="p">]</span> <span class="o">=</span>  <span class="n">node</span> <span class="o">-&gt;</span> <span class="n">val</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">nodeStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">node</span> <span class="o">-&gt;</span> <span class="n">left</span><span class="p">);</span>
+            <span class="n">nodeStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">node</span> <span class="o">-&gt;</span> <span class="n">right</span><span class="p">);</span>
+            <span class="n">depthStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">depthStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">rightView</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">depth</span> <span class="o">&lt;=</span> <span class="n">max_depth</span><span class="p">;</span> <span class="o">++</span><span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rightView</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">rightmostValueAtDepth</span><span class="p">[</span><span class="n">depth</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">rightView</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>也可以执行执行广度优先搜索，左结点排在右结点之前，这样，我们对每一层都从左到右访问。因此，只保留每个深度最后访问的结点，我们就可以在遍历完整棵树后得到每个深度最右的结点：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">rightSideView</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">rightmostValueAtDepth</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">max_depth</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">queue</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*&gt;</span> <span class="n">nodeQueue</span><span class="p">;</span>
+    <span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">depthQueue</span><span class="p">;</span>
+    <span class="n">nodeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="n">depthQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">nodeQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">nodeQueue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span><span class="n">nodeQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="n">depthQueue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span><span class="n">depthQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 维护二叉树的最大深度</span>
+            <span class="n">max_depth</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">depth</span><span class="p">);</span>
+
+            <span class="c1">// 由于每一层最后一个访问到的节点才是我们要的答案，因此不断更新对应深度的信息即可</span>
+            <span class="n">rightmostValueAtDepth</span><span class="p">[</span><span class="n">depth</span><span class="p">]</span> <span class="o">=</span>  <span class="n">node</span> <span class="o">-&gt;</span> <span class="n">val</span><span class="p">;</span>
+
+            <span class="n">nodeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">node</span> <span class="o">-&gt;</span> <span class="n">left</span><span class="p">);</span>
+            <span class="n">nodeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">node</span> <span class="o">-&gt;</span> <span class="n">right</span><span class="p">);</span>
+            <span class="n">depthQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">depthQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">rightView</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">depth</span> <span class="o">&lt;=</span> <span class="n">max_depth</span><span class="p">;</span> <span class="o">++</span><span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rightView</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">rightmostValueAtDepth</span><span class="p">[</span><span class="n">depth</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">rightView</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="每层的平均值">每层的平均值</h4>
+<p>Leetcode 637. 给定一个非空二叉树的根节点 root , 以数组的形式返回每一层节点的平均值。</p>
+
+<p><strong>递归dfs求解就是构造一个helper函数进行递归，将当前节点、所需要记录的数据以及深度depth作为参数传入，一个一个元素进行处理，其中还要注意每一层的第一个节点要进行特殊处理。</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">averageOfLevels</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="k">auto</span> <span class="n">sums</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">sums</span><span class="p">);</span>
+        <span class="k">auto</span> <span class="n">averages</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">sums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">averages</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">sums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">counts</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">averages</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">dfs</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">level</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">counts</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">sums</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">level</span> <span class="o">&lt;</span> <span class="n">sums</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">sums</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">+=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
+            <span class="n">counts</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">sums</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
+            <span class="n">counts</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">sums</span><span class="p">);</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">sums</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="填充每个节点的下一个右侧节点指针">填充每个节点的下一个右侧节点指针</h4>
+<p>Leetcode 116. 给定一个完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。</p>
+
+<p>除了层序遍历外，也可以考虑使用已建立的 next 指针：第 N 层节点之间建立 next 指针后，再建立第 N+1 层节点的 next 指针。可以通过 next 指针访问同一层的所有节点，因此可以使用第 N 层的 next 指针，为第 N+1 层节点建立 next 指针。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Node</span><span class="o">*</span> <span class="nf">connect</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// 从根节点开始</span>
+    <span class="n">Node</span><span class="o">*</span> <span class="n">leftmost</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">leftmost</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 遍历这一层节点组织成的链表，为下一层的节点更新 next 指针</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">head</span> <span class="o">=</span> <span class="n">leftmost</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">head</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span> 
+            <span class="c1">// CONNECTION 1</span>
+            <span class="n">head</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+            <span class="c1">// CONNECTION 2</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">head</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="c1">// 指针向后移动</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 去下一层的最左的节点</span>
+        <span class="n">leftmost</span> <span class="o">=</span> <span class="n">leftmost</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>如果不是完美二叉树，也就是Leetcode 117题，也是可以用该思路：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">handle</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="o">&amp;</span><span class="n">last</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="o">&amp;</span><span class="n">nextStart</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">last</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+    <span class="p">}</span> 
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">nextStart</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nextStart</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">last</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Node</span><span class="o">*</span> <span class="n">connect</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">start</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Node</span> <span class="o">*</span><span class="n">last</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">,</span> <span class="o">*</span><span class="n">nextStart</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">p</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">handle</span><span class="p">(</span><span class="n">last</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">nextStart</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">handle</span><span class="p">(</span><span class="n">last</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">nextStart</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">nextStart</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="二叉树属性">二叉树属性</h2>
+
+<h4 id="对称二叉树">对称二叉树</h4>
 <p>Leetcode 101. 给你一个二叉树的根节点 root ， 检查它是否轴对称。</p>
 
 <p>递归方法一定要注意三步走：<strong>确定递归函数的参数和返回值，确定终止条件，确定单层递归的逻辑。</strong></p>
@@ -134,7 +311,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h3 id="二叉树的最大深度">二叉树的最大深度</h3>
+<h4 id="二叉树的最大深度">二叉树的最大深度</h4>
 
 <p>Leetcode 104. 给定一个二叉树 root ，返回其最大深度。
 二叉树的<strong>最大深度</strong>是指从根节点到最远叶子节点的最长路径上的节点数。</p>
@@ -199,7 +376,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h3 id="n叉树的最大深度">n叉树的最大深度</h3>
+<h4 id="n叉树的最大深度">n叉树的最大深度</h4>
 <p>Leetcode 559. 给定一个 n 叉树，找到其最大深度。</p>
 
 <p>思路一模一样：</p>
@@ -214,7 +391,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h3 id="二叉树的最小深度">二叉树的最小深度</h3>
+<h4 id="二叉树的最小深度">二叉树的最小深度</h4>
 <p>Leetcode 111.
 给定一个二叉树，找出其最小深度。
 最小深度是从根节点到<strong>最近叶子节点</strong>的最短路径上的节点数量。</p>
@@ -288,7 +465,7 @@
 
 <h2 id="二叉树修改与构造">二叉树修改与构造</h2>
 
-<h3 id="翻转二叉树">翻转二叉树</h3>
+<h4 id="翻转二叉树">翻转二叉树</h4>
 
 <p>Leetcode 226. 给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。</p>
 
@@ -360,19 +537,9 @@
   <h2 class="toc-title">Table of Contents</h2>
     <nav class="toc-nav">
       <ul class="toc">
-  <li><a href="#二叉树属性">二叉树属性</a>
-    <ul>
-      <li><a href="#对称二叉树">对称二叉树</a></li>
-      <li><a href="#二叉树的最大深度">二叉树的最大深度</a></li>
-      <li><a href="#n叉树的最大深度">n叉树的最大深度</a></li>
-      <li><a href="#二叉树的最小深度">二叉树的最小深度</a></li>
-    </ul>
-  </li>
-  <li><a href="#二叉树修改与构造">二叉树修改与构造</a>
-    <ul>
-      <li><a href="#翻转二叉树">翻转二叉树</a></li>
-    </ul>
-  </li>
+  <li><a href="#层序遍历">层序遍历</a></li>
+  <li><a href="#二叉树属性">二叉树属性</a></li>
+  <li><a href="#二叉树修改与构造">二叉树修改与构造</a></li>
 </ul>
 
   </nav>
