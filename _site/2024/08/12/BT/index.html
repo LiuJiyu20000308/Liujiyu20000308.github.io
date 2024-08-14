@@ -515,7 +515,7 @@
 <h4 id="找树左下角的值">找树左下角的值</h4>
 <p>Leetcode 513. 给定一个二叉树的 根节点 root，请找出该二叉树的 最底层 最左边 节点的值。</p>
 
-<p>两种方法都是可以的，bfs更简单，只需要每层第一个更新一下result就可以了，递归的dfs如下：</p>
+<p>两种方法都是可以的，<strong>bfs更简单，只需要每层第一个更新一下result就可以了</strong>，递归的dfs如下：</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">maxDepth</span> <span class="o">=</span> <span class="n">INT_MIN</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">result</span><span class="p">;</span>
 <span class="kt">void</span> <span class="nf">traversal</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
@@ -554,6 +554,80 @@
     <span class="n">invertTree</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>        <span class="c1">// 右</span>
     <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
 <span class="p">}</span>   
+</code></pre></div></div>
+
+<h4 id="根据前序遍历和中序遍历构造二叉树">根据前序遍历和中序遍历构造二叉树</h4>
+
+<p>可以先利用递归的思想：
+第一步：如果数组大小为零的话，说明是空节点了。
+第二步：如果不为空，那么取前序数组第一个元素作为节点元素。
+第三步：找到前序数组第一个元素在中序数组的位置，作为切割点
+第四步：切割中序数组，切成中序左数组和中序右数组 （顺序别搞反了，一定是先切中序数组）
+第五步：切割前序数组，切成前序左数组和前序右数组
+第六步：递归处理左区间和右区间</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span> <span class="o">*</span><span class="nf">helper</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">preorder</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">inorder</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">preorder</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+    <span class="n">TreeNode</span> <span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">preorder</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">part</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">inorder</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">preorder</span><span class="p">.</span><span class="n">front</span><span class="p">())</span>
+            <span class="n">part</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">leftIn</span><span class="p">(</span><span class="n">inorder</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">inorder</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="o">+</span><span class="n">part</span><span class="p">);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">rightIn</span><span class="p">(</span><span class="n">inorder</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="o">+</span><span class="n">part</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">inorder</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">leftPre</span><span class="p">(</span><span class="n">preorder</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">preorder</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">part</span><span class="p">);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">rightPre</span><span class="p">(</span><span class="n">preorder</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">part</span><span class="p">,</span> <span class="n">preorder</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">helper</span><span class="p">(</span><span class="n">leftPre</span><span class="p">,</span><span class="n">leftIn</span><span class="p">);</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">helper</span><span class="p">(</span><span class="n">rightPre</span><span class="p">,</span><span class="n">rightIn</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">TreeNode</span><span class="o">*</span> <span class="n">buildTree</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">preorder</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">inorder</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">helper</span><span class="p">(</span><span class="n">preorder</span><span class="p">,</span><span class="n">inorder</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>迭代的思想也很巧妙：对于前序遍历中的任意两个连续节点 u 和 v，根据前序遍历的流程，我们可以知道 u 和 v 只有两种可能的关系：</p>
+<ol>
+  <li>v 是 u 的左儿子。这是因为在遍历到 u 之后，下一个遍历的节点就是 u 的左儿子，即 v；</li>
+  <li>u 没有左儿子，并且 v 是 u 的某个祖先节点（或者 u 本身）的右儿子。如果 u 没有左儿子，那么下一个遍历的节点就是 u 的右儿子。如果 u 没有右儿子，我们就会向上回溯，直到遇到第一个有右儿子（且 u 不在它的右儿子的子树中）的节点 ua，那么 v 就是 ua 的右儿子。
+因此：</li>
+  <li>我们用一个栈和一个指针辅助进行二叉树的构造。初始时栈中存放了根节点（前序遍历的第一个节点），指针指向中序遍历的第一个节点；</li>
+  <li>我们依次枚举前序遍历中除了第一个节点以外的每个节点。如果 index 恰好指向栈顶节点，那么我们不断地弹出栈顶节点并向右移动 index，并将当前节点作为最后一个弹出的节点的右儿子；如果 index 和栈顶节点不同，我们将当前节点作为栈顶节点的左儿子；</li>
+  <li>无论是哪一种情况，我们最后都将当前的节点入栈。</li>
+</ol>
+
+<p><strong>给定中序和后序也可以按照此思路来做，先将两个数组翻转过来，构成 右中左 和 中右左 即可。</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">buildTree</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">preorder</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">inorder</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">preorder</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">preorder</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*&gt;</span> <span class="n">stk</span><span class="p">;</span>
+    <span class="n">stk</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">inorderIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">preorder</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">preorderVal</span> <span class="o">=</span> <span class="n">preorder</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">stk</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">!=</span> <span class="n">inorder</span><span class="p">[</span><span class="n">inorderIndex</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">preorderVal</span><span class="p">);</span>
+            <span class="n">stk</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">stk</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">stk</span><span class="p">.</span><span class="n">top</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">inorder</span><span class="p">[</span><span class="n">inorderIndex</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">stk</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+                <span class="n">stk</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="o">++</span><span class="n">inorderIndex</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">preorderVal</span><span class="p">);</span>
+            <span class="n">stk</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 
