@@ -119,7 +119,7 @@ TreeNode* construct(const vector<int>& nums, int left, int right) {
 
 因此，我们的任务变为：**找出每一个元素左侧和右侧第一个比它大的元素所在的位置。**
 
-**如何求与左侧第一个更大的元素的距离也体现在此了**
+**如何求左侧第一个更大的元素的位置也体现在此了**
 ```cpp
 TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
     int n = nums.size();
