@@ -507,6 +507,46 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="路径之和-递归回溯典型">路径之和 （递归回溯典型）</h3>
+<p>Leetcode 113.给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="c1">// 递归函数不需要返回值，因为我们要遍历整个树</span>
+<span class="kt">void</span> <span class="nf">traversal</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">cur</span><span class="p">,</span> <span class="kt">int</span> <span class="n">count</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 遇到了叶子节点且找到了和为sum的路径</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="k">return</span> <span class="p">;</span> <span class="c1">// 遇到叶子节点而没有找到合适的边，直接返回</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 左 （空节点不遍历）</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
+        <span class="n">count</span> <span class="o">-=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
+        <span class="n">traversal</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span>    <span class="c1">// 递归</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>        <span class="c1">// 回溯</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>                <span class="c1">// 回溯</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 右 （空节点不遍历）</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
+        <span class="n">count</span> <span class="o">-=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
+        <span class="n">traversal</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span>   <span class="c1">// 递归</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>       <span class="c1">// 回溯</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>                <span class="c1">// 回溯</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">;</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pathSum</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sum</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span> <span class="c1">// 把根节点放进路径</span>
+    <span class="n">traversal</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">sum</span> <span class="o">-</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 <h3 id="左叶子之和">左叶子之和</h3>
 <p>Leetcode 404. 给定二叉树的根节点 root ，返回所有左叶子之和。</p>
 
@@ -702,6 +742,7 @@
       <li><a href="#二叉树的最小深度">二叉树的最小深度</a></li>
       <li><a href="#平衡二叉树">平衡二叉树</a></li>
       <li><a href="#二叉树的所有路径">二叉树的所有路径</a></li>
+      <li><a href="#路径之和-递归回溯典型">路径之和 （递归回溯典型）</a></li>
       <li><a href="#左叶子之和">左叶子之和</a></li>
       <li><a href="#找树左下角的值">找树左下角的值</a></li>
     </ul>
