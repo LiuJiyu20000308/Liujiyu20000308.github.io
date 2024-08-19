@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Leetcode记录：回溯 | Liujiyu’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Leetcode记录：回溯" />
+<meta name="author" content="liujiyu" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="回溯框架" />
+<meta property="og:description" content="回溯框架" />
+<link rel="canonical" href="http://localhost:4000/2024/08/18/BackTracking/" />
+<meta property="og:url" content="http://localhost:4000/2024/08/18/BackTracking/" />
+<meta property="og:site_name" content="Liujiyu’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-08-18T14:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Leetcode记录：回溯" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-08-18T14:00:00+08:00","datePublished":"2024-08-18T14:00:00+08:00","description":"回溯框架","headline":"Leetcode记录：回溯","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/08/18/BackTracking/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/08/18/BackTracking/"}</script>
+<!-- End Jekyll SEO tag -->
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } });
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+                       });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+</head>
+
+
+  <body>
+
+    <div class="container pure-g"><div class="sidebar-left pure-u-1 pure-u-md-1-4" style="background-color: rgb(40, 73, 77); color: rgb(255, 255, 255); background-image: url(/bg.jpg);"><header class="masthead">
+  <div class="avatar"><img src="/head.jpg" class="avatar-image" alt="liujiyu">
+    </div>
+  <div class="masthead-title">
+    <a href="/" title="Home">Liujiyu's blog</a>
+  </div>
+  <div class="masthead-tagline">
+    <small>learn & record</small>
+  </div><nav class="navigation">
+    <ul class="navigation-list"><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/">Blog</a>
+      </li><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/about/">About</a>
+      </li></ul>
+  </nav><div class="social pure-menu pure-menu-horizontal">
+      <ul class="social-icons pure-menu-list">
+      <li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="mailto://liujiyu@zju.edu.cn">
+            <i class="fas fa-envelope" title="Email"></i>
+          </a>
+        </li><li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="https://github.com/Liujiyu20000308">
+            <i class="fab fa-github" title="GitHub"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+</header>
+</div>
+
+      <div class="content pure-u-1 pure-u-md-1-2"><main>
+  <article class="post">
+  <h1 class="post-title">Leetcode记录：回溯</h1>
+  <div class="post-meta"><time datetime="2024-08-18T14:00:00+08:00" itemprop="datePublished">18 Aug 2024</time></div>
+
+  <h2 id="回溯框架">回溯框架</h2>
+
+<p>回溯法，一般可以解决如下几种问题：</p>
+<ol>
+  <li>组合问题：N个数里面按一定规则找出k个数的集合</li>
+  <li>切割问题：一个字符串按一定规则有几种切割方式</li>
+  <li>子集问题：一个N个数的集合里有多少符合条件的子集</li>
+  <li>排列问题：N个数按一定规则全排列，有几种排列方式</li>
+  <li>棋盘问题：N皇后，解数独等等</li>
+</ol>
+
+<p>回溯法解决的问题都可以抽象为树形结构，因为回溯法解决的都是在集合中递归查找子集，集合的大小就构成了树的宽度，递归的深度就构成了树的深度。递归就要有终止条件，所以必然是一棵高度有限的树（N叉树）。</p>
+
+<p>回溯的三个重要部分：</p>
+<ol>
+  <li>回溯函数模板返回值以及参数：回溯算法需要的参数可不像二叉树递归的时候那么容易一次性确定下来，所以一般是先写逻辑，然后需要什么参数，就填什么参数。</li>
+  <li>回溯函数终止条件：什么时候达到了终止条件，树中就可以看出，一般来说搜到叶子节点了，也就找到了满足条件的一条答案，把这个答案存放起来，并结束本层递归。</li>
+  <li>回溯搜索的遍历过程</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="err">参数</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="err">终止条件</span><span class="p">)</span> <span class="p">{</span>
+        <span class="err">存放结果</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="err">选择：本层集合中元素（树中节点孩子的数量就是集合的大小）</span><span class="p">)</span> <span class="p">{</span>
+        <span class="err">处理节点</span><span class="p">;</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="err">路径，选择列表</span><span class="p">);</span> <span class="c1">// 递归</span>
+        <span class="err">回溯，撤销处理结果</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="组合问题">组合问题</h2>
+
+<h3 id="组合最基本的回溯">组合（最基本的回溯）</h3>
+<p>Leetcode 77. 给定两个整数 n 和 k，返回 1 … n 中所有可能的 k 个数的组合。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">path</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 优化的地方</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="c1">// 处理节点</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span> <span class="c1">// 回溯，撤销处理的节点</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">combine</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="组合求和i">组合求和I</h3>
+<p>Leetcode 39. 给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。candidates 中的数字可以<strong>无限制重复被选取。</strong>
+<strong>只需注意遍历的时候startIdx还可以从自身开始即可。</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">candidates</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 如果 sum + candidates[i] &gt; target 就终止遍历</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">candidates</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">target</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="c1">//唯一注意的地方，不是i+1</span>
+        <span class="n">sum</span> <span class="o">-=</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">combinationSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">candidates</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">candidates</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">candidates</span><span class="p">.</span><span class="n">end</span><span class="p">());</span> <span class="c1">// 需要排序</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="组合求和ii">组合求和II</h3>
+<p>Leetcode 216. 找出所有相加之和为 n 的 k 个数的组合。组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。</p>
+
+<p><strong>只需改变一下终止条件即可。</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span> <span class="c1">// 存放结果集</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span> <span class="c1">// 符合条件的结果</span>
+<span class="c1">// targetSum：目标和，也就是题目中的n。</span>
+<span class="c1">// k：题目中要求k个数的集合。</span>
+<span class="c1">// sum：已经收集的元素的总和，也就是path里元素的总和。</span>
+<span class="c1">// startIndex：下一层for循环搜索的起始位置。</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="kt">int</span> <span class="n">targetSum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">targetSum</span><span class="p">)</span> <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span> <span class="c1">// 如果path.size() == k 但sum != targetSum 直接返回</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// 处理</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="c1">// 处理</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">targetSum</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 注意i+1调整startIndex</span>
+        <span class="n">sum</span> <span class="o">-=</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// 回溯</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span> <span class="c1">// 回溯</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">combinationSum3</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span> <span class="c1">// 可以不加</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>   <span class="c1">// 可以不加</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="组合求和iii有重复元素">组合求和III（有重复元素）</h3>
+<p>给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。candidates 中的每个数字在每个组合中只能使用一次。
+说明： 所有数字（包括目标数）都是正整数。<strong>解集不能包含重复的组合。</strong></p>
+
+<p>本题的难点在于：<strong>集合（数组candidates）有重复元素，但还不能有重复的组合。</strong>组合问题可以抽象为树形结构，那么“使用过”在这个树形结构上是有两个维度的，一个维度是同一树枝上使用过，一个维度是同一树层上使用过。所以我们要去重的是同一树层上的“使用过”，同一树枝上的都是一个组合里的元素，不用去重。</p>
+
+<p>如果candidates[i] == candidates[i - 1] 并且 used[i - 1] == false，就说明：前一个树枝，使用了candidates[i - 1]，也就是说同一树层使用过candidates[i - 1]，此时for循环里就应该做continue的操作。
+<strong>注意，树层去重的话，需要对数组排序！</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">candidates</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&amp;</span> <span class="n">used</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">candidates</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">target</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// used[i - 1] == true，说明同一树枝candidates[i - 1]使用过</span>
+        <span class="c1">// used[i - 1] == false，说明同一树层candidates[i - 1]使用过</span>
+        <span class="c1">// 要对同一树层使用过的元素进行跳过</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">used</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span> <span class="c1">// 和39.组合总和的区别1，这里是i+1，每个数字在每个组合中只能使用一次</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">sum</span> <span class="o">-=</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">combinationSum2</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">candidates</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">used</span><span class="p">(</span><span class="n">candidates</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="c1">// 首先把给candidates排序，让其相同的元素都挨在一起。</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">candidates</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">candidates</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+  
+    
+      <div class="post-tags-section">
+  <i class="post-tags-icon fas fa-tags"></i>
+  <ul class="post-tags"><li>
+        <a class="post-tag" href="/tags/#数据结构与算法">数据结构与算法</a></li></ul>
+</div>
+
+  
+
+  
+</article>
+
+
+<aside class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="/2024/08/16/MonotonicStack/">
+          Leetcode记录：单调栈
+          <small><time datetime="2024-08-16T14:00:00+08:00">16 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/08/15/BST/">
+          Leetcode记录：二叉搜索树
+          <small><time datetime="2024-08-15T14:00:00+08:00">15 Aug 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/08/12/BT/">
+          Leetcode记录：二叉树例题
+          <small><time datetime="2024-08-12T14:00:00+08:00">12 Aug 2024</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+</main>
+
+<footer class="footer"><small>
+    &copy; 2023&nbsp;-&nbsp;2024 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
+  </small>
+</footer>
+</div>
+      <div class="sidebar-right pure-u-1 pure-u-md-1-4">
+<div  class="toc-wrapper">
+  <h2 class="toc-title">Table of Contents</h2>
+    <nav class="toc-nav">
+      <ul class="toc">
+  <li><a href="#回溯框架">回溯框架</a></li>
+  <li><a href="#组合问题">组合问题</a>
+    <ul>
+      <li><a href="#组合最基本的回溯">组合（最基本的回溯）</a></li>
+      <li><a href="#组合求和i">组合求和I</a></li>
+      <li><a href="#组合求和ii">组合求和II</a></li>
+      <li><a href="#组合求和iii有重复元素">组合求和III（有重复元素）</a></li>
+    </ul>
+  </li>
+</ul>
+
+  </nav>
+</div>
+
+</div>
+    </div>
+
+    <script async src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  function strip(str, remove) {
+    while (str.length > 0 && remove.indexOf(str.charAt(0)) != -1) {
+      str = str.substr(1);
+    }
+    while (str.length > 0 && remove.indexOf(str.charAt(str.length - 1)) != -1) {
+      str = str.substr(0, str.length - 1);
+    }
+    return str;
+  }
+
+  function scroll() {
+    console.log('scroll');
+    window.scrollTo({
+      left: 0, 
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+    sessionStorage.removeItem('forceCheckScroll');
+  }
+
+  const forceCheckScroll = sessionStorage.getItem('forceCheckScroll') === 'true';
+  const checkScroll = strip(window.location.pathname, '/') !== strip('', '/');
+
+  if (forceCheckScroll || checkScroll) {
+    const maxWidth = "(max-width: 48rem)";
+    const result = window.matchMedia(maxWidth);
+    if (result.matches) {
+      scroll();
+    } else {
+      result.addListener((match) => {
+        if (match.media == maxWidth) {
+          if (match.matches) {
+            scroll();
+          }
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>

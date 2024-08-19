@@ -1,4 +1,648 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-17T13:49:55+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：二叉树例题</title><link href="http://localhost:4000/2024/08/12/BT/" rel="alternate" type="text/html" title="Leetcode记录：二叉树例题" /><published>2024-08-12T14:00:00+08:00</published><updated>2024-08-12T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/12/BT</id><content type="html" xml:base="http://localhost:4000/2024/08/12/BT/"><![CDATA[<h2 id="层序遍历">层序遍历</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-19T14:10:01+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：回溯</title><link href="http://localhost:4000/2024/08/18/BackTracking/" rel="alternate" type="text/html" title="Leetcode记录：回溯" /><published>2024-08-18T14:00:00+08:00</published><updated>2024-08-18T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/18/BackTracking</id><content type="html" xml:base="http://localhost:4000/2024/08/18/BackTracking/"><![CDATA[<h2 id="回溯框架">回溯框架</h2>
+
+<p>回溯法，一般可以解决如下几种问题：</p>
+<ol>
+  <li>组合问题：N个数里面按一定规则找出k个数的集合</li>
+  <li>切割问题：一个字符串按一定规则有几种切割方式</li>
+  <li>子集问题：一个N个数的集合里有多少符合条件的子集</li>
+  <li>排列问题：N个数按一定规则全排列，有几种排列方式</li>
+  <li>棋盘问题：N皇后，解数独等等</li>
+</ol>
+
+<p>回溯法解决的问题都可以抽象为树形结构，因为回溯法解决的都是在集合中递归查找子集，集合的大小就构成了树的宽度，递归的深度就构成了树的深度。递归就要有终止条件，所以必然是一棵高度有限的树（N叉树）。</p>
+
+<p>回溯的三个重要部分：</p>
+<ol>
+  <li>回溯函数模板返回值以及参数：回溯算法需要的参数可不像二叉树递归的时候那么容易一次性确定下来，所以一般是先写逻辑，然后需要什么参数，就填什么参数。</li>
+  <li>回溯函数终止条件：什么时候达到了终止条件，树中就可以看出，一般来说搜到叶子节点了，也就找到了满足条件的一条答案，把这个答案存放起来，并结束本层递归。</li>
+  <li>回溯搜索的遍历过程</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="err">参数</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="err">终止条件</span><span class="p">)</span> <span class="p">{</span>
+        <span class="err">存放结果</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="err">选择：本层集合中元素（树中节点孩子的数量就是集合的大小）</span><span class="p">)</span> <span class="p">{</span>
+        <span class="err">处理节点</span><span class="p">;</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="err">路径，选择列表</span><span class="p">);</span> <span class="c1">// 递归</span>
+        <span class="err">回溯，撤销处理结果</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="组合问题">组合问题</h2>
+
+<h3 id="组合最基本的回溯">组合（最基本的回溯）</h3>
+<p>Leetcode 77. 给定两个整数 n 和 k，返回 1 … n 中所有可能的 k 个数的组合。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">path</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 优化的地方</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="c1">// 处理节点</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span> <span class="c1">// 回溯，撤销处理的节点</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">combine</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="组合求和i">组合求和I</h3>
+<p>Leetcode 39. 给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。candidates 中的数字可以<strong>无限制重复被选取。</strong>
+<strong>只需注意遍历的时候startIdx还可以从自身开始即可。</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">candidates</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 如果 sum + candidates[i] &gt; target 就终止遍历</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">candidates</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">target</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="c1">//唯一注意的地方，不是i+1</span>
+        <span class="n">sum</span> <span class="o">-=</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">combinationSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">candidates</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">candidates</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">candidates</span><span class="p">.</span><span class="n">end</span><span class="p">());</span> <span class="c1">// 需要排序</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="组合求和ii">组合求和II</h3>
+<p>Leetcode 216. 找出所有相加之和为 n 的 k 个数的组合。组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。</p>
+
+<p><strong>只需改变一下终止条件即可。</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span> <span class="c1">// 存放结果集</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span> <span class="c1">// 符合条件的结果</span>
+<span class="c1">// targetSum：目标和，也就是题目中的n。</span>
+<span class="c1">// k：题目中要求k个数的集合。</span>
+<span class="c1">// sum：已经收集的元素的总和，也就是path里元素的总和。</span>
+<span class="c1">// startIndex：下一层for循环搜索的起始位置。</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="kt">int</span> <span class="n">targetSum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">targetSum</span><span class="p">)</span> <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span> <span class="c1">// 如果path.size() == k 但sum != targetSum 直接返回</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// 处理</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="c1">// 处理</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">targetSum</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 注意i+1调整startIndex</span>
+        <span class="n">sum</span> <span class="o">-=</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// 回溯</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span> <span class="c1">// 回溯</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">combinationSum3</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span> <span class="c1">// 可以不加</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>   <span class="c1">// 可以不加</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="组合求和iii有重复元素">组合求和III（有重复元素）</h3>
+<p>给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。candidates 中的每个数字在每个组合中只能使用一次。
+说明： 所有数字（包括目标数）都是正整数。<strong>解集不能包含重复的组合。</strong></p>
+
+<p>本题的难点在于：<strong>集合（数组candidates）有重复元素，但还不能有重复的组合。</strong>组合问题可以抽象为树形结构，那么“使用过”在这个树形结构上是有两个维度的，一个维度是同一树枝上使用过，一个维度是同一树层上使用过。所以我们要去重的是同一树层上的“使用过”，同一树枝上的都是一个组合里的元素，不用去重。</p>
+
+<p>如果candidates[i] == candidates[i - 1] 并且 used[i - 1] == false，就说明：前一个树枝，使用了candidates[i - 1]，也就是说同一树层使用过candidates[i - 1]，此时for循环里就应该做continue的操作。
+<strong>注意，树层去重的话，需要对数组排序！</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">candidates</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&amp;</span> <span class="n">used</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">candidates</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">target</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// used[i - 1] == true，说明同一树枝candidates[i - 1]使用过</span>
+        <span class="c1">// used[i - 1] == false，说明同一树层candidates[i - 1]使用过</span>
+        <span class="c1">// 要对同一树层使用过的元素进行跳过</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">used</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span> <span class="c1">// 和39.组合总和的区别1，这里是i+1，每个数字在每个组合中只能使用一次</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">sum</span> <span class="o">-=</span> <span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">combinationSum2</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">candidates</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">used</span><span class="p">(</span><span class="n">candidates</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="c1">// 首先把给candidates排序，让其相同的元素都挨在一起。</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">candidates</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">candidates</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[回溯框架]]></summary></entry><entry><title type="html">Leetcode记录：单调栈</title><link href="http://localhost:4000/2024/08/16/MonotonicStack/" rel="alternate" type="text/html" title="Leetcode记录：单调栈" /><published>2024-08-16T14:00:00+08:00</published><updated>2024-08-16T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/16/MonotonicStack</id><content type="html" xml:base="http://localhost:4000/2024/08/16/MonotonicStack/"><![CDATA[<p>单调栈通常是一维数组，<strong>要寻找任一个元素的右边或者左边第一个比自己大或者小的元素的位置</strong>，此时我们就要想到可以用单调栈了。时间复杂度为O(n)。</p>
+
+<p>单调栈的本质是<strong>空间换时间</strong>，因为在遍历的过程中需要用一个栈来记录右边第一个比当前元素高的元素，优点是整个数组只需要遍历一次。
+更直白来说，就是用一个栈来记录我们遍历过的元素，因为我们遍历数组的时候，我们不知道之前都遍历了哪些元素，以至于遍历一个元素找不到是不是之前遍历过一个更小的，所以我们需要用一个容器（这里用单调栈）来记录我们遍历过的元素。</p>
+
+<p>在使用单调栈的时候首先要明确如下几点：</p>
+
+<ol>
+  <li>单调栈里存放的元素是什么？
+ 单调栈里只需要存放元素的下标i就可以了，如果需要使用对应的元素，直接T[i]就可以获取。</li>
+  <li>单调栈里元素是递增呢？ 还是递减呢？
+如果求一个元素右边第一个更大元素，单调栈就是（栈顶到栈底）递增的，如果求一个元素右边第一个更小元素，单调栈就是递减的。</li>
+</ol>
+
+<p>使用单调栈主要有三个判断条件:</p>
+
+<ol>
+  <li>当前遍历的元素T[i]小于栈顶元素T[st.top()]的情况</li>
+  <li>当前遍历的元素T[i]等于栈顶元素T[st.top()]的情况</li>
+  <li>当前遍历的元素T[i]大于栈顶元素T[st.top()]的情况</li>
+</ol>
+
+<p>我们以下题为例讲解：</p>
+<h3 id="每日温度">每日温度</h3>
+<p>给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer ，其中 answer[i] 是指对于第 i 天，下一个更高温度出现在几天后。如果气温在这之后都不会升高，请在该位置用 0 来代替。</p>
+
+<p>我们用temperatures = [73, 74, 75, 71, 71, 72, 76, 73]为例来逐步分析：</p>
+<ol>
+  <li>首先将第一个遍历元素加入单调栈</li>
+  <li>加入T[1] = 74，因为T[1] &gt; T[0]（<strong>当前遍历的元素T[i]大于栈顶元素T[st.top()]的情况</strong>）。
+ 我们要保持一个递增单调栈（从栈头到栈底），所以将T[0]弹出，T[1]加入，此时result数组可以记录了，result[0] = 1，即T[0]右面第一个比T[0]大的元素是T[1]。</li>
+  <li>加入T[2]，同理，T[1]弹出</li>
+  <li>加入T[3]，T[3] &lt; T[2] （<strong>当前遍历的元素T[i]小于栈顶元素T[st.top()]的情况</strong>），加T[3]加入单调栈。</li>
+  <li>加入T[4]，T[4] == T[3] （当前遍历的元素T[i]等于栈顶元素T[st.top()]的情况），此时依然要加入栈，不用计算距离，<strong>因为我们要求的是右面第一个大于本元素的位置，而不是大于等于！</strong></li>
+  <li>加入T[5]，T[5] &gt; T[4] （当前遍历的元素T[i]大于栈顶元素T[st.top()]的情况），将T[4]弹出，同时计算距离，更新result</li>
+  <li>T[4]弹出之后， T[5] &gt; T[3] （当前遍历的元素T[i]大于栈顶元素T[st.top()]的情况），将T[3]继续弹出，同时计算距离，更新result</li>
+  <li>直到发现T[5]小于T[st.top()]，终止弹出，将T[5]加入单调栈</li>
+  <li>加入T[6]，同理，需要将栈里的T[5]，T[2]弹出</li>
+  <li>加入T[7]， T[7] &lt; T[6] 直接入栈，这就是最后的情况，result数组也更新完了。</li>
+  <li>注意：<strong>定义result数组的时候，就应该直接初始化为0，如果result没有更新，说明这个元素右面没有更大的了，也就是为0。</strong></li>
+</ol>
+
+<p>逻辑详细版本的C++代码如下：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dailyTemperatures</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 递增栈</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">st</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">(</span><span class="n">T</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()])</span> <span class="p">{</span>                       <span class="c1">// 情况一</span>
+            <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">T</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()])</span> <span class="p">{</span>               <span class="c1">// 情况二</span>
+            <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">st</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">T</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()])</span> <span class="p">{</span> <span class="c1">// 情况三</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+                <span class="n">st</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>精简后为：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dailyTemperatures</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">st</span><span class="p">;</span> <span class="c1">// 递增栈</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">(</span><span class="n">T</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">st</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">T</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()])</span> <span class="p">{</span> <span class="c1">// 注意栈不能为空</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="n">st</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="最大二叉树">最大二叉树</h3>
+
+<p>Leetcode 654. 给定一个不重复的整数数组 nums 。 最大二叉树 可以用下面的算法从 nums 递归地构建:</p>
+<ol>
+  <li>创建一个根节点，其值为 nums 中的最大值。</li>
+  <li>递归地在最大值 左边 的 子数组前缀上 构建左子树。</li>
+  <li>递归地在最大值 右边 的 子数组后缀上 构建右子树。</li>
+</ol>
+
+<p>返回 nums 构建的 最大二叉树 。</p>
+
+<p>递归方法很好理解：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">constructMaximumBinaryTree</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">construct</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">TreeNode</span><span class="o">*</span> <span class="n">construct</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">best</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">best</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">best</span><span class="p">]);</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">best</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">best</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>第二种方法可以使用单调栈：在最终构造出的树上，以 nums[i] 为根节点的子树，在原数组中对应的区间，<strong>左边界为 nums[i] 左侧第一个比它大的元素所在的位置，右边界为 nums[i] 右侧第一个比它大的元素所在的位置。左右边界均为开边界。</strong>
+如果某一侧边界不存在，则那一侧边界为数组的边界。如果两侧边界均不存在，说明其为最大值，即根节点。</p>
+
+<p>因此，我们的任务变为：<strong>找出每一个元素左侧和右侧第一个比它大的元素所在的位置。</strong></p>
+
+<p><strong>如何求左侧第一个更大的元素的位置也体现在此了</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">constructMaximumBinaryTree</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stk</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">left</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">right</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*&gt;</span> <span class="n">tree</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">stk</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">stk</span><span class="p">.</span><span class="n">back</span><span class="p">()])</span> <span class="p">{</span>
+            <span class="n">right</span><span class="p">[</span><span class="n">stk</span><span class="p">.</span><span class="n">back</span><span class="p">()]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="n">stk</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">stk</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">stk</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">stk</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="p">(</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]]))</span> <span class="p">{</span>
+            <span class="n">tree</span><span class="p">[</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">tree</span><span class="p">[</span><span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[单调栈通常是一维数组，要寻找任一个元素的右边或者左边第一个比自己大或者小的元素的位置，此时我们就要想到可以用单调栈了。时间复杂度为O(n)。]]></summary></entry><entry><title type="html">Leetcode记录：二叉搜索树</title><link href="http://localhost:4000/2024/08/15/BST/" rel="alternate" type="text/html" title="Leetcode记录：二叉搜索树" /><published>2024-08-15T14:00:00+08:00</published><updated>2024-08-15T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/15/BST</id><content type="html" xml:base="http://localhost:4000/2024/08/15/BST/"><![CDATA[<p>二叉搜索树是一个有序树：</p>
+
+<ol>
+  <li>若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值；</li>
+  <li>若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值；</li>
+  <li>它的左、右子树也分别为二叉搜素树</li>
+</ol>
+
+<div align="center"> <img src="/pic/DS/BST.png" width="400" /> </div>
+
+<p>根据二叉搜索树的性质，左节点的值 &lt; 根节点的值 &lt; 右节点的值，我们很容易想到，对二叉搜索树进行中序遍历就可以得到一个节点值递增的序列。因此我们也将二叉搜索树称为二叉排序树。</p>
+
+<h3 id="二叉搜索树的搜索操作">二叉搜索树的搜索操作</h3>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 递归</span>
+<span class="n">TreeNode</span> <span class="o">*</span><span class="nf">searchBST</span><span class="p">(</span><span class="n">TreeNode</span> <span class="o">*</span><span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">==</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">searchBST</span><span class="p">(</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">?</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">:</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// 迭代</span>
+<span class="n">TreeNode</span><span class="o">*</span> <span class="n">searchBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">root</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">val</span><span class="p">)</span> <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">val</span><span class="p">)</span> <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="插入操作">插入操作</h3>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 递归</span>
+<span class="n">TreeNode</span><span class="o">*</span> <span class="nf">insertIntoBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">val</span><span class="p">)</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">insertIntoBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">val</span><span class="p">)</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">insertIntoBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>关于迭代实现方法，在遍历的过程中需要记录一下当前遍历的节点的父节点，这样才能做插入节点的操作：这也是个小技巧：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">insertIntoBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span> <span class="c1">// 这个很重要，需要记录上一个节点，否则无法赋值新节点</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">cur</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">val</span><span class="p">)</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+        <span class="k">else</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> 
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span><span class="c1">// 此时是用parent节点的进行赋值</span>
+    <span class="k">else</span> 
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="删除操作">删除操作</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">TreeNode</span><span class="o">*</span> <span class="nf">deleteNode</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="k">return</span> <span class="n">root</span><span class="p">;</span> <span class="c1">// 第一种情况：没找到删除的节点，遍历到空节点直接返回了</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 第二种情况：左右孩子都为空（叶子节点），直接删除节点， 返回NULL为根节点</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">///! 内存释放</span>
+            <span class="k">delete</span> <span class="n">root</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 第三种情况：其左孩子为空，右孩子不为空，删除节点，右孩子补位 ，返回右孩子为根节点</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">retNode</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+            <span class="c1">///! 内存释放</span>
+            <span class="k">delete</span> <span class="n">root</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">retNode</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 第四种情况：其右孩子为空，左孩子不为空，删除节点，左孩子补位，返回左孩子为根节点</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">retNode</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="c1">///! 内存释放</span>
+            <span class="k">delete</span> <span class="n">root</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">retNode</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 第五种情况：左右孩子节点都不为空，则将删除节点的左子树放到删除节点的右子树的最左面节点的左孩子的位置</span>
+        <span class="c1">// 并返回删除节点右孩子为新的根节点。</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">TreeNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span> <span class="c1">// 找右子树最左面的节点</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span> <span class="c1">// 把要删除的节点（root）左子树放在cur的左孩子的位置</span>
+            <span class="n">TreeNode</span><span class="o">*</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>   <span class="c1">// 把root节点保存一下，下面来删除</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>     <span class="c1">// 返回旧root的右孩子作为新root</span>
+            <span class="k">delete</span> <span class="n">tmp</span><span class="p">;</span>             <span class="c1">// 释放节点内存（这里不写也可以，但C++最好手动释放一下吧）</span>
+            <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">key</span><span class="p">)</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">deleteNode</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">key</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">key</span><span class="p">)</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">deleteNode</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">key</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>二叉搜索树「中序遍历」得到的值构成的序列一定是升序的</strong></p>
+
+<h3 id="验证bst">验证BST</h3>
+<p>Leetcode 98. 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">isValidBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*&gt;</span> <span class="n">stack</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">inorder</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span><span class="p">)</span><span class="n">INT_MIN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">stack</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">||</span> <span class="n">root</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">root</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">root</span> <span class="o">-&gt;</span> <span class="n">left</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="c1">// 如果中序遍历得到的节点的值小于等于前一个 inorder，说明不是二叉搜索树</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">-&gt;</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="n">inorder</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">inorder</span> <span class="o">=</span> <span class="n">root</span> <span class="o">-&gt;</span> <span class="n">val</span><span class="p">;</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">root</span> <span class="o">-&gt;</span> <span class="n">right</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>递归写法，可以避免存在longlong最小值的节点导致无法判断：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="n">pre</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="c1">// 用来记录前一个节点</span>
+<span class="kt">bool</span> <span class="nf">isValidBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> 
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">left</span> <span class="o">=</span> <span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">pre</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">pre</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> 
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">pre</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span> <span class="c1">// 记录前一个节点</span>
+
+    <span class="kt">bool</span> <span class="n">right</span> <span class="o">=</span> <span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="n">right</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="bst中的最小绝对差">BST中的最小绝对差</h3>
+<p>Leetcode 530. 给你一个二叉搜索树的根节点 root ，返回 树中任意两不同节点值之间的最小差值 。差值是一个正数，其数值等于两值之差的绝对值。</p>
+
+<p>递归版本和迭代版本的中序遍历都可以：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">pre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">ans</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">pre</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pre</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pre</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">-</span> <span class="n">pre</span><span class="p">);</span>
+        <span class="n">pre</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">pre</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">getMinimumDifference</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">INT_MAX</span><span class="p">,</span> <span class="n">pre</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">pre</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="bst中的众数">BST中的众数</h3>
+<p>Leetcode 501. 给你一个含重复值的二叉搜索树（BST）的根节点 root ，找出并返回 BST 中的所有 众数（即，出现频率最高的元素。</p>
+
+<p>如果是二叉树的话就要遍历存入map，再进行排序：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">searchBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">cur</span><span class="p">,</span> <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">map</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 前序遍历</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">cur</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="p">;</span>
+    <span class="n">map</span><span class="p">[</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">]</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 统计元素频率</span>
+    <span class="n">searchBST</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">map</span><span class="p">);</span>
+    <span class="n">searchBST</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">map</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="k">static</span> <span class="n">cmp</span> <span class="p">(</span><span class="k">const</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">second</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">findMode</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span> <span class="c1">// key:元素，value:出现频率</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="n">searchBST</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">map</span><span class="p">);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">vec</span><span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">map</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span> <span class="c1">// 给频率排个序</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">first</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vec</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 取最高的放到result数组中</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">second</span> <span class="o">==</span> <span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">second</span><span class="p">)</span> <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">first</span><span class="p">);</span>
+        <span class="k">else</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>但题目中是BST，因此，同样的思路就是使用中序遍历，递归和迭代方法都可以：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">findMode</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*&gt;</span> <span class="n">st</span><span class="p">;</span>
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">pre</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 最大频率</span>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 统计频率</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="o">!</span><span class="n">st</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 指针来访问节点，访问到最底层</span>
+            <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span> <span class="c1">// 将访问的节点放进栈</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>                <span class="c1">// 左</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="n">st</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>                       <span class="c1">// 中</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pre</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 第一个节点</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">pre</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 与前一个节点数值相同</span>
+                <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// 与前一个节点数值不同</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="n">maxCount</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 如果和最大值相同，放进result中</span>
+                <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">&gt;</span> <span class="n">maxCount</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 如果计数大于最大值频率</span>
+                <span class="n">maxCount</span> <span class="o">=</span> <span class="n">count</span><span class="p">;</span>   <span class="c1">// 更新最大频率</span>
+                <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>     <span class="c1">// 很关键的一步，不要忘记清空result，之前result里的元素都失效了</span>
+                <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">pre</span> <span class="o">=</span> <span class="n">cur</span><span class="p">;</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>               <span class="c1">// 右</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="二叉树二叉搜索树的最近公共祖先">二叉树/二叉搜索树的最近公共祖先</h3>
+<p>Leetcode 235/236. 给定一个二叉树/BST, 找到该树中两个指定节点p、q的最近公共祖先。</p>
+
+<p>对于二叉树，如果左子树出现p，右子树出现q，则它就是最近的公共祖先：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">lowestCommonAncestor</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">||</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">q</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">){</span>
+        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">TreeNode</span> <span class="o">*</span><span class="n">left</span> <span class="o">=</span> <span class="n">lowestCommonAncestor</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">);</span>
+    <span class="n">TreeNode</span> <span class="o">*</span><span class="n">right</span> <span class="o">=</span> <span class="n">lowestCommonAncestor</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="n">right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">left</span><span class="o">==</span><span class="nb">nullptr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">right</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">right</span> <span class="o">==</span><span class="nb">nullptr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">left</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>如果是二叉搜索树会方便一些：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">lowestCommonAncestor</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">ancestor</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&amp;&amp;</span> <span class="n">q</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ancestor</span> <span class="o">=</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&amp;&amp;</span> <span class="n">q</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ancestor</span> <span class="o">=</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ancestor</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="修剪bst">修剪BST</h3>
+<p>Leetcode 669. 给你二叉搜索树的根节点 root ，同时给定最小边界low 和最大边界 high。通过修剪二叉搜索树，使得所有节点的值在[low, high]中。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">trimBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">low</span><span class="p">,</span> <span class="kt">int</span> <span class="n">high</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">low</span><span class="p">)</span> <span class="k">return</span> <span class="n">trimBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">high</span><span class="p">)</span> <span class="k">return</span> <span class="n">trimBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">);</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">trimBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">);</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">trimBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="把bst转化为累加树">把BST转化为累加树</h2>
+<p>Leetcode 538. 给出二叉 搜索 树的根节点，该树的节点值各不相同，请你将其转换为累加树（Greater Sum Tree），使每个节点 node 的新值等于原树中大于或等于 node.val 的值之和。</p>
+
+<p>本质上就是逆前序遍历：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">TreeNode</span><span class="o">*</span> <span class="nf">convertBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">convertBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="n">convertBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="有序数组转化为avltree">有序数组转化为AVLTree</h3>
+
+<p>Leetcode 108. 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵平衡二叉搜索树。</p>
+
+<p>每次都从中间分割即可，<strong>注意涉及到left和right的边界时刻！</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">traversal</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">)</span> <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">((</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]);</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">traversal</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">traversal</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">TreeNode</span><span class="o">*</span> <span class="n">sortedArrayToBST</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="n">traversal</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[二叉搜索树是一个有序树：]]></summary></entry><entry><title type="html">Leetcode记录：二叉树例题</title><link href="http://localhost:4000/2024/08/12/BT/" rel="alternate" type="text/html" title="Leetcode记录：二叉树例题" /><published>2024-08-12T14:00:00+08:00</published><updated>2024-08-12T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/12/BT</id><content type="html" xml:base="http://localhost:4000/2024/08/12/BT/"><![CDATA[<h2 id="层序遍历">层序遍历</h2>
 <p>每道题都可以很简单地用层序遍历解答，以下只是放一些其他思路。</p>
 
 <h3 id="二叉树的右视图">二叉树的右视图</h3>
@@ -588,492 +1232,7 @@
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[层序遍历 每道题都可以很简单地用层序遍历解答，以下只是放一些其他思路。]]></summary></entry><entry><title type="html">Leetcode记录：二叉搜索树</title><link href="http://localhost:4000/2024/08/12/BST/" rel="alternate" type="text/html" title="Leetcode记录：二叉搜索树" /><published>2024-08-12T14:00:00+08:00</published><updated>2024-08-12T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/12/BST</id><content type="html" xml:base="http://localhost:4000/2024/08/12/BST/"><![CDATA[<p>二叉搜索树是一个有序树：</p>
-
-<ol>
-  <li>若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值；</li>
-  <li>若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值；</li>
-  <li>它的左、右子树也分别为二叉搜素树</li>
-</ol>
-
-<div align="center"> <img src="/pic/DS/BST.png" width="400" /> </div>
-
-<p>根据二叉搜索树的性质，左节点的值 &lt; 根节点的值 &lt; 右节点的值，我们很容易想到，对二叉搜索树进行中序遍历就可以得到一个节点值递增的序列。因此我们也将二叉搜索树称为二叉排序树。</p>
-
-<h3 id="二叉搜索树的搜索操作">二叉搜索树的搜索操作</h3>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 递归</span>
-<span class="n">TreeNode</span> <span class="o">*</span><span class="nf">searchBST</span><span class="p">(</span><span class="n">TreeNode</span> <span class="o">*</span><span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">==</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">searchBST</span><span class="p">(</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">?</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">:</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="c1">// 迭代</span>
-<span class="n">TreeNode</span><span class="o">*</span> <span class="n">searchBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">root</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">val</span><span class="p">)</span> <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">val</span><span class="p">)</span> <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
-        <span class="k">else</span> <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="插入操作">插入操作</h3>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 递归</span>
-<span class="n">TreeNode</span><span class="o">*</span> <span class="nf">insertIntoBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">val</span><span class="p">)</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">insertIntoBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">val</span><span class="p">)</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">insertIntoBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>关于迭代实现方法，在遍历的过程中需要记录一下当前遍历的节点的父节点，这样才能做插入节点的操作：这也是个小技巧：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">insertIntoBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
-    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span> <span class="c1">// 这个很重要，需要记录上一个节点，否则无法赋值新节点</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">parent</span> <span class="o">=</span> <span class="n">cur</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">val</span><span class="p">)</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
-        <span class="k">else</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> 
-        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span><span class="c1">// 此时是用parent节点的进行赋值</span>
-    <span class="k">else</span> 
-        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="删除操作">删除操作</h3>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">TreeNode</span><span class="o">*</span> <span class="nf">deleteNode</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="k">return</span> <span class="n">root</span><span class="p">;</span> <span class="c1">// 第一种情况：没找到删除的节点，遍历到空节点直接返回了</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// 第二种情况：左右孩子都为空（叶子节点），直接删除节点， 返回NULL为根节点</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">///! 内存释放</span>
-            <span class="k">delete</span> <span class="n">root</span><span class="p">;</span>
-            <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="c1">// 第三种情况：其左孩子为空，右孩子不为空，删除节点，右孩子补位 ，返回右孩子为根节点</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">auto</span> <span class="n">retNode</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
-            <span class="c1">///! 内存释放</span>
-            <span class="k">delete</span> <span class="n">root</span><span class="p">;</span>
-            <span class="k">return</span> <span class="n">retNode</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="c1">// 第四种情况：其右孩子为空，左孩子不为空，删除节点，左孩子补位，返回左孩子为根节点</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">auto</span> <span class="n">retNode</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
-            <span class="c1">///! 内存释放</span>
-            <span class="k">delete</span> <span class="n">root</span><span class="p">;</span>
-            <span class="k">return</span> <span class="n">retNode</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="c1">// 第五种情况：左右孩子节点都不为空，则将删除节点的左子树放到删除节点的右子树的最左面节点的左孩子的位置</span>
-        <span class="c1">// 并返回删除节点右孩子为新的根节点。</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="n">TreeNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span> <span class="c1">// 找右子树最左面的节点</span>
-            <span class="k">while</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span> <span class="c1">// 把要删除的节点（root）左子树放在cur的左孩子的位置</span>
-            <span class="n">TreeNode</span><span class="o">*</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>   <span class="c1">// 把root节点保存一下，下面来删除</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>     <span class="c1">// 返回旧root的右孩子作为新root</span>
-            <span class="k">delete</span> <span class="n">tmp</span><span class="p">;</span>             <span class="c1">// 释放节点内存（这里不写也可以，但C++最好手动释放一下吧）</span>
-            <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">key</span><span class="p">)</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">deleteNode</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">key</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">key</span><span class="p">)</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">deleteNode</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">key</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p><strong>二叉搜索树「中序遍历」得到的值构成的序列一定是升序的</strong></p>
-
-<h3 id="验证bst">验证BST</h3>
-<p>Leetcode 98. 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">isValidBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">stack</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*&gt;</span> <span class="n">stack</span><span class="p">;</span>
-    <span class="kt">long</span> <span class="kt">long</span> <span class="n">inorder</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span><span class="p">)</span><span class="n">INT_MIN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">stack</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">||</span> <span class="n">root</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">root</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="n">root</span> <span class="o">-&gt;</span> <span class="n">left</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-        <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-        <span class="c1">// 如果中序遍历得到的节点的值小于等于前一个 inorder，说明不是二叉搜索树</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">-&gt;</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="n">inorder</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">inorder</span> <span class="o">=</span> <span class="n">root</span> <span class="o">-&gt;</span> <span class="n">val</span><span class="p">;</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="n">root</span> <span class="o">-&gt;</span> <span class="n">right</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>递归写法，可以避免存在longlong最小值的节点导致无法判断：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="n">pre</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="c1">// 用来记录前一个节点</span>
-<span class="kt">bool</span> <span class="nf">isValidBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> 
-        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="kt">bool</span> <span class="n">left</span> <span class="o">=</span> <span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">pre</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">pre</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> 
-        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="n">pre</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span> <span class="c1">// 记录前一个节点</span>
-
-    <span class="kt">bool</span> <span class="n">right</span> <span class="o">=</span> <span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="n">right</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="bst中的最小绝对差">BST中的最小绝对差</h3>
-<p>Leetcode 530. 给你一个二叉搜索树的根节点 root ，返回 树中任意两不同节点值之间的最小差值 。差值是一个正数，其数值等于两值之差的绝对值。</p>
-
-<p>递归版本和迭代版本的中序遍历都可以：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">pre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">ans</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">pre</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">pre</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">pre</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">-</span> <span class="n">pre</span><span class="p">);</span>
-        <span class="n">pre</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">pre</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="kt">int</span> <span class="n">getMinimumDifference</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">INT_MAX</span><span class="p">,</span> <span class="n">pre</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">pre</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="bst中的众数">BST中的众数</h3>
-<p>Leetcode 501. 给你一个含重复值的二叉搜索树（BST）的根节点 root ，找出并返回 BST 中的所有 众数（即，出现频率最高的元素。</p>
-
-<p>如果是二叉树的话就要遍历存入map，再进行排序：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">searchBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">cur</span><span class="p">,</span> <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">map</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 前序遍历</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">cur</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="p">;</span>
-    <span class="n">map</span><span class="p">[</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">]</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 统计元素频率</span>
-    <span class="n">searchBST</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">map</span><span class="p">);</span>
-    <span class="n">searchBST</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">map</span><span class="p">);</span>
-    <span class="k">return</span> <span class="p">;</span>
-<span class="p">}</span>
-<span class="kt">bool</span> <span class="k">static</span> <span class="n">cmp</span> <span class="p">(</span><span class="k">const</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">second</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">findMode</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span> <span class="c1">// key:元素，value:出现频率</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-    <span class="n">searchBST</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">map</span><span class="p">);</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">vec</span><span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">map</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-    <span class="n">sort</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span> <span class="c1">// 给频率排个序</span>
-    <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">first</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vec</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// 取最高的放到result数组中</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">second</span> <span class="o">==</span> <span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">second</span><span class="p">)</span> <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">first</span><span class="p">);</span>
-        <span class="k">else</span> <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>但题目中是BST，因此，同样的思路就是使用中序遍历，递归和迭代方法都可以：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">findMode</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">stack</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*&gt;</span> <span class="n">st</span><span class="p">;</span>
-    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
-    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">pre</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">maxCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 最大频率</span>
-    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 统计频率</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="o">!</span><span class="n">st</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 指针来访问节点，访问到最底层</span>
-            <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span> <span class="c1">// 将访问的节点放进栈</span>
-            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>                <span class="c1">// 左</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="n">cur</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-            <span class="n">st</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>                       <span class="c1">// 中</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">pre</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 第一个节点</span>
-                <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">pre</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 与前一个节点数值相同</span>
-                <span class="n">count</span><span class="o">++</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// 与前一个节点数值不同</span>
-                <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="n">maxCount</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 如果和最大值相同，放进result中</span>
-                <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
-            <span class="p">}</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">&gt;</span> <span class="n">maxCount</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 如果计数大于最大值频率</span>
-                <span class="n">maxCount</span> <span class="o">=</span> <span class="n">count</span><span class="p">;</span>   <span class="c1">// 更新最大频率</span>
-                <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>     <span class="c1">// 很关键的一步，不要忘记清空result，之前result里的元素都失效了</span>
-                <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="n">pre</span> <span class="o">=</span> <span class="n">cur</span><span class="p">;</span>
-            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>               <span class="c1">// 右</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="二叉树二叉搜索树的最近公共祖先">二叉树/二叉搜索树的最近公共祖先</h3>
-<p>Leetcode 235/236. 给定一个二叉树/BST, 找到该树中两个指定节点p、q的最近公共祖先。</p>
-
-<p>对于二叉树，如果左子树出现p，右子树出现q，则它就是最近的公共祖先：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">lowestCommonAncestor</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">||</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">q</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">){</span>
-        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">TreeNode</span> <span class="o">*</span><span class="n">left</span> <span class="o">=</span> <span class="n">lowestCommonAncestor</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">);</span>
-    <span class="n">TreeNode</span> <span class="o">*</span><span class="n">right</span> <span class="o">=</span> <span class="n">lowestCommonAncestor</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="n">right</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">left</span><span class="o">==</span><span class="nb">nullptr</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">right</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">right</span> <span class="o">==</span><span class="nb">nullptr</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">left</span><span class="p">;</span>
-    <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>如果是二叉搜索树会方便一些：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">lowestCommonAncestor</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">ancestor</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&amp;&amp;</span> <span class="n">q</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">ancestor</span> <span class="o">=</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&amp;&amp;</span> <span class="n">q</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">ancestor</span> <span class="o">=</span> <span class="n">ancestor</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">ancestor</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="修剪bst">修剪BST</h3>
-<p>Leetcode 669. 给你二叉搜索树的根节点 root ，同时给定最小边界low 和最大边界 high。通过修剪二叉搜索树，使得所有节点的值在[low, high]中。</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">trimBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">low</span><span class="p">,</span> <span class="kt">int</span> <span class="n">high</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">low</span><span class="p">)</span> <span class="k">return</span> <span class="n">trimBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">high</span><span class="p">)</span> <span class="k">return</span> <span class="n">trimBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">);</span>
-    <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">trimBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">);</span>
-    <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">trimBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h2 id="把bst转化为累加树">把BST转化为累加树</h2>
-<p>Leetcode 538. 给出二叉 搜索 树的根节点，该树的节点值各不相同，请你将其转换为累加树（Greater Sum Tree），使每个节点 node 的新值等于原树中大于或等于 node.val 的值之和。</p>
-
-<p>本质上就是逆前序遍历：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">TreeNode</span><span class="o">*</span> <span class="nf">convertBST</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">convertBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
-        <span class="n">sum</span> <span class="o">+=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
-        <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">=</span> <span class="n">sum</span><span class="p">;</span>
-        <span class="n">convertBST</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="有序数组转化为avltree">有序数组转化为AVLTree</h3>
-
-<p>Leetcode 108. 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵平衡二叉搜索树。</p>
-
-<p>每次都从中间分割即可，<strong>注意涉及到left和right的边界时刻！</strong></p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">traversal</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">)</span> <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">((</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
-    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]);</span>
-    <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">traversal</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">traversal</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="n">TreeNode</span><span class="o">*</span> <span class="n">sortedArrayToBST</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="n">traversal</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[二叉搜索树是一个有序树：]]></summary></entry><entry><title type="html">Leetcode记录：单调栈</title><link href="http://localhost:4000/2024/08/12/MonotonicStack/" rel="alternate" type="text/html" title="Leetcode记录：单调栈" /><published>2024-08-12T14:00:00+08:00</published><updated>2024-08-12T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/12/MonotonicStack</id><content type="html" xml:base="http://localhost:4000/2024/08/12/MonotonicStack/"><![CDATA[<p>单调栈通常是一维数组，<strong>要寻找任一个元素的右边或者左边第一个比自己大或者小的元素的位置</strong>，此时我们就要想到可以用单调栈了。时间复杂度为O(n)。</p>
-
-<p>单调栈的本质是<strong>空间换时间</strong>，因为在遍历的过程中需要用一个栈来记录右边第一个比当前元素高的元素，优点是整个数组只需要遍历一次。
-更直白来说，就是用一个栈来记录我们遍历过的元素，因为我们遍历数组的时候，我们不知道之前都遍历了哪些元素，以至于遍历一个元素找不到是不是之前遍历过一个更小的，所以我们需要用一个容器（这里用单调栈）来记录我们遍历过的元素。</p>
-
-<p>在使用单调栈的时候首先要明确如下几点：</p>
-
-<ol>
-  <li>单调栈里存放的元素是什么？
- 单调栈里只需要存放元素的下标i就可以了，如果需要使用对应的元素，直接T[i]就可以获取。</li>
-  <li>单调栈里元素是递增呢？ 还是递减呢？
-如果求一个元素右边第一个更大元素，单调栈就是（栈顶到栈底）递增的，如果求一个元素右边第一个更小元素，单调栈就是递减的。</li>
-</ol>
-
-<p>使用单调栈主要有三个判断条件:</p>
-
-<ol>
-  <li>当前遍历的元素T[i]小于栈顶元素T[st.top()]的情况</li>
-  <li>当前遍历的元素T[i]等于栈顶元素T[st.top()]的情况</li>
-  <li>当前遍历的元素T[i]大于栈顶元素T[st.top()]的情况</li>
-</ol>
-
-<p>我们以下题为例讲解：</p>
-<h3 id="每日温度">每日温度</h3>
-<p>给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer ，其中 answer[i] 是指对于第 i 天，下一个更高温度出现在几天后。如果气温在这之后都不会升高，请在该位置用 0 来代替。</p>
-
-<p>我们用temperatures = [73, 74, 75, 71, 71, 72, 76, 73]为例来逐步分析：</p>
-<ol>
-  <li>首先将第一个遍历元素加入单调栈</li>
-  <li>加入T[1] = 74，因为T[1] &gt; T[0]（<strong>当前遍历的元素T[i]大于栈顶元素T[st.top()]的情况</strong>）。
- 我们要保持一个递增单调栈（从栈头到栈底），所以将T[0]弹出，T[1]加入，此时result数组可以记录了，result[0] = 1，即T[0]右面第一个比T[0]大的元素是T[1]。</li>
-  <li>加入T[2]，同理，T[1]弹出</li>
-  <li>加入T[3]，T[3] &lt; T[2] （<strong>当前遍历的元素T[i]小于栈顶元素T[st.top()]的情况</strong>），加T[3]加入单调栈。</li>
-  <li>加入T[4]，T[4] == T[3] （当前遍历的元素T[i]等于栈顶元素T[st.top()]的情况），此时依然要加入栈，不用计算距离，<strong>因为我们要求的是右面第一个大于本元素的位置，而不是大于等于！</strong></li>
-  <li>加入T[5]，T[5] &gt; T[4] （当前遍历的元素T[i]大于栈顶元素T[st.top()]的情况），将T[4]弹出，同时计算距离，更新result</li>
-  <li>T[4]弹出之后， T[5] &gt; T[3] （当前遍历的元素T[i]大于栈顶元素T[st.top()]的情况），将T[3]继续弹出，同时计算距离，更新result</li>
-  <li>直到发现T[5]小于T[st.top()]，终止弹出，将T[5]加入单调栈</li>
-  <li>加入T[6]，同理，需要将栈里的T[5]，T[2]弹出</li>
-  <li>加入T[7]， T[7] &lt; T[6] 直接入栈，这就是最后的情况，result数组也更新完了。</li>
-  <li>注意：<strong>定义result数组的时候，就应该直接初始化为0，如果result没有更新，说明这个元素右面没有更大的了，也就是为0。</strong></li>
-</ol>
-
-<p>逻辑详细版本的C++代码如下：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dailyTemperatures</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">T</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// 递增栈</span>
-    <span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">st</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">(</span><span class="n">T</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
-    <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()])</span> <span class="p">{</span>                       <span class="c1">// 情况一</span>
-            <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">T</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()])</span> <span class="p">{</span>               <span class="c1">// 情况二</span>
-            <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">st</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">T</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()])</span> <span class="p">{</span> <span class="c1">// 情况三</span>
-                <span class="n">result</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-                <span class="n">st</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-            <span class="p">}</span>
-            <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>精简后为：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dailyTemperatures</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">T</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">st</span><span class="p">;</span> <span class="c1">// 递增栈</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">(</span><span class="n">T</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">st</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">T</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()])</span> <span class="p">{</span> <span class="c1">// 注意栈不能为空</span>
-            <span class="n">result</span><span class="p">[</span><span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">()]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-            <span class="n">st</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="n">st</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="最大二叉树">最大二叉树</h3>
-
-<p>Leetcode 654. 给定一个不重复的整数数组 nums 。 最大二叉树 可以用下面的算法从 nums 递归地构建:</p>
-<ol>
-  <li>创建一个根节点，其值为 nums 中的最大值。</li>
-  <li>递归地在最大值 左边 的 子数组前缀上 构建左子树。</li>
-  <li>递归地在最大值 右边 的 子数组后缀上 构建右子树。</li>
-</ol>
-
-<p>返回 nums 构建的 最大二叉树 。</p>
-
-<p>递归方法很好理解：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">constructMaximumBinaryTree</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">construct</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">TreeNode</span><span class="o">*</span> <span class="n">construct</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="kt">int</span> <span class="n">best</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">best</span><span class="p">])</span> <span class="p">{</span>
-            <span class="n">best</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">best</span><span class="p">]);</span>
-    <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">best</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">construct</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">best</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>第二种方法可以使用单调栈：在最终构造出的树上，以 nums[i] 为根节点的子树，在原数组中对应的区间，<strong>左边界为 nums[i] 左侧第一个比它大的元素所在的位置，右边界为 nums[i] 右侧第一个比它大的元素所在的位置。左右边界均为开边界。</strong>
-如果某一侧边界不存在，则那一侧边界为数组的边界。如果两侧边界均不存在，说明其为最大值，即根节点。</p>
-
-<p>因此，我们的任务变为：<strong>找出每一个元素左侧和右侧第一个比它大的元素所在的位置。</strong></p>
-
-<p><strong>如何求左侧第一个更大的元素的位置也体现在此了</strong></p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TreeNode</span><span class="o">*</span> <span class="nf">constructMaximumBinaryTree</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stk</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">left</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">right</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*&gt;</span> <span class="n">tree</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">stk</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">stk</span><span class="p">.</span><span class="n">back</span><span class="p">()])</span> <span class="p">{</span>
-            <span class="n">right</span><span class="p">[</span><span class="n">stk</span><span class="p">.</span><span class="n">back</span><span class="p">()]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-            <span class="n">stk</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">stk</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
-            <span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">stk</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="n">stk</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="p">(</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]]))</span> <span class="p">{</span>
-            <span class="n">tree</span><span class="p">[</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="n">tree</span><span class="p">[</span><span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[单调栈通常是一维数组，要寻找任一个元素的右边或者左边第一个比自己大或者小的元素的位置，此时我们就要想到可以用单调栈了。时间复杂度为O(n)。]]></summary></entry><entry><title type="html">Leetcode记录：排序算法</title><link href="http://localhost:4000/2024/08/10/Sort/" rel="alternate" type="text/html" title="Leetcode记录：排序算法" /><published>2024-08-10T14:00:00+08:00</published><updated>2024-08-10T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/10/Sort</id><content type="html" xml:base="http://localhost:4000/2024/08/10/Sort/"><![CDATA[<h2 id="选择排序">选择排序</h2>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[层序遍历 每道题都可以很简单地用层序遍历解答，以下只是放一些其他思路。]]></summary></entry><entry><title type="html">Leetcode记录：排序算法</title><link href="http://localhost:4000/2024/08/10/Sort/" rel="alternate" type="text/html" title="Leetcode记录：排序算法" /><published>2024-08-10T14:00:00+08:00</published><updated>2024-08-10T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/10/Sort</id><content type="html" xml:base="http://localhost:4000/2024/08/10/Sort/"><![CDATA[<h2 id="选择排序">选择排序</h2>
 <p>选择排序是一种简单的排序算法，其基本思想是在待排序的序列中依次选出最小（或最大）的元素，存放到序列的起始位置，然后再从剩余未排序元素中继续寻找最小（或最大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。</p>
 
 <p><strong>过程简单描述：</strong>
@@ -2787,134 +2946,4 @@ next数组就是一个前缀表（prefix table）。前缀表是用来<strong>�
     <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span> 
 </code></pre></div></div>
-<p><strong>左旋转和右旋转的思路是一样的。</strong></p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[反转字符串]]></summary></entry><entry><title type="html">Leetcode记录：哈希表例题</title><link href="http://localhost:4000/2024/08/04/DS/" rel="alternate" type="text/html" title="Leetcode记录：哈希表例题" /><published>2024-08-04T14:00:00+08:00</published><updated>2024-08-04T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/04/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/04/DS/"><![CDATA[<h3 id="续哈希表例题">续哈希表例题</h3>
-
-<h4 id="四数之和-i">四数之和 I</h4>
-<p>Leetcode 454. 给你四个整数数组 <code class="language-plaintext highlighter-rouge">nums1</code>,<code class="language-plaintext highlighter-rouge">nums2</code>,<code class="language-plaintext highlighter-rouge">nums3</code> 和 <code class="language-plaintext highlighter-rouge">nums4</code> ，数组长度都是 <code class="language-plaintext highlighter-rouge">n</code> ，请你计算有多少个元组 <code class="language-plaintext highlighter-rouge">(i, j, k, l)</code> 能满足：</p>
-<ol>
-  <li><code class="language-plaintext highlighter-rouge">0 &lt;= i, j, k, l &lt; n</code></li>
-  <li><code class="language-plaintext highlighter-rouge">nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0</code></li>
-</ol>
-
-<p>可以将四个数组分成两部分，A 和 B 为一组，C 和 D 为另外一组。
-对于 A 和 B，我们使用二重循环对它们进行遍历，得到所有 A[i]+B[j] 的值并存入哈希映射中。对于哈希映射中的每个键值对，每个键表示一种 A[i]+B[j]，对应的值为 A[i]+B[j] 出现的次数。
-对于 C 和 D，我们同样使用二重循环对它们进行遍历。当遍历到 C[k]+D[l] 时，如果 −(C[k]+D[l]) 出现在哈希映射中，那么将 −(C[k]+D[l]) 对应的值累加进答案中。最终即可得到满足 A[i]+B[j]+C[k]+D[l]=0 的四元组数目:</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">fourSumCount</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">B</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">C</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">D</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">countAB</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">:</span> <span class="n">A</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="o">:</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
-            <span class="o">++</span><span class="n">countAB</span><span class="p">[</span><span class="n">u</span> <span class="o">+</span> <span class="n">v</span><span class="p">];</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">:</span> <span class="n">C</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="o">:</span> <span class="n">D</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">countAB</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="o">-</span><span class="n">u</span> <span class="o">-</span> <span class="n">v</span><span class="p">))</span> <span class="p">{</span>
-                <span class="n">ans</span> <span class="o">+=</span> <span class="n">countAB</span><span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="o">-</span> <span class="n">v</span><span class="p">];</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>如果是要求不重复的话，利用哈希表将会很困难：</p>
-
-<h4 id="三数之和">三数之和</h4>
-<p>Leetcode 15. 给你一个整数数组 <code class="language-plaintext highlighter-rouge">nums</code> ，判断是否存在三元组 <code class="language-plaintext highlighter-rouge">[nums[i], nums[j], nums[k]]</code> 满足 <code class="language-plaintext highlighter-rouge">i != j、i != k</code> 且 <code class="language-plaintext highlighter-rouge">j != k</code> ，同时还满足 <code class="language-plaintext highlighter-rouge">nums[i] + nums[j] + nums[k] == 0</code> 。请你返回所有和为 <code class="language-plaintext highlighter-rouge">0</code> 且<strong>不重复</strong>的三元组.</p>
-
-<p>「不重复」的本质是需要保证：</p>
-<ol>
-  <li>第二重循环枚举到的元素不小于当前第一重循环枚举到的元素；</li>
-  <li>第三重循环枚举到的元素不小于当前第二重循环枚举到的元素。</li>
-</ol>
-
-<p>也就是说，我们枚举的三元组 <code class="language-plaintext highlighter-rouge">(a,b,c)</code> 满足 <code class="language-plaintext highlighter-rouge">a≤b≤c</code>，保证了只有 <code class="language-plaintext highlighter-rouge">(a,b,c)</code> 这个顺序会被枚举到，而 <code class="language-plaintext highlighter-rouge">(b,a,c)、(c,b,a)</code> 等等这些不会，这样就减少了重复。要实现这一点，我们可以将数组中的元素从小到大进行排序，随后使用普通的三重循环就可以满足上面的要求。
-同时，对于每一重循环而言，相邻两次枚举的元素不能相同，否则也会造成重复。</p>
-
-<p>如果我们固定了前两重循环枚举到的元素 a 和 b，那么只有唯一的 c 满足 a+b+c=0。当第二重循环往后枚举一个元素 b’时，由于 b’&gt;b，那么满足 a+b’+c‘=0 的 c’一定有 c’&lt; c，即 c’在数组中一定出现在 c 的左侧。也就是说，我们可以从小到大枚举 b，同时从大到小枚举 c，也就是<strong>双指针</strong>的思想，这样就将三重循环降低为二重循环了。</p>
-
-<p><strong>在代码实现中一定要注意需要在哪里去重，否则可能会出现一些算例不会ac的情况。</strong></p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">threeSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">sort</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">!=</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-        <span class="k">while</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">){</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
-                <span class="n">left</span><span class="o">++</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
-                <span class="n">right</span><span class="o">--</span><span class="p">;</span>
-            <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
-                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">],</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]});</span>
-                <span class="n">left</span><span class="o">++</span><span class="p">;</span>
-                <span class="k">while</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">)</span>
-                    <span class="n">left</span><span class="o">++</span><span class="p">;</span>
-                <span class="n">right</span><span class="o">--</span><span class="p">;</span>
-                <span class="k">while</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">right</span> <span class="o">&gt;</span> <span class="n">left</span><span class="p">)</span>
-                    <span class="n">right</span><span class="o">--</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h4 id="四数之和">四数之和</h4>
-
-<p>给你一个由 n 个整数组成的数组 <code class="language-plaintext highlighter-rouge">nums</code> ，和一个目标值 <code class="language-plaintext highlighter-rouge">target</code> 。请你找出并返回满足下述全部条件且不重复的四元组 <code class="language-plaintext highlighter-rouge">[nums[a], nums[b], nums[c], nums[d]]</code>（若两个四元组元素一一对应，则认为两个四元组重复）：</p>
-
-<ol>
-  <li>0 &lt;= a, b, c, d &lt; n</li>
-  <li>a、b、c 和 d 互不相同</li>
-  <li>nums[a] + nums[b] + nums[c] + nums[d] == target</li>
-</ol>
-
-<p>求解思路和三数之和一模一样：</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">fourSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">)</span> 
-        <span class="k">return</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">{};</span>
-    <span class="n">sort</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">){</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">j</span><span class="o">&gt;</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                <span class="k">continue</span><span class="p">;</span>
-            <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
-            <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-            <span class="k">while</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">){</span>
-                <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-                <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-                <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">];</span>
-                <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">];</span>
-                <span class="k">if</span><span class="p">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="n">c</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">)</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">if</span><span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="n">c</span><span class="o">+</span><span class="n">d</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span>
-                    <span class="n">left</span><span class="o">++</span><span class="p">;</span>
-                <span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="n">c</span><span class="o">+</span><span class="n">d</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span>
-                    <span class="n">right</span><span class="o">--</span><span class="p">;</span>
-                <span class="k">else</span><span class="p">{</span>
-                    <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">});</span>
-                    <span class="n">right</span><span class="o">--</span><span class="p">;</span>
-                    <span class="n">left</span><span class="o">++</span><span class="p">;</span>
-                    <span class="k">while</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
-                    <span class="n">right</span><span class="o">--</span><span class="p">;</span>
-                    <span class="k">while</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                    <span class="n">left</span><span class="o">++</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[续哈希表例题]]></summary></entry></feed>
+<p><strong>左旋转和右旋转的思路是一样的。</strong></p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[反转字符串]]></summary></entry></feed>
