@@ -1,4 +1,446 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-19T14:10:01+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：回溯</title><link href="http://localhost:4000/2024/08/18/BackTracking/" rel="alternate" type="text/html" title="Leetcode记录：回溯" /><published>2024-08-18T14:00:00+08:00</published><updated>2024-08-18T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/18/BackTracking</id><content type="html" xml:base="http://localhost:4000/2024/08/18/BackTracking/"><![CDATA[<h2 id="回溯框架">回溯框架</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-08-27T05:29:23+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">Leetcode记录：贪心算法</title><link href="http://localhost:4000/2024/08/21/Greedy/" rel="alternate" type="text/html" title="Leetcode记录：贪心算法" /><published>2024-08-21T04:00:00+08:00</published><updated>2024-08-21T04:00:00+08:00</updated><id>http://localhost:4000/2024/08/21/Greedy</id><content type="html" xml:base="http://localhost:4000/2024/08/21/Greedy/"><![CDATA[<h2 id="贪心算法">贪心算法</h2>
+
+<p><strong>贪心的本质是选择每一阶段的局部最优，从而达到全局最优</strong>。贪心算法并没有固定的套路。所以唯一的难点就是如何通过局部最优，推出整体最优。如何验证可不可以用贪心算法呢？
+<strong>最好用的策略就是举反例</strong>，如果想不到反例，那么就试一试贪心吧。</p>
+
+<p><strong>摆动序列，跳跃游戏，k次取反，分发糖果，根据身高重建队列，单调递增的数字，监控二叉树的思路，都需要重点看看。</strong></p>
+
+<p><strong>引爆气球，无重叠区间，划分字母区间，合并区间都是一类的区间问题。</strong></p>
+
+<h3 id="分发饼干">分发饼干</h3>
+<p>Leetcode 455. 对每个孩子 i，都有一个胃口值  g[i]，这是能让孩子们满足胃口的饼干的最小尺寸；并且每块饼干 j，都有一个尺寸 s[j] 。如果 s[j] &gt;= g[i]，我们可以将这个饼干 j 分配给孩子 i ，这个孩子会得到满足。你的目标是尽可能满足越多数量的孩子，并输出这个最大数值。</p>
+
+<p>贪心思路： 大饼干给大孩子吃，小饼干给小孩子吃，因此将两个数组排序一下，用双指针倒序即可。</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">findContentChildren</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">g</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">g</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 饼干数组的下标</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 遍历胃口</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 遍历饼干</span>
+            <span class="n">result</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">index</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="摆动序列">摆动序列</h3>
+<p>Leetcode 376. 如果连续数字之间的差严格地在正数和负数之间交替，则数字序列称为摆动序列。第一个差（如果存在的话）可能是正数或负数。少于两个元素的序列也是摆动序列。</p>
+
+<p>贪心思路：取数组中的局部峰值即可，即计算 prediff（nums[i] - nums[i-1]） 和 curdiff（nums[i+1] - nums[i]），如果prediff &lt; 0 &amp;&amp; curdiff &gt; 0 或者 prediff &gt; 0 &amp;&amp; curdiff &lt; 0 此时就有波动就需要统计。 但是要考虑数组首尾以及平坡的情况：<strong>数组首尾的话可以默认右侧是峰值，即res初始化为1。</strong>
+<strong>对于平坡情况，记录峰值的条件应该是<code class="language-plaintext highlighter-rouge">(preDiff &lt;= 0 &amp;&amp; curDiff &gt; 0) || (preDiff &gt;= 0 &amp;&amp; curDiff &lt; 0)</code>。</strong> 
+另外，<strong>preDiff只有在坡度摆动发生变化的时候才进行改变</strong>，这样是为了避免单调坡上出现平坡的情况。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">wiggleMaxLength</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">curDiff</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 当前一对差值</span>
+    <span class="kt">int</span> <span class="n">preDiff</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 前一对差值</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 记录峰值个数，序列默认序列最右边有一个峰值</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">curDiff</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="c1">// 出现峰值</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">preDiff</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">curDiff</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">preDiff</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">curDiff</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">result</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">preDiff</span> <span class="o">=</span> <span class="n">curDiff</span><span class="p">;</span> <span class="c1">// 注意这里，只在摆动变化的时候更新prediff</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>也可以考虑dp思路：</p>
+<ol>
+  <li>设 dp 状态dp[i][0]，表示考虑前 i 个数，第 i 个数作为山峰的摆动子序列的最长长度</li>
+  <li>设 dp 状态dp[i][1]，表示考虑前 i 个数，第 i 个数作为山谷的摆动子序列的最长长度</li>
+</ol>
+
+<p>则转移方程为：</p>
+
+<ol>
+  <li>dp[i][0] = max(dp[i][0], dp[j][1] + 1)，其中0 &lt; j &lt; i且nums[j] &lt; nums[i]，表示将 nums[i]接到前面某个山谷后面，作为山峰。</li>
+  <li>dp[i][1] = max(dp[i][1], dp[j][0] + 1)，其中0 &lt; j &lt; i且nums[j] &gt; nums[i]，表示将 nums[i]接到前面某个山峰后面，作为山谷。</li>
+</ol>
+
+<h3 id="最大子序和">最大子序和</h3>
+<p>Leetcode 53. 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
+
+<p>贪心思路：遍历数组，遇到负数就将sum重置即可：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">maxSubArray</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">INT32_MIN</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">&gt;</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 取区间累计的最大值（相当于不断确定最大子序终止位置）</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">count</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 相当于重置最大子序起始位置，因为遇到负数一定是拉低总和</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>dp思路：dp[i]表示包括i之前的最大连续子序列和， dp[i] = max(dp[i - 1] + nums[i], nums[i])，实时更新result即可。</p>
+
+<h3 id="买卖股票最佳时机ii">买卖股票最佳时机II</h3>
+<p>Leetcode 122. 给定一个数组，它的第  i 个元素是一支给定股票第 i 天的价格。设计一个算法来计算你所能获取的最大利润。</p>
+
+<p>贪心思路： 第 0 天买入，第 3 天卖出，那么利润为：prices[3] - prices[0]。相当于(prices[3] - prices[2]) + (prices[2] - prices[1]) + (prices[1] - prices[0])。<strong>此时就是把利润分解为每天为单位的维度，而不是从 0 天到第 3 天整体去考虑！</strong></p>
+
+<p>所以把每天的正利润都拿到就可以：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">maxProfit</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">prices</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">prices</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">max</span><span class="p">(</span><span class="n">prices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">prices</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>dp思路：dp[i][1]第i天持有的最多现金，dp[i][0]第i天持有股票后的最多现金，第i天持股票所剩最多现金 = max(第i-1天持股票所剩现金, 第i-1天持现金-买第i天的股票)，第i天持有最多现金 = max(第i-1天持有的最多现金，第i-1天持有股票的最多现金+第i天卖出股票)。
+dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] - prices[i]);
+dp[i][1] = max(dp[i - 1][1], dp[i - 1][0] + prices[i]);</p>
+
+<h3 id="跳跃游戏i">跳跃游戏I</h3>
+<p>Leetcode 55. 给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断你是否能够到达最后一个位置。</p>
+
+<p>实时记录能跳的最远距离即可：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">canJump</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">cover</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 只有一个元素，就是能达到</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">cover</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 注意这里是小于等于cover</span>
+        <span class="n">cover</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cover</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cover</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 说明可以覆盖到终点了</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="跳跃游戏ii">跳跃游戏II</h3>
+<p>给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。你的目标是使用最少的跳跃次数到达数组的最后一个位置。</p>
+
+<p>这里需要统计两个覆盖范围，当前这一步的最大覆盖和下一步最大覆盖。如果移动下标达到了当前这一步的最大覆盖最远距离了，还没有到终点的话，那么就必须再走一步来增加覆盖范围，直到覆盖范围覆盖了终点。
+<strong>注意每次都要先更新nextDistance。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">jump</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">curDistance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    <span class="c1">// 当前覆盖最远距离下标</span>
+    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>            <span class="c1">// 记录走的最大步数</span>
+    <span class="kt">int</span> <span class="n">nextDistance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>   <span class="c1">// 下一步覆盖最远距离下标</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nextDistance</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">nextDistance</span><span class="p">);</span>  <span class="c1">// 更新下一步覆盖最远距离下标</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">curDistance</span><span class="p">)</span> <span class="p">{</span>                         <span class="c1">// 遇到当前覆盖最远距离下标</span>
+            <span class="n">ans</span><span class="o">++</span><span class="p">;</span>                                  <span class="c1">// 需要走下一步</span>
+            <span class="n">curDistance</span> <span class="o">=</span> <span class="n">nextDistance</span><span class="p">;</span>             <span class="c1">// 更新当前覆盖最远距离下标（相当于加油了）</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nextDistance</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>  <span class="c1">// 当前覆盖最远距到达集合终点，不用做ans++操作了，直接结束</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="k次取反后最大化的数组和">K次取反后最大化的数组和</h3>
+<p>Leetcode 1005. 给定一个整数数组 A，我们只能用以下方法修改该数组：我们选择某个索引 i 并将 A[i] 替换为 -A[i]，然后总共重复这个过程 K 次。（我们可以多次选择同一个索引 i。）以这种方式修改数组后，返回数组可能的最大和。</p>
+
+<p>如果将负数都转变为正数了，K依然大于0，此时的问题是一个有序正整数序列，如何转变K次正负，让数组和达到最大。那么又是一个贪心：局部最优：只找数值最小的正整数进行反转，当前数值和可以达到最大。</p>
+
+<p>本题的解题步骤为：</p>
+
+<p>第一步：将数组按照绝对值大小从大到小排序，注意要按照绝对值的大小
+第二步：从前向后遍历，遇到负数将其变为正数，同时K–
+第三步：如果K还大于0，那么反复转变数值最小的元素，将K用完
+第四步：求和</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">abs</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">largestSumAfterKNegations</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">A</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span>       <span class="c1">// 第一步</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 第二步</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">K</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="n">K</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">K</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="n">A</span><span class="p">[</span><span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// 第三步</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">a</span> <span class="o">:</span> <span class="n">A</span><span class="p">)</span> <span class="n">result</span> <span class="o">+=</span> <span class="n">a</span><span class="p">;</span>        <span class="c1">// 第四步</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="加油站">加油站</h3>
+<p>Leetcode 134. 在一条环路上有 N 个加油站，其中第 i 个加油站有汽油 gas[i] 升。你有一辆油箱容量无限的的汽车，从第 i 个加油站开往第 i+1 个加油站需要消耗汽油 cost[i] 升。你从其中的一个加油站出发，开始时油箱为空。如果你可以绕环路行驶一周，则返回出发时加油站的编号，否则返回 -1。</p>
+
+<p>每个加油站的剩余量rest[i]为gas[i] - cost[i]。
+i从0开始累加rest[i]，和记为curSum，一旦curSum小于零，说明[0, i]区间都不能作为起始位置，因为这个区间选择任何一个位置作为起点，到i这里都会断油，那么起始位置从i+1算起，再从0计算curSum。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">canCompleteCircuit</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">gas</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">cost</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">curSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">totalSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">gas</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">curSum</span> <span class="o">+=</span> <span class="n">gas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">totalSum</span> <span class="o">+=</span> <span class="n">gas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">curSum</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">// 当前累加rest[i]和 curSum一旦小于0</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 起始位置更新为i+1</span>
+            <span class="n">curSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>     <span class="c1">// curSum从0开始</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">totalSum</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// 说明怎么走都不可能跑一圈了</span>
+    <span class="k">return</span> <span class="n">start</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="分发糖果">分发糖果</h3>
+<p>Leetcode 135. 老师想给孩子们分发糖果，有 N 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。你需要按照以下要求，帮助老师给这些孩子分发糖果：</p>
+<ol>
+  <li>每个孩子至少分配到 1 个糖果。</li>
+  <li>相邻的孩子中，评分高的孩子必须获得更多的糖果。
+那么这样下来，老师至少需要准备多少颗糖果呢？</li>
+</ol>
+
+<p>如果两边一起考虑一定会顾此失彼。<strong>先确定右边评分大于左边的情况</strong>（也就是<strong>从前向后</strong>遍历），只要右边评分比左边大，右边的孩子就多一个糖果。<strong>再确定左孩子大于右孩子的情况</strong>（<strong>从后向前</strong>遍历），因为rating[5]与rating[4]的比较 要利用上 rating[5]与rating[6]的比较结果，所以要从后向前遍历。</p>
+
+<p>如果ratings[i] &gt; ratings[i + 1]，此时candyVec[i]（第i个小孩的糖果数量）就有两个选择了，一个是candyVec[i + 1] + 1（从右边这个加1得到的糖果数量），一个是candyVec[i]（之前比较右孩子大于左孩子得到的糖果数量）。<strong>此时就要取最大值才能都满足。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">candy</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">ratings</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">candyVec</span><span class="p">(</span><span class="n">ratings</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="c1">// 从前向后</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ratings</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ratings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">ratings</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="n">candyVec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">candyVec</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// 从后向前</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">ratings</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ratings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">ratings</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="n">candyVec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">candyVec</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">candyVec</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// 统计结果</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">candyVec</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">result</span> <span class="o">+=</span> <span class="n">candyVec</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="柠檬水找零">柠檬水找零</h3>
+<p>在柠檬水摊上，每一杯柠檬水的售价为 5 美元。每位顾客只买一杯柠檬水，然后向你付 5 美元、10 美元或 20 美元。你必须给每个顾客正确找零，也就是说净交易是每位顾客向你支付 5 美元。
+注意，一开始你手头没有任何零钱。如果你能给每位顾客正确找零，返回 true ，否则返回 false 。</p>
+
+<p>分类讨论，20元的优先给10元再给5元即可：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">lemonadeChange</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">bills</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">five</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ten</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">twenty</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">bill</span> <span class="o">:</span> <span class="n">bills</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 情况一</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">bill</span> <span class="o">==</span> <span class="mi">5</span><span class="p">)</span> <span class="n">five</span><span class="o">++</span><span class="p">;</span>
+        <span class="c1">// 情况二</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">bill</span> <span class="o">==</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">five</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">ten</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">five</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 情况三</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">bill</span> <span class="o">==</span> <span class="mi">20</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 优先消耗10美元，因为5美元的找零用处更大，能多留着就多留着</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">five</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ten</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">five</span><span class="o">--</span><span class="p">;</span>
+                <span class="n">ten</span><span class="o">--</span><span class="p">;</span>
+                <span class="n">twenty</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 其实这行代码可以删了，因为记录20已经没有意义了，不会用20来找零</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">five</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">five</span> <span class="o">-=</span> <span class="mi">3</span><span class="p">;</span>
+                <span class="n">twenty</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 同理，这行代码也可以删了</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="根据身高重建队列">根据身高重建队列</h3>
+
+<p>假设有打乱顺序的一群人站成一个队列，数组people表示队列中一些人的属性（不一定按顺序）。每个people[i] = [hi, ki]表示第 i 个人的身高为hi ，前面正好有ki个身高<strong>大于或等于</strong>hi的人。</p>
+
+<p>请你重新构造并返回输入数组 people 所表示的队列。</p>
+
+<p>先按照身高进行排序，然后依次按照ki为下标插入即可，因为小数字在前面的插入是不影响后面大数字的下标条件的。</p>
+
+<p><strong>这里选择链表插入，因为vector的插入是O(n^2)的</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 身高从大到小排（身高相同k小的站前面）</span>
+<span class="k">static</span> <span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">reconstructQueue</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">people</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">sort</span> <span class="p">(</span><span class="n">people</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">people</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span>
+    <span class="n">list</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">que</span><span class="p">;</span> <span class="c1">// list底层是链表实现，插入效率比vector高的多</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">people</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">position</span> <span class="o">=</span> <span class="n">people</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span> <span class="c1">// 插入到下标为position的位置</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;::</span><span class="n">iterator</span> <span class="n">it</span> <span class="o">=</span> <span class="n">que</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">position</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 寻找在插入位置</span>
+            <span class="n">it</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">que</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">people</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">que</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">que</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="引爆气球">引爆气球</h3>
+<p>Leetcode 452. 一支弓箭可以沿着 x 轴从不同点完全垂直地射出。在坐标 x 处射出一支箭，若有一个气球的直径的开始和结束坐标为 xstart，xend， 且满足  xstart ≤ x ≤ xend，则该气球会被引爆。可以射出的弓箭的数量没有限制。 弓箭一旦被射出之后，可以无限地前进。我们想找到使得所有气球全部被引爆，所需的弓箭的最小数量。给你一个数组 points ，其中 points [i] = [xstart,xend]，返回引爆所有气球所必须射出的最小弓箭数。</p>
+
+<p>为了让气球尽可能的重叠，<strong>需要对数组进行排序。</strong>从前向后遍历，<strong>如果气球重叠了，重叠气球中右边边界的最小值 之前的区间一定需要一个弓箭。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">findMinArrowShots</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">points</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">points</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">points</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// points 不为空至少需要一支箭</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span>  <span class="c1">// 气球i和气球i-1不挨着，注意这里不是&gt;=</span>
+                <span class="n">result</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 需要一支箭</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>  <span class="c1">// 气球i和气球i-1挨着</span>
+                <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span> <span class="c1">// 更新重叠气球最小右边界</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="无重叠区间">无重叠区间</h3>
+<p>Leetcode 435. 给定一个区间的集合，找到需要移除区间的最小数量，使剩余区间互不重叠。</p>
+
+<p><strong>气球问题的本质是最多有多少个不重叠区间，这个问题中最小移除数量就是总区间减去最多不重叠区间。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">eraseOverlapIntervals</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">intervals</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">intervals</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">intervals</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="n">intervals</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">intervals</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">intervals</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">){</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">intervals</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="n">res</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">intervals</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">intervals</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="划分字母区间">划分字母区间</h3>
+<p>Leetcode 763. 字符串 S 由小写字母组成。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。返回一个表示每个字符串片段的长度的列表。</p>
+
+<p>提前记录好每个字母的最后下标，然后在遍历时实时更新当前字符的最右侧边界即可。</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">partitionLabels</span><span class="p">(</span><span class="n">string</span> <span class="n">S</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">hash</span><span class="p">[</span><span class="mi">27</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span> <span class="c1">// i为字符，hash[i]为字符出现的最后位置</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">S</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 统计每一个字符最后出现的位置</span>
+        <span class="n">hash</span><span class="p">[</span><span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">S</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">hash</span><span class="p">[</span><span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">]);</span> <span class="c1">// 找到字符出现的最远边界</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="合并区间">合并区间</h3>
+<p>Leetcode 56. 给出一个区间的集合，请合并所有重叠的区间。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">merge</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">intervals</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">intervals</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">result</span><span class="p">;</span> <span class="c1">// 区间集合为空直接返回</span>
+    <span class="c1">// 排序的参数使用了lambda表达式</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">intervals</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">intervals</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">b</span><span class="p">){</span><span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">];});</span>
+
+    <span class="c1">// 第一个区间就可以放进结果集里，后面如果重叠，在result上直接合并</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">intervals</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> 
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">intervals</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">back</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">intervals</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 发现重叠区间</span>
+            <span class="c1">// 合并区间，只更新右边界就好，因为result.back()的左边界一定是最小值，因为我们按照左边界排序的</span>
+            <span class="n">result</span><span class="p">.</span><span class="n">back</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">back</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span> <span class="n">intervals</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span> 
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">intervals</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="c1">// 区间不重叠 </span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="单调递增的数字">单调递增的数字</h3>
+<p>Leetcode 738. 给定一个非负整数 N，找出小于或等于 N 的最大的整数，同时这个整数需要满足其各个位数上的数字是单调递增。</p>
+
+<p>拿一个两位的数字来举例。例如：98，一旦出现strNum[i - 1] &gt; strNum[i]的情况（非单调递增），首先想让strNum[i - 1]–，然后strNum[i]给为9，这样这个整数就是89，即小于98的最大的单调递增整数。</p>
+
+<p>从前向后遍历的话，遇到strNum[i - 1] &gt; strNum[i]的情况，让strNum[i - 1]减一，但此时如果strNum[i - 1]减一了，可能又小于strNum[i - 2]。这么说有点抽象，举个例子，数字：332，从前向后遍历的话，那么就把变成了329，此时2又小于了第一位的3了，真正的结果应该是299。<strong>因此必须要从后向前遍历。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">monotoneIncreasingDigits</span><span class="p">(</span><span class="kt">int</span> <span class="n">N</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">string</span> <span class="n">strNum</span> <span class="o">=</span> <span class="n">to_string</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
+    <span class="c1">// flag用来标记赋值9从哪里开始</span>
+    <span class="c1">// 设置为这个默认值，为了防止第二个for循环在flag没有被赋值的情况下执行</span>
+    <span class="kt">int</span> <span class="n">flag</span> <span class="o">=</span> <span class="n">strNum</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">strNum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strNum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">strNum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="n">strNum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">flag</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">strNum</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">strNum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'9'</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">stoi</span><span class="p">(</span><span class="n">strNum</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="监控二叉树">监控二叉树</h3>
+<p>Leetcode 968. 给定一个二叉树，我们在树的节点上安装摄像头。节点上的每个摄影头都可以监视其父对象、自身及其直接子对象。计算监控树的所有节点所需的最小摄像头数量。</p>
+
+<p>大体思路就是从低到上，先给叶子节点父节点放个摄像头，然后隔两个节点放一个摄像头，直至到二叉树头结点。<strong>遍历的话要采用后序遍历，因为需要处理好子节点，得到子节点的状态再考虑父节点。</strong> 每个节点可能有3种状态：无覆盖，有摄像头，有覆盖，可以用0，1，2来表示，空节点应记为有覆盖，否则叶子节点就要放摄像头了：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">result</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="nf">traversal</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">cur</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// 空节点，该节点有覆盖</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cur</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">traversal</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>    <span class="c1">// 左</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">traversal</span><span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>  <span class="c1">// 右</span>
+
+        <span class="c1">// 情况1</span>
+        <span class="c1">// 左右节点都有覆盖</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">right</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="c1">// 情况2</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">right</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">result</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">right</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+
+        <span class="c1">// 以上代码我没有使用else，主要是为了把各个分支条件展现出来，这样代码有助于读者理解</span>
+        <span class="c1">// 这个 return -1 逻辑不会走到这里。</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">minCameraCover</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="c1">// 情况4</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">traversal</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// root 无覆盖</span>
+            <span class="n">result</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[贪心算法]]></summary></entry><entry><title type="html">Leetcode记录：回溯</title><link href="http://localhost:4000/2024/08/18/BackTracking/" rel="alternate" type="text/html" title="Leetcode记录：回溯" /><published>2024-08-18T14:00:00+08:00</published><updated>2024-08-18T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/18/BackTracking</id><content type="html" xml:base="http://localhost:4000/2024/08/18/BackTracking/"><![CDATA[<h2 id="回溯框架">回溯框架</h2>
 
 <p>回溯法，一般可以解决如下几种问题：</p>
 <ol>
@@ -121,7 +563,7 @@
 <p>给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。candidates 中的每个数字在每个组合中只能使用一次。
 说明： 所有数字（包括目标数）都是正整数。<strong>解集不能包含重复的组合。</strong></p>
 
-<p>本题的难点在于：<strong>集合（数组candidates）有重复元素，但还不能有重复的组合。</strong>组合问题可以抽象为树形结构，那么“使用过”在这个树形结构上是有两个维度的，一个维度是同一树枝上使用过，一个维度是同一树层上使用过。所以我们要去重的是同一树层上的“使用过”，同一树枝上的都是一个组合里的元素，不用去重。</p>
+<p>本题的难点在于：<strong>集合（数组candidates）有重复元素，但还不能有重复的组合。</strong> 组合问题可以抽象为树形结构，那么“使用过”在这个树形结构上是有两个维度的，一个维度是同一树枝上使用过，一个维度是同一树层上使用过。所以我们要去重的是同一树层上的“使用过”，同一树枝上的都是一个组合里的元素，不用去重。</p>
 
 <p>如果candidates[i] == candidates[i - 1] 并且 used[i - 1] == false，就说明：前一个树枝，使用了candidates[i - 1]，也就是说同一树层使用过candidates[i - 1]，此时for循环里就应该做continue的操作。
 <strong>注意，树层去重的话，需要对数组排序！</strong></p>
@@ -155,6 +597,458 @@
     <span class="c1">// 首先把给candidates排序，让其相同的元素都挨在一起。</span>
     <span class="n">sort</span><span class="p">(</span><span class="n">candidates</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">candidates</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
     <span class="n">backtracking</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="分割问题">分割问题</h2>
+
+<h3 id="分割回文串">分割回文串</h3>
+<p>Leetcode 131. 给定一个字符串 s，将 s 分割成一些子串，使每个子串都是回文串。返回 s 所有可能的分割方案。</p>
+
+<p>其实切割问题类似组合问题:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span> <span class="c1">// 放已经回文的子串</span>
+<span class="kt">void</span> <span class="nf">backtracking</span> <span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 如果起始位置已经大于s的大小，说明已经找到了一组分割方案了</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">startIndex</span> <span class="o">&gt;=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">isPalindrome</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">startIndex</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="p">{</span>   <span class="c1">// 是回文子串</span>
+            <span class="c1">// 获取[startIndex,i]在s中的子串</span>
+            <span class="n">string</span> <span class="n">str</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">startIndex</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">startIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>                                <span class="c1">// 不是回文，跳过</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 寻找i+1为起始位置的子串</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span> <span class="c1">// 回溯过程，弹出本次已经添加的子串</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="n">isPalindrome</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">,</span> <span class="n">j</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">partition</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>也可以提前利用DP把回文串计算好：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span> <span class="c1">// 放已经回文的子串</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&gt;</span> <span class="n">isPalindrome</span><span class="p">;</span> <span class="c1">// 放事先计算好的是否回文子串的结果</span>
+<span class="kt">void</span> <span class="nf">backtracking</span> <span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 如果起始位置已经大于s的大小，说明已经找到了一组分割方案了</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">startIndex</span> <span class="o">&gt;=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">isPalindrome</span><span class="p">[</span><span class="n">startIndex</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>   <span class="c1">// 是回文子串</span>
+            <span class="c1">// 获取[startIndex,i]在s中的子串</span>
+            <span class="n">string</span> <span class="n">str</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">startIndex</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">startIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>                                <span class="c1">// 不是回文，跳过</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 寻找i+1为起始位置的子串</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span> <span class="c1">// 回溯过程，弹出本次已经添加的子串</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="n">computePalindrome</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// isPalindrome[i][j] 代表 s[i:j](双边包括)是否是回文字串 </span>
+    <span class="n">isPalindrome</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="nb">false</span><span class="p">));</span> <span class="c1">// 根据字符串s, 刷新布尔矩阵的大小</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="c1">// 需要倒序计算, 保证在i行时, i+1行已经计算好了</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span><span class="n">isPalindrome</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span><span class="n">isPalindrome</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]);}</span>
+            <span class="k">else</span> <span class="p">{</span><span class="n">isPalindrome</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">isPalindrome</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]);}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">partition</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">computePalindrome</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<h3 id="复原ip地址">复原IP地址</h3>
+<p>Leetcode 93. 给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。有效的 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 ‘.’ 分隔。</p>
+
+<p>仍是要检查每个字符串是否满足性质，满足则继续划分，<strong>注意insert函数的作用效果以及插入逗点后backTracking的startIdx</strong>：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span><span class="c1">// 记录结果</span>
+<span class="c1">// startIndex: 搜索的起始位置，pointNum:添加逗点的数量</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pointNum</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pointNum</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 逗点数量为3时，分隔结束</span>
+        <span class="c1">// 判断第四段子字符串是否合法，如果合法就放进result中</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">isValid</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">startIndex</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">isValid</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">startIndex</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// 判断 [startIndex,i] 这个区间的子串是否合法</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">,</span> <span class="sc">'.'</span><span class="p">);</span>  <span class="c1">// 在i的后面插入一个逗点</span>
+            <span class="n">pointNum</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">backtracking</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">pointNum</span><span class="p">);</span>   <span class="c1">// 插入逗点之后下一个子串的起始位置为i+2</span>
+            <span class="n">pointNum</span><span class="o">--</span><span class="p">;</span>                         <span class="c1">// 回溯</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>         <span class="c1">// 回溯删掉逗点</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">break</span><span class="p">;</span> <span class="c1">// 不合法，直接结束本层循环</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// 判断字符串s在左闭又闭区间[start, end]所组成的数字是否合法</span>
+<span class="kt">bool</span> <span class="n">isValid</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="o">&gt;</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">start</span> <span class="o">!=</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 0开头的数字不合法</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">end</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="sc">'9'</span> <span class="o">||</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">'0'</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 遇到非数字字符不合法</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'0'</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&gt;</span> <span class="mi">255</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 如果大于255了不合法</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">restoreIpAddresses</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">||</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">12</span><span class="p">)</span> <span class="k">return</span> <span class="n">result</span><span class="p">;</span> <span class="c1">// 算是剪枝了</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="子集问题">子集问题</h2>
+
+<h3 id="子集i">子集I</h3>
+<p>Leetcode 78. 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。</p>
+
+<p>如果把 子集问题、组合问题、分割问题都抽象为一棵树的话，那么<strong>组合问题和分割问题都是收集树的叶子节点，而子集问题是找树的所有节点！</strong> 其实子集也是一种组合问题，因为它的集合是无序的，子集{1,2} 和 子集{2,1}是一样的。那么既然是无序，取过的元素不会重复取，<strong>写回溯算法的时候，for就要从startIndex开始，而不是从0开始！</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span> <span class="c1">// 收集子集，要放在终止添加的上面，否则会漏掉自己</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">startIndex</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span> <span class="c1">// 终止条件可以不加</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">subsets</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="子集ii">子集II</h3>
+<p>Leetcode 90. 给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。</p>
+
+<p><strong>先排序再used判断可以将{2，3}，{3，2}直接去重掉。</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&amp;</span> <span class="n">used</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// used[i - 1] == true，说明同一树枝candidates[i - 1]使用过</span>
+        <span class="c1">// used[i - 1] == false，说明同一树层candidates[i - 1]使用过</span>
+        <span class="c1">// 而我们要对同一树层使用过的元素进行跳过</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">used</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">subsetsWithDup</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">used</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">());</span> <span class="c1">// 去重需要排序</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="递增子序列">递增子序列</h3>
+<p>Leetcode 491. 给定一个整型数组, 你的任务是找到所有该数组的递增子序列，递增子序列的长度至少是2。</p>
+
+<p><strong>这里要注意不能进行排序，但是有一点好处是它要求递增子序列，相对于组合问题，隐含着做了一步去重，这里我们只需要在每一层定义一次unordered_set，确保同一父节点下不能重复使用即可。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startIndex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="c1">// 注意这里不要加return，要取树上的节点</span>
+    <span class="p">}</span>
+    <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">uset</span><span class="p">;</span> <span class="c1">// 使用set对本层元素进行去重</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startIndex</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="o">!</span><span class="n">path</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">path</span><span class="p">.</span><span class="n">back</span><span class="p">())</span>
+                <span class="o">||</span> <span class="n">uset</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">uset</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">uset</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="c1">// 记录这个元素在本层用过了，本层后面不能再用了</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">findSubsequences</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="排列问题">排列问题</h2>
+
+<h3 id="全排列i">全排列I</h3>
+<p>Leetcode46. 给定一个 没有重复 数字的序列，返回其所有可能的全排列。</p>
+
+<p><strong>处理排列问题就不用使用startIndex了。但排列问题需要一个used数组，标记已经选择的元素。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&amp;</span> <span class="n">used</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 此时说明找到了一组</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">true</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span> <span class="c1">// path里已经收录的元素，直接跳过</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">backtracking</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span>
+        <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">permute</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">used</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="全排列ii">全排列II</h3>
+<p>Leetcode 47. 给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。</p>
+
+<p><strong>注意去重一定要对元素进行排序，这样我们才方便通过相邻的节点来判断是否重复使用了。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">path</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">backtracking</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&amp;</span> <span class="n">used</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 此时说明找到了一组</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// used[i - 1] == true，说明同一树枝nums[i - 1]使用过</span>
+        <span class="c1">// used[i - 1] == false，说明同一树层nums[i - 1]使用过</span>
+        <span class="c1">// 如果同一树层nums[i - 1]使用过则直接跳过</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">used</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+            <span class="n">backtracking</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span>
+            <span class="n">path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+            <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">permuteUnique</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">());</span> <span class="c1">// 排序</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">used</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">used</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>其实以上所有问题在涉及到去重的时候都可以使用unordered_set来实现，但是这样做的话空间复杂度就从用used数组的$O(n)$变为$O(n^2)$了。</strong></p>
+
+<h2 id="棋盘问题">棋盘问题</h2>
+
+<p>这里涉及到什么时候backTrack需要返回值，什么时候不需要：<strong>当需要遍历整棵树，找到所有可行的叶子节点时不需要返回值，而如果只需要找到一种可行树枝的话就需要一个bool返回值，如果不及时return的话回溯会把找到的结果清空。</strong> 以下三个问题可以作为例子</p>
+
+<h3 id="n皇后问题">n皇后问题</h3>
+<p>Leetcode 51. n皇后问题研究的是如何将n个皇后放置在n×n的棋盘上，并且使皇后彼此之间不能相互攻击。</p>
+
+<p><strong>本质上就是回溯算法，只不过每一步需要isValid进行一次判断：</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">result</span><span class="p">;</span>
+<span class="c1">// n 为输入的棋盘大小</span>
+<span class="c1">// row 是当前递归到棋盘的第几行了</span>
+<span class="kt">void</span> <span class="nf">backtracking</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">chessboard</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">row</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">chessboard</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">col</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">isValid</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">chessboard</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// 验证合法就可以放</span>
+            <span class="n">chessboard</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'Q'</span><span class="p">;</span> <span class="c1">// 放置皇后</span>
+            <span class="n">backtracking</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">chessboard</span><span class="p">);</span>
+            <span class="n">chessboard</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'.'</span><span class="p">;</span> <span class="c1">// 回溯，撤销皇后</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="n">isValid</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="kt">int</span> <span class="n">col</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">chessboard</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 检查列</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 这是一个剪枝</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">chessboard</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'Q'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// 检查 45度角是否有皇后</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">,</span> <span class="n">j</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">chessboard</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'Q'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// 检查 135度角是否有皇后</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">,</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">chessboard</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'Q'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">solveNQueens</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">chessboard</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="sc">'.'</span><span class="p">));</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">chessboard</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="数独问题">数独问题</h3>
+<p>Leetcode 37. 编写一个程序，通过填充空格来解决数独问题。</p>
+
+<p>棋盘搜索问题可以使用回溯法暴力搜索，只不过这次我们要做的是二维递归。N皇后问题是一维递归，因为每一行每一列只放一个皇后，只需要一层for循环遍历一行，递归来遍历列，然后一行一列确定皇后的唯一位置。</p>
+
+<p>这个问题中递归函数的返回值需要是bool类型，因为解数独找到一个符合的条件（就在树的叶子节点上）立刻就返回，相当于找<strong>从根节点到叶子节点一条唯一路径，所以需要使用bool返回值。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">backtracking</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;&amp;</span> <span class="n">board</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">board</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>        <span class="c1">// 遍历行</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 遍历列</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'.'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">k</span> <span class="o">=</span> <span class="sc">'1'</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="sc">'9'</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>     <span class="c1">// (i, j) 这个位置放k是否合适</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">isValid</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">board</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>                <span class="c1">// 放置k</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">backtracking</span><span class="p">(</span><span class="n">board</span><span class="p">))</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 如果找到合适一组立刻返回</span>
+                        <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'.'</span><span class="p">;</span>              <span class="c1">// 回溯，撤销k</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>  <span class="c1">// 9个数都试完了，都不行，那么就返回false</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 遍历完没有返回false，说明找到了合适棋盘位置了</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="n">isValid</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="kt">int</span> <span class="n">col</span><span class="p">,</span> <span class="kt">char</span> <span class="n">val</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;&amp;</span> <span class="n">board</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 判断行里是否重复</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 判断列里是否重复</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">startRow</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">startCol</span> <span class="o">=</span> <span class="p">(</span><span class="n">col</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startRow</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">startRow</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 判断9方格里是否重复</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">startCol</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">startCol</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">val</span> <span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="n">solveSudoku</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;&amp;</span> <span class="n">board</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">board</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="重新规划行程">重新规划行程</h3>
+<p>Leetcode 332. 给定一个机票的字符串二维数组 [from, to]，子数组中的两个成员分别表示飞机出发和降落的机场地点，对该行程进行重新规划排序，如果有多种排序方法只返回字典序最大的一个。所有这些机票都属于一个从 JFK（肯尼迪国际机场）出发的先生，所以该行程必须从 JFK 开始。</p>
+
+<p>这道题目有几个难点：</p>
+
+<ol>
+  <li>一个行程中，如果航班处理不好容易变成一个圈，成为死循环。
+ 例如[ [“JFK”,”SFO”],[“JFK”,”ATL”],[“SFO”,”ATL”],[“ATL”,”JFK”],[“ATL”,”SFO”] ]构成了一个环，如果在回溯遍历一个机票的时候不去将其删除就会构成死循环。</li>
+  <li>有多种解法，字母序靠前排在前面，如何该记录映射关系呢？
+ 一个机场映射多个机场，机场之间要靠字母序排列，一个机场映射多个机场，可以使用std::unordered_map，如果让多个机场之间再有顺序的话，就是用std::map 或者std::multimap 或者 std::multiset。但是multiset在删除元素的时候会导致迭代器失效，因此<strong>我们还是要选用unordered_map&lt;string,map&lt;string,int»。</strong></li>
+  <li>使用回溯法（也可以说深搜） 的话，那么终止条件是什么呢？
+终止条件就是ans数组的大小等于机票个数+1了。</li>
+  <li>搜索的过程中，如何遍历一个机场所对应的所有机场
+记unordered_map为Map，那么遍历Map[from]中的每一个pair就可以了。</li>
+</ol>
+
+<p><strong>这里还要注意我们只要找一个分支即可，因此递归函数需要一个bool返回值。</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// unordered_map&lt;出发机场, map&lt;到达机场, 航班次数&gt;&gt; targets</span>
+<span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">targets</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="nf">backtracking</span><span class="p">(</span><span class="kt">int</span> <span class="n">ticketNum</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">ticketNum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">target</span> <span class="o">:</span> <span class="n">targets</span><span class="p">[</span><span class="n">result</span><span class="p">[</span><span class="n">result</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]])</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="n">second</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span> <span class="c1">// 记录到达机场是否飞过了</span>
+            <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="n">target</span><span class="p">.</span><span class="n">second</span><span class="o">--</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">backtracking</span><span class="p">(</span><span class="n">ticketNum</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">result</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+            <span class="n">target</span><span class="p">.</span><span class="n">second</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">findItinerary</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">tickets</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">targets</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">vec</span> <span class="o">:</span> <span class="n">tickets</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">targets</span><span class="p">[</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 记录映射关系</span>
+    <span class="p">}</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">"JFK"</span><span class="p">);</span> <span class="c1">// 起始机场</span>
+    <span class="n">backtracking</span><span class="p">(</span><span class="n">tickets</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">result</span><span class="p">);</span>
     <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[回溯框架]]></summary></entry><entry><title type="html">Leetcode记录：单调栈</title><link href="http://localhost:4000/2024/08/16/MonotonicStack/" rel="alternate" type="text/html" title="Leetcode记录：单调栈" /><published>2024-08-16T14:00:00+08:00</published><updated>2024-08-16T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/16/MonotonicStack</id><content type="html" xml:base="http://localhost:4000/2024/08/16/MonotonicStack/"><![CDATA[<p>单调栈通常是一维数组，<strong>要寻找任一个元素的右边或者左边第一个比自己大或者小的元素的位置</strong>，此时我们就要想到可以用单调栈了。时间复杂度为O(n)。</p>
@@ -2732,218 +3626,4 @@ next数组就是一个前缀表（prefix table）。前缀表是用来<strong>�
     <span class="p">}</span>
     <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[找出字符串中第一个匹配的下标 Leetcode 28. 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回 -1 。]]></summary></entry><entry><title type="html">Leetcode记录：字符串例题</title><link href="http://localhost:4000/2024/08/06/DS/" rel="alternate" type="text/html" title="Leetcode记录：字符串例题" /><published>2024-08-06T14:00:00+08:00</published><updated>2024-08-06T14:00:00+08:00</updated><id>http://localhost:4000/2024/08/06/DS</id><content type="html" xml:base="http://localhost:4000/2024/08/06/DS/"><![CDATA[<h3 id="反转字符串">反转字符串</h3>
-
-<p>编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 s 的形式给出。</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">reverseString</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">;</span> <span class="o">++</span><span class="n">left</span><span class="p">,</span> <span class="o">--</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">swap</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">]);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="反转字符串-1">反转字符串</h3>
-
-<p>给定一个字符串 s 和一个整数 k，从字符串开头算起，每计数至 2k 个字符，就反转这 2k 字符中的前 k 个字符。
-如果剩余字符少于 k 个，则将剩余字符全部反转。如果剩余字符小于 2k 但大于或等于 k 个，则反转前 k 个字符，其余字符保持原样。</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseStr</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="替换数字">替换数字</h3>
-
-<p>给定一个字符串 s，它包含小写字母和数字字符，请编写一个函数，将字符串中的字母字符保持不变，而将每个数字字符替换为number。</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">string</span> <span class="n">s</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">sOldIndex</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 统计数字的个数</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">'9'</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">count</span><span class="o">++</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="c1">// 扩充字符串s的大小，也就是将每个数字替换成"number"之后的大小</span>
-        <span class="n">s</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="n">count</span> <span class="o">*</span> <span class="mi">5</span><span class="p">);</span>
-        <span class="kt">int</span> <span class="n">sNewIndex</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="c1">// 从后往前将数字替换为"number"</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">sOldIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">sOldIndex</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">sOldIndex</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">'9'</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'r'</span><span class="p">;</span>
-                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'e'</span><span class="p">;</span>
-                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'b'</span><span class="p">;</span>
-                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'m'</span><span class="p">;</span>
-                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'u'</span><span class="p">;</span>
-                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'n'</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="n">s</span><span class="p">[</span><span class="n">sNewIndex</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">sOldIndex</span><span class="p">];</span>
-            <span class="p">}</span>
-            <span class="n">sOldIndex</span><span class="o">--</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>       
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="反转字符串中的字母">反转字符串中的字母</h3>
-
-<p>Leetcode 151. 给你一个字符串 s ，请你反转字符串中 单词 的顺序。</p>
-
-<p>单词 是由非空格字符组成的字符串。s 中使用至少一个空格将字符串中的 单词 分隔开。返回单词顺序颠倒且单词之间用单个空格连接的结果字符串。</p>
-
-<p>注意：输入字符串s中<strong>可能会存在前导空格、尾随空格或者单词间的多个空格。</strong> 返回的结果字符串中，单词间应当仅用单个空格分隔，且不包含任何额外的空格。</p>
-
-<p>一种最直观的方法是双指针法，从后向前依次寻找每个单词的首和尾：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// 使用双指针</span>
-    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="n">string</span> <span class="n">res</span><span class="p">;</span>
-    <span class="c1">// 除去尾部空格</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span> <span class="o">&amp;&amp;</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">m</span><span class="o">--</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span> <span class="c1">// n是另一个指针</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="n">m</span><span class="o">--</span><span class="p">;</span>
-        <span class="n">res</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="s">" "</span><span class="p">;</span> <span class="c1">// 获取单词并加上空格</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="n">m</span><span class="o">--</span><span class="p">;</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">res</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">res</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 忽略最后一位的空格</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>也可以原地进行操作，首先先将字符串翻转，再去从头开始填充每个单词：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// 反转整个字符串</span>
-    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-
-    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-    <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">start</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// 填一个空白字符然后将idx移动到下一个单词的开头位置</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">s</span><span class="p">[</span><span class="n">idx</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">' '</span><span class="p">;</span>
-
-            <span class="c1">// 循环遍历至单词的末尾</span>
-            <span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span>
-            <span class="k">while</span> <span class="p">(</span><span class="n">end</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> 
-                <span class="n">s</span><span class="p">[</span><span class="n">idx</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">end</span><span class="o">++</span><span class="p">];</span>
-            <span class="c1">// 此时idx和end都指向单词的末尾的后一个位置</span>
-            <span class="c1">// 反转整个单词</span>
-            <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">idx</span> <span class="o">-</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">),</span> <span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">idx</span><span class="p">);</span>
-
-            <span class="c1">// 更新start，去找下一个单词</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">idx</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>更直观的写法为：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">reverse</span><span class="p">(</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">){</span> <span class="c1">//翻转，区间写法：左闭右闭 []</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">,</span> <span class="n">j</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">swap</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="kt">void</span> <span class="n">removeExtraSpaces</span><span class="p">(</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span><span class="c1">//去除所有空格并在相邻单词之间添加空格, 快慢指针。</span>
-        <span class="kt">int</span> <span class="n">slow</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>   <span class="c1">//整体思想参考https://programmercarl.com/0027.移除元素.html</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//遇到非空格就处理，即删除所有空格。</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">slow</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">s</span><span class="p">[</span><span class="n">slow</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">' '</span><span class="p">;</span> <span class="c1">//手动控制空格，给单词之间添加空格。slow != 0说明不是第一个单词，需要在单词前添加空格。</span>
-                <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//补上该单词，遇到空格说明单词结束。</span>
-                    <span class="n">s</span><span class="p">[</span><span class="n">slow</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="n">s</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">slow</span><span class="p">);</span> <span class="c1">//slow的大小即为去除多余空格后的大小。</span>
-    <span class="p">}</span>
-
-    <span class="n">string</span> <span class="n">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">removeExtraSpaces</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="c1">//去除多余空格，保证单词之间之只有一个空格，且字符串首尾没空格。</span>
-        <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//removeExtraSpaces后保证第一个单词的开始下标一定是0。</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">||</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//到达空格或者串尾，说明一个单词结束。进行翻转。</span>
-                <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//翻转，注意是左闭右闭 []的翻转。</span>
-                <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//更新下一个单词的开始下标start</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p>还有一种办法是利用双端队列，由于双端队列支持从队列头部插入的方法，因此我们可以沿着字符串一个一个单词处理，然后将单词压入队列的头部，再将队列转成字符串即可。</p>
-
-<p>这里用的是<code class="language-plaintext highlighter-rouge">std::deque</code>，是一个双端队列，支持<code class="language-plaintext highlighter-rouge">push_back,push_front,pop_back,pop_front</code>.</p>
-
-<p><code class="language-plaintext highlighter-rouge">queue</code>是FIFO，<code class="language-plaintext highlighter-rouge">stack</code>是LIFO,它们只支持<code class="language-plaintext highlighter-rouge">push,pop</code>.</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="c1">// 去掉字符串开头的空白字符</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="o">++</span><span class="n">left</span><span class="p">;</span>
-
-    <span class="c1">// 去掉字符串末尾的空白字符</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="o">--</span><span class="n">right</span><span class="p">;</span>
-
-    <span class="n">deque</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">;</span>
-    <span class="n">string</span> <span class="n">word</span><span class="p">;</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">word</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// 将单词 push 到队列的头部</span>
-            <span class="n">d</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">move</span><span class="p">(</span><span class="n">word</span><span class="p">));</span>
-            <span class="n">word</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">!=</span> <span class="sc">' '</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">word</span> <span class="o">+=</span> <span class="n">c</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="o">++</span><span class="n">left</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">d</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">move</span><span class="p">(</span><span class="n">word</span><span class="p">));</span>
-    
-    <span class="n">string</span> <span class="n">ans</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">d</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
-        <span class="n">ans</span> <span class="o">+=</span> <span class="n">d</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
-        <span class="n">d</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">d</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="n">ans</span> <span class="o">+=</span> <span class="sc">' '</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="右旋字符串">右旋字符串</h3>
-
-<p>字符串的右旋转操作是把字符串尾部的若干个字符转移到字符串的前面。给定一个字符串 s 和一个正整数 k，请编写一个函数，将字符串中的后面 k 个字符移到字符串的前面，实现字符串的右旋转操作。要求不额外使用空间。</p>
-
-<p>进行三次翻转即可：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp">
-#include</span><span class="cpf">&lt;algorithm&gt;</span><span class="cp">
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
-    <span class="n">string</span> <span class="n">s</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="c1">//获取长度</span>
-
-    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span> <span class="c1">// 整体反转</span>
-    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">n</span><span class="p">);</span> <span class="c1">// 先反转前一段，长度n</span>
-    <span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span> <span class="c1">// 再反转后一段</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span> 
-</code></pre></div></div>
-<p><strong>左旋转和右旋转的思路是一样的。</strong></p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[反转字符串]]></summary></entry></feed>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[找出字符串中第一个匹配的下标 Leetcode 28. 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回 -1 。]]></summary></entry></feed>
