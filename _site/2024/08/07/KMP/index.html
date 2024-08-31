@@ -205,6 +205,7 @@ next数组就是一个前缀表（prefix table）。前缀表是用来<strong>�
     <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 匹配，j和i同时向后移动</span>
         <span class="n">j</span><span class="o">++</span><span class="p">;</span> <span class="c1">// i的增加在for循环里</span>
     <span class="p">}</span>
+    <span class="c1">// j 从 -1 开始，所以最后是t.size()-1.</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span> <span class="c1">// 文本串s里出现了模式串t</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
     <span class="p">}</span>
