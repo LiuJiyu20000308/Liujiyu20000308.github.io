@@ -86,6 +86,14 @@
 
 <p>这是经典的多源最短路径问题，Floyd算法对边的权值正负没有要求，都可以处理。Floyd算法核心思想是动态规划。</p>
 
+<ol>
+  <li>定义 <code class="language-plaintext highlighter-rouge">grid[i][j][k] = m</code> 表示 节点i 到 节点j 以[1…k] 集合为中间节点的最短距离为m。</li>
+  <li>递推公式分为两个情况：i到j的最短路径是否经过k，因此有：
+ <code class="language-plaintext highlighter-rouge">grid[i][j][k] = min(grid[i][k][k - 1] + grid[k][j][k - 1]， grid[i][j][k - 1])</code>.</li>
+  <li>初始化：初始化k=0来表示没有中间节点，i直接到达j的距离，如果没有i-&gt;j的边，距离则设为一个最大值100000.</li>
+  <li>递推顺序：k在最外层，i，j在内循环即可.</li>
+</ol>
+
 
   
     
