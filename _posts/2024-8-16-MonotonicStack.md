@@ -153,3 +153,70 @@ TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
     return root;
 }
 ```
+
+
+### 接雨水
+
+Leetcode 42. 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+**注意每次存入的时候的循环是while循环，要把前面所有的都考虑到。**
+```cpp
+int trap(vector<int>& height) {
+    if(height.size() <= 1)
+        return 0;
+    int res = 0;
+    stack<int> stk;
+    stk.push(0);
+    for(int i = 1; i < height.size(); ++i){
+        if (height[i] < height[stk.top()]){
+            stk.push(i);
+        } else if(height[i] == height[stk.top()]){
+            stk.pop();
+            stk.push(i);
+        } 
+        else{
+            while(!stk.empty() && height[i] > height[stk.top()]){
+                int mid = stk.top();
+                stk.pop();
+                if(!stk.empty()){
+                    int left = stk.top();
+                    int h = min(height[left], height[i]) - height[mid];
+                    res += h * (i-left-1);
+                }
+            }
+            stk.push(i);
+        }
+    }
+    return res;
+}
+```
+
+### 柱状图中最大的矩形
+
+Leetcode 84. 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。求在该柱状图中，能够勾勒出来的矩形的最大面积。
+
+```cpp
+int largestRectangleArea(vector<int>& heights) {
+    int res = 0;
+    heights.insert(heights.begin(),0);
+    heights.push_back(0);
+    stack<int> stk;
+    stk.push(0);
+    for(int i = 1; i < heights.size(); ++i){
+        if(heights[i] >= heights[stk.top()]){
+            stk.push(i);
+        } else{
+            while(!stk.empty() && heights[i] < heights[stk.top()]){
+                int mid = stk.top();
+                stk.pop();
+                if(!stk.empty()){
+                    int left = stk.top();
+                    res = max(res, heights[mid] * (i-left-1));
+                }
+            }
+            stk.push(i);
+        }
+    }
+    return res;
+}
+```
