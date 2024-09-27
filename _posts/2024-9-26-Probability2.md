@@ -53,14 +53,14 @@ toc: true
         1-e^{-\lambda x}, x>0 \\ 0, x\leq 0
     \end{cases}$
 
-    指数分布最重要的性质是无记忆性：$P(X>t_0+t|X>t_0) = \frac{P(X>t_0+t)}{P(X>t_0)} = e^{-\lambda t} = P(X>t)$,即$P(X>t_0+t) = P(X>t_0)P(X>t)$.可以联想到某产品的正常使用时长。
+    指数分布最重要的性质是无记忆性：$P(X>t_0+t\|X>t_0) = \frac{P(X>t_0+t)}{P(X>t_0)} = e^{-\lambda t} = P(X>t)$,即$P(X>t_0+t) = P(X>t_0)P(X>t)$.可以联想到某产品的正常使用时长。
     类似的无记忆性还有几何分布：$P(X-m=n)=P(X=m)P(X=n)$，可以联想到抛硬币。
-3. 正态分布：$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{\frac{-(x-\mu)^2}{2\sigma^2}}, |x| < +\infty,\sigma>0,|\mu|<+\infty$，记作$X\sim N(\mu,\sigma^2)$服从参数为$(\mu,\sigma)$的正态分布。
+3. 正态分布：$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{\frac{-(x-\mu)^2}{2\sigma^2}}, \|x| < +\infty,\sigma>0,\|\mu\|<+\infty$，记作$X\sim N(\mu,\sigma^2)$服从参数为$(\mu,\sigma)$的正态分布。
     （补充：$\int_{-\infty}^{+\infty}e^{-x^2}dx=\sqrt{\pi}.$）
     正态分布具有以下性质：
     1. $f(x)$关于$x=\mu$对称
-    2. $\max f(x) = f(\mu) = \frac{1}{\sqrt{2\pi}\sigma}$
-    3. $\lim_{|x-\mu|\rightarrow \infty} f(x) = 0$
+    2. $ \max f(x) = f(\mu) = \frac{1}{\sqrt{2\pi}\sigma}$
+    3. $ \lim_{\|x-\mu\|\rightarrow \infty} f(x) = 0$
     
     当$\mu=0,\sigma=1$的时候称为标准正态分布，密度函数为$\varphi(x)=\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}$,分布函数为$\varPhi(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}}e^{-\frac{t^2}{2}}dt$，具有性质：
     1. $\varPhi(-x) = 1-\varPhi(x)$
@@ -73,14 +73,15 @@ toc: true
 2. 当Y是连续型时同样可以求出分布函数$F_Y$，求导获得$f_Y$.
 
 **如果$X$为连续型，密度函数为$f_X(x),\ y=g(X)$，如果$y=g(X)$严格单增(减)，记$y=g(x)$的反函数为$x=h(y)$，则有**
+
 $$f_Y(y) = \begin{cases}
-    f_X(h(y))|h'(y)|, y\in D \\
+    f_X(h(y))\|h'(y)\|, y\in D \\
     0, y\notin D
 \end{cases}, D为y=g(x)的值域.$$
 
 **1. $X\sim N(\mu,\sigma)$，求$aX+b$的密度函数：**
-
-$y=g(X)=aX+b \Rightarrow x = h(y) = \frac{y-b}{a}, h'(y)=\frac{1}{a} \Rightarrow f_Y(y) = \frac{1}{|a|}f_X(\frac{y-b}{a}).$
+$y=g(X)=aX+b \Rightarrow x = h(y) = \frac{y-b}{a}$,
+$h'(y)=\frac{1}{a} \Rightarrow f_Y(y) = \frac{1}{\|a\|}f_X(\frac{y-b}{a}).$
 
 **2. $X\sim U(0,\pi),Y=\sin(x)$，求$f_Y(y)$：**
  当$0< y \leq 1, F_Y(y)=P(Y\leq y) = P(X\in[0,\arcsin y]\cup [\pi-\arcsin y,\pi]) = \frac{2\arcsin y}{\pi}$
@@ -99,7 +100,9 @@ $y=g(X)=aX+b \Rightarrow x = h(y) = \frac{y-b}{a}, h'(y)=\frac{1}{a} \Rightarrow
 
 1. 联合分布律：$P(X=x_i,Y=y_j) = p_{ij}, \sum_{i,j}p_{ij}=1, p_{ij}\geq 0.$
 2. 边际分布：$p_{i\cdot}=\sum_{j}p_{ij} = P(X=x_i), p_{\cdot j} = \sum_i p_{ij} = P(Y=y_j).$
-3. 条件分布：$P(X=x_i | Y=y_j) = \frac{p_{ij}}{p_{\cdot j}}, P(Y=y_j|X=x_i) = \frac{p_{ij}}{p_{i\cdot}}.$
+
+3. 条件分布：$P(X=x_i \| Y=y_j) = \frac{p_{ij}}{p_{\cdot j}}$,
+    P(Y=y_j \| X=x_i) = \frac{p_{ij}}{p_{i\cdot}}.$
 
 ## 分布函数
 
@@ -110,8 +113,8 @@ $y=g(X)=aX+b \Rightarrow x = h(y) = \frac{y-b}{a}, h'(y)=\frac{1}{a} \Rightarrow
    4. $P(x_1<X\leq x_2, y_1 < Y \leq y_2) = F(x_2,y_2)- F(x_1,y_2) -F(x_2,y_1)+F(x_1,y_1).$
 2. 边际分布函数：$F_X(x) = P(X\leq x) = F(x,+\infty), F_Y(y)= F(+\infty,y).
 3. 条件分布函数：
-   1. 离散型：$F_{Y|X}(y|x_i) = P(Y\leq y| X=x_i)$
-   2. 连续型：$F_{Y|X}(y|x) = \lim_{\delta\rightarrow 0^+} P(Y\leq y| x < X \leq x+\delta)$
+   1. 离散型：$F_{Y\|X}(y\|x_i) = P(Y\leq y\| X=x_i)$
+   2. 连续型：$F_{Y\|X}(y\|x) = \lim_{\delta\rightarrow 0^+} P(Y\leq y\| x < X \leq x+\delta)$
 
 ## 连续型随机变量
 
@@ -122,8 +125,8 @@ $y=g(X)=aX+b \Rightarrow x = h(y) = \frac{y-b}{a}, h'(y)=\frac{1}{a} \Rightarrow
    4. $P((X,Y)\in D) = \int\int_D f(x,y) dxdy.$
 2. 边际概率密度函数：$F_X(x) = P(X\leq x) = \int_{-\infty}^x[\int_{-\infty}^{+\infty}f(x,y)dy]dx \Rightarrow f_X(x) = \int_{-\infty}^{\infty}f(x,y)dy.$
     同理 $f_Y(y) = \int_{-\infty}^{+\infty}f(x,y)dx.$
-3. 条件分布：$F_{Y|X}(y|x) = \lim_{\delta\rightarrow 0^+} P(Y\leq y| x < X \leq x+\delta) = \lim_{\delta\rightarrow 0^+}\frac{F(x+\delta,y)-F(x,y)}{F_X(x+\delta) - F_X(x)} = \int_{-\infty}^y \frac{f(x,v)}{f_X(x)}dv.$
-    因此条件概率密度函数$f_{Y|X}(y|x)=\frac{f(x,y)}{f_X(x)}.$
+3. 条件分布：$F_{Y\|X}(y\|x) = \lim_{\delta\rightarrow 0^+} P(Y\leq y\| x < X \leq x+\delta) = \lim_{\delta\rightarrow 0^+}\frac{F(x+\delta,y)-F(x,y)}{F_X(x+\delta) - F_X(x)} = \int_{-\infty}^y \frac{f(x,v)}{f_X(x)}dv.$
+    因此条件概率密度函数$f_{Y\|X}(y\|x)=\frac{f(x,y)}{f_X(x)}.$
 二元均匀分布：$f(x,y) = \begin{cases}
     \frac{1}{S(D)}, (x,y)\in D \\
     0, 其他
@@ -135,8 +138,8 @@ $y=g(X)=aX+b \Rightarrow x = h(y) = \frac{y-b}{a}, h'(y)=\frac{1}{a} \Rightarrow
 3. 给定$Y=y, X \sim N(\mu_1+\rho\frac{\sigma_1}{\sigma_2}(y-\mu_2), (1-\rho^2)\sigma_1^2)$
 
 
-**如果X为离散型随机变量，概率分布为p_X(x_i)，由全概率公式有$$P(A)=\sum_iP(A|X=x_i)P(X=x_i)$$**
-**如果X为连续型，其密度函数为$p_X(x)$，则$$P(A) = \int_{-\infty}^{+\infty}P(A|X=x)p_X(x).$$**
+**如果X为离散型随机变量，概率分布为p_X(x_i)，由全概率公式有$$P(A)=\sum_iP(A\|X=x_i)P(X=x_i)$$**
+**如果X为连续型，其密度函数为$p_X(x)$，则$$P(A) = \int_{-\infty}^{+\infty}P(A\|X=x)p_X(x).$$**
 
 例子：设$U_1,\cdots,U_n$独立同分布于$(0,1]$上的均匀分布，令$\xi = \min\{n\geq 1: U_1+\cdots+U_n > 1\}$，求$\xi$的概率分布。
 
@@ -144,7 +147,7 @@ $y=g(X)=aX+b \Rightarrow x = h(y) = \frac{y-b}{a}, h'(y)=\frac{1}{a} \Rightarrow
 $P(\xi(x)> 1) = P(U_1\leq x) = x$，进而有递推关系
 $$\begin{align*}
     P(\xi(x)>n+1) &= P(U_1+\cdots+U_{n+1} \leq x) \\
-    &= \int_{-\infty}^{+\infty}P(U_1+\cdots+U_{n+1} \leq x | U_1 = y)p_{U_1}(y)dy \\
+    &= \int_{-\infty}^{+\infty}P(U_1+\cdots+U_{n+1} \leq x \| U_1 = y)p_{U_1}(y)dy \\
     &= \int_0^1 P(U_2+\cdots+U_{n+1} \leq x-y)dy \\
     &= \int_0^x P(\xi(u)>n)du
 \end{align*}$$
@@ -183,7 +186,7 @@ $$
     &= \int_0^{\infty}dy\int_{-\infty}^{yz}f(x,y)dx + \int_{-\infty}^0dy\int_{yz}^{+\infty}f(x,y)dx \\
     &= \int_{-\infty}^z \left[ \int_0^{\infty}p(ay,y)ydy -\int_{-\infty}^0 p(ay,y)ydy\right]da\quad (这里令x=ay) \\
     &= \int_{-\infty}^zp_Z(a)da \\
-    p_Z(z) &= \int_{-\infty}^{\infty}p(zx,x)|x|dx.
+    p_Z(z) &= \int_{-\infty}^{\infty}p(zx,x)\|x\|dx.
 \end{align*}
 $$
 
@@ -225,7 +228,7 @@ $$
 
 $X_1,X_2$独立同分布于$U(0,1), Y=\min(X_1,X_2), Z+\max(X_1,X_2)$，请问给定$Z\leq z$时$Y\geq y$的概率是多少？ Y和Z的相关系数是多少？
 
-通过画图可以看出来$P(Y\geq y | Z\leq z) = \begin{cases}
+通过画图可以看出来$P(Y\geq y \| Z\leq z) = \begin{cases}
     (z-y)^2 / z^2, 0\leq y \leq z \leq 1,
     0, 其他
 \end{cases}$
@@ -246,7 +249,7 @@ $(\xi_1,\ldots,\xi_n)$密度函数为$p(x_1,\ldots,x_n)$，现有$m$个函数$\e
 
 如果$m=n$并且$f_i$有唯一反函数组$x_i = x_i(y_1,\ldots,y_n)$并且$J = \frac{\partial(x_1,\ldots,x_n)}{\partial(y_1,\ldots,y_n)}\neq 0$，那么有
 $$q(y_1,\ldots,y_n) = \begin{cases}
-    p(x_1(y_1,\ldots,y_n),\ldots)|J|, (y_1,\ldots,y_n)\in (\eta_1,\ldots,\eta_n)的值域 \\
+    p(x_1(y_1,\ldots,y_n),\ldots)\|J\|, (y_1,\ldots,y_n)\in (\eta_1,\ldots,\eta_n)的值域 \\
     0, 其他
 \end{cases}$$
 
@@ -264,16 +267,16 @@ $$q(y_1,\ldots,y_n) = \begin{cases}
 
 ## 条件期望
 
-$E(\eta|\xi =x) = \int_{-\infty}^{\infty} ydF_{\eta|\xi}(y|x)$
+$E(\eta\|\xi =x) = \int_{-\infty}^{\infty} ydF_{\eta\|\xi}(y\|x)$
 
-离散型：$E(\eta|\xi =x) = \sum_j y_jp_{\eta|\xi}(y_j|x)$
-连续型：$E(\eta|\xi =x) = \int_{-\infty}^{\infty} y p_{\eta|\xi}(y|x)dy$
+离散型：$E(\eta\|\xi =x) = \sum_j y_jp_{\eta|\xi}(y_j\|x)$
+连续型：$E(\eta\|\xi =x) = \int_{-\infty}^{\infty} y p_{\eta\|\xi}(y\|x)dy$
 
 ## 全期望公式
 
-$E(X) = E(E(X|Y)) = \begin{cases}
-    \sum_y E(X|Y=y)p(Y=y), Y为离散型 \\
-    \int_{-\infty}^{\infty} E(X|Y=y)f_Y(y)dy, Y为连续型
+$E(X) = E(E(X\|Y)) = \begin{cases}
+    \sum_y E(X\|Y=y)p(Y=y), Y为离散型 \\
+    \int_{-\infty}^{\infty} E(X\|Y=y)f_Y(y)dy, Y为连续型
 \end{cases}$
 
 ## 方差、协方差、相关系数
@@ -297,10 +300,10 @@ $E(X) = E(E(X|Y)) = \begin{cases}
 5. $X,Y$独立可以推出$Cov(X,Y)=0$，反过来不一定
 6. $Var(X)Var(Y)\neq 0$的时候$(Cov(X,Y))^2 \leq Var(X)Var(Y)$，等号成立当且仅当$\exists c_1,c_2, s.t. P(Y=c_1+c_2X) = 1$(严格线性关系)
 
-**相关系数**$\rho_{XY} = \frac{Cov(X,Y)}{\sqrt{Var(X)Var(Y)}}, |\rho_{XY}| \leq 1.$
+**相关系数**$\rho_{XY} = \frac{Cov(X,Y)}{\sqrt{Var(X)Var(Y)}}, \|\rho_{XY}\| \leq 1.$
 相关系数性质：
 1. $X,Y$相互独立可以推出$\rho_{XY}=0$，反之不一定
-2. $|\rho_{XY}|\leq 1$，等号成立当且仅当X和Y有严格线性关系，也就是说$|\rho_{XY}|$反映的是$X$和$Y$的线性关系密切程度
+2. $\|\rho_{XY}\|\leq 1$，等号成立当且仅当X和Y有严格线性关系，也就是说$\|\rho_{XY}\|$反映的是$X$和$Y$的线性关系密切程度
 3. $\rho_{XY}>0$称为正相关，反之为负相关
 4. 若$\rho_{XY}=0$，称X和Y不相关
 5. $\rho_{XY} = 0 \Leftrightarrow E(XY)=E(X)E(Y) \Leftrightarrow Var(X+Y)=Var(X)+Var(Y)$
@@ -359,7 +362,7 @@ $M(t) = \int_{-\infty}^{\infty}e^{tx}\frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx = e^{t^2/
 
 **每次掷骰子，你都要支付那个面的数值，如果转到4\5\6则可以再投一次，否则游戏停止，请问游戏的花费期望是多少。**
 
-$Y$记为第一次掷骰子的点数，$X$为花费，则有$E(X|Y\in\{1,2,3\}) = 2, E(X|Y\in\{4,5,6\}) = 5 + E(X)$，因此$E(X) =\frac{1}{2}(7+E(X)) \Rightarrow E(X)=7.$
+$Y$记为第一次掷骰子的点数，$X$为花费，则有$E(X\|Y\in\{1,2,3\}) = 2, E(X\|Y\in\{4,5,6\}) = 5 + E(X)$，因此$E(X) =\frac{1}{2}(7+E(X)) \Rightarrow E(X)=7.$
 
 ### 卡牌游戏
 
@@ -400,7 +403,7 @@ $P(S_{n+1}\leq 1) = \int_{0}^1 f(X_{n+1})P(S_n\leq 1-X_{n+1})dX_{n+1}=\int_0^1 \
 $I_A=1$表示A会违约，则有$E(I_A)=0.5,Var(I_A)=0.25,E(I_B)=0.3, Var(I_B)=0.21$
 $$
 \begin{align}
-    P(I_A=1 || I_B=1) &= E(I_A)+E(I_B)-E(I_AI_B) \\
+    P(I_A=1 \|\| I_B=1) &= E(I_A)+E(I_B)-E(I_AI_B) \\
     &= E(I_A) + E(I_B) -(E(I_A)E(I_B)-Cov(I_A,I_B)) \\
     &= 0.8-(0.15-\rho_{AB}\sigma_A\sigma_B) \\
     &= 0.65 - \sqrt{0.21}/2 \rho_{AB}
