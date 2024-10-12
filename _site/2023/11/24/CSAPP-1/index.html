@@ -210,7 +210,7 @@
 <p>对于位向量 $\mathbf{x} = [x_{w-1},x_{w-2},\ldots,x_0]$, 无符号数编码定义为
 \(\text{B2U}_w(\mathbf{x}) = \sum\limits_{i=0}^{w-1} x_i 2^i\)</p>
 
-<p>补码编码的定义为 \(\text{B2T}_w(\mathbf{x}) = -x_{w-1}2^{w-1} - \sum\limits_{i=0}^{w-2} x_i 2^i\)</p>
+<p>补码编码的定义为 \(\text{B2T}_w(\mathbf{x}) = -x_{w-1}2^{w-1} + \sum\limits_{i=0}^{w-2} x_i 2^i\)</p>
 
 <p>可以证明当 $0\leq x \leq 2^w-1$ 时，无符号数编码是唯一的，
 当 $\text{TMin}_w = -2^{w-1} \leq x \leq 2^{w-1}-1 = \text{TMax}_w$ 时，补码编码是唯一的。</p>
@@ -774,23 +774,23 @@ x = (x + bias) &gt;&gt; 4;
   <ul class="related-posts">
     
       <li>
+        <a href="/2024/10/11/Problem/">
+          算法和c++类面经
+          <small><time datetime="2024-10-11T10:00:00+08:00">11 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/10/10/Problem2/">
+          数学题目类面经
+          <small><time datetime="2024-10-10T10:00:00+08:00">10 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
         <a href="/2024/09/26/Probability2/">
           概率论:随机变量（绿皮书+额外补充）
           <small><time datetime="2024-09-26T10:00:00+08:00">26 Sep 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2024/09/25/Probability/">
-          概率论:事件及其概率（绿皮书+额外补充）
-          <small><time datetime="2024-09-25T10:00:00+08:00">25 Sep 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2024/09/10/QuantitiveChap2/">
-          绿皮书第二章：Brain Teasers
-          <small><time datetime="2024-09-10T10:00:00+08:00">10 Sep 2024</time></small>
         </a>
       </li>
     

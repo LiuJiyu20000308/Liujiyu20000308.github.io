@@ -7,22 +7,22 @@
   <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
   <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Leetcode记录：Effective C++ and Modern C++ 笔记记录 | Liujiyu’s blog</title>
+<title>数学题目类面经 | Liujiyu’s blog</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Leetcode记录：Effective C++ and Modern C++ 笔记记录" />
+<meta property="og:title" content="数学题目类面经" />
 <meta name="author" content="liujiyu" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="笔记pdf" />
-<meta property="og:description" content="笔记pdf" />
-<link rel="canonical" href="http://localhost:4000/2023/10/01/EffectiveCpp/" />
-<meta property="og:url" content="http://localhost:4000/2023/10/01/EffectiveCpp/" />
+<meta name="description" content="题1 两个人抛硬币，正面为H，反面为T每个人可以选择一个长度为3的序列，如果抛到该序列则胜利，如果A选择了HTH序列，B该选择什么序列保证自己的胜率最高。" />
+<meta property="og:description" content="题1 两个人抛硬币，正面为H，反面为T每个人可以选择一个长度为3的序列，如果抛到该序列则胜利，如果A选择了HTH序列，B该选择什么序列保证自己的胜率最高。" />
+<link rel="canonical" href="http://localhost:4000/2024/10/10/Problem2/" />
+<meta property="og:url" content="http://localhost:4000/2024/10/10/Problem2/" />
 <meta property="og:site_name" content="Liujiyu’s blog" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2023-10-01T10:00:00+08:00" />
+<meta property="article:published_time" content="2024-10-10T10:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Leetcode记录：Effective C++ and Modern C++ 笔记记录" />
+<meta property="twitter:title" content="数学题目类面经" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2023-10-01T10:00:00+08:00","datePublished":"2023-10-01T10:00:00+08:00","description":"笔记pdf","headline":"Leetcode记录：Effective C++ and Modern C++ 笔记记录","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/10/01/EffectiveCpp/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2023/10/01/EffectiveCpp/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-10-10T10:00:00+08:00","datePublished":"2024-10-10T10:00:00+08:00","description":"题1 两个人抛硬币，正面为H，反面为T每个人可以选择一个长度为3的序列，如果抛到该序列则胜利，如果A选择了HTH序列，B该选择什么序列保证自己的胜率最高。","headline":"数学题目类面经","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/10/10/Problem2/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/10/10/Problem2/"}</script>
 <!-- End Jekyll SEO tag -->
 <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
 <script type="text/x-mathjax-config">
@@ -75,10 +75,44 @@
 
       <div class="content pure-u-1 pure-u-md-1-2"><main>
   <article class="post">
-  <h1 class="post-title">Leetcode记录：Effective C++ and Modern C++ 笔记记录</h1>
-  <div class="post-meta"><time datetime="2023-10-01T10:00:00+08:00" itemprop="datePublished">1 Oct 2023</time></div>
+  <h1 class="post-title">数学题目类面经</h1>
+  <div class="post-meta"><time datetime="2024-10-10T10:00:00+08:00" itemprop="datePublished">10 Oct 2024</time></div>
 
-  <p><a href="https://github.com/LiuJiyu20000308/Cpp_learning/blob/master/CppLearning.pdf">笔记pdf</a></p>
+  <h3 id="题1">题1</h3>
+<p>两个人抛硬币，正面为H，反面为T每个人可以选择一个长度为3的序列，如果抛到该序列则胜利，如果A选择了HTH序列，B该选择什么序列保证自己的胜率最高。</p>
+
+<p>看绿皮书Markov链</p>
+
+<h3 id="题2">题2</h3>
+
+<p>n个学生围成一圈，每个人有若干个糖果，接下来按照以下步骤重复分配：</p>
+<ol>
+  <li>如果有人有奇数个糖果，则会从老师那里额外拿到一个糖果；</li>
+  <li>然后所有人将自己一半数量的糖果给左侧的人；
+证明：有限步之后每个人的糖果数量是相同的。</li>
+</ol>
+
+<h3 id="题3">题3</h3>
+
+<p>有10000个硬币，全部抛起来后，记正面朝上的个数为X，求X=5000的概率（一位有效数字即可）</p>
+
+<p>这是一个二项分布n=10000,p=0.5
+当n很大时可以近似于正态分布，$\mu = np = 5000, \sigma^2 = np(1-p) = 2500.$</p>
+
+<p>再将X标准化$Z= \frac{X-\mu}{\sigma} \sim N(0,1)$
+$P(4999.5&lt; X&lt; 5000.5) = \Phi(0.01)-\Phi(-0.01) = 0.5040−0.4960=0.0080$</p>
+
+<h3 id="题4">题4</h3>
+<p>给出以下问题的解析解：</p>
+<ol>
+  <li>一个n位线性字符串，每一位都是0或1，求不存在相邻的1的字符串的个数。</li>
+  <li>一个n为环形字符串，每一位都是0或1，求不存在相邻的1的字符串的个数。</li>
+</ol>
+
+<h3 id="题5">题5</h3>
+<p>有N个石头，每个人可以拿若干个石头，第一个人不能全拿光，后面的人不能拿的比前面的人多，请问N什么时候先手必胜，什么时候后手必胜。</p>
+
+<p>分为奇数，2m,4m,其中m为奇数，还有2的幂次。</p>
 
 
   
@@ -86,7 +120,7 @@
       <div class="post-tags-section">
   <i class="post-tags-icon fas fa-tags"></i>
   <ul class="post-tags"><li>
-        <a class="post-tag" href="/tags/#c">c</a></li></ul>
+        <a class="post-tag" href="/tags/#面经">面经</a></li></ul>
 </div>
 
   
@@ -107,16 +141,16 @@
       </li>
     
       <li>
-        <a href="/2024/10/10/Problem2/">
-          数学题目类面经
-          <small><time datetime="2024-10-10T10:00:00+08:00">10 Oct 2024</time></small>
+        <a href="/2024/09/26/Probability2/">
+          概率论:随机变量（绿皮书+额外补充）
+          <small><time datetime="2024-09-26T10:00:00+08:00">26 Sep 2024</time></small>
         </a>
       </li>
     
       <li>
-        <a href="/2024/09/26/Probability2/">
-          概率论:随机变量（绿皮书+额外补充）
-          <small><time datetime="2024-09-26T10:00:00+08:00">26 Sep 2024</time></small>
+        <a href="/2024/09/25/Probability/">
+          概率论:事件及其概率（绿皮书+额外补充）
+          <small><time datetime="2024-09-25T10:00:00+08:00">25 Sep 2024</time></small>
         </a>
       </li>
     
@@ -136,7 +170,13 @@
 <div  class="toc-wrapper">
   <h2 class="toc-title">Table of Contents</h2>
     <nav class="toc-nav">
-      
+      <ul class="toc">
+  <li><a href="#题1">题1</a></li>
+  <li><a href="#题2">题2</a></li>
+  <li><a href="#题3">题3</a></li>
+  <li><a href="#题4">题4</a></li>
+  <li><a href="#题5">题5</a></li>
+</ul>
 
   </nav>
 </div>
