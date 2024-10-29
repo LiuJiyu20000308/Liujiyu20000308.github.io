@@ -209,6 +209,48 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="寻找两个中序数组的中位数">寻找两个中序数组的中位数</h3>
+
+<p>Leetcode 4. 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 算法的时间复杂度应该为 O(log (m+n)) 。</p>
+
+<p><strong>这道题可以转化成寻找两个有序数组中的第 k 小的数，其中 k 为 (m+n)/2 或 (m+n)/2+1。</strong>
+假设两个有序数组分别是 A 和 B。要找到第 k 个元素，我们可以比较 <code class="language-plaintext highlighter-rouge">A[k/2−1]</code> 和 <code class="language-plaintext highlighter-rouge">B[k/2−1]</code>，对于较小值，最多只会有 k−2 个元素比它小，那么它就不能是第 k 小的数了。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">getKthElement</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">nums1</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">nums2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">nums1</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums2</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">index1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">index2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">index1</span> <span class="o">==</span> <span class="n">m</span><span class="p">){</span>
+            <span class="k">return</span> <span class="n">nums2</span><span class="p">[</span><span class="n">index2</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">index2</span> <span class="o">==</span> <span class="n">n</span><span class="p">){</span>
+            <span class="k">return</span> <span class="n">nums1</span><span class="p">[</span><span class="n">index1</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">min</span><span class="p">(</span><span class="n">nums1</span><span class="p">[</span><span class="n">index1</span><span class="p">],</span> <span class="n">nums2</span><span class="p">[</span><span class="n">index2</span><span class="p">]);</span>
+    
+        <span class="kt">int</span> <span class="n">newIndex1</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">index1</span> <span class="o">+</span> <span class="n">k</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">newIndex2</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">index2</span> <span class="o">+</span> <span class="n">k</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">pivot1</span> <span class="o">=</span> <span class="n">nums1</span><span class="p">[</span><span class="n">newIndex1</span><span class="p">],</span> <span class="n">pivot2</span> <span class="o">=</span> <span class="n">nums2</span><span class="p">[</span><span class="n">newIndex2</span><span class="p">];</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">pivot1</span> <span class="o">&lt;=</span> <span class="n">pivot2</span><span class="p">){</span>
+            <span class="n">k</span><span class="o">-=</span> <span class="n">newIndex1</span> <span class="o">-</span> <span class="n">index1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">index1</span> <span class="o">=</span> <span class="n">newIndex1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+            <span class="n">k</span> <span class="o">-=</span> <span class="n">newIndex2</span> <span class="o">-</span> <span class="n">index2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">index2</span> <span class="o">=</span> <span class="n">newIndex2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">double</span> <span class="n">findMedianSortedArrays</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">totalLength</span> <span class="o">=</span> <span class="n">nums1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="n">nums2</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">totalLength</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">getKthElement</span><span class="p">(</span><span class="n">nums1</span><span class="p">,</span> <span class="n">nums2</span><span class="p">,</span> <span class="p">(</span><span class="n">totalLength</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">getKthElement</span><span class="p">(</span><span class="n">nums1</span><span class="p">,</span><span class="n">nums2</span><span class="p">,</span><span class="n">totalLength</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">getKthElement</span><span class="p">(</span><span class="n">nums1</span><span class="p">,</span> <span class="n">nums2</span><span class="p">,</span> <span class="n">totalLength</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 <p>对应题目：</p>
 <ol>
   <li><strong>704.二分查找</strong></li>
@@ -376,6 +418,13 @@
   <ul class="related-posts">
     
       <li>
+        <a href="/2024/10/20/Thread/">
+          C++多线程
+          <small><time datetime="2024-10-20T10:00:00+08:00">20 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
         <a href="/2024/10/11/Problem/">
           算法和c++类面经
           <small><time datetime="2024-10-11T10:00:00+08:00">11 Oct 2024</time></small>
@@ -386,13 +435,6 @@
         <a href="/2024/10/10/Problem2/">
           数学题目类面经
           <small><time datetime="2024-10-10T10:00:00+08:00">10 Oct 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2024/09/26/Probability2/">
-          概率论:随机变量（绿皮书+额外补充）
-          <small><time datetime="2024-09-26T10:00:00+08:00">26 Sep 2024</time></small>
         </a>
       </li>
     
@@ -417,6 +459,7 @@
     <ul>
       <li><a href="#基本的二分查找">基本的二分查找</a></li>
       <li><a href="#寻找左右侧边界的二分搜索">寻找左右侧边界的二分搜索</a></li>
+      <li><a href="#寻找两个中序数组的中位数">寻找两个中序数组的中位数</a></li>
     </ul>
   </li>
   <li><a href="#双指针法">双指针法</a>

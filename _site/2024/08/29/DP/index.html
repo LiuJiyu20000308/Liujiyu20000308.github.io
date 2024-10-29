@@ -333,6 +333,39 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="正则表达式匹配">正则表达式匹配</h3>
+
+<p>Leetcode 10.给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 <code class="language-plaintext highlighter-rouge">.</code> 和 <code class="language-plaintext highlighter-rouge">*</code> 的正则表达式匹配。<code class="language-plaintext highlighter-rouge">.</code> 匹配任意单个字符，<code class="language-plaintext highlighter-rouge">*</code> 将前一个元素变为零个或多个</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">isMatch</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">string</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+
+        <span class="k">auto</span> <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'.'</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+        <span class="p">};</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">));</span>
+        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'*'</span><span class="p">){</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">|=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="mi">2</span><span class="p">];</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">matches</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c1">//注意这一步，很巧妙！！</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">|=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+                <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">matches</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">|=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
 
   
     
@@ -353,6 +386,13 @@
   <ul class="related-posts">
     
       <li>
+        <a href="/2024/10/20/Thread/">
+          C++多线程
+          <small><time datetime="2024-10-20T10:00:00+08:00">20 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
         <a href="/2024/10/11/Problem/">
           算法和c++类面经
           <small><time datetime="2024-10-11T10:00:00+08:00">11 Oct 2024</time></small>
@@ -363,13 +403,6 @@
         <a href="/2024/10/10/Problem2/">
           数学题目类面经
           <small><time datetime="2024-10-10T10:00:00+08:00">10 Oct 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2024/09/26/Probability2/">
-          概率论:随机变量（绿皮书+额外补充）
-          <small><time datetime="2024-09-26T10:00:00+08:00">26 Sep 2024</time></small>
         </a>
       </li>
     
@@ -412,6 +445,7 @@
     <ul>
       <li><a href="#回文子串">回文子串</a></li>
       <li><a href="#最长回文子序列">最长回文子序列</a></li>
+      <li><a href="#正则表达式匹配">正则表达式匹配</a></li>
     </ul>
   </li>
 </ul>
