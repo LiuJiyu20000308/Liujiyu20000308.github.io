@@ -12,8 +12,8 @@
 <meta property="og:title" content="C++多线程" />
 <meta name="author" content="liujiyu" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="This link" />
-<meta property="og:description" content="This link" />
+<meta name="description" content="C++的atomic库和thread库是多线程编程中常用的库，提供了安全的并发操作支持。" />
+<meta property="og:description" content="C++的atomic库和thread库是多线程编程中常用的库，提供了安全的并发操作支持。" />
 <link rel="canonical" href="http://localhost:4000/2024/10/20/Thread/" />
 <meta property="og:url" content="http://localhost:4000/2024/10/20/Thread/" />
 <meta property="og:site_name" content="Liujiyu’s blog" />
@@ -22,7 +22,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="C++多线程" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-10-20T10:00:00+08:00","datePublished":"2024-10-20T10:00:00+08:00","description":"This link","headline":"C++多线程","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/10/20/Thread/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/10/20/Thread/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-10-20T10:00:00+08:00","datePublished":"2024-10-20T10:00:00+08:00","description":"C++的atomic库和thread库是多线程编程中常用的库，提供了安全的并发操作支持。","headline":"C++多线程","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/10/20/Thread/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/10/20/Thread/"}</script>
 <!-- End Jekyll SEO tag -->
 <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
 <script type="text/x-mathjax-config">
@@ -78,7 +78,58 @@
   <h1 class="post-title">C++多线程</h1>
   <div class="post-meta"><time datetime="2024-10-20T10:00:00+08:00" itemprop="datePublished">20 Oct 2024</time></div>
 
-  <p><a href="https://blog.csdn.net/QLeelq/article/details/115747717">This link</a></p>
+  <p>C++的<code class="language-plaintext highlighter-rouge">atomic</code>库和<code class="language-plaintext highlighter-rouge">thread</code>库是多线程编程中常用的库，提供了安全的并发操作支持。</p>
+
+<h3 id="1-thread库">1. <code class="language-plaintext highlighter-rouge">thread</code>库</h3>
+
+<p><a href="https://blog.csdn.net/QLeelq/article/details/115747717">This link</a></p>
+
+<h3 id="2-atomic库">2. <code class="language-plaintext highlighter-rouge">atomic</code>库</h3>
+
+<p><code class="language-plaintext highlighter-rouge">&lt;atomic&gt;</code>库主要提供了原子操作（atomic operations），即无需锁机制即可实现的线程安全操作。这对提高多线程环境下的数据一致性和性能很有帮助。</p>
+
+<h4 id="常见的原子类型">常见的原子类型</h4>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::atomic&lt;T&gt;</code></strong>：提供一种基础原子类型，<code class="language-plaintext highlighter-rouge">T</code>可以是整型、指针等。常见类型如<code class="language-plaintext highlighter-rouge">std::atomic&lt;int&gt;</code>、<code class="language-plaintext highlighter-rouge">std::atomic&lt;bool&gt;</code>等。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::atomic_flag</code></strong>：最简单的原子布尔类型，适用于实现简单的锁（如自旋锁）。</li>
+</ul>
+
+<h4 id="原子操作的基本方法">原子操作的基本方法</h4>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">store(value)</code></strong>：原子地存储一个值。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">load()</code></strong>：原子地加载一个值。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">exchange(value)</code></strong>：原子地将变量的值设置为<code class="language-plaintext highlighter-rouge">value</code>，并返回先前的值。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">compare_exchange_strong(expected, desired)</code></strong> 和 <strong><code class="language-plaintext highlighter-rouge">compare_exchange_weak(expected, desired)</code></strong>：原子比较并交换操作，根据当前值与<code class="language-plaintext highlighter-rouge">expected</code>是否相等决定是否替换为<code class="language-plaintext highlighter-rouge">desired</code>。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">fetch_add(value)</code></strong>、<strong><code class="language-plaintext highlighter-rouge">fetch_sub(value)</code></strong>、<strong><code class="language-plaintext highlighter-rouge">fetch_or(value)</code></strong>等：执行加、减、或等操作并返回旧值。</li>
+</ul>
+
+<h4 id="原子变量的示例">原子变量的示例</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;atomic&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">counter</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">increment</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">counter</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// 原子增加操作</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span><span class="p">(</span><span class="n">increment</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t2</span><span class="p">(</span><span class="n">increment</span><span class="p">);</span>
+
+    <span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Final counter value: "</span> <span class="o">&lt;&lt;</span> <span class="n">counter</span><span class="p">.</span><span class="n">load</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 
   
@@ -100,23 +151,23 @@
   <ul class="related-posts">
     
       <li>
+        <a href="/2024/10/21/Cpp/">
+          C++补充
+          <small><time datetime="2024-10-21T10:00:00+08:00">21 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/10/21/Cpp11_14/">
+          C++11\14特性
+          <small><time datetime="2024-10-21T10:00:00+08:00">21 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
         <a href="/2024/10/11/Problem/">
           算法和c++类面经
           <small><time datetime="2024-10-11T10:00:00+08:00">11 Oct 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2024/10/10/Problem2/">
-          数学题目类面经
-          <small><time datetime="2024-10-10T10:00:00+08:00">10 Oct 2024</time></small>
-        </a>
-      </li>
-    
-      <li>
-        <a href="/2024/09/26/Probability2/">
-          概率论:随机变量（绿皮书+额外补充）
-          <small><time datetime="2024-09-26T10:00:00+08:00">26 Sep 2024</time></small>
         </a>
       </li>
     
@@ -136,7 +187,10 @@
 <div  class="toc-wrapper">
   <h2 class="toc-title">Table of Contents</h2>
     <nav class="toc-nav">
-      
+      <ul class="toc">
+  <li><a href="#1-thread库">1. <code class="language-plaintext highlighter-rouge">thread</code>库</a></li>
+  <li><a href="#2-atomic库">2. <code class="language-plaintext highlighter-rouge">atomic</code>库</a></li>
+</ul>
 
   </nav>
 </div>

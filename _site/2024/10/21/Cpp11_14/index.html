@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>C++11\14特性 | Liujiyu’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="C++11\14特性" />
+<meta name="author" content="liujiyu" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="C++11特性" />
+<meta property="og:description" content="C++11特性" />
+<link rel="canonical" href="http://localhost:4000/2024/10/21/Cpp11_14/" />
+<meta property="og:url" content="http://localhost:4000/2024/10/21/Cpp11_14/" />
+<meta property="og:site_name" content="Liujiyu’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-10-21T10:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="C++11\14特性" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-10-21T10:00:00+08:00","datePublished":"2024-10-21T10:00:00+08:00","description":"C++11特性","headline":"C++11\\14特性","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/10/21/Cpp11_14/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/10/21/Cpp11_14/"}</script>
+<!-- End Jekyll SEO tag -->
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } });
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+                       });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+</head>
+
+
+  <body>
+
+    <div class="container pure-g"><div class="sidebar-left pure-u-1 pure-u-md-1-4" style="background-color: rgb(40, 73, 77); color: rgb(255, 255, 255); background-image: url(/bg.jpg);"><header class="masthead">
+  <div class="avatar"><img src="/head.jpg" class="avatar-image" alt="liujiyu">
+    </div>
+  <div class="masthead-title">
+    <a href="/" title="Home">Liujiyu's blog</a>
+  </div>
+  <div class="masthead-tagline">
+    <small>learn & record</small>
+  </div><nav class="navigation">
+    <ul class="navigation-list"><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/">Blog</a>
+      </li><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/about/">About</a>
+      </li></ul>
+  </nav><div class="social pure-menu pure-menu-horizontal">
+      <ul class="social-icons pure-menu-list">
+      <li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="mailto://liujiyu@zju.edu.cn">
+            <i class="fas fa-envelope" title="Email"></i>
+          </a>
+        </li><li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="https://github.com/Liujiyu20000308">
+            <i class="fab fa-github" title="GitHub"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+</header>
+</div>
+
+      <div class="content pure-u-1 pure-u-md-1-2"><main>
+  <article class="post">
+  <h1 class="post-title">C++11\14特性</h1>
+  <div class="post-meta"><time datetime="2024-10-21T10:00:00+08:00" itemprop="datePublished">21 Oct 2024</time></div>
+
+  <h2 id="c11特性">C++11特性</h2>
+
+<h3 id="1-自动类型推导-auto">1. <strong>自动类型推导 (<code class="language-plaintext highlighter-rouge">auto</code>)</strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">auto</code> 关键字，允许编译器根据表达式的类型自动推导变量的类型。它可以简化代码，特别是在处理复杂的类型时。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>      <span class="c1">// 编译器推导 x 为 int</span>
+<span class="k">auto</span> <span class="n">y</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>   <span class="c1">// 编译器推导 y 为 double</span>
+<span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">int</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>  <span class="c1">// 推导为 int*</span>
+</code></pre></div></div>
+
+<p>推导规则看CppLearning.pdf。</p>
+
+<h3 id="2-范围-for-循环range-based-for-loop">2. <strong>范围 for 循环（Range-based for loop）</strong></h3>
+
+<p>C++11 引入了范围 for 循环，简化了对容器或数组元素的迭代操作。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+<span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">v</span> <span class="o">:</span> <span class="n">vec</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="3-智能指针-shared_ptr-unique_ptr-weak_ptr">3. <strong>智能指针 (<code class="language-plaintext highlighter-rouge">shared_ptr</code>, <code class="language-plaintext highlighter-rouge">unique_ptr</code>, <code class="language-plaintext highlighter-rouge">weak_ptr</code>)</strong></h3>
+<p>智能指针本质是一个封装了一个原始C++指针的类模板，为了确保动态内存的安全性而产生的。
+C++11 提供了新的智能指针，用于更好地管理动态内存：</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::unique_ptr</code>：独占所有权。</li>
+  <li><code class="language-plaintext highlighter-rouge">std::shared_ptr</code>：共享所有权，使用引用计数来管理对象的生命周期。</li>
+  <li><code class="language-plaintext highlighter-rouge">std::weak_ptr</code>：用于打破 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 之间的循环引用。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>在 C++ 的早期，<code class="language-plaintext highlighter-rouge">auto_ptr</code> 是标准库中唯一提供的智能指针，用于自动管理动态分配的内存。然而，<code class="language-plaintext highlighter-rouge">auto_ptr</code> 有一些设计缺陷，尤其是所有权的转移行为不直观、不安全，因此在 C++11 引入了新的智能指针类型，如 <code class="language-plaintext highlighter-rouge">unique_ptr</code>、<code class="language-plaintext highlighter-rouge">shared_ptr</code> 和 <code class="language-plaintext highlighter-rouge">weak_ptr</code>，并逐渐淘汰了 <code class="language-plaintext highlighter-rouge">auto_ptr</code>。</p>
+
+<p>接下来，我们详细讨论从 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 到 C++11 的智能指针演变。</p>
+
+<h4 id="1-auto_ptrc98">1. <strong><code class="language-plaintext highlighter-rouge">auto_ptr</code>（C++98）</strong></h4>
+
+<p><code class="language-plaintext highlighter-rouge">auto_ptr</code> 是 C++98 标准中的智能指针，用来管理动态分配的对象。它的主要目的是在对象离开作用域时自动释放动态分配的内存，避免内存泄漏。</p>
+
+<h5 id="11-基本用法">1.1 <strong>基本用法</strong>：</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">auto_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>  <span class="c1">// 动态分配内存并绑定到 auto_ptr</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">auto_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>          <span class="c1">// 转移所有权，p1 不再持有对象</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">p2</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>       <span class="c1">// 输出 10</span>
+    <span class="c1">// p1 现在是空指针，持有 nullptr</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="12-auto_ptr-的问题">1.2 <strong><code class="language-plaintext highlighter-rouge">auto_ptr</code> 的问题</strong>：</h5>
+<ul>
+  <li><strong>所有权转移</strong>：<code class="language-plaintext highlighter-rouge">auto_ptr</code> 在拷贝和赋值时会转移资源的所有权。例如，<code class="language-plaintext highlighter-rouge">auto_ptr p2 = p1;</code> 会将资源从 <code class="language-plaintext highlighter-rouge">p1</code> 转移到 <code class="language-plaintext highlighter-rouge">p2</code>，而 <code class="language-plaintext highlighter-rouge">p1</code> 被置为空。这种所有权转移是不直观的，容易导致悬空指针或双重释放的问题。</li>
+  <li><strong>不能用于容器</strong>：由于 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 拷贝时会改变源对象的状态，它无法安全地用于 STL 容器（如 <code class="language-plaintext highlighter-rouge">std::vector</code>）。容器通常会在元素的插入和删除过程中进行拷贝操作，使用 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 会导致意外的行为。</li>
+  <li><strong>已经废弃</strong>：由于这些问题，<code class="language-plaintext highlighter-rouge">auto_ptr</code> 在 C++11 被标记为<strong>废弃</strong>，并在 C++17 中完全移除。</li>
+</ul>
+
+<h4 id="2-unique_ptrc11">2. <strong><code class="language-plaintext highlighter-rouge">unique_ptr</code>（C++11）</strong></h4>
+
+<p><code class="language-plaintext highlighter-rouge">unique_ptr</code> 是 C++11 引入的智能指针，旨在替代 <code class="language-plaintext highlighter-rouge">auto_ptr</code>。它也是一种<strong>独占所有权</strong>的智能指针，但相比 <code class="language-plaintext highlighter-rouge">auto_ptr</code>，<code class="language-plaintext highlighter-rouge">unique_ptr</code> 更加安全和高效。</p>
+
+<h5 id="21-特点">2.1 <strong>特点</strong>：</h5>
+<ul>
+  <li><strong>独占所有权</strong>：<code class="language-plaintext highlighter-rouge">unique_ptr</code> 独占所管理的资源，不能被拷贝，但可以通过<strong>移动语义</strong>（move semantics）转移所有权。</li>
+  <li><strong>轻量高效</strong>：相比于 <code class="language-plaintext highlighter-rouge">shared_ptr</code>，<code class="language-plaintext highlighter-rouge">unique_ptr</code> 没有额外的引用计数开销。</li>
+  <li><strong>自定义删除器</strong>：<code class="language-plaintext highlighter-rouge">unique_ptr</code> 支持自定义删除器，可以管理复杂资源（如文件句柄、网络连接等）。</li>
+</ul>
+
+<h5 id="22-基本用法">2.2 <strong>基本用法</strong>：</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">20</span><span class="p">));</span>       <span class="c1">// 创建 unique_ptr，管理动态分配的内存</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span>    <span class="c1">// 使用 std::move 转移所有权</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">p2</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>              <span class="c1">// 输出 20</span>
+    <span class="c1">// p1 现在是空的，不能再使用它</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="23-与-auto_ptr-的区别">2.3 <strong>与 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 的区别</strong>：</h5>
+<ul>
+  <li>
+    <p><strong>不能拷贝</strong>：与 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 不同，<code class="language-plaintext highlighter-rouge">unique_ptr</code> 不能通过复制构造或赋值操作来拷贝。必须使用 <code class="language-plaintext highlighter-rouge">std::move</code> 将所有权从一个 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 转移到另一个。这避免了 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 的潜在所有权混乱问题。</p>
+  </li>
+  <li>
+    <p><strong>自定义删除器</strong>：<code class="language-plaintext highlighter-rouge">unique_ptr</code> 可以接受自定义删除器来释放资源，适用于更复杂的资源管理场景。</p>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">FILE</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fclose</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">filePtr</span><span class="p">(</span><span class="n">fopen</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">),</span> <span class="n">fclose</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h5 id="24-应用场景">2.4 <strong>应用场景</strong>：</h5>
+<ul>
+  <li>用于确保资源在离开作用域时被正确释放，避免内存泄漏。</li>
+  <li><code class="language-plaintext highlighter-rouge">unique_ptr</code> 适用于独占资源的场景，如管理文件、网络连接或设备句柄等。</li>
+</ul>
+
+<h4 id="3-shared_ptrc11">3. <strong><code class="language-plaintext highlighter-rouge">shared_ptr</code>（C++11）</strong></h4>
+
+<p><code class="language-plaintext highlighter-rouge">shared_ptr</code> 是一种支持<strong>共享所有权</strong>的智能指针，多个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 可以共同管理同一个对象。对象的生命周期会延长，直到最后一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 释放它。</p>
+
+<h5 id="31-特点">3.1 <strong>特点</strong>：</h5>
+<ul>
+  <li><strong>引用计数</strong>：<code class="language-plaintext highlighter-rouge">shared_ptr</code> 内部维护一个引用计数，当引用计数为 0 时，所管理的对象会被自动销毁。</li>
+  <li><strong>拷贝安全</strong>：<code class="language-plaintext highlighter-rouge">shared_ptr</code> 可以被拷贝，拷贝时引用计数增加。</li>
+  <li><strong>线程安全</strong>：C++11 标准中，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的引用计数是线程安全的。</li>
+</ul>
+
+<h5 id="32-基本用法">3.2 <strong>基本用法</strong>：</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span>   <span class="c1">// 推荐的创建方式</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>                          <span class="c1">// 拷贝 p1，引用计数增加</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">p1</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>                         <span class="c1">// 输出 30</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Use count: "</span> <span class="o">&lt;&lt;</span> <span class="n">p1</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 引用计数输出 2</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="33-shared_ptr-与-unique_ptr-的区别">3.3 <strong><code class="language-plaintext highlighter-rouge">shared_ptr</code> 与 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 的区别</strong>：</h5>
+<ul>
+  <li>
+    <p><strong>共享所有权</strong>：<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的设计目的是让多个智能指针共享同一个对象。当不再需要对象时，引用计数归零，自动销毁对象。相比之下，<code class="language-plaintext highlighter-rouge">unique_ptr</code> 独占对象，不能共享。</p>
+  </li>
+  <li>
+    <p><strong>性能开销</strong>：由于 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 需要维护引用计数，它比 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 有更大的内存和性能开销。如果没有必要的共享行为，应该优先使用 <code class="language-plaintext highlighter-rouge">unique_ptr</code>。</p>
+  </li>
+</ul>
+
+<h5 id="34-自定义删除器">3.4 <strong>自定义删除器</strong>：</h5>
+<p>与 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 类似，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 也支持自定义删除器：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">FILE</span><span class="o">&gt;</span> <span class="n">filePtr</span><span class="p">(</span><span class="n">fopen</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">),</span> <span class="n">fclose</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h5 id="35-应用场景">3.5 <strong>应用场景</strong>：</h5>
+<ul>
+  <li>当多个对象需要共享同一个资源时，可以使用 <code class="language-plaintext highlighter-rouge">shared_ptr</code>。例如，一个对象在多个模块中被使用，所有模块都应该控制其生命周期。</li>
+  <li>当对象的强引用计数降为0时，shared_ptr会释放该对象的内存，但控制块不会立即释放，因为仍然有weak_ptr可能在观察它。控制块会在弱引用计数也降为0时释放，这样可以确保weak_ptr可以安全地判断对象是否有效。</li>
+</ul>
+
+<h4 id="4-weak_ptrc11">4. <strong><code class="language-plaintext highlighter-rouge">weak_ptr</code>（C++11）</strong></h4>
+
+<p><code class="language-plaintext highlighter-rouge">weak_ptr</code> 是一种<strong>非拥有</strong>（non-owning）的智能指针，它与 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 配合使用，用于解决共享对象的<strong>循环引用</strong>问题。<code class="language-plaintext highlighter-rouge">weak_ptr</code> 不影响引用计数。</p>
+
+<h5 id="41-特点">4.1 <strong>特点</strong>：</h5>
+<ul>
+  <li><strong>弱引用</strong>：<code class="language-plaintext highlighter-rouge">weak_ptr</code> 只是指向对象，并不影响对象的生命周期，不能直接解引用。</li>
+  <li><strong>循环引用解决</strong>：在使用 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 时，如果两个对象相互持有对方的 <code class="language-plaintext highlighter-rouge">shared_ptr</code>，会导致循环引用，无法释放内存。使用 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 可以打破这种循环。</li>
+</ul>
+
+<h5 id="42-基本用法">4.2 <strong>基本用法</strong>：</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sp</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">40</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">wp</span> <span class="o">=</span> <span class="n">sp</span><span class="p">;</span>  <span class="c1">// 创建 weak_ptr，不增加引用计数</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">wp</span><span class="p">.</span><span class="n">lock</span><span class="p">())</span> <span class="p">{</span>  <span class="c1">// 使用 lock() 生成 shared_ptr</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">temp</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出 40</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Resource no longer available."</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="43-应用场景">4.3 <strong>应用场景</strong>：</h5>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">weak_ptr</code> 通常用于避免循环引用。例如在双向链表、图结构或依赖关系复杂的系统中，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的循环引用问题可以通过 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 解决。</li>
+</ul>
+
+<p><strong>智能指针中的引用计数是线程安全的，但是智能指针所指向的对象的线程安全问题，智能指针没有做任何保障线程不安全。</strong></p>
+
+<h3 id="4-lambda-表达式">4. <strong>Lambda 表达式</strong></h3>
+
+<p>C++11 引入了 lambda 表达式，使得可以在代码中编写匿名函数，特别适合于函数作为参数的场景，如回调、事件处理等。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">add</span> <span class="o">=</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出 3</span>
+</code></pre></div></div>
+
+<p>捕获外部变量：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="k">auto</span> <span class="n">func</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">](</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">x</span><span class="p">;</span> <span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">func</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出 8</span>
+</code></pre></div></div>
+
+<p>匿名函数本质上是一个对象，在其定义的过程中会创建出一个栈对象，内部通过重载()符号实现函数调用的外表。</p>
+
+<p>优点：使用匿名函数，可以免去函数的声明和定义。这样匿名函数仅在调用函数的时候才会创建函数对象，而调用结束后立即释放，所以匿名函数比非匿名函数更节省空间。</p>
+
+<h3 id="5-移动语义与右值引用-rvalue-references">5. <strong>移动语义与右值引用 (<code class="language-plaintext highlighter-rouge">rvalue references</code>)</strong></h3>
+
+<p>C++11 引入了移动语义和右值引用，允许开发者通过转移资源所有权来避免不必要的拷贝，极大地提升了性能，尤其是对于临时对象的处理。</p>
+
+<ul>
+  <li>右值引用通过 <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code> 定义，可以捕获右值，并通过 <code class="language-plaintext highlighter-rouge">std::move()</code> 转移资源。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v1</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">v1</span><span class="p">);</span>  <span class="c1">// v1 的资源被转移给 v2，避免了拷贝</span>
+</code></pre></div></div>
+
+<p><strong>完美转发</strong>（Perfect Forwarding）是 C++11 引入的一个特性，<strong>允许函数将其接收到的参数（包括其值类型、引用类型和右值或左值属性）完美地转发给另一个函数</strong>。这种转发可以保留参数的所有特性，从而避免不必要的拷贝或引用失效问题。</p>
+
+<p>完美转发的核心是<strong>右值引用</strong>（rvalue references）和<strong>模板参数推导</strong>，特别是结合了 <code class="language-plaintext highlighter-rouge">std::forward</code> 的使用，使得我们可以将函数接收到的参数以最优的方式传递给其他函数。</p>
+
+<p>完美转发依赖于以下几个概念：</p>
+
+<ol>
+  <li><strong>右值引用（Rvalue Reference）</strong>：
+    <ul>
+      <li>右值引用通过 <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code> 语法定义，用来接受右值对象（临时对象），并允许开发者高效地使用和转移这些对象的资源。</li>
+      <li>对于模板参数中的 <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code>，它既能接受右值引用，也能接受左值引用，这是完美转发的基础。</li>
+    </ul>
+  </li>
+  <li><strong>万能引用（Universal Reference）</strong>：
+    <ul>
+      <li>当 <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code> 作为模板参数出现时，它被称为<strong>万能引用</strong>，可以同时接受左值引用和右值引用。编译器根据传递的参数类型推导 <code class="language-plaintext highlighter-rouge">T</code> 的类型，从而决定是左值引用还是右值引用。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::forward</code></strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::forward</code> 是一个帮助函数，用来在函数内部将参数以原始的类型（左值或右值）转发给另一个函数。它根据模板参数的类型决定是否执行<strong>移动语义</strong>（move semantics）。</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;utility&gt;</span><span class="c1">  // for std::forward</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">process</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Lvalue reference: "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">process</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Rvalue reference: "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="n">forwarder</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">arg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">process</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">arg</span><span class="p">));</span>  <span class="c1">// 保持 arg 的值类别</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+    <span class="n">forwarder</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>        <span class="c1">// 转发左值，调用 process(int&amp;)</span>
+    <span class="n">forwarder</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>      <span class="c1">// 转发右值，调用 process(int&amp;&amp;)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Lvalue reference: 42
+Rvalue reference: 100
+</code></pre></div></div>
+
+<p>如果没有使用 <code class="language-plaintext highlighter-rouge">std::forward</code>，完美转发就无法正常工作。例如：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="nf">forwarder</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">arg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">process</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>  <span class="c1">// 没有使用 std::forward</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+    <span class="n">forwarder</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>        <span class="c1">// 错误：a 是左值，传递给 process 时应为左值引用</span>
+    <span class="n">forwarder</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>      <span class="c1">// 错误：100 是右值，但被转发为左值</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>在这段代码中，<code class="language-plaintext highlighter-rouge">process(arg)</code> 传递的是 <code class="language-plaintext highlighter-rouge">arg</code>，无论 <code class="language-plaintext highlighter-rouge">arg</code> 是左值还是右值，都会被视为<strong>左值</strong>传递。结果是，即使你传递的是右值，它在传递过程中也会丧失右值属性。</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">std::forward</code> 根据模板参数的类型来决定是否转发为右值：</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">forward</span><span class="p">(</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&amp;&amp;&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>如果 <code class="language-plaintext highlighter-rouge">T</code> 是左值引用类型，<code class="language-plaintext highlighter-rouge">std::forward&lt;T&gt;(t)</code> 会返回 <code class="language-plaintext highlighter-rouge">t</code> 的左值引用。</li>
+  <li>如果 <code class="language-plaintext highlighter-rouge">T</code> 是右值引用类型，<code class="language-plaintext highlighter-rouge">std::forward&lt;T&gt;(t)</code> 会将 <code class="language-plaintext highlighter-rouge">t</code> 转换为右值引用。</li>
+</ul>
+
+<h3 id="6-完美转发的注意事项">6. <strong>完美转发的注意事项</strong></h3>
+
+<ol>
+  <li><strong>引用折叠</strong>：
+    <ul>
+      <li>在完美转发中，C++11 引入了<strong>引用折叠规则</strong>，帮助解决模板参数推导过程中多重引用的问题。具体规则如下：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">T&amp; &amp;</code>、<code class="language-plaintext highlighter-rouge">T&amp; &amp;&amp;</code>、<code class="language-plaintext highlighter-rouge">T&amp;&amp; &amp;</code> 都会折叠为 <code class="language-plaintext highlighter-rouge">T&amp;</code>（左值引用）。</li>
+          <li>只有 <code class="language-plaintext highlighter-rouge">T&amp;&amp; &amp;&amp;</code> 会折叠为 <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code>（右值引用）。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>性能问题</strong>：
+    <ul>
+      <li>完美转发的设计目的是优化性能，减少不必要的拷贝和对象构造。然而，完美转发可能引入额外的复杂性，尤其是在处理移动语义时。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::forward</code> 与 <code class="language-plaintext highlighter-rouge">std::move</code> 的区别</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::move</code> 总是将其参数转换为右值引用，而 <code class="language-plaintext highlighter-rouge">std::forward</code> 会根据参数类型决定是否保留其值类别。因此，<code class="language-plaintext highlighter-rouge">std::forward</code> 更适合用于模板参数转发。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="6-nullptr">6. <strong><code class="language-plaintext highlighter-rouge">nullptr</code></strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">nullptr</code>，它取代了传统的 <code class="language-plaintext highlighter-rouge">NULL</code>，成为一个类型安全的空指针常量。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>  <span class="c1">// 代替 NULL</span>
+</code></pre></div></div>
+
+<h3 id="7-constexpr">7. <strong><code class="language-plaintext highlighter-rouge">constexpr</code></strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">constexpr</code>，它允许在编译时计算常量表达式，提高编译期的优化。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">constexpr</span> <span class="kt">int</span> <span class="nf">square</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">;</span> <span class="p">}</span>
+<span class="k">constexpr</span> <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>  <span class="c1">// 在编译时计算</span>
+</code></pre></div></div>
+
+<h3 id="8-委托构造函数delegating-constructors">8. <strong>委托构造函数（Delegating constructors）</strong></h3>
+
+<p>C++11 允许一个构造函数调用另一个构造函数，简化了构造函数的实现。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">MyClass</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="o">:</span> <span class="n">MyClass</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>  <span class="c1">// 调用另一个构造函数</span>
+    <span class="n">MyClass</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">{}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="9-显式转换运算符explicit-conversion-operators">9. <strong>显式转换运算符（Explicit conversion operators）</strong></h3>
+
+<p>C++11 允许将类型转换运算符标记为 <code class="language-plaintext highlighter-rouge">explicit</code>，避免隐式转换带来的错误。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">explicit</span> <span class="k">operator</span> <span class="kt">bool</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">MyClass</span> <span class="n">obj</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// 只有通过显示的转换，才能将 obj 转换为 bool</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="10-stdthread-和多线程支持">10. <strong><code class="language-plaintext highlighter-rouge">std::thread</code> 和多线程支持</strong></h3>
+
+<p>C++11 引入了标准库的多线程支持，包括 <code class="language-plaintext highlighter-rouge">std::thread</code>、<code class="language-plaintext highlighter-rouge">std::mutex</code>、<code class="language-plaintext highlighter-rouge">std::lock_guard</code> 等，可以直接使用标准库进行线程创建和同步。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span><span class="kt">void</span> <span class="nf">threadFunc</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Hello from thread"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t</span><span class="p">(</span><span class="n">threadFunc</span><span class="p">);</span>  <span class="c1">// 创建一个线程</span>
+    <span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>                   <span class="c1">// 等待线程结束</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="11-变参模板variadic-templates">11. <strong>变参模板（Variadic templates）</strong></h3>
+
+<p>C++11 支持变参模板，允许模板接受任意数量的模板参数。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="nf">print</span><span class="p">(</span><span class="n">Args</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">...</span> <span class="o">&lt;&lt;</span> <span class="n">args</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// C++17 fold expression</span>
+<span class="p">}</span>
+<span class="n">print</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="s">"Hello"</span><span class="p">);</span>  <span class="c1">// 输出：1 2.5 Hello</span>
+</code></pre></div></div>
+
+<h3 id="12-stdtuple">12. <strong><code class="language-plaintext highlighter-rouge">std::tuple</code></strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">std::tuple</code>，它是一个固定大小的异构集合，允许存储不同类型的对象。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;tuple&gt;</span><span class="cp">
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="s">"Hello"</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出 1</span>
+</code></pre></div></div>
+
+<h3 id="13-enum-class">13. <strong><code class="language-plaintext highlighter-rouge">enum class</code></strong></h3>
+
+<p>C++11 引入了强类型枚举 <code class="language-plaintext highlighter-rouge">enum class</code>，它比传统的 <code class="language-plaintext highlighter-rouge">enum</code> 更安全，因为它不会隐式转换为整型。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">enum</span> <span class="k">class</span> <span class="nc">Color</span> <span class="p">{</span> <span class="n">Red</span><span class="p">,</span> <span class="n">Green</span><span class="p">,</span> <span class="n">Blue</span> <span class="p">};</span>
+<span class="n">Color</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="o">::</span><span class="n">Red</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="14-stdarray">14. <strong><code class="language-plaintext highlighter-rouge">std::array</code></strong></h3>
+
+<p>C++11 提供了 <code class="language-plaintext highlighter-rouge">std::array</code>，它是 C++ STL 的静态数组，具有固定大小，并且提供了与 STL 容器相同的接口。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;array&gt;</span><span class="cp">
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="n">arr</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出 2</span>
+</code></pre></div></div>
+
+<h3 id="15-初始化列表initializer-lists">15. <strong>初始化列表（Initializer Lists）</strong></h3>
+
+<p>C++11 引入了初始化列表语法，允许通过大括号 <code class="language-plaintext highlighter-rouge">{}</code> 直接初始化对象。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span>  <span class="c1">// 使用初始化列表</span>
+</code></pre></div></div>
+
+<h3 id="16-decltype">16. <strong><code class="language-plaintext highlighter-rouge">decltype</code></strong></h3>
+
+<p>C++11 提供了 <code class="language-plaintext highlighter-rouge">decltype</code>，用于推导表达式的类型，类似于 <code class="language-plaintext highlighter-rouge">auto</code>，但 <code class="language-plaintext highlighter-rouge">decltype</code> 可以用于复杂表达式的类型推导。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="k">decltype</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>  <span class="c1">// y 的类型与 x 相同，推导为 int</span>
+</code></pre></div></div>
+
+<h3 id="17-静态断言static_assert">17. <strong>静态断言（<code class="language-plaintext highlighter-rouge">static_assert</code>）</strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">static_assert</code>，用于在编译时进行条件检查，如果条件为假，编译器会抛出错误。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static_assert</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="s">"int size is not 4 bytes"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="18-后置返回类型trailing-return-types">18. <strong>后置返回类型（Trailing Return Types）</strong></h3>
+
+<p>C++11 支持在函数定义中使用后置返回类型，特别适用于复杂的返回类型或函数模板。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="19-noexcept">19. <strong><code class="language-plaintext highlighter-rouge">noexcept</code></strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">noexcept</code>，用于标记函数不抛出异常，有助于编译器优化。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">func</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span>
+    <span class="c1">// 函数不抛出异常</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="20-右值引用与移动构造函数">20. <strong>右值引用与移动构造函数</strong></h3>
+
+<p>C++11 提供了右值引用和移动语义，用于避免不必要的对象拷贝，提高性能。移动构造函数和移动赋值运算符可以通过转移资源来避免深拷贝。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">MyClass</span><span class="p">(</span><span class="n">MyClass</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+        <span class="c1">// 实现移动构造函数</span>
+    <span class="p">}</span>
+    <span class="n">MyClass</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">MyClass</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+        <span class="c1">// 实现移动赋值运算符</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="总结">总结</h3>
+
+<p>C++11 是 C++ 语言的一次重大更新，带来了许多极大增强语言能力的特性。这些特性不仅简化了编写 C++ 代码的过程，还提供了强大的工具用于提高性能和安全性，使得 C++ 在现代开发中更加高效和实用。</p>
+
+
+  
+    
+      <div class="post-tags-section">
+  <i class="post-tags-icon fas fa-tags"></i>
+  <ul class="post-tags"><li>
+        <a class="post-tag" href="/tags/#c">c</a></li></ul>
+</div>
+
+  
+
+  
+</article>
+
+
+<aside class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="/2024/10/21/Cpp/">
+          C++补充
+          <small><time datetime="2024-10-21T10:00:00+08:00">21 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/10/20/Thread/">
+          C++多线程
+          <small><time datetime="2024-10-20T10:00:00+08:00">20 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/10/11/Problem/">
+          算法和c++类面经
+          <small><time datetime="2024-10-11T10:00:00+08:00">11 Oct 2024</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+</main>
+
+<footer class="footer"><small>
+    &copy; 2023&nbsp;-&nbsp;2024 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
+  </small>
+</footer>
+</div>
+      <div class="sidebar-right pure-u-1 pure-u-md-1-4">
+<div  class="toc-wrapper">
+  <h2 class="toc-title">Table of Contents</h2>
+    <nav class="toc-nav">
+      <ul class="toc">
+  <li><a href="#c11特性">C++11特性</a>
+    <ul>
+      <li><a href="#1-自动类型推导-auto">1. <strong>自动类型推导 (<code class="language-plaintext highlighter-rouge">auto</code>)</strong></a></li>
+      <li><a href="#2-范围-for-循环range-based-for-loop">2. <strong>范围 for 循环（Range-based for loop）</strong></a></li>
+      <li><a href="#3-智能指针-shared_ptr-unique_ptr-weak_ptr">3. <strong>智能指针 (<code class="language-plaintext highlighter-rouge">shared_ptr</code>, <code class="language-plaintext highlighter-rouge">unique_ptr</code>, <code class="language-plaintext highlighter-rouge">weak_ptr</code>)</strong></a></li>
+      <li><a href="#4-lambda-表达式">4. <strong>Lambda 表达式</strong></a></li>
+      <li><a href="#5-移动语义与右值引用-rvalue-references">5. <strong>移动语义与右值引用 (<code class="language-plaintext highlighter-rouge">rvalue references</code>)</strong></a></li>
+      <li><a href="#6-完美转发的注意事项">6. <strong>完美转发的注意事项</strong></a></li>
+      <li><a href="#6-nullptr">6. <strong><code class="language-plaintext highlighter-rouge">nullptr</code></strong></a></li>
+      <li><a href="#7-constexpr">7. <strong><code class="language-plaintext highlighter-rouge">constexpr</code></strong></a></li>
+      <li><a href="#8-委托构造函数delegating-constructors">8. <strong>委托构造函数（Delegating constructors）</strong></a></li>
+      <li><a href="#9-显式转换运算符explicit-conversion-operators">9. <strong>显式转换运算符（Explicit conversion operators）</strong></a></li>
+      <li><a href="#10-stdthread-和多线程支持">10. <strong><code class="language-plaintext highlighter-rouge">std::thread</code> 和多线程支持</strong></a></li>
+      <li><a href="#11-变参模板variadic-templates">11. <strong>变参模板（Variadic templates）</strong></a></li>
+      <li><a href="#12-stdtuple">12. <strong><code class="language-plaintext highlighter-rouge">std::tuple</code></strong></a></li>
+      <li><a href="#13-enum-class">13. <strong><code class="language-plaintext highlighter-rouge">enum class</code></strong></a></li>
+      <li><a href="#14-stdarray">14. <strong><code class="language-plaintext highlighter-rouge">std::array</code></strong></a></li>
+      <li><a href="#15-初始化列表initializer-lists">15. <strong>初始化列表（Initializer Lists）</strong></a></li>
+      <li><a href="#16-decltype">16. <strong><code class="language-plaintext highlighter-rouge">decltype</code></strong></a></li>
+      <li><a href="#17-静态断言static_assert">17. <strong>静态断言（<code class="language-plaintext highlighter-rouge">static_assert</code>）</strong></a></li>
+      <li><a href="#18-后置返回类型trailing-return-types">18. <strong>后置返回类型（Trailing Return Types）</strong></a></li>
+      <li><a href="#19-noexcept">19. <strong><code class="language-plaintext highlighter-rouge">noexcept</code></strong></a></li>
+      <li><a href="#20-右值引用与移动构造函数">20. <strong>右值引用与移动构造函数</strong></a></li>
+      <li><a href="#总结">总结</a></li>
+    </ul>
+  </li>
+</ul>
+
+  </nav>
+</div>
+
+</div>
+    </div>
+
+    <script async src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  function strip(str, remove) {
+    while (str.length > 0 && remove.indexOf(str.charAt(0)) != -1) {
+      str = str.substr(1);
+    }
+    while (str.length > 0 && remove.indexOf(str.charAt(str.length - 1)) != -1) {
+      str = str.substr(0, str.length - 1);
+    }
+    return str;
+  }
+
+  function scroll() {
+    console.log('scroll');
+    window.scrollTo({
+      left: 0, 
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+    sessionStorage.removeItem('forceCheckScroll');
+  }
+
+  const forceCheckScroll = sessionStorage.getItem('forceCheckScroll') === 'true';
+  const checkScroll = strip(window.location.pathname, '/') !== strip('', '/');
+
+  if (forceCheckScroll || checkScroll) {
+    const maxWidth = "(max-width: 48rem)";
+    const result = window.matchMedia(maxWidth);
+    if (result.matches) {
+      scroll();
+    } else {
+      result.addListener((match) => {
+        if (match.media == maxWidth) {
+          if (match.matches) {
+            scroll();
+          }
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>C++补充 | Liujiyu’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="C++补充" />
+<meta name="author" content="liujiyu" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="内存分区" />
+<meta property="og:description" content="内存分区" />
+<link rel="canonical" href="http://localhost:4000/2024/10/21/Cpp/" />
+<meta property="og:url" content="http://localhost:4000/2024/10/21/Cpp/" />
+<meta property="og:site_name" content="Liujiyu’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-10-21T10:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="C++补充" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2024-10-21T10:00:00+08:00","datePublished":"2024-10-21T10:00:00+08:00","description":"内存分区","headline":"C++补充","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/10/21/Cpp/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2024/10/21/Cpp/"}</script>
+<!-- End Jekyll SEO tag -->
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } });
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+                       });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+</head>
+
+
+  <body>
+
+    <div class="container pure-g"><div class="sidebar-left pure-u-1 pure-u-md-1-4" style="background-color: rgb(40, 73, 77); color: rgb(255, 255, 255); background-image: url(/bg.jpg);"><header class="masthead">
+  <div class="avatar"><img src="/head.jpg" class="avatar-image" alt="liujiyu">
+    </div>
+  <div class="masthead-title">
+    <a href="/" title="Home">Liujiyu's blog</a>
+  </div>
+  <div class="masthead-tagline">
+    <small>learn & record</small>
+  </div><nav class="navigation">
+    <ul class="navigation-list"><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/">Blog</a>
+      </li><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/about/">About</a>
+      </li></ul>
+  </nav><div class="social pure-menu pure-menu-horizontal">
+      <ul class="social-icons pure-menu-list">
+      <li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="mailto://liujiyu@zju.edu.cn">
+            <i class="fas fa-envelope" title="Email"></i>
+          </a>
+        </li><li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="https://github.com/Liujiyu20000308">
+            <i class="fab fa-github" title="GitHub"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+</header>
+</div>
+
+      <div class="content pure-u-1 pure-u-md-1-2"><main>
+  <article class="post">
+  <h1 class="post-title">C++补充</h1>
+  <div class="post-meta"><time datetime="2024-10-21T10:00:00+08:00" itemprop="datePublished">21 Oct 2024</time></div>
+
+  <h3 id="内存分区">内存分区</h3>
+
+<p>C++内存主要分为以下几个部分：</p>
+
+<p>栈（Stack）：用于存储局部变量、函数参数、返回地址等。栈是自动管理的，数据进入作用域分配空间，离开作用域自动释放。</p>
+
+<p>堆（Heap）：用于动态分配内存，如使用new或malloc分配的内存。堆内存需要手动释放，否则会导致内存泄露。</p>
+
+<p>全局/静态存储区：存储全局变量和静态变量。全局/静态存储区的内存在程序编译时就已经分配好，且在程序整个运行期间都存在。</p>
+
+<p>常量存储区：存储常量字符串等。该区域的内存在程序编译时就已经分配好，并且内容不可更改。</p>
+
+<p>代码区：存储程序的可执行代码。</p>
+
+<h3 id="多态的实现原理实现方式是什么以及多态的优点特点">多态的实现原理（实现方式）是什么？以及多态的优点（特点）？</h3>
+<p>实现方式：多态分为动态多态和静态多态（又称编译期多态，即在系统编译期间就可以确定程序将要执行哪个函数）</p>
+
+<p>其中动态多态是通过虚函数实现的，虚函数是类的成员函数，存在存储虚函数指针的表叫做虚函数表，虚函数表是一个存储类成员虚函数的指针，每个指针都指向调用它的地方，当子类调用虚函数时，就会去虚表里面找自己对应的函数指针，从而实现“谁调用、实现谁”从而实现多态。</p>
+
+<p>静态多态则是通过函数重载（函数名相同，参数不同，两个函数在同一作用域），运算符重载，和重定义（又叫隐藏，指的是在继承关系中，子类实现了一个和父类名字一样的函数，（只关注函数名，和参数与返回值无关）这样的话子类的函数就把父类的同名函数隐藏了。隐藏只与函数名有关，与参数没有关系）来实现的。</p>
+
+<p>优点：加强代码的可扩展性，可替换性，增强程序的灵活性，提高使用效率，简化对应用代码的编写和修改过程。</p>
+
+<h3 id="final标识符的作用">final标识符的作用</h3>
+<p>放在类的后面表示该类无法被继承，也就是阻止了从类的继承，放在虚函数后面该虚函数无法被重写，表示阻止虚函数的重载</p>
+
+<h3 id="explicit关键字">explicit关键字</h3>
+<p>只能用于修饰只有一个参数的类构造函数（有一个例外就是，当除了第一个参数以外的其他参数都有默认值的时候此关键字依然有效），它的作用是表明该构造函数是显示的，而非隐式的，跟它对应的另一个关键字是implicit，意思是隐藏的，类构造函数默认情况下声明为implicit。作用是防止类构造函数的隐式自动转换。</p>
+
+<p>在<code class="language-plaintext highlighter-rouge">std::vector</code>中，<code class="language-plaintext highlighter-rouge">push_back()</code>和<code class="language-plaintext highlighter-rouge">emplace_back()</code>都用于在末尾添加元素，但它们的实现和适用场景有所不同。</p>
+
+<h3 id="push_back"><code class="language-plaintext highlighter-rouge">push_back()</code></h3>
+
+<ul>
+  <li><strong>功能</strong>：将一个元素拷贝或移动到容器的末尾。</li>
+  <li><strong>实现方式</strong>：<code class="language-plaintext highlighter-rouge">push_back()</code>会创建一个临时对象（如果传入的是构造参数），然后将该对象拷贝或移动到<code class="language-plaintext highlighter-rouge">vector</code>的末尾。对于已存在的对象传递，是直接拷贝或移动的。</li>
+  <li><strong>适用场景</strong>：在需要添加一个已经创建好的对象（例如一个临时变量或函数返回的对象）时使用<code class="language-plaintext highlighter-rouge">push_back()</code>更直观。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"hello"</span><span class="p">;</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>           <span class="c1">// 拷贝 str</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">"world"</span><span class="p">);</span>        <span class="c1">// 创建临时对象并拷贝</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">str</span><span class="p">));</span> <span class="c1">// 移动 str</span>
+</code></pre></div></div>
+
+<h3 id="emplace_back"><code class="language-plaintext highlighter-rouge">emplace_back()</code></h3>
+
+<ul>
+  <li><strong>功能</strong>：直接在<code class="language-plaintext highlighter-rouge">vector</code>的末尾构造对象，避免不必要的拷贝或移动操作。</li>
+  <li><strong>实现方式</strong>：<code class="language-plaintext highlighter-rouge">emplace_back()</code>会将传入的参数直接用于调用对象的构造函数，因此不会额外创建临时对象。这在效率上更高，特别是对于复杂对象来说。</li>
+  <li><strong>适用场景</strong>：在需要添加新对象且不希望额外拷贝时，使用<code class="language-plaintext highlighter-rouge">emplace_back()</code>更合适，尤其在构造的过程中可以直接传入参数。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">;</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span>    <span class="c1">// 直接构造字符串，无需拷贝</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="sc">'a'</span><span class="p">);</span>    <span class="c1">// 调用 std::string(10, 'a') 构造字符串</span>
+</code></pre></div></div>
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">push_back()</code></strong>适用于已有对象或简单对象的插入，能更直观表达意图。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">emplace_back()</code></strong>适合在需要构造复杂对象时使用，因为它可以避免临时对象的创建，提高效率。</li>
+</ul>
+
+<h3 id="类中static函数是否能声明为虚函数">类中static函数是否能声明为虚函数？</h3>
+<p>不能，因为类中的static函数是所有类实例化对象所共有的，没有this指针，而虚函数依靠vptr和vtable来处理，vptr是一个指针，在类中的构造函数中生成，并且只能通过this指针访问，对于静态成员函数来说，他没有this指针，无法访问vptr，因此static函数无法声明为虚函数</p>
+
+<h3 id="为什么存在this指针">为什么存在this指针？</h3>
+<p>类和对象中的成员函数存储在公共的代码段，不同的对象调用成员函数时编译器为了知道具体操作的是哪一个对象给每个“非静态的成员函数”增加了一个隐藏的指针参数，让该指针指向当前对象，在函数体中所有成员变量的操作，都是通过这个指针来完成的由编译器自动完成。</p>
+
+<p>C++ 中有四种主要的强制类型转换方式：<code class="language-plaintext highlighter-rouge">static_cast</code>、<code class="language-plaintext highlighter-rouge">dynamic_cast</code>、<code class="language-plaintext highlighter-rouge">const_cast</code> 和 <code class="language-plaintext highlighter-rouge">reinterpret_cast</code>，它们各自有不同的功能和适用场景。以下是每种类型转换的特点和实现原理：</p>
+
+<h3 id="四个类型强制转换">四个类型强制转换</h3>
+<h5 id="1-static_cast">1. <code class="language-plaintext highlighter-rouge">static_cast</code></h5>
+
+<ul>
+  <li><strong>特点</strong>：用于在编译时执行显式的类型转换。它可以在已知不会引发错误的情况下，用于安全类型转换。
+    <ul>
+      <li>支持基本数据类型之间的转换，如<code class="language-plaintext highlighter-rouge">int</code>到<code class="language-plaintext highlighter-rouge">float</code>。</li>
+      <li>支持指针或引用在类层次结构中的转换，但只能用于已知类型的上下层关系（例如父类到子类的转换）。</li>
+      <li>支持 void* 到其他指针类型的转换。</li>
+    </ul>
+  </li>
+  <li><strong>原理</strong>：在编译时执行，转换过程中不会进行运行时检查，因此效率较高，但不适用于多态类型的安全转换。</li>
+  <li>
+    <p><strong>适用场景</strong>：当确定转换是合法且安全时，如基本类型之间转换、类层次结构中父类指针转换为子类指针（前提是确知转换有效）。</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 浮点转为整数</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h5 id="2-dynamic_cast">2. <code class="language-plaintext highlighter-rouge">dynamic_cast</code></h5>
+
+<ul>
+  <li><strong>特点</strong>：用于在运行时执行安全的类型转换，主要用于指针或引用之间的转换。只能用于带有虚函数的多态类（即 RTTI，运行时类型识别）。
+    <ul>
+      <li>如果转换失败，指针类型会返回 <code class="language-plaintext highlighter-rouge">nullptr</code>，引用类型会抛出 <code class="language-plaintext highlighter-rouge">bad_cast</code> 异常。</li>
+      <li>只能用于类层次结构中基类和派生类之间的转换。</li>
+    </ul>
+  </li>
+  <li><strong>原理</strong>：依赖于 RTTI 机制，在运行时检查类型安全性，适用于基类指针向派生类指针的转换（即向下转型）。</li>
+  <li>
+    <p><strong>适用场景</strong>：当需要在类层次结构中安全地进行向下转换，并且类是多态类（带有虚函数表）时。</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Base</span> <span class="p">{</span> <span class="k">virtual</span> <span class="kt">void</span> <span class="n">func</span><span class="p">()</span> <span class="p">{}</span> <span class="p">};</span> <span class="c1">// 必须是多态类</span>
+<span class="k">class</span> <span class="nc">Derived</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span> <span class="p">{};</span>
+
+<span class="n">Base</span><span class="o">*</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Derived</span><span class="p">;</span>
+<span class="n">Derived</span><span class="o">*</span> <span class="n">d</span> <span class="o">=</span> <span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">Derived</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">b</span><span class="p">);</span> <span class="c1">// 转换成功</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h5 id="3-const_cast">3. <code class="language-plaintext highlighter-rouge">const_cast</code></h5>
+
+<ul>
+  <li><strong>特点</strong>：用于去掉或添加 <code class="language-plaintext highlighter-rouge">const</code> 或 <code class="language-plaintext highlighter-rouge">volatile</code> 修饰符，通常用于处理需要修改 <code class="language-plaintext highlighter-rouge">const</code> 对象的场景。
+    <ul>
+      <li>只能更改对象的<code class="language-plaintext highlighter-rouge">const</code>或<code class="language-plaintext highlighter-rouge">volatile</code>属性，不能用于其他类型的转换。</li>
+    </ul>
+  </li>
+  <li><strong>原理</strong>：编译时直接更改类型的<code class="language-plaintext highlighter-rouge">const</code>或<code class="language-plaintext highlighter-rouge">volatile</code>修饰，不影响数据在内存中的布局。</li>
+  <li>
+    <p><strong>适用场景</strong>：当需要在调用接口时移除<code class="language-plaintext highlighter-rouge">const</code>属性，如需要对<code class="language-plaintext highlighter-rouge">const</code>对象进行某些不可更改操作，或需要传递<code class="language-plaintext highlighter-rouge">const</code>对象给非<code class="language-plaintext highlighter-rouge">const</code>函数。</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="kt">int</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">const_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span> <span class="c1">// 去掉 const 修饰</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h5 id="4-reinterpret_cast">4. <code class="language-plaintext highlighter-rouge">reinterpret_cast</code></h5>
+
+<ul>
+  <li><strong>特点</strong>：用于进行极为底层的、类型上不安全的强制转换。它可以将任何指针类型转换为其他指针类型，或将整数转换为指针类型。
+    <ul>
+      <li>不同类型的指针之间、整数和指针之间可以相互转换。</li>
+      <li>该转换并不更改数据的底层二进制表示。</li>
+    </ul>
+  </li>
+  <li><strong>原理</strong>：直接重新解释内存中的二进制内容，将指针或数据的类型重新解释为目标类型。转换后数据的行为可能无法预测，因此需慎重使用。</li>
+  <li>
+    <p><strong>适用场景</strong>：当需要进行底层数据操作（如位操作或字节处理）时，或者需要将指针类型和整数类型之间转换时。</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">65</span><span class="p">;</span>
+<span class="kt">char</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">i</span><span class="p">);</span> <span class="c1">// 将 int* 转为 char*</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>转换类型</th>
+      <th>适用范围</th>
+      <th>运行时检查</th>
+      <th>主要功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">static_cast</code></td>
+      <td>编译时可确定的安全转换</td>
+      <td>否</td>
+      <td>基本类型转换、类层次结构的向上转换</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">dynamic_cast</code></td>
+      <td>类层次结构中的向下转换，适用于多态类型</td>
+      <td>是</td>
+      <td>多态类的运行时类型检查，确保转换安全</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">const_cast</code></td>
+      <td>去掉或添加<code class="language-plaintext highlighter-rouge">const</code>或<code class="language-plaintext highlighter-rouge">volatile</code>修饰</td>
+      <td>否</td>
+      <td>改变<code class="language-plaintext highlighter-rouge">const</code>或<code class="language-plaintext highlighter-rouge">volatile</code>修饰，主要用于修改<code class="language-plaintext highlighter-rouge">const</code>对象</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">reinterpret_cast</code></td>
+      <td>低层次、不安全的类型转换</td>
+      <td>否</td>
+      <td>直接重新解释数据的二进制表示，适用于指针和整数之间的转换</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="使用建议">使用建议</h5>
+
+<ul>
+  <li>优先选择 <strong><code class="language-plaintext highlighter-rouge">static_cast</code></strong> 和 <strong><code class="language-plaintext highlighter-rouge">dynamic_cast</code></strong>，因为它们更安全、用途更清晰。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">const_cast</code></strong> 仅在必要时使用（如函数接口限制）。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">reinterpret_cast</code></strong> 应慎用，避免带来不易预期的错误和不稳定因素。</li>
+</ul>
+
+
+  
+    
+      <div class="post-tags-section">
+  <i class="post-tags-icon fas fa-tags"></i>
+  <ul class="post-tags"><li>
+        <a class="post-tag" href="/tags/#c">c</a></li></ul>
+</div>
+
+  
+
+  
+</article>
+
+
+<aside class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="/2024/10/21/Cpp11_14/">
+          C++11\14特性
+          <small><time datetime="2024-10-21T10:00:00+08:00">21 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/10/20/Thread/">
+          C++多线程
+          <small><time datetime="2024-10-20T10:00:00+08:00">20 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/10/11/Problem/">
+          算法和c++类面经
+          <small><time datetime="2024-10-11T10:00:00+08:00">11 Oct 2024</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+</main>
+
+<footer class="footer"><small>
+    &copy; 2023&nbsp;-&nbsp;2024 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
+  </small>
+</footer>
+</div>
+      <div class="sidebar-right pure-u-1 pure-u-md-1-4">
+<div  class="toc-wrapper">
+  <h2 class="toc-title">Table of Contents</h2>
+    <nav class="toc-nav">
+      <ul class="toc">
+  <li><a href="#内存分区">内存分区</a></li>
+  <li><a href="#多态的实现原理实现方式是什么以及多态的优点特点">多态的实现原理（实现方式）是什么？以及多态的优点（特点）？</a></li>
+  <li><a href="#final标识符的作用">final标识符的作用</a></li>
+  <li><a href="#explicit关键字">explicit关键字</a></li>
+  <li><a href="#push_back"><code class="language-plaintext highlighter-rouge">push_back()</code></a></li>
+  <li><a href="#emplace_back"><code class="language-plaintext highlighter-rouge">emplace_back()</code></a></li>
+  <li><a href="#类中static函数是否能声明为虚函数">类中static函数是否能声明为虚函数？</a></li>
+  <li><a href="#为什么存在this指针">为什么存在this指针？</a></li>
+  <li><a href="#四个类型强制转换">四个类型强制转换</a></li>
+</ul>
+
+  </nav>
+</div>
+
+</div>
+    </div>
+
+    <script async src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  function strip(str, remove) {
+    while (str.length > 0 && remove.indexOf(str.charAt(0)) != -1) {
+      str = str.substr(1);
+    }
+    while (str.length > 0 && remove.indexOf(str.charAt(str.length - 1)) != -1) {
+      str = str.substr(0, str.length - 1);
+    }
+    return str;
+  }
+
+  function scroll() {
+    console.log('scroll');
+    window.scrollTo({
+      left: 0, 
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+    sessionStorage.removeItem('forceCheckScroll');
+  }
+
+  const forceCheckScroll = sessionStorage.getItem('forceCheckScroll') === 'true';
+  const checkScroll = strip(window.location.pathname, '/') !== strip('', '/');
+
+  if (forceCheckScroll || checkScroll) {
+    const maxWidth = "(max-width: 48rem)";
+    const result = window.matchMedia(maxWidth);
+    if (result.matches) {
+      scroll();
+    } else {
+      result.addListener((match) => {
+        if (match.media == maxWidth) {
+          if (match.matches) {
+            scroll();
+          }
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>

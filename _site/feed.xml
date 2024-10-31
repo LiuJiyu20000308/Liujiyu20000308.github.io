@@ -1,4 +1,722 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-10-29T13:13:00+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">C++多线程</title><link href="http://localhost:4000/2024/10/20/Thread/" rel="alternate" type="text/html" title="C++多线程" /><published>2024-10-20T10:00:00+08:00</published><updated>2024-10-20T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/20/Thread</id><content type="html" xml:base="http://localhost:4000/2024/10/20/Thread/"><![CDATA[<p><a href="https://blog.csdn.net/QLeelq/article/details/115747717">This link</a></p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="多线程" /><summary type="html"><![CDATA[This link]]></summary></entry><entry><title type="html">算法和c++类面经</title><link href="http://localhost:4000/2024/10/11/Problem/" rel="alternate" type="text/html" title="算法和c++类面经" /><published>2024-10-11T10:00:00+08:00</published><updated>2024-10-11T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/11/Problem</id><content type="html" xml:base="http://localhost:4000/2024/10/11/Problem/"><![CDATA[<h3 id="改进以下类">改进以下类</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-10-31T23:51:30+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">C++11\14特性</title><link href="http://localhost:4000/2024/10/21/Cpp11_14/" rel="alternate" type="text/html" title="C++11\14特性" /><published>2024-10-21T10:00:00+08:00</published><updated>2024-10-21T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/21/Cpp11_14</id><content type="html" xml:base="http://localhost:4000/2024/10/21/Cpp11_14/"><![CDATA[<h2 id="c11特性">C++11特性</h2>
+
+<h3 id="1-自动类型推导-auto">1. <strong>自动类型推导 (<code class="language-plaintext highlighter-rouge">auto</code>)</strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">auto</code> 关键字，允许编译器根据表达式的类型自动推导变量的类型。它可以简化代码，特别是在处理复杂的类型时。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>      <span class="c1">// 编译器推导 x 为 int</span>
+<span class="k">auto</span> <span class="n">y</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>   <span class="c1">// 编译器推导 y 为 double</span>
+<span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">int</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>  <span class="c1">// 推导为 int*</span>
+</code></pre></div></div>
+
+<p>推导规则看CppLearning.pdf。</p>
+
+<h3 id="2-范围-for-循环range-based-for-loop">2. <strong>范围 for 循环（Range-based for loop）</strong></h3>
+
+<p>C++11 引入了范围 for 循环，简化了对容器或数组元素的迭代操作。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+<span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">v</span> <span class="o">:</span> <span class="n">vec</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="3-智能指针-shared_ptr-unique_ptr-weak_ptr">3. <strong>智能指针 (<code class="language-plaintext highlighter-rouge">shared_ptr</code>, <code class="language-plaintext highlighter-rouge">unique_ptr</code>, <code class="language-plaintext highlighter-rouge">weak_ptr</code>)</strong></h3>
+<p>智能指针本质是一个封装了一个原始C++指针的类模板，为了确保动态内存的安全性而产生的。
+C++11 提供了新的智能指针，用于更好地管理动态内存：</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::unique_ptr</code>：独占所有权。</li>
+  <li><code class="language-plaintext highlighter-rouge">std::shared_ptr</code>：共享所有权，使用引用计数来管理对象的生命周期。</li>
+  <li><code class="language-plaintext highlighter-rouge">std::weak_ptr</code>：用于打破 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 之间的循环引用。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>在 C++ 的早期，<code class="language-plaintext highlighter-rouge">auto_ptr</code> 是标准库中唯一提供的智能指针，用于自动管理动态分配的内存。然而，<code class="language-plaintext highlighter-rouge">auto_ptr</code> 有一些设计缺陷，尤其是所有权的转移行为不直观、不安全，因此在 C++11 引入了新的智能指针类型，如 <code class="language-plaintext highlighter-rouge">unique_ptr</code>、<code class="language-plaintext highlighter-rouge">shared_ptr</code> 和 <code class="language-plaintext highlighter-rouge">weak_ptr</code>，并逐渐淘汰了 <code class="language-plaintext highlighter-rouge">auto_ptr</code>。</p>
+
+<p>接下来，我们详细讨论从 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 到 C++11 的智能指针演变。</p>
+
+<h4 id="1-auto_ptrc98">1. <strong><code class="language-plaintext highlighter-rouge">auto_ptr</code>（C++98）</strong></h4>
+
+<p><code class="language-plaintext highlighter-rouge">auto_ptr</code> 是 C++98 标准中的智能指针，用来管理动态分配的对象。它的主要目的是在对象离开作用域时自动释放动态分配的内存，避免内存泄漏。</p>
+
+<h5 id="11-基本用法">1.1 <strong>基本用法</strong>：</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">auto_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>  <span class="c1">// 动态分配内存并绑定到 auto_ptr</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">auto_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>          <span class="c1">// 转移所有权，p1 不再持有对象</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">p2</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>       <span class="c1">// 输出 10</span>
+    <span class="c1">// p1 现在是空指针，持有 nullptr</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="12-auto_ptr-的问题">1.2 <strong><code class="language-plaintext highlighter-rouge">auto_ptr</code> 的问题</strong>：</h5>
+<ul>
+  <li><strong>所有权转移</strong>：<code class="language-plaintext highlighter-rouge">auto_ptr</code> 在拷贝和赋值时会转移资源的所有权。例如，<code class="language-plaintext highlighter-rouge">auto_ptr p2 = p1;</code> 会将资源从 <code class="language-plaintext highlighter-rouge">p1</code> 转移到 <code class="language-plaintext highlighter-rouge">p2</code>，而 <code class="language-plaintext highlighter-rouge">p1</code> 被置为空。这种所有权转移是不直观的，容易导致悬空指针或双重释放的问题。</li>
+  <li><strong>不能用于容器</strong>：由于 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 拷贝时会改变源对象的状态，它无法安全地用于 STL 容器（如 <code class="language-plaintext highlighter-rouge">std::vector</code>）。容器通常会在元素的插入和删除过程中进行拷贝操作，使用 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 会导致意外的行为。</li>
+  <li><strong>已经废弃</strong>：由于这些问题，<code class="language-plaintext highlighter-rouge">auto_ptr</code> 在 C++11 被标记为<strong>废弃</strong>，并在 C++17 中完全移除。</li>
+</ul>
+
+<h4 id="2-unique_ptrc11">2. <strong><code class="language-plaintext highlighter-rouge">unique_ptr</code>（C++11）</strong></h4>
+
+<p><code class="language-plaintext highlighter-rouge">unique_ptr</code> 是 C++11 引入的智能指针，旨在替代 <code class="language-plaintext highlighter-rouge">auto_ptr</code>。它也是一种<strong>独占所有权</strong>的智能指针，但相比 <code class="language-plaintext highlighter-rouge">auto_ptr</code>，<code class="language-plaintext highlighter-rouge">unique_ptr</code> 更加安全和高效。</p>
+
+<h5 id="21-特点">2.1 <strong>特点</strong>：</h5>
+<ul>
+  <li><strong>独占所有权</strong>：<code class="language-plaintext highlighter-rouge">unique_ptr</code> 独占所管理的资源，不能被拷贝，但可以通过<strong>移动语义</strong>（move semantics）转移所有权。</li>
+  <li><strong>轻量高效</strong>：相比于 <code class="language-plaintext highlighter-rouge">shared_ptr</code>，<code class="language-plaintext highlighter-rouge">unique_ptr</code> 没有额外的引用计数开销。</li>
+  <li><strong>自定义删除器</strong>：<code class="language-plaintext highlighter-rouge">unique_ptr</code> 支持自定义删除器，可以管理复杂资源（如文件句柄、网络连接等）。</li>
+</ul>
+
+<h5 id="22-基本用法">2.2 <strong>基本用法</strong>：</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">20</span><span class="p">));</span>       <span class="c1">// 创建 unique_ptr，管理动态分配的内存</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span>    <span class="c1">// 使用 std::move 转移所有权</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">p2</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>              <span class="c1">// 输出 20</span>
+    <span class="c1">// p1 现在是空的，不能再使用它</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="23-与-auto_ptr-的区别">2.3 <strong>与 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 的区别</strong>：</h5>
+<ul>
+  <li>
+    <p><strong>不能拷贝</strong>：与 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 不同，<code class="language-plaintext highlighter-rouge">unique_ptr</code> 不能通过复制构造或赋值操作来拷贝。必须使用 <code class="language-plaintext highlighter-rouge">std::move</code> 将所有权从一个 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 转移到另一个。这避免了 <code class="language-plaintext highlighter-rouge">auto_ptr</code> 的潜在所有权混乱问题。</p>
+  </li>
+  <li>
+    <p><strong>自定义删除器</strong>：<code class="language-plaintext highlighter-rouge">unique_ptr</code> 可以接受自定义删除器来释放资源，适用于更复杂的资源管理场景。</p>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">FILE</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fclose</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">filePtr</span><span class="p">(</span><span class="n">fopen</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">),</span> <span class="n">fclose</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h5 id="24-应用场景">2.4 <strong>应用场景</strong>：</h5>
+<ul>
+  <li>用于确保资源在离开作用域时被正确释放，避免内存泄漏。</li>
+  <li><code class="language-plaintext highlighter-rouge">unique_ptr</code> 适用于独占资源的场景，如管理文件、网络连接或设备句柄等。</li>
+</ul>
+
+<h4 id="3-shared_ptrc11">3. <strong><code class="language-plaintext highlighter-rouge">shared_ptr</code>（C++11）</strong></h4>
+
+<p><code class="language-plaintext highlighter-rouge">shared_ptr</code> 是一种支持<strong>共享所有权</strong>的智能指针，多个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 可以共同管理同一个对象。对象的生命周期会延长，直到最后一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 释放它。</p>
+
+<h5 id="31-特点">3.1 <strong>特点</strong>：</h5>
+<ul>
+  <li><strong>引用计数</strong>：<code class="language-plaintext highlighter-rouge">shared_ptr</code> 内部维护一个引用计数，当引用计数为 0 时，所管理的对象会被自动销毁。</li>
+  <li><strong>拷贝安全</strong>：<code class="language-plaintext highlighter-rouge">shared_ptr</code> 可以被拷贝，拷贝时引用计数增加。</li>
+  <li><strong>线程安全</strong>：C++11 标准中，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的引用计数是线程安全的。</li>
+</ul>
+
+<h5 id="32-基本用法">3.2 <strong>基本用法</strong>：</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span>   <span class="c1">// 推荐的创建方式</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>                          <span class="c1">// 拷贝 p1，引用计数增加</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">p1</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>                         <span class="c1">// 输出 30</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Use count: "</span> <span class="o">&lt;&lt;</span> <span class="n">p1</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 引用计数输出 2</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="33-shared_ptr-与-unique_ptr-的区别">3.3 <strong><code class="language-plaintext highlighter-rouge">shared_ptr</code> 与 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 的区别</strong>：</h5>
+<ul>
+  <li>
+    <p><strong>共享所有权</strong>：<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的设计目的是让多个智能指针共享同一个对象。当不再需要对象时，引用计数归零，自动销毁对象。相比之下，<code class="language-plaintext highlighter-rouge">unique_ptr</code> 独占对象，不能共享。</p>
+  </li>
+  <li>
+    <p><strong>性能开销</strong>：由于 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 需要维护引用计数，它比 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 有更大的内存和性能开销。如果没有必要的共享行为，应该优先使用 <code class="language-plaintext highlighter-rouge">unique_ptr</code>。</p>
+  </li>
+</ul>
+
+<h5 id="34-自定义删除器">3.4 <strong>自定义删除器</strong>：</h5>
+<p>与 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 类似，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 也支持自定义删除器：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">FILE</span><span class="o">&gt;</span> <span class="n">filePtr</span><span class="p">(</span><span class="n">fopen</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">),</span> <span class="n">fclose</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h5 id="35-应用场景">3.5 <strong>应用场景</strong>：</h5>
+<ul>
+  <li>当多个对象需要共享同一个资源时，可以使用 <code class="language-plaintext highlighter-rouge">shared_ptr</code>。例如，一个对象在多个模块中被使用，所有模块都应该控制其生命周期。</li>
+  <li>当对象的强引用计数降为0时，shared_ptr会释放该对象的内存，但控制块不会立即释放，因为仍然有weak_ptr可能在观察它。控制块会在弱引用计数也降为0时释放，这样可以确保weak_ptr可以安全地判断对象是否有效。</li>
+</ul>
+
+<h4 id="4-weak_ptrc11">4. <strong><code class="language-plaintext highlighter-rouge">weak_ptr</code>（C++11）</strong></h4>
+
+<p><code class="language-plaintext highlighter-rouge">weak_ptr</code> 是一种<strong>非拥有</strong>（non-owning）的智能指针，它与 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 配合使用，用于解决共享对象的<strong>循环引用</strong>问题。<code class="language-plaintext highlighter-rouge">weak_ptr</code> 不影响引用计数。</p>
+
+<h5 id="41-特点">4.1 <strong>特点</strong>：</h5>
+<ul>
+  <li><strong>弱引用</strong>：<code class="language-plaintext highlighter-rouge">weak_ptr</code> 只是指向对象，并不影响对象的生命周期，不能直接解引用。</li>
+  <li><strong>循环引用解决</strong>：在使用 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 时，如果两个对象相互持有对方的 <code class="language-plaintext highlighter-rouge">shared_ptr</code>，会导致循环引用，无法释放内存。使用 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 可以打破这种循环。</li>
+</ul>
+
+<h5 id="42-基本用法">4.2 <strong>基本用法</strong>：</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sp</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">40</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">wp</span> <span class="o">=</span> <span class="n">sp</span><span class="p">;</span>  <span class="c1">// 创建 weak_ptr，不增加引用计数</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">wp</span><span class="p">.</span><span class="n">lock</span><span class="p">())</span> <span class="p">{</span>  <span class="c1">// 使用 lock() 生成 shared_ptr</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">temp</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出 40</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Resource no longer available."</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="43-应用场景">4.3 <strong>应用场景</strong>：</h5>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">weak_ptr</code> 通常用于避免循环引用。例如在双向链表、图结构或依赖关系复杂的系统中，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的循环引用问题可以通过 <code class="language-plaintext highlighter-rouge">weak_ptr</code> 解决。</li>
+</ul>
+
+<p><strong>智能指针中的引用计数是线程安全的，但是智能指针所指向的对象的线程安全问题，智能指针没有做任何保障线程不安全。</strong></p>
+
+<h3 id="4-lambda-表达式">4. <strong>Lambda 表达式</strong></h3>
+
+<p>C++11 引入了 lambda 表达式，使得可以在代码中编写匿名函数，特别适合于函数作为参数的场景，如回调、事件处理等。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">add</span> <span class="o">=</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出 3</span>
+</code></pre></div></div>
+
+<p>捕获外部变量：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="k">auto</span> <span class="n">func</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">](</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">x</span><span class="p">;</span> <span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">func</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出 8</span>
+</code></pre></div></div>
+
+<p>匿名函数本质上是一个对象，在其定义的过程中会创建出一个栈对象，内部通过重载()符号实现函数调用的外表。</p>
+
+<p>优点：使用匿名函数，可以免去函数的声明和定义。这样匿名函数仅在调用函数的时候才会创建函数对象，而调用结束后立即释放，所以匿名函数比非匿名函数更节省空间。</p>
+
+<h3 id="5-移动语义与右值引用-rvalue-references">5. <strong>移动语义与右值引用 (<code class="language-plaintext highlighter-rouge">rvalue references</code>)</strong></h3>
+
+<p>C++11 引入了移动语义和右值引用，允许开发者通过转移资源所有权来避免不必要的拷贝，极大地提升了性能，尤其是对于临时对象的处理。</p>
+
+<ul>
+  <li>右值引用通过 <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code> 定义，可以捕获右值，并通过 <code class="language-plaintext highlighter-rouge">std::move()</code> 转移资源。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v1</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">v1</span><span class="p">);</span>  <span class="c1">// v1 的资源被转移给 v2，避免了拷贝</span>
+</code></pre></div></div>
+
+<p><strong>完美转发</strong>（Perfect Forwarding）是 C++11 引入的一个特性，<strong>允许函数将其接收到的参数（包括其值类型、引用类型和右值或左值属性）完美地转发给另一个函数</strong>。这种转发可以保留参数的所有特性，从而避免不必要的拷贝或引用失效问题。</p>
+
+<p>完美转发的核心是<strong>右值引用</strong>（rvalue references）和<strong>模板参数推导</strong>，特别是结合了 <code class="language-plaintext highlighter-rouge">std::forward</code> 的使用，使得我们可以将函数接收到的参数以最优的方式传递给其他函数。</p>
+
+<p>完美转发依赖于以下几个概念：</p>
+
+<ol>
+  <li><strong>右值引用（Rvalue Reference）</strong>：
+    <ul>
+      <li>右值引用通过 <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code> 语法定义，用来接受右值对象（临时对象），并允许开发者高效地使用和转移这些对象的资源。</li>
+      <li>对于模板参数中的 <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code>，它既能接受右值引用，也能接受左值引用，这是完美转发的基础。</li>
+    </ul>
+  </li>
+  <li><strong>万能引用（Universal Reference）</strong>：
+    <ul>
+      <li>当 <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code> 作为模板参数出现时，它被称为<strong>万能引用</strong>，可以同时接受左值引用和右值引用。编译器根据传递的参数类型推导 <code class="language-plaintext highlighter-rouge">T</code> 的类型，从而决定是左值引用还是右值引用。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::forward</code></strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::forward</code> 是一个帮助函数，用来在函数内部将参数以原始的类型（左值或右值）转发给另一个函数。它根据模板参数的类型决定是否执行<strong>移动语义</strong>（move semantics）。</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;utility&gt;</span><span class="c1">  // for std::forward</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">process</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Lvalue reference: "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">process</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Rvalue reference: "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="n">forwarder</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">arg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">process</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">arg</span><span class="p">));</span>  <span class="c1">// 保持 arg 的值类别</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+    <span class="n">forwarder</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>        <span class="c1">// 转发左值，调用 process(int&amp;)</span>
+    <span class="n">forwarder</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>      <span class="c1">// 转发右值，调用 process(int&amp;&amp;)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Lvalue reference: 42
+Rvalue reference: 100
+</code></pre></div></div>
+
+<p>如果没有使用 <code class="language-plaintext highlighter-rouge">std::forward</code>，完美转发就无法正常工作。例如：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="nf">forwarder</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">arg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">process</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>  <span class="c1">// 没有使用 std::forward</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+    <span class="n">forwarder</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>        <span class="c1">// 错误：a 是左值，传递给 process 时应为左值引用</span>
+    <span class="n">forwarder</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>      <span class="c1">// 错误：100 是右值，但被转发为左值</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>在这段代码中，<code class="language-plaintext highlighter-rouge">process(arg)</code> 传递的是 <code class="language-plaintext highlighter-rouge">arg</code>，无论 <code class="language-plaintext highlighter-rouge">arg</code> 是左值还是右值，都会被视为<strong>左值</strong>传递。结果是，即使你传递的是右值，它在传递过程中也会丧失右值属性。</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">std::forward</code> 根据模板参数的类型来决定是否转发为右值：</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">forward</span><span class="p">(</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&amp;&amp;&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>如果 <code class="language-plaintext highlighter-rouge">T</code> 是左值引用类型，<code class="language-plaintext highlighter-rouge">std::forward&lt;T&gt;(t)</code> 会返回 <code class="language-plaintext highlighter-rouge">t</code> 的左值引用。</li>
+  <li>如果 <code class="language-plaintext highlighter-rouge">T</code> 是右值引用类型，<code class="language-plaintext highlighter-rouge">std::forward&lt;T&gt;(t)</code> 会将 <code class="language-plaintext highlighter-rouge">t</code> 转换为右值引用。</li>
+</ul>
+
+<h3 id="6-完美转发的注意事项">6. <strong>完美转发的注意事项</strong></h3>
+
+<ol>
+  <li><strong>引用折叠</strong>：
+    <ul>
+      <li>在完美转发中，C++11 引入了<strong>引用折叠规则</strong>，帮助解决模板参数推导过程中多重引用的问题。具体规则如下：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">T&amp; &amp;</code>、<code class="language-plaintext highlighter-rouge">T&amp; &amp;&amp;</code>、<code class="language-plaintext highlighter-rouge">T&amp;&amp; &amp;</code> 都会折叠为 <code class="language-plaintext highlighter-rouge">T&amp;</code>（左值引用）。</li>
+          <li>只有 <code class="language-plaintext highlighter-rouge">T&amp;&amp; &amp;&amp;</code> 会折叠为 <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code>（右值引用）。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>性能问题</strong>：
+    <ul>
+      <li>完美转发的设计目的是优化性能，减少不必要的拷贝和对象构造。然而，完美转发可能引入额外的复杂性，尤其是在处理移动语义时。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::forward</code> 与 <code class="language-plaintext highlighter-rouge">std::move</code> 的区别</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::move</code> 总是将其参数转换为右值引用，而 <code class="language-plaintext highlighter-rouge">std::forward</code> 会根据参数类型决定是否保留其值类别。因此，<code class="language-plaintext highlighter-rouge">std::forward</code> 更适合用于模板参数转发。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="6-nullptr">6. <strong><code class="language-plaintext highlighter-rouge">nullptr</code></strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">nullptr</code>，它取代了传统的 <code class="language-plaintext highlighter-rouge">NULL</code>，成为一个类型安全的空指针常量。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>  <span class="c1">// 代替 NULL</span>
+</code></pre></div></div>
+
+<h3 id="7-constexpr">7. <strong><code class="language-plaintext highlighter-rouge">constexpr</code></strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">constexpr</code>，它允许在编译时计算常量表达式，提高编译期的优化。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">constexpr</span> <span class="kt">int</span> <span class="nf">square</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">;</span> <span class="p">}</span>
+<span class="k">constexpr</span> <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>  <span class="c1">// 在编译时计算</span>
+</code></pre></div></div>
+
+<h3 id="8-委托构造函数delegating-constructors">8. <strong>委托构造函数（Delegating constructors）</strong></h3>
+
+<p>C++11 允许一个构造函数调用另一个构造函数，简化了构造函数的实现。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">MyClass</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="o">:</span> <span class="n">MyClass</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>  <span class="c1">// 调用另一个构造函数</span>
+    <span class="n">MyClass</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">{}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="9-显式转换运算符explicit-conversion-operators">9. <strong>显式转换运算符（Explicit conversion operators）</strong></h3>
+
+<p>C++11 允许将类型转换运算符标记为 <code class="language-plaintext highlighter-rouge">explicit</code>，避免隐式转换带来的错误。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">explicit</span> <span class="k">operator</span> <span class="kt">bool</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">MyClass</span> <span class="n">obj</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// 只有通过显示的转换，才能将 obj 转换为 bool</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="10-stdthread-和多线程支持">10. <strong><code class="language-plaintext highlighter-rouge">std::thread</code> 和多线程支持</strong></h3>
+
+<p>C++11 引入了标准库的多线程支持，包括 <code class="language-plaintext highlighter-rouge">std::thread</code>、<code class="language-plaintext highlighter-rouge">std::mutex</code>、<code class="language-plaintext highlighter-rouge">std::lock_guard</code> 等，可以直接使用标准库进行线程创建和同步。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span><span class="kt">void</span> <span class="nf">threadFunc</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Hello from thread"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t</span><span class="p">(</span><span class="n">threadFunc</span><span class="p">);</span>  <span class="c1">// 创建一个线程</span>
+    <span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>                   <span class="c1">// 等待线程结束</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="11-变参模板variadic-templates">11. <strong>变参模板（Variadic templates）</strong></h3>
+
+<p>C++11 支持变参模板，允许模板接受任意数量的模板参数。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="nf">print</span><span class="p">(</span><span class="n">Args</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">...</span> <span class="o">&lt;&lt;</span> <span class="n">args</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// C++17 fold expression</span>
+<span class="p">}</span>
+<span class="n">print</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="s">"Hello"</span><span class="p">);</span>  <span class="c1">// 输出：1 2.5 Hello</span>
+</code></pre></div></div>
+
+<h3 id="12-stdtuple">12. <strong><code class="language-plaintext highlighter-rouge">std::tuple</code></strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">std::tuple</code>，它是一个固定大小的异构集合，允许存储不同类型的对象。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;tuple&gt;</span><span class="cp">
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="s">"Hello"</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出 1</span>
+</code></pre></div></div>
+
+<h3 id="13-enum-class">13. <strong><code class="language-plaintext highlighter-rouge">enum class</code></strong></h3>
+
+<p>C++11 引入了强类型枚举 <code class="language-plaintext highlighter-rouge">enum class</code>，它比传统的 <code class="language-plaintext highlighter-rouge">enum</code> 更安全，因为它不会隐式转换为整型。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">enum</span> <span class="k">class</span> <span class="nc">Color</span> <span class="p">{</span> <span class="n">Red</span><span class="p">,</span> <span class="n">Green</span><span class="p">,</span> <span class="n">Blue</span> <span class="p">};</span>
+<span class="n">Color</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="o">::</span><span class="n">Red</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="14-stdarray">14. <strong><code class="language-plaintext highlighter-rouge">std::array</code></strong></h3>
+
+<p>C++11 提供了 <code class="language-plaintext highlighter-rouge">std::array</code>，它是 C++ STL 的静态数组，具有固定大小，并且提供了与 STL 容器相同的接口。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;array&gt;</span><span class="cp">
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="n">arr</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出 2</span>
+</code></pre></div></div>
+
+<h3 id="15-初始化列表initializer-lists">15. <strong>初始化列表（Initializer Lists）</strong></h3>
+
+<p>C++11 引入了初始化列表语法，允许通过大括号 <code class="language-plaintext highlighter-rouge">{}</code> 直接初始化对象。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span>  <span class="c1">// 使用初始化列表</span>
+</code></pre></div></div>
+
+<h3 id="16-decltype">16. <strong><code class="language-plaintext highlighter-rouge">decltype</code></strong></h3>
+
+<p>C++11 提供了 <code class="language-plaintext highlighter-rouge">decltype</code>，用于推导表达式的类型，类似于 <code class="language-plaintext highlighter-rouge">auto</code>，但 <code class="language-plaintext highlighter-rouge">decltype</code> 可以用于复杂表达式的类型推导。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="k">decltype</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>  <span class="c1">// y 的类型与 x 相同，推导为 int</span>
+</code></pre></div></div>
+
+<h3 id="17-静态断言static_assert">17. <strong>静态断言（<code class="language-plaintext highlighter-rouge">static_assert</code>）</strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">static_assert</code>，用于在编译时进行条件检查，如果条件为假，编译器会抛出错误。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static_assert</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="s">"int size is not 4 bytes"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="18-后置返回类型trailing-return-types">18. <strong>后置返回类型（Trailing Return Types）</strong></h3>
+
+<p>C++11 支持在函数定义中使用后置返回类型，特别适用于复杂的返回类型或函数模板。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="19-noexcept">19. <strong><code class="language-plaintext highlighter-rouge">noexcept</code></strong></h3>
+
+<p>C++11 引入了 <code class="language-plaintext highlighter-rouge">noexcept</code>，用于标记函数不抛出异常，有助于编译器优化。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">func</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span>
+    <span class="c1">// 函数不抛出异常</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="20-右值引用与移动构造函数">20. <strong>右值引用与移动构造函数</strong></h3>
+
+<p>C++11 提供了右值引用和移动语义，用于避免不必要的对象拷贝，提高性能。移动构造函数和移动赋值运算符可以通过转移资源来避免深拷贝。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">MyClass</span><span class="p">(</span><span class="n">MyClass</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+        <span class="c1">// 实现移动构造函数</span>
+    <span class="p">}</span>
+    <span class="n">MyClass</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">MyClass</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+        <span class="c1">// 实现移动赋值运算符</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="总结">总结</h3>
+
+<p>C++11 是 C++ 语言的一次重大更新，带来了许多极大增强语言能力的特性。这些特性不仅简化了编写 C++ 代码的过程，还提供了强大的工具用于提高性能和安全性，使得 C++ 在现代开发中更加高效和实用。</p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="C++" /><summary type="html"><![CDATA[C++11特性]]></summary></entry><entry><title type="html">C++补充</title><link href="http://localhost:4000/2024/10/21/Cpp/" rel="alternate" type="text/html" title="C++补充" /><published>2024-10-21T10:00:00+08:00</published><updated>2024-10-21T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/21/Cpp</id><content type="html" xml:base="http://localhost:4000/2024/10/21/Cpp/"><![CDATA[<h3 id="内存分区">内存分区</h3>
+
+<p>C++内存主要分为以下几个部分：</p>
+
+<p>栈（Stack）：用于存储局部变量、函数参数、返回地址等。栈是自动管理的，数据进入作用域分配空间，离开作用域自动释放。</p>
+
+<p>堆（Heap）：用于动态分配内存，如使用new或malloc分配的内存。堆内存需要手动释放，否则会导致内存泄露。</p>
+
+<p>全局/静态存储区：存储全局变量和静态变量。全局/静态存储区的内存在程序编译时就已经分配好，且在程序整个运行期间都存在。</p>
+
+<p>常量存储区：存储常量字符串等。该区域的内存在程序编译时就已经分配好，并且内容不可更改。</p>
+
+<p>代码区：存储程序的可执行代码。</p>
+
+<h3 id="多态的实现原理实现方式是什么以及多态的优点特点">多态的实现原理（实现方式）是什么？以及多态的优点（特点）？</h3>
+<p>实现方式：多态分为动态多态和静态多态（又称编译期多态，即在系统编译期间就可以确定程序将要执行哪个函数）</p>
+
+<p>其中动态多态是通过虚函数实现的，虚函数是类的成员函数，存在存储虚函数指针的表叫做虚函数表，虚函数表是一个存储类成员虚函数的指针，每个指针都指向调用它的地方，当子类调用虚函数时，就会去虚表里面找自己对应的函数指针，从而实现“谁调用、实现谁”从而实现多态。</p>
+
+<p>静态多态则是通过函数重载（函数名相同，参数不同，两个函数在同一作用域），运算符重载，和重定义（又叫隐藏，指的是在继承关系中，子类实现了一个和父类名字一样的函数，（只关注函数名，和参数与返回值无关）这样的话子类的函数就把父类的同名函数隐藏了。隐藏只与函数名有关，与参数没有关系）来实现的。</p>
+
+<p>优点：加强代码的可扩展性，可替换性，增强程序的灵活性，提高使用效率，简化对应用代码的编写和修改过程。</p>
+
+<h3 id="final标识符的作用">final标识符的作用</h3>
+<p>放在类的后面表示该类无法被继承，也就是阻止了从类的继承，放在虚函数后面该虚函数无法被重写，表示阻止虚函数的重载</p>
+
+<h3 id="explicit关键字">explicit关键字</h3>
+<p>只能用于修饰只有一个参数的类构造函数（有一个例外就是，当除了第一个参数以外的其他参数都有默认值的时候此关键字依然有效），它的作用是表明该构造函数是显示的，而非隐式的，跟它对应的另一个关键字是implicit，意思是隐藏的，类构造函数默认情况下声明为implicit。作用是防止类构造函数的隐式自动转换。</p>
+
+<p>在<code class="language-plaintext highlighter-rouge">std::vector</code>中，<code class="language-plaintext highlighter-rouge">push_back()</code>和<code class="language-plaintext highlighter-rouge">emplace_back()</code>都用于在末尾添加元素，但它们的实现和适用场景有所不同。</p>
+
+<h3 id="push_back"><code class="language-plaintext highlighter-rouge">push_back()</code></h3>
+
+<ul>
+  <li><strong>功能</strong>：将一个元素拷贝或移动到容器的末尾。</li>
+  <li><strong>实现方式</strong>：<code class="language-plaintext highlighter-rouge">push_back()</code>会创建一个临时对象（如果传入的是构造参数），然后将该对象拷贝或移动到<code class="language-plaintext highlighter-rouge">vector</code>的末尾。对于已存在的对象传递，是直接拷贝或移动的。</li>
+  <li><strong>适用场景</strong>：在需要添加一个已经创建好的对象（例如一个临时变量或函数返回的对象）时使用<code class="language-plaintext highlighter-rouge">push_back()</code>更直观。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"hello"</span><span class="p">;</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>           <span class="c1">// 拷贝 str</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">"world"</span><span class="p">);</span>        <span class="c1">// 创建临时对象并拷贝</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">str</span><span class="p">));</span> <span class="c1">// 移动 str</span>
+</code></pre></div></div>
+
+<h3 id="emplace_back"><code class="language-plaintext highlighter-rouge">emplace_back()</code></h3>
+
+<ul>
+  <li><strong>功能</strong>：直接在<code class="language-plaintext highlighter-rouge">vector</code>的末尾构造对象，避免不必要的拷贝或移动操作。</li>
+  <li><strong>实现方式</strong>：<code class="language-plaintext highlighter-rouge">emplace_back()</code>会将传入的参数直接用于调用对象的构造函数，因此不会额外创建临时对象。这在效率上更高，特别是对于复杂对象来说。</li>
+  <li><strong>适用场景</strong>：在需要添加新对象且不希望额外拷贝时，使用<code class="language-plaintext highlighter-rouge">emplace_back()</code>更合适，尤其在构造的过程中可以直接传入参数。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">;</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span>    <span class="c1">// 直接构造字符串，无需拷贝</span>
+<span class="n">vec</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="sc">'a'</span><span class="p">);</span>    <span class="c1">// 调用 std::string(10, 'a') 构造字符串</span>
+</code></pre></div></div>
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">push_back()</code></strong>适用于已有对象或简单对象的插入，能更直观表达意图。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">emplace_back()</code></strong>适合在需要构造复杂对象时使用，因为它可以避免临时对象的创建，提高效率。</li>
+</ul>
+
+<h3 id="类中static函数是否能声明为虚函数">类中static函数是否能声明为虚函数？</h3>
+<p>不能，因为类中的static函数是所有类实例化对象所共有的，没有this指针，而虚函数依靠vptr和vtable来处理，vptr是一个指针，在类中的构造函数中生成，并且只能通过this指针访问，对于静态成员函数来说，他没有this指针，无法访问vptr，因此static函数无法声明为虚函数</p>
+
+<h3 id="为什么存在this指针">为什么存在this指针？</h3>
+<p>类和对象中的成员函数存储在公共的代码段，不同的对象调用成员函数时编译器为了知道具体操作的是哪一个对象给每个“非静态的成员函数”增加了一个隐藏的指针参数，让该指针指向当前对象，在函数体中所有成员变量的操作，都是通过这个指针来完成的由编译器自动完成。</p>
+
+<p>C++ 中有四种主要的强制类型转换方式：<code class="language-plaintext highlighter-rouge">static_cast</code>、<code class="language-plaintext highlighter-rouge">dynamic_cast</code>、<code class="language-plaintext highlighter-rouge">const_cast</code> 和 <code class="language-plaintext highlighter-rouge">reinterpret_cast</code>，它们各自有不同的功能和适用场景。以下是每种类型转换的特点和实现原理：</p>
+
+<h3 id="四个类型强制转换">四个类型强制转换</h3>
+<h5 id="1-static_cast">1. <code class="language-plaintext highlighter-rouge">static_cast</code></h5>
+
+<ul>
+  <li><strong>特点</strong>：用于在编译时执行显式的类型转换。它可以在已知不会引发错误的情况下，用于安全类型转换。
+    <ul>
+      <li>支持基本数据类型之间的转换，如<code class="language-plaintext highlighter-rouge">int</code>到<code class="language-plaintext highlighter-rouge">float</code>。</li>
+      <li>支持指针或引用在类层次结构中的转换，但只能用于已知类型的上下层关系（例如父类到子类的转换）。</li>
+      <li>支持 void* 到其他指针类型的转换。</li>
+    </ul>
+  </li>
+  <li><strong>原理</strong>：在编译时执行，转换过程中不会进行运行时检查，因此效率较高，但不适用于多态类型的安全转换。</li>
+  <li>
+    <p><strong>适用场景</strong>：当确定转换是合法且安全时，如基本类型之间转换、类层次结构中父类指针转换为子类指针（前提是确知转换有效）。</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 浮点转为整数</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h5 id="2-dynamic_cast">2. <code class="language-plaintext highlighter-rouge">dynamic_cast</code></h5>
+
+<ul>
+  <li><strong>特点</strong>：用于在运行时执行安全的类型转换，主要用于指针或引用之间的转换。只能用于带有虚函数的多态类（即 RTTI，运行时类型识别）。
+    <ul>
+      <li>如果转换失败，指针类型会返回 <code class="language-plaintext highlighter-rouge">nullptr</code>，引用类型会抛出 <code class="language-plaintext highlighter-rouge">bad_cast</code> 异常。</li>
+      <li>只能用于类层次结构中基类和派生类之间的转换。</li>
+    </ul>
+  </li>
+  <li><strong>原理</strong>：依赖于 RTTI 机制，在运行时检查类型安全性，适用于基类指针向派生类指针的转换（即向下转型）。</li>
+  <li>
+    <p><strong>适用场景</strong>：当需要在类层次结构中安全地进行向下转换，并且类是多态类（带有虚函数表）时。</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Base</span> <span class="p">{</span> <span class="k">virtual</span> <span class="kt">void</span> <span class="n">func</span><span class="p">()</span> <span class="p">{}</span> <span class="p">};</span> <span class="c1">// 必须是多态类</span>
+<span class="k">class</span> <span class="nc">Derived</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span> <span class="p">{};</span>
+
+<span class="n">Base</span><span class="o">*</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Derived</span><span class="p">;</span>
+<span class="n">Derived</span><span class="o">*</span> <span class="n">d</span> <span class="o">=</span> <span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">Derived</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">b</span><span class="p">);</span> <span class="c1">// 转换成功</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h5 id="3-const_cast">3. <code class="language-plaintext highlighter-rouge">const_cast</code></h5>
+
+<ul>
+  <li><strong>特点</strong>：用于去掉或添加 <code class="language-plaintext highlighter-rouge">const</code> 或 <code class="language-plaintext highlighter-rouge">volatile</code> 修饰符，通常用于处理需要修改 <code class="language-plaintext highlighter-rouge">const</code> 对象的场景。
+    <ul>
+      <li>只能更改对象的<code class="language-plaintext highlighter-rouge">const</code>或<code class="language-plaintext highlighter-rouge">volatile</code>属性，不能用于其他类型的转换。</li>
+    </ul>
+  </li>
+  <li><strong>原理</strong>：编译时直接更改类型的<code class="language-plaintext highlighter-rouge">const</code>或<code class="language-plaintext highlighter-rouge">volatile</code>修饰，不影响数据在内存中的布局。</li>
+  <li>
+    <p><strong>适用场景</strong>：当需要在调用接口时移除<code class="language-plaintext highlighter-rouge">const</code>属性，如需要对<code class="language-plaintext highlighter-rouge">const</code>对象进行某些不可更改操作，或需要传递<code class="language-plaintext highlighter-rouge">const</code>对象给非<code class="language-plaintext highlighter-rouge">const</code>函数。</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="kt">int</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">const_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span> <span class="c1">// 去掉 const 修饰</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h5 id="4-reinterpret_cast">4. <code class="language-plaintext highlighter-rouge">reinterpret_cast</code></h5>
+
+<ul>
+  <li><strong>特点</strong>：用于进行极为底层的、类型上不安全的强制转换。它可以将任何指针类型转换为其他指针类型，或将整数转换为指针类型。
+    <ul>
+      <li>不同类型的指针之间、整数和指针之间可以相互转换。</li>
+      <li>该转换并不更改数据的底层二进制表示。</li>
+    </ul>
+  </li>
+  <li><strong>原理</strong>：直接重新解释内存中的二进制内容，将指针或数据的类型重新解释为目标类型。转换后数据的行为可能无法预测，因此需慎重使用。</li>
+  <li>
+    <p><strong>适用场景</strong>：当需要进行底层数据操作（如位操作或字节处理）时，或者需要将指针类型和整数类型之间转换时。</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">65</span><span class="p">;</span>
+<span class="kt">char</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">i</span><span class="p">);</span> <span class="c1">// 将 int* 转为 char*</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>转换类型</th>
+      <th>适用范围</th>
+      <th>运行时检查</th>
+      <th>主要功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">static_cast</code></td>
+      <td>编译时可确定的安全转换</td>
+      <td>否</td>
+      <td>基本类型转换、类层次结构的向上转换</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">dynamic_cast</code></td>
+      <td>类层次结构中的向下转换，适用于多态类型</td>
+      <td>是</td>
+      <td>多态类的运行时类型检查，确保转换安全</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">const_cast</code></td>
+      <td>去掉或添加<code class="language-plaintext highlighter-rouge">const</code>或<code class="language-plaintext highlighter-rouge">volatile</code>修饰</td>
+      <td>否</td>
+      <td>改变<code class="language-plaintext highlighter-rouge">const</code>或<code class="language-plaintext highlighter-rouge">volatile</code>修饰，主要用于修改<code class="language-plaintext highlighter-rouge">const</code>对象</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">reinterpret_cast</code></td>
+      <td>低层次、不安全的类型转换</td>
+      <td>否</td>
+      <td>直接重新解释数据的二进制表示，适用于指针和整数之间的转换</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="使用建议">使用建议</h5>
+
+<ul>
+  <li>优先选择 <strong><code class="language-plaintext highlighter-rouge">static_cast</code></strong> 和 <strong><code class="language-plaintext highlighter-rouge">dynamic_cast</code></strong>，因为它们更安全、用途更清晰。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">const_cast</code></strong> 仅在必要时使用（如函数接口限制）。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">reinterpret_cast</code></strong> 应慎用，避免带来不易预期的错误和不稳定因素。</li>
+</ul>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="C++" /><summary type="html"><![CDATA[内存分区]]></summary></entry><entry><title type="html">C++多线程</title><link href="http://localhost:4000/2024/10/20/Thread/" rel="alternate" type="text/html" title="C++多线程" /><published>2024-10-20T10:00:00+08:00</published><updated>2024-10-20T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/20/Thread</id><content type="html" xml:base="http://localhost:4000/2024/10/20/Thread/"><![CDATA[<p>C++的<code class="language-plaintext highlighter-rouge">atomic</code>库和<code class="language-plaintext highlighter-rouge">thread</code>库是多线程编程中常用的库，提供了安全的并发操作支持。</p>
+
+<h3 id="1-thread库">1. <code class="language-plaintext highlighter-rouge">thread</code>库</h3>
+
+<p><a href="https://blog.csdn.net/QLeelq/article/details/115747717">This link</a></p>
+
+<h3 id="2-atomic库">2. <code class="language-plaintext highlighter-rouge">atomic</code>库</h3>
+
+<p><code class="language-plaintext highlighter-rouge">&lt;atomic&gt;</code>库主要提供了原子操作（atomic operations），即无需锁机制即可实现的线程安全操作。这对提高多线程环境下的数据一致性和性能很有帮助。</p>
+
+<h4 id="常见的原子类型">常见的原子类型</h4>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::atomic&lt;T&gt;</code></strong>：提供一种基础原子类型，<code class="language-plaintext highlighter-rouge">T</code>可以是整型、指针等。常见类型如<code class="language-plaintext highlighter-rouge">std::atomic&lt;int&gt;</code>、<code class="language-plaintext highlighter-rouge">std::atomic&lt;bool&gt;</code>等。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::atomic_flag</code></strong>：最简单的原子布尔类型，适用于实现简单的锁（如自旋锁）。</li>
+</ul>
+
+<h4 id="原子操作的基本方法">原子操作的基本方法</h4>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">store(value)</code></strong>：原子地存储一个值。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">load()</code></strong>：原子地加载一个值。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">exchange(value)</code></strong>：原子地将变量的值设置为<code class="language-plaintext highlighter-rouge">value</code>，并返回先前的值。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">compare_exchange_strong(expected, desired)</code></strong> 和 <strong><code class="language-plaintext highlighter-rouge">compare_exchange_weak(expected, desired)</code></strong>：原子比较并交换操作，根据当前值与<code class="language-plaintext highlighter-rouge">expected</code>是否相等决定是否替换为<code class="language-plaintext highlighter-rouge">desired</code>。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">fetch_add(value)</code></strong>、<strong><code class="language-plaintext highlighter-rouge">fetch_sub(value)</code></strong>、<strong><code class="language-plaintext highlighter-rouge">fetch_or(value)</code></strong>等：执行加、减、或等操作并返回旧值。</li>
+</ul>
+
+<h4 id="原子变量的示例">原子变量的示例</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;atomic&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">counter</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">increment</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">counter</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// 原子增加操作</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span><span class="p">(</span><span class="n">increment</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t2</span><span class="p">(</span><span class="n">increment</span><span class="p">);</span>
+
+    <span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Final counter value: "</span> <span class="o">&lt;&lt;</span> <span class="n">counter</span><span class="p">.</span><span class="n">load</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="多线程" /><summary type="html"><![CDATA[C++的atomic库和thread库是多线程编程中常用的库，提供了安全的并发操作支持。]]></summary></entry><entry><title type="html">算法和c++类面经</title><link href="http://localhost:4000/2024/10/11/Problem/" rel="alternate" type="text/html" title="算法和c++类面经" /><published>2024-10-11T10:00:00+08:00</published><updated>2024-10-11T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/11/Problem</id><content type="html" xml:base="http://localhost:4000/2024/10/11/Problem/"><![CDATA[<h3 id="改进以下类">改进以下类</h3>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">MyStruct</span><span class="p">{</span>
     <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
@@ -1534,217 +2252,4 @@ b是可以被9整除的，因此a可以被9整除。</p>
     <span class="k">else</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">minDist</span><span class="p">[</span><span class="n">dst</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 到达终点最短路径</span>
 
 <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[Bellman-ford算法]]></summary></entry><entry><title type="html">Leetcode记录：拓扑排序</title><link href="http://localhost:4000/2024/08/31/TopoSort/" rel="alternate" type="text/html" title="Leetcode记录：拓扑排序" /><published>2024-08-31T15:00:00+08:00</published><updated>2024-08-31T15:00:00+08:00</updated><id>http://localhost:4000/2024/08/31/TopoSort</id><content type="html" xml:base="http://localhost:4000/2024/08/31/TopoSort/"><![CDATA[<p>例子：某个大型软件项目的构建系统拥有 N 个文件，文件编号从 0 到 N - 1，在这些文件中，某些文件依赖于其他文件的内容，这意味着如果文件 A 依赖于文件 B，则必须在处理文件 A 之前处理文件 B （0 &lt;= A, B &lt;= N - 1）。请编写一个算法，用于确定文件处理的顺序。</p>
-
-<p>概括来说，<strong>给出一个有向图，把这个有向图转成线性的排序就叫拓扑排序。</strong></p>
-
-<p>当然拓扑排序也要检测这个有向图 是否有环，即存在循环依赖的情况，因为这种情况是不能做线性排序的。<strong>所以拓扑排序也是图论中判断有向无环图的常用方法。</strong></p>
-
-<p>实现拓扑排序的算法有两种：<strong>卡恩算法（BFS）和DFS</strong>，接下来我们来讲解BFS的实现思路：当我们做拓扑排序的时候，应该优先找入度为0的节点，只有入度为0，它才是出发节点。之后将其去掉，再寻找入度为0的节点即可。</p>
-
-<p>因此，拓扑排序的过程，其实就两步：</p>
-<ol>
-  <li>找到入度为0 的节点，加入结果集</li>
-  <li>将该节点从图中移除</li>
-</ol>
-
-<p><strong>如果我们发现结果集元素个数不等于图中节点个数，我们就可以认定图中一定有有向环！这也是拓扑排序判断有向环的方法。</strong></p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">inDegree</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// 记录每个文件的入度</span>
-
-    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">umap</span><span class="p">;</span><span class="c1">// 记录文件依赖关系</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span> <span class="c1">// 记录结果</span>
-
-    <span class="k">while</span> <span class="p">(</span><span class="n">m</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// s-&gt;t，先有s才能有t</span>
-        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span> <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">;</span>
-        <span class="n">inDegree</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">++</span><span class="p">;</span> <span class="c1">// t的入度加一</span>
-        <span class="n">umap</span><span class="p">[</span><span class="n">s</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">t</span><span class="p">);</span> <span class="c1">// 记录s指向哪些文件</span>
-    <span class="p">}</span>
-
-    <span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">que</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// 入度为0的文件，可以作为开头，先加入队列</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">inDegree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">que</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-        <span class="c1">//cout &lt;&lt; inDegree[i] &lt;&lt; endl;</span>
-    <span class="p">}</span>
-    <span class="c1">// int count = 0;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">que</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">que</span><span class="p">.</span><span class="n">front</span><span class="p">();</span> <span class="c1">// 当前选中的文件</span>
-        <span class="n">que</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-        <span class="c1">//count++;</span>
-        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span>
-        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">files</span> <span class="o">=</span> <span class="n">umap</span><span class="p">[</span><span class="n">cur</span><span class="p">];</span> <span class="c1">//获取该文件指向的文件</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">files</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span> <span class="c1">// cur有后续文件</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">files</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">inDegree</span><span class="p">[</span><span class="n">files</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">--</span><span class="p">;</span> <span class="c1">// cur的指向的文件入度-1</span>
-                <span class="k">if</span><span class="p">(</span><span class="n">inDegree</span><span class="p">[</span><span class="n">files</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">que</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">result</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[例子：某个大型软件项目的构建系统拥有 N 个文件，文件编号从 0 到 N - 1，在这些文件中，某些文件依赖于其他文件的内容，这意味着如果文件 A 依赖于文件 B，则必须在处理文件 A 之前处理文件 B （0 &lt;= A, B &lt;= N - 1）。请编写一个算法，用于确定文件处理的顺序。]]></summary></entry><entry><title type="html">Leetcode记录：最小生成树</title><link href="http://localhost:4000/2024/08/31/MST/" rel="alternate" type="text/html" title="Leetcode记录：最小生成树" /><published>2024-08-31T10:00:00+08:00</published><updated>2024-08-31T10:00:00+08:00</updated><id>http://localhost:4000/2024/08/31/MST</id><content type="html" xml:base="http://localhost:4000/2024/08/31/MST/"><![CDATA[<h2 id="prim算法">prim算法</h2>
-
-<p>prim算法 是从节点的角度 采用贪心的策略 每次寻找距离 最小生成树最近的节点 并加入到最小生成树中。其算法核心就是三步：</p>
-
-<ol>
-  <li>选距离生成树最近节点</li>
-  <li>最近节点加入生成树</li>
-  <li>更新非生成树节点到生成树的距离（即更新minDist数组）</li>
-</ol>
-
-<p>时间复杂度为O(n^2), n为节点数量。</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">v</span><span class="p">,</span> <span class="n">e</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">v</span> <span class="o">&gt;&gt;</span> <span class="n">e</span><span class="p">;</span>
-    <span class="c1">// 填一个默认最大值，题目描述val最大为10000</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">grid</span><span class="p">(</span><span class="n">v</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10001</span><span class="p">));</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">e</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="n">k</span><span class="p">;</span>
-        <span class="c1">// 因为是双向图，所以两个方向都要填上</span>
-        <span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>
-        <span class="n">grid</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>
-
-    <span class="p">}</span>
-    <span class="c1">// 所有节点到最小生成树的最小距离</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">minDist</span><span class="p">(</span><span class="n">v</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10001</span><span class="p">);</span>
-
-    <span class="c1">// 这个节点是否在树里</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">isInTree</span><span class="p">(</span><span class="n">v</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
-
-     <span class="c1">//加上初始化</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">parent</span><span class="p">(</span><span class="n">v</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-
-    <span class="c1">// 我们只需要循环 n-1次，建立 n - 1条边，就可以把n个节点的图连在一起</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-
-        <span class="c1">// 1、prim三部曲，第一步：选距离生成树最近节点</span>
-        <span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// 选中哪个节点 加入最小生成树</span>
-        <span class="kt">int</span> <span class="n">minVal</span> <span class="o">=</span> <span class="n">INT_MAX</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">v</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 1 - v，顶点编号，这里下标从1开始</span>
-            <span class="c1">//  选取最小生成树节点的条件：</span>
-            <span class="c1">//  （1）不在最小生成树里</span>
-            <span class="c1">//  （2）距离最小生成树最近的节点</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isInTree</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span>  <span class="n">minDist</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">minVal</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">minVal</span> <span class="o">=</span> <span class="n">minDist</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-                <span class="n">cur</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="c1">// 2、prim三部曲，第二步：最近节点（cur）加入生成树</span>
-        <span class="n">isInTree</span><span class="p">[</span><span class="n">cur</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-
-        <span class="c1">// 3、prim三部曲，第三步：更新非生成树节点到生成树的距离（即更新minDist数组）</span>
-        <span class="c1">// cur节点加入之后， 最小生成树加入了新的节点，那么所有节点到 最小生成树的距离（即minDist数组）需要更新一下</span>
-        <span class="c1">// 由于cur节点是新加入到最小生成树，那么只需要关心与 cur 相连的 非生成树节点 的距离 是否比 原来 非生成树节点到生成树节点的距离更小了呢</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">v</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// 更新的条件：</span>
-            <span class="c1">// （1）节点是 非生成树里的节点</span>
-            <span class="c1">// （2）与cur相连的某节点的权值 比 该某节点距离最小生成树的距离小</span>
-            <span class="c1">// 很多录友看到自己 就想不明白什么意思，其实就是 cur 是新加入 最小生成树的节点，那么 所有非生成树的节点距离生成树节点的最近距离 由于 cur的新加入，需要更新一下数据了</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isInTree</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">grid</span><span class="p">[</span><span class="n">cur</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">minDist</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
-                <span class="n">minDist</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="n">cur</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
-                <span class="n">parent</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur</span><span class="p">;</span> <span class="c1">// 记录边</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="c1">// 统计结果，minDist[i]均为最小生成树的一条边的权值</span>
-    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">v</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 不计第一个顶点，因为统计的是边的权值，v个节点有 v-1条边</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="n">minDist</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h2 id="kruskal算法">Kruskal算法</h2>
-
-<p><strong>prim 算法是维护节点的集合，而 Kruskal 是维护边的集合。</strong>
-Kruskal的思路：</p>
-
-<ol>
-  <li>边的权值排序，因为要优先选最小的边加入到生成树里</li>
-  <li>遍历排序后的边
-    <ol>
-      <li>如果边首尾的两个节点在同一个集合，说明如果连上这条边图中会出现环</li>
-      <li>如果边首尾的两个节点不在同一个集合，加入到最小生成树，并把两个节点加入同一个集合</li>
-    </ol>
-  </li>
-</ol>
-
-<p>但在代码中，如果将两个节点加入同一个集合，又如何判断两个节点是否在同一个集合呢？<strong>这里就涉及到并查集。</strong></p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">Edge</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">val</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">10001</span><span class="p">;</span>
-
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">father</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> 
-
-<span class="kt">void</span> <span class="n">init</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">father</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="n">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">u</span> <span class="o">==</span> <span class="n">father</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">?</span> <span class="n">u</span> <span class="o">:</span> <span class="n">father</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">father</span><span class="p">[</span><span class="n">u</span><span class="p">]);</span> 
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="n">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">u</span><span class="p">);</span> 
-    <span class="n">v</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">v</span><span class="p">);</span> 
-    <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">==</span> <span class="n">v</span><span class="p">)</span> <span class="k">return</span> <span class="p">;</span> 
-    <span class="n">father</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-
-    <span class="kt">int</span> <span class="n">v</span><span class="p">,</span> <span class="n">e</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">val</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="n">Edge</span><span class="o">&gt;</span> <span class="n">edges</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">result_val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">v</span> <span class="o">&gt;&gt;</span> <span class="n">e</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">e</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">v1</span> <span class="o">&gt;&gt;</span> <span class="n">v2</span> <span class="o">&gt;&gt;</span> <span class="n">val</span><span class="p">;</span>
-        <span class="n">edges</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">val</span><span class="p">});</span>
-    <span class="p">}</span>
-
-    <span class="n">sort</span><span class="p">(</span><span class="n">edges</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">edges</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="k">const</span> <span class="n">Edge</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Edge</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
-    <span class="p">});</span>
-
-    <span class="n">vector</span><span class="o">&lt;</span><span class="n">Edge</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span> <span class="c1">// 存储最小生成树的边</span>
-
-    <span class="n">init</span><span class="p">();</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">Edge</span> <span class="n">edge</span> <span class="o">:</span> <span class="n">edges</span><span class="p">)</span> <span class="p">{</span>
-
-        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">edge</span><span class="p">.</span><span class="n">l</span><span class="p">);</span>
-        <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">edge</span><span class="p">.</span><span class="n">r</span><span class="p">);</span>
-
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">edge</span><span class="p">);</span> <span class="c1">// 保存最小生成树的边</span>
-            <span class="n">result_val</span> <span class="o">+=</span> <span class="n">edge</span><span class="p">.</span><span class="n">val</span><span class="p">;</span> 
-            <span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="c1">// 打印最小生成树的边</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">Edge</span> <span class="n">edge</span> <span class="o">:</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">edge</span><span class="p">.</span><span class="n">l</span> <span class="o">&lt;&lt;</span> <span class="s">" - "</span> <span class="o">&lt;&lt;</span> <span class="n">edge</span><span class="p">.</span><span class="n">r</span> <span class="o">&lt;&lt;</span> <span class="s">" : "</span> <span class="o">&lt;&lt;</span> <span class="n">edge</span><span class="p">.</span><span class="n">val</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Kruskal 与 prim 的关键区别在于，prim维护的是节点的集合，而 Kruskal 维护的是边的集合。 如果 一个图中，节点多，但边相对较少，那么使用Kruskal 更优。</p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[prim算法]]></summary></entry></feed>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="数据结构与算法" /><summary type="html"><![CDATA[Bellman-ford算法]]></summary></entry></feed>
