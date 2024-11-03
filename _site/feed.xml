@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-11-03T02:46:28+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">C++11\14特性</title><link href="http://localhost:4000/2024/10/21/Cpp11_14/" rel="alternate" type="text/html" title="C++11\14特性" /><published>2024-10-21T10:00:00+08:00</published><updated>2024-10-21T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/21/Cpp11_14</id><content type="html" xml:base="http://localhost:4000/2024/10/21/Cpp11_14/"><![CDATA[<h2 id="c11特性">C++11特性</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-11-03T18:20:23+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">C++11\14特性</title><link href="http://localhost:4000/2024/10/21/Cpp11_14/" rel="alternate" type="text/html" title="C++11\14特性" /><published>2024-10-21T10:00:00+08:00</published><updated>2024-10-21T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/21/Cpp11_14</id><content type="html" xml:base="http://localhost:4000/2024/10/21/Cpp11_14/"><![CDATA[<h2 id="c11特性">C++11特性</h2>
 
 <h3 id="1-自动类型推导-auto">1. <strong>自动类型推导 (<code class="language-plaintext highlighter-rouge">auto</code>)</strong></h3>
 
@@ -1112,34 +1112,976 @@ Rvalue reference: 100
   <li><strong>虚函数可以声明为内联</strong>，但实际内联展开取决于编译器的判断。</li>
   <li>如果通过具体对象（非指针或引用）调用虚函数，编译器可能会内联。</li>
   <li>非多态调用（例如派生类中直接调用基类的虚函数）也可能被内联。</li>
-  <li>典型的多态调用（通过基类指针或引用调用虚函数）通常无法内联，因为编译器在编译期无法确定具体实现。
+  <li>典型的多态调用（通过基类指针或引用调用虚函数）通常无法内联，因为编译器在编译期无法确定具体实现。</li>
+  <li>
     <h3 id="optional取size是多大">optional<bool>取size是多大？</bool></h3>
+    <p>大小通常为 2 个字节，因为需要额外空间来存储“是否包含值”的状态。</p>
   </li>
 </ul>
 
+<p><code class="language-plaintext highlighter-rouge">std::optional</code> 是 C++17 引入的一个标准库模板类，定义在 <code class="language-plaintext highlighter-rouge">&lt;optional&gt;</code> 头文件中。它用于表示一个可能包含值、也可能不包含值的对象，通常用于替代返回空指针或特殊值来表示“值缺失”的情况。</p>
+
+<h5 id="stdoptional-的主要特点"><code class="language-plaintext highlighter-rouge">std::optional</code> 的主要特点</h5>
+
+<ul>
+  <li><strong>可选值</strong>：<code class="language-plaintext highlighter-rouge">std::optional&lt;T&gt;</code> 是一个包装类型，它可以存储类型 <code class="language-plaintext highlighter-rouge">T</code> 的一个值，或不存储任何值。</li>
+  <li><strong>语义明确</strong>：<code class="language-plaintext highlighter-rouge">std::optional</code> 可以更清晰地表达“值可能不存在”这种语义，而不必使用 <code class="language-plaintext highlighter-rouge">nullptr</code> 或特定的标记值（如 <code class="language-plaintext highlighter-rouge">-1</code> 或 <code class="language-plaintext highlighter-rouge">0</code>）来表示。</li>
+  <li><strong>安全</strong>：在函数返回类型中使用 <code class="language-plaintext highlighter-rouge">std::optional</code> 可以避免返回裸指针或特定值带来的潜在风险，增强代码的安全性和可读性。</li>
+</ul>
+
+<h5 id="stdoptional-的典型用法"><code class="language-plaintext highlighter-rouge">std::optional</code> 的典型用法</h5>
+
+<ol>
+  <li>
+    <p><strong>替代返回值</strong>：<br />
+<code class="language-plaintext highlighter-rouge">std::optional</code> 常用于表示函数的返回值可能为空。例如，一个查找函数可以返回 <code class="language-plaintext highlighter-rouge">std::optional</code> 表示找到的值或未找到的情况。</p>
+  </li>
+  <li>
+    <p><strong>替代指针</strong>：<br />
+在某些情况下，<code class="language-plaintext highlighter-rouge">std::optional</code> 可以用来代替指针，从而避免使用空指针（<code class="language-plaintext highlighter-rouge">nullptr</code>）来表示值的缺失。</p>
+  </li>
+  <li>
+    <p><strong>可选参数</strong>：<br />
+可以用 <code class="language-plaintext highlighter-rouge">std::optional</code> 来表示函数的可选参数，而不是重载函数或设置默认值。</p>
+  </li>
+</ol>
+
+<h5 id="主要成员和操作">主要成员和操作</h5>
+
+<ul>
+  <li><strong>默认构造函数</strong>：构造一个不包含值的 <code class="language-plaintext highlighter-rouge">std::optional</code>。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::nullopt</code></strong>：一个表示空状态的特殊常量，可以赋给 <code class="language-plaintext highlighter-rouge">std::optional</code> 来表示没有值。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">operator bool</code></strong>：可以将 <code class="language-plaintext highlighter-rouge">std::optional</code> 转换为布尔值，以判断是否包含值。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">value()</code></strong>：获取 <code class="language-plaintext highlighter-rouge">optional</code> 中的值。如果没有值，则会抛出 <code class="language-plaintext highlighter-rouge">std::bad_optional_access</code> 异常。</li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">value_or(default_value)</code></strong>：如果有值，返回值；否则返回 <code class="language-plaintext highlighter-rouge">default_value</code>。</p>
+  </li>
+  <li>提供了更安全、语义更明确的方式来表示“可选值”。</li>
+  <li>避免了返回特殊值或空指针的风险。</li>
+  <li>增强代码的可读性和维护性。</li>
+</ul>
+
 <h3 id="描述一下c编译的整个过程">描述一下C++编译的整个过程</h3>
+<p>整个 C++ 编译过程的各个阶段如下：</p>
+
+<ol>
+  <li>预处理：处理宏、头文件和条件编译指令，生成纯净的.i代码文件。</li>
+  <li>编译：将预处理后的代码编译为.s汇编代码，进行语法检查和优化。</li>
+  <li>汇编：将汇编代码转换为机器码，生成.o目标文件。</li>
+  <li>链接：将多个目标文件和库文件整合，解析符号，生成可执行文件。</li>
+</ol>
 
 <h3 id="如果头文件定义了函数源文件不实现会在哪个环节报错如果构建的是静态库会报错吗">如果头文件定义了函数，源文件不实现，会在哪个环节报错？如果构建的是静态库，会报错吗？</h3>
+<p>普通程序（非库）中在 <strong>链接阶段</strong> 会出现报错。这是因为编译器在编译每个源文件时并不会检查函数的实现是否存在，它只检查函数的声明是否存在。当所有源文件编译成目标文件后，链接器会尝试将所有的符号（包括函数和变量）解析到具体的实现位置。</p>
+
+<p>当构建静态库时：</p>
+<ul>
+  <li>如果头文件中声明的函数没有实现，那么<strong>构建库时不会报错</strong>。</li>
+  <li>这是因为静态库的构建过程仅涉及将各个目标文件打包到一个归档文件中（如 .a 文件），<strong>并不会执行链接过程</strong>。</li>
+  <li>因此，即使静态库中存在未实现的函数，只要没有实际使用该函数，就不会触发错误。</li>
+  <li><strong>即便是库内部调用了该函数也不会报错。（因为静态库只进行编译、汇编生成目标文件，并不会进行链接，这与动态库不同。）</strong></li>
+</ul>
+
+<p>但是，<strong>当静态库被其他程序链接并使用到未实现的函数时，链接器会在 链接阶段 报错</strong>，因为它无法在静态库或程序中找到该函数的定义。</p>
+
+<p>对于动态库：</p>
+<ul>
+  <li>构建动态库时，<strong>如果未实现的函数没有在库内部被调用</strong>，不会报错；但如果<strong>库内部代码引用了未实现的函数</strong>，则在链接阶段会报错。</li>
+  <li>在<strong>客户端使用动态库时，编译和链接阶段一般不会报错</strong>，因为动态库的符号解析是在运行时进行的，但运行时若调用了未实现的函数，动态链接器会尝试解析该符号，找不到实现时会导致运行时错误，报出类似“未定义符号”的错误。。</li>
+  <li><strong>延迟加载机制</strong> 可能使得未实现的函数仅在被调用时引发运行时错误，而不会在程序加载时立即报错。</li>
+</ul>
 
 <h3 id="对静态库和动态库的理解">对静态库和动态库的理解</h3>
 
+<h4 id="1-静态库static-library">1. 静态库（Static Library）</h4>
+
+<p>静态库是在<strong>编译时</strong>被直接链接到程序中的库。它通常是一个归档文件（例如 <code class="language-plaintext highlighter-rouge">.lib</code> 在 Windows 上或 <code class="language-plaintext highlighter-rouge">.a</code> 在 Unix/Linux 上），包含了多个目标文件（编译生成的 <code class="language-plaintext highlighter-rouge">.o</code> 文件），每个目标文件中包含了一组函数或类的实现。</p>
+
+<ul>
+  <li><strong>编译时链接</strong>：在程序编译过程中，静态库会被直接嵌入到生成的可执行文件中。链接完成后，库的代码被复制到每个使用它的可执行文件中。</li>
+  <li><strong>独立性</strong>：由于静态库的代码在编译时已嵌入可执行文件中，运行时不需要额外的库文件。这使得静态链接的程序可以独立分发，无需依赖外部库。</li>
+  <li><strong>占用更多磁盘空间</strong>：因为每个使用静态库的程序都会包含一份库的代码，所以多个程序使用同一个静态库时会有重复的代码拷贝，从而占用更多磁盘空间。</li>
+  <li><strong>性能</strong>：在性能上，由于库代码已经嵌入可执行文件，不需要在运行时加载，因此启动速度可能比动态库稍快。</li>
+  <li><strong>更新困难</strong>：如果静态库有更新，需要重新编译链接所有使用它的程序，生成新的可执行文件。</li>
+</ul>
+
+<h5 id="适用场景">适用场景</h5>
+
+<ul>
+  <li><strong>嵌入式系统或独立分发</strong>：当程序需要独立运行，不依赖外部库（如某些嵌入式系统）时，可以使用静态库。</li>
+  <li><strong>性能要求高</strong>：在对启动速度要求较高的场景中，由于静态库无需加载，可以减少启动时的开销。</li>
+</ul>
+
+<h4 id="2-动态库dynamic-library">2. 动态库（Dynamic Library）</h4>
+
+<p>动态库是在<strong>运行时</strong>被加载到内存中并链接到程序的库。动态库的文件扩展名通常是 <code class="language-plaintext highlighter-rouge">.dll</code>（Windows）或 <code class="language-plaintext highlighter-rouge">.so</code>（Unix/Linux）。在程序运行时，操作系统会将动态库加载到内存中，并将程序中的函数调用链接到动态库中的函数实现。</p>
+
+<ul>
+  <li><strong>运行时链接</strong>：程序在启动时或在需要时加载动态库，这种链接方式称为延迟链接或运行时链接。它允许多个程序共享同一个动态库，节省内存空间。</li>
+  <li><strong>节省内存</strong>：多个运行中的程序可以共享同一个动态库的内存实例，而不需要每个程序都包含一份库的代码，这样可以显著节省内存资源。</li>
+  <li><strong>更新灵活</strong>：因为动态库在程序运行时加载，如果动态库有更新，不需要重新编译程序。只需用新版本的动态库替换旧版本即可实现程序的更新。</li>
+  <li><strong>启动时加载或延迟加载</strong>：动态库可以在程序启动时加载，也可以在程序运行期间按需加载，从而提高启动速度并减少不必要的资源消耗。</li>
+</ul>
+
+<h5 id="适用场景-1">适用场景</h5>
+
+<ul>
+  <li><strong>共享库</strong>：当多个程序需要共享库代码，并且希望尽可能节省内存资源时，动态库是一个好的选择。</li>
+  <li><strong>便于更新和维护</strong>：动态库更适合需要频繁更新的系统，尤其是在大型系统中，可以随时替换动态库而不影响程序的其他部分。</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>特性</th>
+      <th>静态库</th>
+      <th>动态库</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>链接时间</strong></td>
+      <td>编译时链接</td>
+      <td>运行时链接</td>
+    </tr>
+    <tr>
+      <td><strong>文件大小</strong></td>
+      <td>更大，代码复制到每个可执行文件中</td>
+      <td>更小，多个程序共享同一个库</td>
+    </tr>
+    <tr>
+      <td><strong>内存占用</strong></td>
+      <td>每个进程独立占用内存</td>
+      <td>多个进程共享内存</td>
+    </tr>
+    <tr>
+      <td><strong>启动速度</strong></td>
+      <td>较快（不需要加载库）</td>
+      <td>稍慢（需要加载库）</td>
+    </tr>
+    <tr>
+      <td><strong>更新方式</strong></td>
+      <td>需要重新编译、链接</td>
+      <td>替换库文件即可</td>
+    </tr>
+    <tr>
+      <td><strong>应用场景</strong></td>
+      <td>独立分发、嵌入式系统</td>
+      <td>共享库、频繁更新的系统</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="总结">总结</h5>
+
+<ul>
+  <li><strong>静态库</strong>：适用于不希望程序依赖外部文件的场景，启动速度快，但占用磁盘空间较大，不易更新。</li>
+  <li><strong>动态库</strong>：适用于需要多个程序共享库、需要频繁更新库的场景，占用内存少，便于维护和更新，但启动时稍有开销。</li>
+</ul>
+
+<p>在实际开发中，选择静态库还是动态库通常取决于应用程序的需求、性能要求、维护方式以及系统架构的设计。</p>
+
 <h3 id="一个shared_ptr大小是多大unique_ptr呢不同智能指针性能上有什么区别如果只是用指针解引用性能上有区别吗">一个shared_ptr大小是多大，unique_ptr呢？不同智能指针性能上有什么区别？如果只是用指针解引用，性能上有区别吗？</h3>
 
+<ol>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 的大小</strong></p>
+
+    <p><code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 的大小通常是 <strong>一个指针的大小</strong>，即 8 字节（在 64 位系统上）。这是因为 <code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 只需要一个指针来管理动态分配的对象。</p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 是一个独占所有权的智能指针，意味着同一时刻只能有一个 <code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 指向特定的对象。</li>
+      <li>在对象被销毁或 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 被重置时，它会自动释放所管理的资源。</li>
+      <li>因为没有额外的引用计数等信息，所以 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 的内存开销较小。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">std::shared_ptr</code> 的大小</strong></p>
+
+    <p><code class="language-plaintext highlighter-rouge">std::shared_ptr</code> 的大小通常是 <strong>两个指针的大小</strong>，即 16 字节（在 64 位系统上）。这两个指针分别指向：</p>
+
+    <ul>
+      <li>被管理的对象。</li>
+      <li>一个 <strong>控制块</strong>（control block），包含引用计数等信息。</li>
+    </ul>
+  </li>
+</ol>
+
+<h5 id="不同智能指针的性能对比">不同智能指针的性能对比</h5>
+
+<ol>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 的性能</strong></p>
+
+    <ul>
+      <li><strong>独占所有权</strong>：<code class="language-plaintext highlighter-rouge">unique_ptr</code> 的独占所有权机制使它不需要引用计数，因此操作非常轻量。</li>
+      <li><strong>无额外开销</strong>：由于没有控制块和引用计数，<code class="language-plaintext highlighter-rouge">unique_ptr</code> 在创建、销毁、复制和移动时的开销都非常小。</li>
+      <li><strong>适合单线程场景</strong>：<code class="language-plaintext highlighter-rouge">unique_ptr</code> 的独占所有权机制不需要多线程同步，因此在单线程场景中性能非常好。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">std::shared_ptr</code> 的性能</strong></p>
+
+    <ul>
+      <li><strong>引用计数</strong>：<code class="language-plaintext highlighter-rouge">shared_ptr</code> 使用控制块来跟踪引用计数，因此在每次创建、复制和销毁时都需要对引用计数进行增减操作。这增加了额外的开销。</li>
+      <li><strong>线程安全</strong>：<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的引用计数更新是线程安全的，这意味着在多线程环境中，可以安全地共享 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 对象。然而，为了保证线程安全，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 引用计数的增减通常会使用原子操作，这在多线程环境中会带来额外的开销。</li>
+      <li><strong>适合多线程共享资源</strong>：当需要多个对象或多个线程共享同一个动态分配的对象时，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 是合适的选择，但在频繁的创建、销毁、复制操作中，其性能劣于 <code class="language-plaintext highlighter-rouge">unique_ptr</code>。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>在智能指针解引用方面，<code class="language-plaintext highlighter-rouge">std::shared_ptr</code> 和 <code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 的性能几乎是相同的，因为解引用操作只是获取被管理对象的地址，并不涉及控制块或引用计数的更改。</p>
+
+<p>在实际应用中，应该根据需要选择合适的智能指针类型：若对象需要唯一所有权且性能要求高，使用 <code class="language-plaintext highlighter-rouge">unique_ptr</code>；若对象需要共享所有权，特别是在多线程场景下，使用 <code class="language-plaintext highlighter-rouge">shared_ptr</code>。</p>
+
 <h3 id="手动实现shared_ptr和unique_ptr">手动实现shared_ptr和unique_ptr</h3>
+<p>手动实现 <code class="language-plaintext highlighter-rouge">std::shared_ptr</code> 和 <code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 的核心在于理解它们的基本特性：<code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 实现独占所有权，而 <code class="language-plaintext highlighter-rouge">std::shared_ptr</code> 则实现共享所有权。为了实现这两个智能指针类，我们将从管理动态内存的角度来实现这两种指针的基本功能。</p>
+
+<ol>
+  <li>
+    <p>手动实现 <code class="language-plaintext highlighter-rouge">unique_ptr</code></p>
+
+    <p><code class="language-plaintext highlighter-rouge">unique_ptr</code> 具有独占所有权，因此它只需持有一个指向对象的指针，并在析构时删除它。复制 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 是不允许的，但它可以通过移动语义转移所有权。</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+ <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+ <span class="k">class</span> <span class="nc">MyUniquePtr</span> <span class="p">{</span>
+ <span class="nl">private:</span>
+     <span class="n">T</span><span class="o">*</span> <span class="n">ptr</span><span class="p">;</span>
+
+ <span class="nl">public:</span>
+     <span class="c1">// 构造函数</span>
+     <span class="k">explicit</span> <span class="n">MyUniquePtr</span><span class="p">(</span><span class="n">T</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="o">:</span> <span class="n">ptr</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">{}</span>
+
+     <span class="c1">// 禁止拷贝构造和赋值</span>
+     <span class="n">MyUniquePtr</span><span class="p">(</span><span class="k">const</span> <span class="n">MyUniquePtr</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+     <span class="n">MyUniquePtr</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyUniquePtr</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+
+     <span class="c1">// 移动构造函数</span>
+     <span class="n">MyUniquePtr</span><span class="p">(</span><span class="n">MyUniquePtr</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">:</span> <span class="n">ptr</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">other</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="c1">// 移动赋值操作符</span>
+     <span class="n">MyUniquePtr</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">MyUniquePtr</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="p">{</span>
+             <span class="k">delete</span> <span class="n">ptr</span><span class="p">;</span>          <span class="c1">// 释放当前对象</span>
+             <span class="n">ptr</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">ptr</span><span class="p">;</span>     <span class="c1">// 转移所有权</span>
+             <span class="n">other</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span> <span class="c1">// 清空源对象</span>
+         <span class="p">}</span>
+         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="c1">// 解引用操作符</span>
+     <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span> <span class="p">}</span>
+     <span class="n">T</span><span class="o">*</span> <span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ptr</span><span class="p">;</span> <span class="p">}</span>
+
+     <span class="c1">// 获取原始指针</span>
+     <span class="n">T</span><span class="o">*</span> <span class="n">get</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ptr</span><span class="p">;</span> <span class="p">}</span>
+
+     <span class="c1">// 释放所有权</span>
+     <span class="n">T</span><span class="o">*</span> <span class="n">release</span><span class="p">()</span> <span class="p">{</span>
+         <span class="n">T</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">ptr</span><span class="p">;</span>
+         <span class="n">ptr</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+         <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="c1">// 重置指针</span>
+     <span class="kt">void</span> <span class="n">reset</span><span class="p">(</span><span class="n">T</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+         <span class="k">delete</span> <span class="n">ptr</span><span class="p">;</span>
+         <span class="n">ptr</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="c1">// 析构函数</span>
+     <span class="o">~</span><span class="n">MyUniquePtr</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span> <span class="n">ptr</span><span class="p">;</span> <span class="p">}</span>
+ <span class="p">};</span>
+
+ <span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+     <span class="n">MyUniquePtr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">42</span><span class="p">));</span>
+     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">p1</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+     <span class="n">MyUniquePtr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span>  <span class="c1">// 移动所有权</span>
+     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">p1</span><span class="p">.</span><span class="n">get</span><span class="p">())</span> <span class="p">{</span>
+         <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"p1 is now empty."</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+     <span class="p">}</span>
+     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">p2</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+    <ul>
+      <li><strong>禁止拷贝构造和赋值</strong>：通过删除拷贝构造函数和赋值操作符，确保 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 的独占所有权特性。</li>
+      <li><strong>移动构造和移动赋值</strong>：实现了移动构造函数和移动赋值操作符，允许所有权的转移。</li>
+      <li><strong>析构</strong>：在析构函数中释放所管理的资源。</li>
+    </ul>
+  </li>
+  <li>
+    <p>手动实现 <code class="language-plaintext highlighter-rouge">shared_ptr</code></p>
+
+    <p><code class="language-plaintext highlighter-rouge">shared_ptr</code> 允许多个对象共享所有权，因此需要一个引用计数来跟踪有多少个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 指向同一个对象。当引用计数减为零时才释放资源。</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+ <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+ <span class="k">class</span> <span class="nc">MySharedPtr</span> <span class="p">{</span>
+ <span class="nl">private:</span>
+     <span class="n">T</span><span class="o">*</span> <span class="n">ptr</span><span class="p">;</span>
+     <span class="kt">int</span><span class="o">*</span> <span class="n">ref_count</span><span class="p">;</span>
+
+     <span class="kt">void</span> <span class="n">release</span><span class="p">()</span> <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">ref_count</span> <span class="o">&amp;&amp;</span> <span class="o">--</span><span class="p">(</span><span class="o">*</span><span class="n">ref_count</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+             <span class="k">delete</span> <span class="n">ptr</span><span class="p">;</span>
+             <span class="k">delete</span> <span class="n">ref_count</span><span class="p">;</span>
+         <span class="p">}</span>
+     <span class="p">}</span>
+
+ <span class="nl">public:</span>
+     <span class="c1">// 构造函数</span>
+     <span class="k">explicit</span> <span class="n">MySharedPtr</span><span class="p">(</span><span class="n">T</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="o">:</span> <span class="n">ptr</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">ref_count</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="p">{}</span>
+
+     <span class="c1">// 拷贝构造函数</span>
+     <span class="n">MySharedPtr</span><span class="p">(</span><span class="k">const</span> <span class="n">MySharedPtr</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">:</span> <span class="n">ptr</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">ptr</span><span class="p">),</span> <span class="n">ref_count</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">ref_count</span><span class="p">)</span> <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">ref_count</span><span class="p">)</span> <span class="p">{</span>
+             <span class="o">++</span><span class="p">(</span><span class="o">*</span><span class="n">ref_count</span><span class="p">);</span>
+         <span class="p">}</span>
+     <span class="p">}</span>
+
+     <span class="c1">// 赋值操作符</span>
+     <span class="n">MySharedPtr</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">MySharedPtr</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="p">{</span>
+             <span class="n">release</span><span class="p">();</span>  <span class="c1">// 释放当前对象</span>
+
+             <span class="n">ptr</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">ptr</span><span class="p">;</span>
+             <span class="n">ref_count</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">ref_count</span><span class="p">;</span>
+             <span class="k">if</span> <span class="p">(</span><span class="n">ref_count</span><span class="p">)</span> <span class="p">{</span>
+                 <span class="o">++</span><span class="p">(</span><span class="o">*</span><span class="n">ref_count</span><span class="p">);</span>  <span class="c1">// 增加引用计数</span>
+             <span class="p">}</span>
+         <span class="p">}</span>
+         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="c1">// 移动构造函数</span>
+     <span class="n">MySharedPtr</span><span class="p">(</span><span class="n">MySharedPtr</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">:</span> <span class="n">ptr</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">ptr</span><span class="p">),</span> <span class="n">ref_count</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">ref_count</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">other</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+         <span class="n">other</span><span class="p">.</span><span class="n">ref_count</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="c1">// 移动赋值操作符</span>
+     <span class="n">MySharedPtr</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">MySharedPtr</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="p">{</span>
+             <span class="n">release</span><span class="p">();</span>  <span class="c1">// 释放当前对象</span>
+
+             <span class="n">ptr</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">ptr</span><span class="p">;</span>
+             <span class="n">ref_count</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">ref_count</span><span class="p">;</span>
+             <span class="n">other</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+             <span class="n">other</span><span class="p">.</span><span class="n">ref_count</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+         <span class="p">}</span>
+         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="c1">// 解引用操作符</span>
+     <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span> <span class="p">}</span>
+     <span class="n">T</span><span class="o">*</span> <span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ptr</span><span class="p">;</span> <span class="p">}</span>
+
+     <span class="c1">// 获取引用计数</span>
+     <span class="kt">int</span> <span class="n">use_count</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ref_count</span> <span class="o">?</span> <span class="o">*</span><span class="n">ref_count</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+
+     <span class="c1">// 析构函数</span>
+     <span class="o">~</span><span class="n">MySharedPtr</span><span class="p">()</span> <span class="p">{</span> <span class="n">release</span><span class="p">();</span> <span class="p">}</span>
+ <span class="p">};</span>
+
+ <span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+     <span class="n">MySharedPtr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">42</span><span class="p">));</span>
+     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"p1 use count: "</span> <span class="o">&lt;&lt;</span> <span class="n">p1</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+     <span class="p">{</span>
+         <span class="n">MySharedPtr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>  <span class="c1">// 共享所有权</span>
+         <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"p1 use count after p2: "</span> <span class="o">&lt;&lt;</span> <span class="n">p1</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+         <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"p2 use count: "</span> <span class="o">&lt;&lt;</span> <span class="n">p2</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+     <span class="p">}</span>  <span class="c1">// p2 离开作用域，引用计数减 1</span>
+
+     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"p1 use count after p2 goes out of scope: "</span> <span class="o">&lt;&lt;</span> <span class="n">p1</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+
+    <ul>
+      <li><strong>引用计数管理</strong>：使用 <code class="language-plaintext highlighter-rouge">int* ref_count</code> 来记录当前对象的引用次数。</li>
+      <li><strong>拷贝控制</strong>：拷贝构造和赋值操作符会增加引用计数，确保多个 <code class="language-plaintext highlighter-rouge">MySharedPtr</code> 对象安全地共享同一资源。</li>
+      <li><strong>移动控制</strong>：移动构造和移动赋值将指针和引用计数转移到新的 <code class="language-plaintext highlighter-rouge">MySharedPtr</code>，确保资源的唯一所有权。</li>
+      <li><strong>析构</strong>：在析构函数中减少引用计数，当引用计数为零时释放资源。</li>
+    </ul>
+  </li>
+</ol>
 
 <h3 id="c多线程中常用的mutex是怎么实现的和自旋锁有什么区别">C++多线程中常用的mutex是怎么实现的，和自旋锁有什么区别？</h3>
 
+<p>在 C++ 中，<code class="language-plaintext highlighter-rouge">std::mutex</code> 是一种常用的同步原语，用于在多线程环境下保护共享资源，防止多个线程同时访问并导致数据不一致。<code class="language-plaintext highlighter-rouge">std::mutex</code> 的实现通常依赖于底层操作系统提供的互斥锁机制，最常见的是 <strong>互斥锁（Mutex）</strong> 和 <strong>自旋锁（Spinlock）</strong>。这两种锁的区别主要在于其锁定和等待的机制不同，适用于不同的场景。下面分别介绍它们的实现原理和区别。</p>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">std::mutex</code> 的实现原理</p>
+
+    <p><code class="language-plaintext highlighter-rouge">std::mutex</code> 的具体实现取决于编译器和操作系统。例如，在 POSIX 系统（如 Linux）上，<code class="language-plaintext highlighter-rouge">std::mutex</code> 通常封装了 POSIX 的 <code class="language-plaintext highlighter-rouge">pthread_mutex</code>，在 Windows 上则使用 <code class="language-plaintext highlighter-rouge">CRITICAL_SECTION</code> 等 Win32 API。一般情况下，<code class="language-plaintext highlighter-rouge">std::mutex</code> 的实现包含以下机制：</p>
+
+    <ol>
+      <li>
+        <p><strong>加锁（lock）</strong>：当一个线程调用 <code class="language-plaintext highlighter-rouge">mutex.lock()</code> 时，<code class="language-plaintext highlighter-rouge">mutex</code> 会检查锁是否被占用。如果锁未被占用，则线程获取锁并进入临界区。如果锁已经被占用，线程将进入<strong>阻塞状态</strong>，等待锁的释放。</p>
+      </li>
+      <li>
+        <p><strong>解锁（unlock）</strong>：当一个线程执行完临界区代码后，调用 <code class="language-plaintext highlighter-rouge">mutex.unlock()</code> 释放锁。如果有其他线程在等待该锁，其中一个线程将被唤醒并尝试获取锁。</p>
+      </li>
+      <li>
+        <p><strong>操作系统调度</strong>：对于 <code class="language-plaintext highlighter-rouge">std::mutex</code> 的阻塞线程，操作系统会将这些线程挂起，直到锁被释放。这减少了 CPU 的使用，因为等待线程进入了“睡眠”状态，释放了处理器资源，使其他线程或进程可以继续执行。</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">std::mutex</code> 和自旋锁的区别</p>
+
+    <p><strong>自旋锁（Spinlock）</strong> 是另一种锁机制，不同于 <code class="language-plaintext highlighter-rouge">std::mutex</code> 的阻塞等待方式，自旋锁在锁被占用时不会使线程进入休眠，而是让线程反复检查锁的状态（即“自旋”），直到锁被释放。</p>
+
+    <p>以下是 <code class="language-plaintext highlighter-rouge">std::mutex</code> 和自旋锁的主要区别：</p>
+    <ol>
+      <li>等待机制
+        <ul>
+          <li><strong><code class="language-plaintext highlighter-rouge">std::mutex</code></strong>：当一个线程试图获取被占用的 <code class="language-plaintext highlighter-rouge">std::mutex</code> 时，线程会被挂起，进入阻塞状态，由操作系统负责管理调度。当锁释放时，操作系统唤醒该线程。</li>
+          <li><strong>自旋锁</strong>：当一个线程试图获取被占用的自旋锁时，它不会进入阻塞状态，而是不断循环检查锁的状态（即“自旋”），直到锁被释放。自旋锁不会导致线程挂起或切换上下文。</li>
+        </ul>
+      </li>
+      <li>
+        <p>性能对比</p>
+
+        <ul>
+          <li><strong><code class="language-plaintext highlighter-rouge">std::mutex</code></strong>：适合长时间持有锁的情况。由于阻塞的线程进入休眠状态，不会占用 CPU 资源，因此适合锁定时间较长的场景。</li>
+          <li><strong>自旋锁</strong>：适合短时间持有锁的情况。自旋锁不会进入阻塞状态，因此不需要上下文切换的开销，但会占用 CPU 资源。如果锁定时间较短，自旋锁避免了线程切换的开销，可以获得更好的性能。但如果锁持有时间较长，自旋锁的 CPU 开销会迅速增大。</li>
+        </ul>
+      </li>
+      <li>
+        <p>上下文切换开销</p>
+
+        <ul>
+          <li><strong><code class="language-plaintext highlighter-rouge">std::mutex</code></strong>：阻塞等待涉及线程上下文切换，开销较高。操作系统在管理阻塞线程时需要进行调度，而上下文切换会带来一定的性能开销。</li>
+          <li><strong>自旋锁</strong>：没有上下文切换，避免了因阻塞带来的调度开销，但在锁占用较长的情况下，自旋会浪费 CPU 资源，导致性能下降。</li>
+        </ul>
+      </li>
+      <li>
+        <p>多核系统的适用性</p>
+
+        <ul>
+          <li><strong><code class="language-plaintext highlighter-rouge">std::mutex</code></strong>：适用于单核和多核系统，因为阻塞等待并不依赖 CPU 核心数。</li>
+          <li><strong>自旋锁</strong>：在多核系统上更为高效，因为在多核系统中，当一个线程自旋等待时，另一个核心上的线程可以释放锁。单核系统上，自旋锁的线程会一直占用 CPU，导致锁持有线程无法执行，从而产生死锁的风险。</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<h5 id="适用场景总结">适用场景总结</h5>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::mutex</code></strong>：适用于锁定时间不确定或较长的场景，尤其是在多线程环境下锁需要长时间持有时。操作系统的调度机制能够有效地管理线程，避免 CPU 资源的浪费。</li>
+  <li><strong>自旋锁</strong>：适用于锁定时间很短、线程频繁竞争的情况，尤其是在多核系统上效果更佳，避免了不必要的上下文切换开销。</li>
+</ul>
+
+<h5 id="小结">小结</h5>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::mutex</code> 和自旋锁的主要区别在于等待机制：<code class="language-plaintext highlighter-rouge">std::mutex</code> 是阻塞等待，而自旋锁是忙等待。</li>
+  <li>在锁持有时间短的情况下，自旋锁性能较好；在锁持有时间长的情况下，<code class="language-plaintext highlighter-rouge">std::mutex</code> 的性能更佳。</li>
+  <li>在实际应用中，选择 <code class="language-plaintext highlighter-rouge">std::mutex</code> 还是自旋锁应根据锁的持有时间、系统的核心数量和性能要求来决定。</li>
+</ul>
+
 <h3 id="atomic内部实现是有锁还是没锁的所有的原子变量都没锁吗对于原子变量的memory-order有了解吗">atomic内部实现？是有锁还是没锁的？所有的原子变量都没锁吗？对于原子变量的memory order有了解吗？</h3>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">std::atomic</code> 的内部实现：有锁还是无锁？</p>
+
+    <p><code class="language-plaintext highlighter-rouge">std::atomic</code> 变量的实现方式依赖于硬件的原子性支持。在大多数现代 CPU 上，硬件可以直接支持无锁的原子操作，例如使用<strong>原子读-改-写指令</strong>（如 <code class="language-plaintext highlighter-rouge">compare_and_swap</code> 或 <code class="language-plaintext highlighter-rouge">fetch_and_add</code>）实现。以下是主要情况：</p>
+
+    <ul>
+      <li><strong>无锁实现</strong>：如果硬件支持无锁的原子指令，那么 <code class="language-plaintext highlighter-rouge">std::atomic</code> 会直接使用这些指令。这种无锁实现的原子操作性能较高，因为它避免了线程上下文切换和锁管理的开销。</li>
+      <li><strong>有锁实现</strong>：在某些不支持无锁原子操作的硬件平台上，或对于复杂的操作（如大于硬件支持的整数大小的原子变量），编译器可能会回退到使用互斥锁（如 <code class="language-plaintext highlighter-rouge">std::mutex</code>）来确保线程安全。这种情况下，<code class="language-plaintext highlighter-rouge">std::atomic</code> 会使用锁来保证原子性。</li>
+    </ul>
+
+    <p>大多数主流 CPU（如 x86、x64、ARM）都支持原子指令，因此在这些平台上，<code class="language-plaintext highlighter-rouge">std::atomic</code> 通常是<strong>无锁的</strong>。但是，在一些嵌入式平台或不支持原子指令的硬件上，可能会使用锁来模拟原子操作。</p>
+  </li>
+  <li>
+    <p>所有的原子变量都没有锁吗？</p>
+
+    <p>并不是所有的原子变量都在无锁环境下实现。例如：</p>
+
+    <ul>
+      <li><strong>小于或等于机器字大小的基本数据类型</strong>（如 <code class="language-plaintext highlighter-rouge">int</code>、<code class="language-plaintext highlighter-rouge">bool</code>、<code class="language-plaintext highlighter-rouge">pointer</code>）在主流硬件上通常可以无锁实现。</li>
+      <li><strong>复杂类型</strong>或<strong>大于机器字大小的类型</strong>（如 128 位整数或结构体）可能需要锁。标准库中的 <code class="language-plaintext highlighter-rouge">std::atomic</code> 提供了 <code class="language-plaintext highlighter-rouge">is_lock_free()</code> 方法，允许程序检查特定类型的原子变量是否在无锁环境下实现。</li>
+    </ul>
+
+    <p>例如：在支持无锁的环境中，例如 x86 或 ARM 上，32 位和 64 位的整数通常是无锁的，而更大的类型（如 128 位整数）可能会需要锁。</p>
+  </li>
+  <li>
+    <p>原子变量的内存顺序（Memory Order）</p>
+
+    <p>在 C++ 中，<code class="language-plaintext highlighter-rouge">std::atomic</code> 提供了对 <strong>内存顺序</strong>（Memory Order）的控制，使开发者可以指定内存操作的顺序约束。内存顺序控制的是<strong>不同线程之间原子操作的可见性和执行顺序</strong>，这在多线程编程中尤为重要。C++ 标准定义了几种内存顺序：</p>
+
+    <ol>
+      <li><strong><code class="language-plaintext highlighter-rouge">memory_order_relaxed</code></strong>：
+        <ul>
+          <li>放松顺序，仅保证操作是原子的，不会引入任何同步或顺序约束。</li>
+          <li>适用于不需要跨线程同步顺序的场景，性能最好，但只能用于极少数的、独立的状态更新场景。</li>
+        </ul>
+      </li>
+      <li><strong><code class="language-plaintext highlighter-rouge">memory_order_consume</code></strong>：
+        <ul>
+          <li>是 <code class="language-plaintext highlighter-rouge">memory_order_acquire</code> 的一种弱化形式，确保数据依赖关系的操作能看到更新的结果。</li>
+          <li>由于在实际编译器支持上存在问题，通常会降级为 <code class="language-plaintext highlighter-rouge">memory_order_acquire</code>。</li>
+        </ul>
+      </li>
+      <li><strong><code class="language-plaintext highlighter-rouge">memory_order_acquire</code></strong>：
+        <ul>
+          <li>保证从当前操作读取的变量及其之前的所有写入在当前线程中可见。</li>
+          <li>通常用于获取操作，以确保获取的数据对当前线程可见。</li>
+        </ul>
+      </li>
+      <li><strong><code class="language-plaintext highlighter-rouge">memory_order_release</code></strong>：
+        <ul>
+          <li>确保在此操作之前的所有写操作在其他线程中可见。</li>
+          <li>通常用于释放操作，以确保当前线程的更改对其他线程可见。</li>
+        </ul>
+      </li>
+      <li><strong><code class="language-plaintext highlighter-rouge">memory_order_acq_rel</code></strong>（Acquire-Release）：
+        <ul>
+          <li>同时具备 <code class="language-plaintext highlighter-rouge">acquire</code> 和 <code class="language-plaintext highlighter-rouge">release</code> 的效果。</li>
+          <li>适用于既要同步读又要同步写的操作，例如 <code class="language-plaintext highlighter-rouge">compare_exchange</code> 操作。</li>
+        </ul>
+      </li>
+      <li><strong><code class="language-plaintext highlighter-rouge">memory_order_seq_cst</code>（Sequentially Consistent Order）</strong>：
+        <ul>
+          <li>最严格的内存顺序保证，确保所有原子操作都具有全局的顺序。</li>
+          <li>提供最强的可见性和顺序性保障，但通常会有更高的性能开销。</li>
+        </ul>
+      </li>
+    </ol>
+
+    <p>以下是一个使用 <code class="language-plaintext highlighter-rouge">memory_order_acquire</code> 和 <code class="language-plaintext highlighter-rouge">memory_order_release</code> 的示例，用于实现线程间的同步：</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="cp">#include</span> <span class="cpf">&lt;atomic&gt;</span><span class="cp">
+</span> <span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span> <span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+ <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">ready</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+ <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+ <span class="kt">void</span> <span class="nf">producer</span><span class="p">()</span> <span class="p">{</span>
+     <span class="n">data</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>  <span class="c1">// 先更新数据</span>
+     <span class="n">ready</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>  <span class="c1">// 再通知消费者</span>
+ <span class="p">}</span>
+
+ <span class="kt">void</span> <span class="n">consumer</span><span class="p">()</span> <span class="p">{</span>
+     <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">ready</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span> <span class="p">{</span>
+         <span class="c1">// 等待生产者通知</span>
+     <span class="p">}</span>
+     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Data: "</span> <span class="o">&lt;&lt;</span> <span class="n">data</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出数据</span>
+ <span class="p">}</span>
+
+ <span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+     <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span><span class="p">(</span><span class="n">producer</span><span class="p">);</span>
+     <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t2</span><span class="p">(</span><span class="n">consumer</span><span class="p">);</span>
+
+     <span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+     <span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+
+    <p>在这个例子中：</p>
+
+    <ul>
+      <li><strong>生产者线程</strong>在 <code class="language-plaintext highlighter-rouge">memory_order_release</code> 顺序下将 <code class="language-plaintext highlighter-rouge">ready</code> 设置为 <code class="language-plaintext highlighter-rouge">true</code>，使得之前对 <code class="language-plaintext highlighter-rouge">data</code> 的写操作（存储 42）对消费者线程可见。</li>
+      <li><strong>消费者线程</strong>在 <code class="language-plaintext highlighter-rouge">memory_order_acquire</code> 顺序下读取 <code class="language-plaintext highlighter-rouge">ready</code>。如果读取到 <code class="language-plaintext highlighter-rouge">true</code>，可以确保此时 <code class="language-plaintext highlighter-rouge">data</code> 的值是生产者线程已经更新过的。</li>
+    </ul>
+  </li>
+</ol>
+
+<h5 id="总结-1">总结</h5>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">std::atomic</code> 的实现</strong>：多数情况下是无锁的，依赖于硬件的原子指令；某些平台或较大的数据类型可能使用锁。</li>
+  <li><strong>是否使用锁</strong>：小于或等于机器字大小的类型通常是无锁的，而较大的或复杂的数据类型可能需要锁。</li>
+  <li><strong>内存顺序</strong>：<code class="language-plaintext highlighter-rouge">std::atomic</code> 提供了不同的内存顺序模型，允许在性能和同步保障之间进行权衡。</li>
+</ul>
 
 <h3 id="无锁队列">无锁队列</h3>
 
+<p>无锁队列（Lock-Free Queue）是一种并发数据结构，它允许多个线程安全地进行入队和出队操作，而无需使用传统的互斥锁。这种结构在多线程编程中极为重要，尤其在高并发场景下，可以显著提高性能并减少线程竞争导致的开销。</p>
+
+<h5 id="无锁队列的特点">无锁队列的特点</h5>
+
+<p>无锁队列的核心特点是它使用了<strong>无锁算法</strong>，在进行并发操作时不会阻塞线程，而是依赖于<strong>原子操作</strong>（如 <code class="language-plaintext highlighter-rouge">compare_and_swap</code>、<code class="language-plaintext highlighter-rouge">fetch_add</code> 等）来实现线程安全。这种方式通常能提供更高的性能和更低的延迟。</p>
+
+<p>具体特点包括：</p>
+
+<ol>
+  <li><strong>无锁操作</strong>：通过无锁算法来实现操作的原子性，避免线程阻塞。</li>
+  <li><strong>线程安全</strong>：多个线程可以同时对队列进行操作，且不会破坏队列的状态。</li>
+  <li><strong>高并发</strong>：由于避免了锁的竞争和上下文切换的开销，无锁队列在高并发场景下性能优于传统的锁队列。</li>
+</ol>
+
+<h5 id="无锁队列的实现原理">无锁队列的实现原理</h5>
+
+<p>无锁队列的实现主要依赖以下几个技术：</p>
+
+<ol>
+  <li><strong>原子操作</strong>：如 <code class="language-plaintext highlighter-rouge">compare_and_swap</code>（CAS），它允许线程以原子方式比较并设置变量。这种操作可以确保在多线程环境下不需要加锁而安全地修改变量。</li>
+  <li><strong>ABA 问题</strong>：在无锁队列中，可能会出现 ABA 问题，即某个变量的值从 A 变为 B，再变回 A，使得 CAS 操作以为变量没有变化。解决方法包括使用<strong>带有版本号的指针</strong>（如 <code class="language-plaintext highlighter-rouge">std::atomic&lt;std::uintptr_t&gt;</code>）或者<strong>引用计数</strong>。</li>
+  <li><strong>两指针结构</strong>：无锁队列通常使用<strong>两个指针</strong>，一个指向队列的头（<code class="language-plaintext highlighter-rouge">head</code>），一个指向队列的尾（<code class="language-plaintext highlighter-rouge">tail</code>）。这样可以允许并发的入队和出队操作，分别操作 <code class="language-plaintext highlighter-rouge">head</code> 和 <code class="language-plaintext highlighter-rouge">tail</code> 指针。</li>
+</ol>
+
+<h5 id="典型实现michael--scott-队列算法">典型实现：Michael &amp; Scott 队列算法</h5>
+
+<p>Michael 和 Scott 提出的无锁队列算法是一个典型的无锁队列实现，通常用于支持多生产者、多消费者的场景。该算法的基本思路如下：</p>
+
+<ol>
+  <li>
+    <p><strong>数据结构</strong>：队列中的每个节点包含一个值和一个指向下一个节点的指针。队列头指针 <code class="language-plaintext highlighter-rouge">head</code> 指向队列的第一个元素，而尾指针 <code class="language-plaintext highlighter-rouge">tail</code> 指向最后一个元素。</p>
+  </li>
+  <li><strong>入队操作（Enqueue）</strong>：
+    <ul>
+      <li>创建一个新节点，指向 <code class="language-plaintext highlighter-rouge">nullptr</code>。</li>
+      <li>使用 CAS 操作将 <code class="language-plaintext highlighter-rouge">tail</code> 指针更新为新节点。</li>
+      <li>如果其他线程也在更新 <code class="language-plaintext highlighter-rouge">tail</code>，可能会出现冲突；但是 CAS 操作确保只有一个线程可以成功。</li>
+    </ul>
+  </li>
+  <li><strong>出队操作（Dequeue）</strong>：
+    <ul>
+      <li>获取 <code class="language-plaintext highlighter-rouge">head</code> 指向的节点。</li>
+      <li>使用 CAS 操作将 <code class="language-plaintext highlighter-rouge">head</code> 更新为下一个节点。</li>
+      <li>如果 <code class="language-plaintext highlighter-rouge">head</code> 和 <code class="language-plaintext highlighter-rouge">tail</code> 指向同一个节点且该节点的 <code class="language-plaintext highlighter-rouge">next</code> 为空，则队列为空。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>下面是一个简单的无锁队列的示例代码：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;atomic&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">LockFreeQueue</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="k">struct</span> <span class="nc">Node</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">next</span><span class="p">;</span>
+        <span class="n">Node</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="n">next</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;</span> <span class="n">head</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;</span> <span class="n">tail</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">LockFreeQueue</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">dummy</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">T</span><span class="p">());</span>  <span class="c1">// 创建哨兵节点</span>
+        <span class="n">head</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">dummy</span><span class="p">);</span>
+        <span class="n">tail</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">dummy</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="o">~</span><span class="n">LockFreeQueue</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">load</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">head</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+            <span class="k">delete</span> <span class="n">node</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">enqueue</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">newNode</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">oldTail</span> <span class="o">=</span> <span class="n">tail</span><span class="p">.</span><span class="n">load</span><span class="p">();</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Node</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">oldTail</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// 尝试将 oldTail-&gt;next 设置为新节点</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">atomic_compare_exchange_weak</span><span class="p">(</span><span class="o">&amp;</span><span class="n">oldTail</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">temp</span><span class="p">,</span> <span class="n">newNode</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="c1">// 更新 tail 指向新节点</span>
+                    <span class="n">std</span><span class="o">::</span><span class="n">atomic_compare_exchange_weak</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tail</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldTail</span><span class="p">,</span> <span class="n">newNode</span><span class="p">);</span>
+                    <span class="k">return</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="c1">// 如果其他线程正在入队，推进 tail 指针</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">atomic_compare_exchange_weak</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tail</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldTail</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">dequeue</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Node</span><span class="o">*</span> <span class="n">oldHead</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">load</span><span class="p">();</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Node</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">oldHead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>  <span class="c1">// 队列为空</span>
+            <span class="p">}</span>
+
+            <span class="c1">// 尝试更新 head 指针</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">atomic_compare_exchange_weak</span><span class="p">(</span><span class="o">&amp;</span><span class="n">head</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldHead</span><span class="p">,</span> <span class="n">temp</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+                <span class="k">delete</span> <span class="n">oldHead</span><span class="p">;</span>  <span class="c1">// 删除旧的头节点</span>
+                <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h5 id="代码解释">代码解释</h5>
+
+<ul>
+  <li><strong>哨兵节点</strong>：在初始化时，创建一个哨兵节点。<code class="language-plaintext highlighter-rouge">head</code> 和 <code class="language-plaintext highlighter-rouge">tail</code> 都指向这个哨兵节点，以确保队列最初为空，并使得入队和出队操作更加简洁。</li>
+  <li><strong>入队操作</strong>：新节点通过 <code class="language-plaintext highlighter-rouge">tail</code> 指针入队。CAS 操作确保多个线程不会将 <code class="language-plaintext highlighter-rouge">tail-&gt;next</code> 指向同一个节点。</li>
+  <li><strong>出队操作</strong>：通过移动 <code class="language-plaintext highlighter-rouge">head</code> 指针从队列中移除节点。CAS 操作保证 <code class="language-plaintext highlighter-rouge">head</code> 被更新到下一个节点。</li>
+</ul>
+
+<h5 id="自旋等待和性能">自旋等待和性能</h5>
+
+<p>在无锁队列中，线程在 CAS 操作失败时会<strong>自旋等待</strong>，即反复尝试直到成功。这种忙等待在短期锁定中效率很高，因为它避免了线程上下文切换的开销，但如果操作时间过长，自旋可能会导致性能下降。因此，无锁队列适合高并发和短期锁定的场景。</p>
+
 <h3 id="stl容器的线程安全">STL容器的线程安全</h3>
+
+<p>在 C++ 标准库（STL）中，大多数容器（如 <code class="language-plaintext highlighter-rouge">vector</code>、<code class="language-plaintext highlighter-rouge">list</code>、<code class="language-plaintext highlighter-rouge">map</code> 等）本身并不保证线程安全性。这意味着在多线程环境下，使用这些容器时需要遵循一定的规则，或者通过适当的同步机制（如互斥锁 <code class="language-plaintext highlighter-rouge">std::mutex</code>）来确保线程安全。</p>
+
+<p>以下是 STL 容器在多线程环境下的线程安全规则及一些常见的处理方式：</p>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">std::vector</code>、<code class="language-plaintext highlighter-rouge">std::deque</code> 和 <code class="language-plaintext highlighter-rouge">std::list</code></p>
+
+    <ul>
+      <li>这些容器在结构上是动态调整大小的（如 <code class="language-plaintext highlighter-rouge">vector</code> 会动态分配和释放内存），因此在多线程环境中修改其内容是非线程安全的。</li>
+      <li>如果一个线程修改这些容器的内容，另一个线程尝试访问容器（无论是读或写），则会导致数据竞争，需要使用互斥锁来保证线程安全。</li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">std::map</code> 和 <code class="language-plaintext highlighter-rouge">std::unordered_map</code></p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::map</code> 和 <code class="language-plaintext highlighter-rouge">std::unordered_map</code> 是键值对容器，内部实现相对复杂，尤其是 <code class="language-plaintext highlighter-rouge">unordered_map</code>，其元素位置可能会随插入或删除而重排。</li>
+      <li>如果多个线程同时访问 <code class="language-plaintext highlighter-rouge">map</code> 或 <code class="language-plaintext highlighter-rouge">unordered_map</code>，则只读操作是安全的，但一旦有线程进行写操作（插入或删除），就需要同步。</li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">std::set</code> 和 <code class="language-plaintext highlighter-rouge">std::unordered_set</code></p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">set</code> 和 <code class="language-plaintext highlighter-rouge">unordered_set</code> 是集合类型的容器，具有类似于 <code class="language-plaintext highlighter-rouge">map</code> 和 <code class="language-plaintext highlighter-rouge">unordered_map</code> 的特性。</li>
+      <li>只读操作是线程安全的，多个线程同时进行读取不需要额外的同步。但是，一旦有写操作（插入或删除），就需要使用同步机制。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>在需要保证线程安全的多线程环境下，可以使用以下方式确保安全访问 STL 容器：</p>
+
+<ol>
+  <li>
+    <p><strong>互斥锁保护</strong>：使用 <code class="language-plaintext highlighter-rouge">std::mutex</code> 或 <code class="language-plaintext highlighter-rouge">std::shared_mutex</code> 对容器的访问进行同步。</p>
+
+    <ul>
+      <li><strong><code class="language-plaintext highlighter-rouge">std::mutex</code></strong>：如果容器既有读操作又有写操作，可以使用 <code class="language-plaintext highlighter-rouge">std::mutex</code>，确保只有一个线程可以访问容器。</li>
+      <li><strong><code class="language-plaintext highlighter-rouge">std::shared_mutex</code></strong>（C++17 引入）：如果大多数操作都是读取，可以使用 <code class="language-plaintext highlighter-rouge">std::shared_mutex</code>，允许多个线程同时读取，而写操作仍然需要独占锁。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>线程安全容器</strong>：C++ 标准库没有提供线程安全的容器实现，但有些第三方库（如 <code class="language-plaintext highlighter-rouge">TBB</code>、<code class="language-plaintext highlighter-rouge">Boost</code>、<code class="language-plaintext highlighter-rouge">Folly</code> 等）提供了线程安全的容器，可以根据需求使用。例如：</p>
+
+    <ul>
+      <li><strong>Intel TBB（Threading Building Blocks）</strong> 提供的线程安全容器。</li>
+      <li><strong>Boost</strong> 库提供的多线程工具也有线程安全的结构支持。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>使用原子操作</strong>：如果容器只需要存储简单的计数或标志，可以使用 <code class="language-plaintext highlighter-rouge">std::atomic</code> 变量来存储，而不是整个容器锁定。<code class="language-plaintext highlighter-rouge">std::atomic</code> 允许无锁访问，提高了性能。</p>
+  </li>
+</ol>
 
 <h3 id="红黑树和哈希表的区别时间和空间的性能上">红黑树和哈希表的区别（时间和空间的性能上）</h3>
 
-<h3 id="在交易场景中哈希表和红黑树各自应当在什么时候使用deque和vector有哪些使用场景">在交易场景中，哈希表和红黑树各自应当在什么时候使用？deque和vector有哪些使用场景</h3>
+<p>红黑树在最坏情况下的操作时间复杂度如下：</p>
 
-<h3 id="实现一个订单簿系统有挂单吃单撤单的功能">实现一个订单簿系统，有挂单吃单撤单的功能</h3>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="C++" /><summary type="html"><![CDATA[内存分区]]></summary></entry><entry><title type="html">计算机系统、网络面经</title><link href="http://localhost:4000/2024/10/21/CS/" rel="alternate" type="text/html" title="计算机系统、网络面经" /><published>2024-10-21T10:00:00+08:00</published><updated>2024-10-21T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/21/CS</id><content type="html" xml:base="http://localhost:4000/2024/10/21/CS/"><![CDATA[<h3 id="描述一下cpu怎么从内存中获取数据的要经过哪些模块">描述一下cpu怎么从内存中获取数据的，要经过哪些模块？</h3>
+<ul>
+  <li><strong>查找</strong>：<code class="language-plaintext highlighter-rouge">O(log n)</code></li>
+  <li><strong>插入</strong>：<code class="language-plaintext highlighter-rouge">O(log n)</code></li>
+  <li><strong>删除</strong>：<code class="language-plaintext highlighter-rouge">O(log n)</code></li>
+  <li><strong>空间复杂度</strong>：红黑树在每个节点上需要额外存储一些平衡信息（如颜色），因此相较于其他二叉树类型会占用稍多的空间。但总体上，红黑树的空间复杂度是 <code class="language-plaintext highlighter-rouge">O(n)</code>。</li>
+</ul>
+
+<p>在平均情况下，哈希表的时间复杂度如下：</p>
+
+<ul>
+  <li><strong>查找</strong>：<code class="language-plaintext highlighter-rouge">O(1)</code>（平均情况下），最坏情况下可能退化为 <code class="language-plaintext highlighter-rouge">O(n)</code>（当所有键都映射到同一个位置时）。</li>
+  <li><strong>插入</strong>：<code class="language-plaintext highlighter-rouge">O(1)</code>（平均情况下），最坏情况下可能退化为 <code class="language-plaintext highlighter-rouge">O(n)</code>。</li>
+  <li><strong>删除</strong>：<code class="language-plaintext highlighter-rouge">O(1)</code>（平均情况下），最坏情况下可能退化为 <code class="language-plaintext highlighter-rouge">O(n)</code>。</li>
+</ul>
+
+<p>在大多数情况下，哈希表的查找、插入和删除操作都是 <code class="language-plaintext highlighter-rouge">O(1)</code> 的，但在发生<strong>哈希冲突</strong>或负载因子（元素数与哈希桶数的比值）过高时，性能可能退化为 <code class="language-plaintext highlighter-rouge">O(n)</code>。</p>
+
+<ul>
+  <li><strong>空间复杂度</strong>：哈希表在数组中存储元素，并且随着元素的增多，哈希表会进行<strong>动态扩容</strong>（例如 <code class="language-plaintext highlighter-rouge">std::unordered_map</code> 会在达到一定负载因子后自动增加桶的数量）。因此，哈希表的空间复杂度通常是 <code class="language-plaintext highlighter-rouge">O(n)</code>，但会随着动态扩容而多占用一些空间。</li>
+  <li><strong>内存浪费</strong>：哈希表通常会预留额外的空间以降低冲突率，从而实现 <code class="language-plaintext highlighter-rouge">O(1)</code> 的平均时间复杂度。相比红黑树，哈希表的空间开销会更大。</li>
+</ul>
+
+<p>红黑树和哈希表的适用场景如下：</p>
+<ul>
+  <li><strong>红黑树的适用场景</strong>：
+    <ul>
+      <li>需要有序访问数据时（如按键排序、区间查询）。</li>
+      <li>需要频繁的插入和删除操作，同时需要有序性保障。</li>
+      <li>需要高效的范围查询（如找到范围内的所有键值对）。</li>
+    </ul>
+  </li>
+  <li><strong>哈希表的适用场景</strong>：
+    <ul>
+      <li>需要快速查找和插入，但不关心数据顺序时。</li>
+      <li>需要频繁的查找和更新操作，如缓存、字典、集合等。</li>
+      <li>当空间开销不是关键考虑因素时，哈希表提供了更高效的查找和插入性能。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="在交易场景中哈希表和红黑树各自应当在什么时候使用">在交易场景中，哈希表和红黑树各自应当在什么时候使用？</h3>
+<p>在交易系统中，数据结构的选择非常重要，不同的数据结构在效率、性能以及适用场景上各不相同。下面是哈希表和红黑树在交易场景中的适用场景分析，之后再讨论 <code class="language-plaintext highlighter-rouge">deque</code> 和 <code class="language-plaintext highlighter-rouge">vector</code> 的应用场景。</p>
+
+<h5 id="1-哈希表在交易场景中的使用场景">1. 哈希表在交易场景中的使用场景</h5>
+
+<p>哈希表（如 <code class="language-plaintext highlighter-rouge">std::unordered_map</code>）在交易场景中的适用场景主要是快速查找和更新操作，无需关心顺序性。常见的使用场景包括：</p>
+
+<ul>
+  <li>
+    <p><strong>按订单 ID 查找订单</strong>：在交易系统中，每个订单通常有一个唯一的订单 ID。通过哈希表可以快速根据订单 ID 查找到特定的订单，以便于查询、取消或更新订单。哈希表的 <code class="language-plaintext highlighter-rouge">O(1)</code> 平均查找复杂度在这种情况下具有很大优势。</p>
+  </li>
+  <li>
+    <p><strong>按客户 ID 查找客户信息</strong>：在订单系统中，经常需要通过客户 ID 查找客户的订单历史、账户余额等信息。哈希表可以提供快速的查找，使得能够在海量的客户数据中高效获取目标客户的详细信息。</p>
+  </li>
+  <li>
+    <p><strong>缓存数据</strong>：哈希表适合缓存常用的数据，比如缓存最新的市场行情信息、交易对信息、配置信息等。通过键值对的形式，可以实现快速查找和更新，尤其是在需要频繁读写的场景中，哈希表提供了很好的性能。</p>
+  </li>
+</ul>
+
+<h5 id="适用场景总结-1">适用场景总结</h5>
+
+<ul>
+  <li>哈希表适合在交易场景中快速查找特定对象、缓存高频读写的数据、管理和查找基于 ID 的信息（如订单 ID、客户 ID 等），并且不需要保持数据的有序性。</li>
+</ul>
+
+<h5 id="2-红黑树在交易场景中的使用场景">2. 红黑树在交易场景中的使用场景</h5>
+
+<p>红黑树（如 <code class="language-plaintext highlighter-rouge">std::map</code>）在交易场景中的适用场景主要是需要顺序性、范围查找等操作的场合。常见的使用场景包括：</p>
+
+<ul>
+  <li>
+    <p><strong>订单簿（Order Book）</strong>：在订单簿中，通常会根据价格对买卖订单进行排序，以实现撮合交易（如寻找最优的买价和卖价）。红黑树的有序性保证了订单能够按照价格排序，便于快速查找、插入和删除。例如，撮合引擎可以快速找到价格最低的卖单和价格最高的买单。</p>
+  </li>
+  <li>
+    <p><strong>价格范围查询</strong>：在交易中，可能需要查询某一价格范围内的订单。例如，找到某价格区间内所有待处理的订单。红黑树支持范围查询操作，可以通过 <code class="language-plaintext highlighter-rouge">lower_bound</code> 和 <code class="language-plaintext highlighter-rouge">upper_bound</code> 方法快速查找特定区间内的订单。</p>
+  </li>
+  <li>
+    <p><strong>时间排序的订单列表</strong>：在某些交易系统中，可能需要按时间戳排序的订单列表，方便按顺序处理订单。红黑树可以在插入时维持时间戳的顺序，便于顺序性处理。</p>
+  </li>
+</ul>
+
+<h5 id="适用场景总结-2">适用场景总结</h5>
+
+<ul>
+  <li>红黑树适合在交易系统中维护有序的订单簿、支持价格范围查询的订单管理、以及按时间或价格排序的需求。其 <code class="language-plaintext highlighter-rouge">O(log n)</code> 的复杂度在这些场景中具有较好的性能表现。</li>
+</ul>
+
+<h3 id="deque和vector有哪些使用场景">deque和vector有哪些使用场景</h3>
+
+<p><code class="language-plaintext highlighter-rouge">deque</code> 和 <code class="language-plaintext highlighter-rouge">vector</code> 都是线性容器，但在某些特性上存在差异，适用的场景也有所不同。</p>
+
+<h5 id="vector-的使用场景"><code class="language-plaintext highlighter-rouge">vector</code> 的使用场景</h5>
+
+<ul>
+  <li>
+    <p><strong>顺序数据存储</strong>：<code class="language-plaintext highlighter-rouge">vector</code> 适合存储顺序性数据，并且大多数情况下可以连续访问元素。对于随机访问需求较高的数据，<code class="language-plaintext highlighter-rouge">vector</code> 是不错的选择，因为 <code class="language-plaintext highlighter-rouge">vector</code> 的元素在内存中是连续存储的，因此可以使用索引快速访问。</p>
+  </li>
+  <li>
+    <p><strong>只在尾部插入或删除</strong>：<code class="language-plaintext highlighter-rouge">vector</code> 在尾部插入和删除的性能较好，具有 <code class="language-plaintext highlighter-rouge">O(1)</code> 的时间复杂度。但在中间或头部插入和删除元素的性能较差，因为需要移动元素，时间复杂度为 <code class="language-plaintext highlighter-rouge">O(n)</code>。</p>
+  </li>
+  <li>
+    <p><strong>内存占用较小</strong>：由于 <code class="language-plaintext highlighter-rouge">vector</code> 元素连续存储，内存分配相对紧凑。它不需要额外的指针来连接元素，因此相比 <code class="language-plaintext highlighter-rouge">deque</code>，在相同的容量下 <code class="language-plaintext highlighter-rouge">vector</code> 更节省内存。</p>
+  </li>
+</ul>
+
+<h5 id="适用场景示例">适用场景示例</h5>
+
+<ul>
+  <li><strong>交易记录缓存</strong>：<code class="language-plaintext highlighter-rouge">vector</code> 可用于存储顺序排列的交易记录，尤其是只需要在尾部追加新记录的情况。</li>
+  <li><strong>历史行情数据</strong>：存储市场的历史价格等数据，可以直接按索引快速访问，并在尾部追加新数据。</li>
+</ul>
+
+<h5 id="deque-的使用场景"><code class="language-plaintext highlighter-rouge">deque</code> 的使用场景</h5>
+
+<ul>
+  <li>
+    <p><strong>双端插入和删除</strong>：<code class="language-plaintext highlighter-rouge">deque</code> 允许在头部和尾部进行高效的插入和删除，时间复杂度是 <code class="language-plaintext highlighter-rouge">O(1)</code>。这使得它非常适合需要双端插入删除的场景。</p>
+  </li>
+  <li>
+    <p><strong>动态调整长度</strong>：<code class="language-plaintext highlighter-rouge">deque</code> 的内存分配方式允许在首尾插入删除元素而不会频繁进行内存重分配，适合长度动态变化频繁的场景。相比 <code class="language-plaintext highlighter-rouge">vector</code>，<code class="language-plaintext highlighter-rouge">deque</code> 的结构更加灵活。</p>
+  </li>
+  <li>
+    <p><strong>队列或栈</strong>：由于支持双端操作，<code class="language-plaintext highlighter-rouge">deque</code> 适合实现双端队列、双向栈等结构。<code class="language-plaintext highlighter-rouge">deque</code> 的设计适合 FIFO（先进先出）和 LIFO（后进先出）模型。</p>
+  </li>
+</ul>
+
+<h6 id="适用场景示例-1">适用场景示例</h6>
+
+<ul>
+  <li><strong>实时行情窗口</strong>：<code class="language-plaintext highlighter-rouge">deque</code> 适合用于存储实时行情数据的滑动窗口，比如只保留最近几秒的价格数据，在数据进来时添加到尾部，最旧的数据从头部删除。</li>
+  <li><strong>订单处理队列</strong>：如果订单需要在队列的首部和尾部进行频繁操作（如撤销最早的订单），<code class="language-plaintext highlighter-rouge">deque</code> 提供更高效的处理。</li>
+</ul>
+
+<h3 id="实现一个订单簿系统有挂单吃单撤单的功能">实现一个订单簿系统，有挂单吃单撤单的功能</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;list&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unordered_map&gt;</span><span class="cp">
+</span>
+<span class="k">enum</span> <span class="n">OrderType</span> <span class="p">{</span> <span class="n">BUY</span><span class="p">,</span> <span class="n">SELL</span> <span class="p">};</span>
+
+<span class="c1">// 订单结构体</span>
+<span class="k">struct</span> <span class="nc">Order</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">order_id</span><span class="p">;</span>
+    <span class="n">OrderType</span> <span class="n">type</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">price</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">quantity</span><span class="p">;</span>
+
+    <span class="n">Order</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="n">OrderType</span> <span class="n">t</span><span class="p">,</span> <span class="kt">double</span> <span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">q</span><span class="p">)</span> <span class="o">:</span> <span class="n">order_id</span><span class="p">(</span><span class="n">id</span><span class="p">),</span> <span class="n">type</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">price</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">quantity</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">};</span>
+
+<span class="c1">// 订单簿类</span>
+<span class="k">class</span> <span class="nc">OrderBook</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="c1">// 买单按降序排列（价格从高到低）</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">greater</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&gt;</span> <span class="n">buy_orders</span><span class="p">;</span>
+    <span class="c1">// 卖单按升序排列（价格从低到高）</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;&gt;</span> <span class="n">sell_orders</span><span class="p">;</span>
+    <span class="c1">// 存储订单 ID 到订单的映射，方便撤单</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;::</span><span class="n">iterator</span><span class="o">&gt;</span> <span class="n">order_map</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="c1">// 挂单</span>
+    <span class="kt">void</span> <span class="n">add_order</span><span class="p">(</span><span class="kt">int</span> <span class="n">order_id</span><span class="p">,</span> <span class="n">OrderType</span> <span class="n">type</span><span class="p">,</span> <span class="kt">double</span> <span class="n">price</span><span class="p">,</span> <span class="kt">int</span> <span class="n">quantity</span><span class="p">);</span>
+
+    <span class="c1">// 吃单</span>
+    <span class="kt">void</span> <span class="n">execute_market_order</span><span class="p">(</span><span class="n">OrderType</span> <span class="n">type</span><span class="p">,</span> <span class="kt">int</span> <span class="n">quantity</span><span class="p">);</span>
+
+    <span class="c1">// 撤单</span>
+    <span class="kt">void</span> <span class="n">cancel_order</span><span class="p">(</span><span class="kt">int</span> <span class="n">order_id</span><span class="p">);</span>
+<span class="p">};</span>
+
+
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="C++" /><summary type="html"><![CDATA[内存分区]]></summary></entry><entry><title type="html">计算机系统、网络面经</title><link href="http://localhost:4000/2024/10/21/CS/" rel="alternate" type="text/html" title="计算机系统、网络面经" /><published>2024-10-21T10:00:00+08:00</published><updated>2024-10-21T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/21/CS</id><content type="html" xml:base="http://localhost:4000/2024/10/21/CS/"><![CDATA[<h3 id="描述一下cpu怎么从内存中获取数据的要经过哪些模块">描述一下cpu怎么从内存中获取数据的，要经过哪些模块？</h3>
 
 <h3 id="介绍一下cpu中的cache">介绍一下cpu中的cache</h3>
 
@@ -1149,7 +2091,11 @@ Rvalue reference: 100
 
 <h3 id="虚拟内存是什么好处是什么每个页的大小一般是多少">虚拟内存是什么？好处是什么？每个页的大小一般是多少？</h3>
 
-<h3 id="线程和进程的区别-它们在linux的实现上的区别">线程和进程的区别？ 它们在Linux的实现上的区别？</h3>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="C++" /><summary type="html"><![CDATA[描述一下cpu怎么从内存中获取数据的，要经过哪些模块？]]></summary></entry><entry><title type="html">其他面经</title><link href="http://localhost:4000/2024/10/21/other/" rel="alternate" type="text/html" title="其他面经" /><published>2024-10-21T10:00:00+08:00</published><updated>2024-10-21T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/21/other</id><content type="html" xml:base="http://localhost:4000/2024/10/21/other/"><![CDATA[<h3 id="c性能检测用过什么工具">C++性能检测用过什么工具</h3>
+<h3 id="线程和进程的区别-它们在linux的实现上的区别">线程和进程的区别？ 它们在Linux的实现上的区别？</h3>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="C++" /><summary type="html"><![CDATA[描述一下cpu怎么从内存中获取数据的，要经过哪些模块？]]></summary></entry><entry><title type="html">其他面经</title><link href="http://localhost:4000/2024/10/21/other/" rel="alternate" type="text/html" title="其他面经" /><published>2024-10-21T10:00:00+08:00</published><updated>2024-10-21T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/21/other</id><content type="html" xml:base="http://localhost:4000/2024/10/21/other/"><![CDATA[<h3 id="设计模式">设计模式</h3>
+
+<p><a href="https://refactoringguru.cn/design-patterns/catalog">设计模式详解</a></p>
+
+<h3 id="c性能检测用过什么工具">C++性能检测用过什么工具</h3>
 
 <h3 id="gdb看backtrace和切换线程">gdb看backtrace和切换线程</h3>
 
@@ -1159,7 +2105,7 @@ Rvalue reference: 100
 
 <h3 id="新旧数据不兼容怎么办">新旧数据不兼容怎么办</h3>
 
-<h3 id="有哪些加速计算的方法">有哪些加速计算的方法</h3>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="C++" /><summary type="html"><![CDATA[C++性能检测用过什么工具]]></summary></entry><entry><title type="html">C++多线程</title><link href="http://localhost:4000/2024/10/20/Thread/" rel="alternate" type="text/html" title="C++多线程" /><published>2024-10-20T10:00:00+08:00</published><updated>2024-10-20T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/20/Thread</id><content type="html" xml:base="http://localhost:4000/2024/10/20/Thread/"><![CDATA[<p>C++的<code class="language-plaintext highlighter-rouge">atomic</code>库和<code class="language-plaintext highlighter-rouge">thread</code>库是多线程编程中常用的库，提供了安全的并发操作支持。</p>
+<h3 id="有哪些加速计算的方法">有哪些加速计算的方法</h3>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="C++" /><summary type="html"><![CDATA[设计模式]]></summary></entry><entry><title type="html">C++多线程</title><link href="http://localhost:4000/2024/10/20/Thread/" rel="alternate" type="text/html" title="C++多线程" /><published>2024-10-20T10:00:00+08:00</published><updated>2024-10-20T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/20/Thread</id><content type="html" xml:base="http://localhost:4000/2024/10/20/Thread/"><![CDATA[<p>C++的<code class="language-plaintext highlighter-rouge">atomic</code>库和<code class="language-plaintext highlighter-rouge">thread</code>库是多线程编程中常用的库，提供了安全的并发操作支持。</p>
 
 <h3 id="1-thread库">1. <code class="language-plaintext highlighter-rouge">thread</code>库</h3>
 
