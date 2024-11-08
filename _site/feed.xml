@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-11-04T18:00:11+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">设计模式</title><link href="http://localhost:4000/2024/10/27/DesignPattern/" rel="alternate" type="text/html" title="设计模式" /><published>2024-10-27T10:00:00+08:00</published><updated>2024-10-27T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/27/DesignPattern</id><content type="html" xml:base="http://localhost:4000/2024/10/27/DesignPattern/"><![CDATA[<h3 id="一创建型模式">一、创建型模式</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-11-08T23:41:02+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">设计模式</title><link href="http://localhost:4000/2024/10/27/DesignPattern/" rel="alternate" type="text/html" title="设计模式" /><published>2024-10-27T10:00:00+08:00</published><updated>2024-10-27T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/27/DesignPattern</id><content type="html" xml:base="http://localhost:4000/2024/10/27/DesignPattern/"><![CDATA[<h3 id="一创建型模式">一、创建型模式</h3>
 
 <p><strong>1. 单例模式（Singleton Pattern）</strong></p>
 
@@ -1376,6 +1376,16 @@ Rvalue reference: 100
 
 <p>代码区：存储程序的可执行代码。</p>
 
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">function</span><span class="p">(){</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">a</code> 对象本身（包括管理指针和其他元数据）存储在栈区。</li>
+  <li><code class="language-plaintext highlighter-rouge">std::vector</code> 在内部使用指针和动态分配的内存来管理其元素，当 <code class="language-plaintext highlighter-rouge">a(2)</code> 被构造时，会在堆上分配足够的空间来存储这两个 <code class="language-plaintext highlighter-rouge">int</code> 元素。</li>
+</ul>
+
 <h3 id="多态的实现原理实现方式是什么以及多态的优点特点">多态的实现原理（实现方式）是什么？以及多态的优点（特点）？</h3>
 <p>实现方式：多态分为动态多态和静态多态（又称编译期多态，即在系统编译期间就可以确定程序将要执行哪个函数）</p>
 
@@ -2225,6 +2235,60 @@ Rvalue reference: 100
 
 <p>在实际应用中，应该根据需要选择合适的智能指针类型：若对象需要唯一所有权且性能要求高，使用 <code class="language-plaintext highlighter-rouge">unique_ptr</code>；若对象需要共享所有权，特别是在多线程场景下，使用 <code class="language-plaintext highlighter-rouge">shared_ptr</code>。</p>
 
+<h3 id="一个-shared_ptr-指向另一个地址时操作的复杂性和开销主要来源于以下几个因素">一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 指向另一个地址时，操作的复杂性和开销主要来源于以下几个因素：</h3>
+
+<h5 id="1-引用计数的递减和递增">1. <strong>引用计数的递减和递增</strong></h5>
+
+<p>当你将 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 重新指向另一个地址时，操作系统会执行以下步骤：</p>
+
+<ul>
+  <li><strong>递减旧对象的引用计数</strong>：将 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 从旧对象指向新对象时，会先减少旧对象的引用计数，如果引用计数降为 0，旧对象会被销毁。</li>
+  <li><strong>递增新对象的引用计数</strong>：接着，将 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 指向的新对象的引用计数加 1。</li>
+</ul>
+
+<p>这些操作是原子操作，在多线程环境中具有一定的开销，尤其当多个线程频繁执行这样的操作时。每次引用计数的增减都会触发缓存同步和内存屏障，增加系统开销。</p>
+
+<h5 id="2-旧对象的销毁若引用计数归零">2. <strong>旧对象的销毁（若引用计数归零）</strong></h5>
+
+<p>如果原来指向的对象在重置后引用计数降为 0，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 会销毁该对象：</p>
+
+<ul>
+  <li><strong>析构函数的调用</strong>：当引用计数降为 0 时，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 会调用对象的析构函数。对象的析构可能需要释放资源，如文件句柄、内存等。这会带来一定的额外开销。</li>
+  <li><strong>释放控制块</strong>：<code class="language-plaintext highlighter-rouge">shared_ptr</code> 的控制块也会被销毁和释放，这涉及一次堆内存的释放操作。如果频繁重置 <code class="language-plaintext highlighter-rouge">shared_ptr</code>，多次内存分配和释放会增加开销。</li>
+</ul>
+
+<h5 id="3-在多线程环境中增减引用计数的竞争">3. <strong>在多线程环境中，增减引用计数的竞争</strong></h5>
+
+<p>当多个线程频繁对同一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 进行重置操作时，增减引用计数的竞争会进一步增加性能开销：</p>
+
+<ul>
+  <li><strong>竞争条件</strong>：在多线程环境中，如果多个线程频繁地对同一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 重置为不同对象，则引用计数的增减操作可能发生竞争，导致性能下降。每次引用计数的更改都会触发原子操作的锁定，影响 CPU 的缓存一致性。</li>
+  <li><strong>伪共享</strong>：当多个线程频繁更新同一 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 的引用计数，这些操作可能发生在同一缓存行上，导致伪共享，进一步增加缓存一致性协议的压力。</li>
+</ul>
+
+<h5 id="4-内存分配和释放的频率">4. <strong>内存分配和释放的频率</strong></h5>
+
+<p>如果 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 重新指向新地址的操作非常频繁，且每次都是指向不同的对象，会导致以下开销：</p>
+
+<ul>
+  <li><strong>频繁的控制块分配和释放</strong>：每次指向一个新对象时，<code class="language-plaintext highlighter-rouge">shared_ptr</code> 会为新对象分配一个控制块。频繁的内存分配和释放会影响程序的内存管理性能，尤其是在堆上进行小块内存分配时，开销较大。</li>
+  <li><strong>潜在的内存碎片化</strong>：频繁分配和释放小块内存可能会导致内存碎片化，进一步影响内存分配效率。</li>
+</ul>
+
+<h5 id="5-析构和构造的开销">5. <strong>析构和构造的开销</strong></h5>
+
+<p>每次 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 被重置到不同的对象时，如果新的对象和旧对象的生命周期需要被管理，就可能会多次调用构造和析构函数。特别是当指向的对象包含复杂的成员或资源时，这些构造和析构函数的开销也会加大。</p>
+
+<h5 id="6-避免开销的方法">6. <strong>避免开销的方法</strong></h5>
+
+<p>为了减少上述操作带来的开销，可以考虑以下方法：</p>
+
+<ul>
+  <li><strong>使用 <code class="language-plaintext highlighter-rouge">weak_ptr</code></strong>：如果只是短暂指向新对象，可以考虑使用 <code class="language-plaintext highlighter-rouge">weak_ptr</code>，因为它不会更改引用计数，减少了原子操作的开销。</li>
+  <li><strong>使用 <code class="language-plaintext highlighter-rouge">std::move</code></strong>：如果旧对象不再需要，可以使用 <code class="language-plaintext highlighter-rouge">std::move</code> 将 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 直接转移给另一个 <code class="language-plaintext highlighter-rouge">shared_ptr</code>，避免引用计数的增减。</li>
+  <li><strong>使用 <code class="language-plaintext highlighter-rouge">reset()</code> 重置为 nullptr</strong>：如果 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 已经不再需要，可以先使用 <code class="language-plaintext highlighter-rouge">reset()</code> 将其重置为 <code class="language-plaintext highlighter-rouge">nullptr</code>，这样旧对象会立即释放，再赋值新对象，避免频繁的引用计数竞争。</li>
+</ul>
+
 <h3 id="手动实现shared_ptr和unique_ptr">手动实现shared_ptr和unique_ptr</h3>
 <p>手动实现 <code class="language-plaintext highlighter-rouge">std::shared_ptr</code> 和 <code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 的核心在于理解它们的基本特性：<code class="language-plaintext highlighter-rouge">std::unique_ptr</code> 实现独占所有权，而 <code class="language-plaintext highlighter-rouge">std::shared_ptr</code> 则实现共享所有权。为了实现这两个智能指针类，我们将从管理动态内存的角度来实现这两种指针的基本功能。</p>
 
@@ -2989,6 +3053,88 @@ Rvalue reference: 100
 <h3 id="c性能检测用过什么工具">C++性能检测用过什么工具</h3>
 
 <h3 id="gdb看backtrace和切换线程">gdb看backtrace和切换线程</h3>
+
+<p>以下是一些常用的多线程调试方法：</p>
+
+<h5 id="1-查看线程">1. 查看线程</h5>
+<ul>
+  <li><strong>显示所有线程</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>info threads
+</code></pre></div>    </div>
+    <p>这个命令会显示当前所有线程的编号、线程ID（TID）、状态以及当前的执行位置。每个线程都有一个 <code class="language-plaintext highlighter-rouge">gdb</code> 编号，可以用来切换到指定线程。</p>
+  </li>
+</ul>
+
+<h5 id="2-切换线程">2. 切换线程</h5>
+<ul>
+  <li><strong>切换到指定线程</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>thread THREAD_NUM
+</code></pre></div>    </div>
+    <p>这里的 <code class="language-plaintext highlighter-rouge">THREAD_NUM</code> 是 <code class="language-plaintext highlighter-rouge">info threads</code> 命令输出中线程的编号。切换到指定线程后，可以使用正常的调试命令，比如 <code class="language-plaintext highlighter-rouge">backtrace</code> 查看调用栈，<code class="language-plaintext highlighter-rouge">print</code> 查看变量等。</p>
+  </li>
+</ul>
+
+<h5 id="3-设置线程断点">3. 设置线程断点</h5>
+<ul>
+  <li><strong>对特定线程设置断点</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">break </span>function_name thread THREAD_NUM
+</code></pre></div>    </div>
+    <p>在指定线程上设置断点。这样只有当指定线程执行到该断点时，程序才会暂停。</p>
+  </li>
+  <li><strong>对所有线程设置断点</strong>：
+正常的断点会影响所有线程，因此可以直接使用 <code class="language-plaintext highlighter-rouge">break</code> 命令，而无需特别指定线程。</li>
+</ul>
+
+<h5 id="4-控制线程">4. 控制线程</h5>
+<ul>
+  <li><strong>暂停/继续特定线程</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">continue</code>: 继续当前线程的执行。</li>
+      <li><code class="language-plaintext highlighter-rouge">thread THREAD_NUM</code>: 切换到特定线程后，可以继续执行该线程的调试流程。</li>
+    </ul>
+
+    <p><strong>注意</strong>：<code class="language-plaintext highlighter-rouge">continue</code> 命令会让所有线程继续运行，想要单步调试特定线程时可以结合 <code class="language-plaintext highlighter-rouge">next</code> 和 <code class="language-plaintext highlighter-rouge">step</code> 命令操作。</p>
+  </li>
+</ul>
+
+<h5 id="5-锁和竞态调试">5. 锁和竞态调试</h5>
+<ul>
+  <li><strong>设置断点和观察变量</strong>：
+可以在临界区或共享资源访问代码处设置断点，使用 <code class="language-plaintext highlighter-rouge">watch</code> 命令观察共享变量的值变化，帮助发现竞争条件或死锁情况。
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>watch var
+</code></pre></div>    </div>
+  </li>
+  <li><strong>死锁调试</strong>：
+使用 <code class="language-plaintext highlighter-rouge">thread apply all backtrace</code> 查看所有线程的调用栈，确定是否有线程卡在锁等待或死锁状态。</li>
+</ul>
+
+<h3 id="6-常用命令总结">6. 常用命令总结</h3>
+<ul>
+  <li><strong>列出所有线程</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>info threads
+</code></pre></div>    </div>
+  </li>
+  <li><strong>切换线程</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>thread THREAD_NUM
+</code></pre></div>    </div>
+  </li>
+  <li><strong>对指定线程设置断点</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">break </span>func_name thread THREAD_NUM
+</code></pre></div>    </div>
+  </li>
+  <li><strong>查看所有线程的调用栈</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>thread apply all backtrace
+</code></pre></div>    </div>
+  </li>
+  <li><strong>查看特定线程的调用栈</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>backtrace
+</code></pre></div>    </div>
+  </li>
+  <li><strong>继续执行所有线程</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">continue</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
 
 <h3 id="全部加载到内存太大了怎么办">全部加载到内存太大了怎么办</h3>
 
