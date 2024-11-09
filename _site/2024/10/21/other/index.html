@@ -168,6 +168,79 @@
   </li>
 </ul>
 
+<h3 id="检测内存泄漏">检测内存泄漏</h3>
+
+<p><code class="language-plaintext highlighter-rouge">Valgrind</code> 是 Linux 下功能非常强大的内存分析工具，常用于检测 C/C++ 程序的内存泄漏、非法访问、内存越界等问题。它的核心工具是 <code class="language-plaintext highlighter-rouge">memcheck</code>，用于检测内存泄漏和内存访问错误。以下是对 <code class="language-plaintext highlighter-rouge">Valgrind</code> 的详细介绍以及使用方法。</p>
+
+<h5 id="valgrind-的功能">Valgrind 的功能</h5>
+
+<p><code class="language-plaintext highlighter-rouge">Valgrind</code> 提供了一系列的子工具来检测和分析程序的各种问题，包括：</p>
+
+<ul>
+  <li><strong>Memcheck</strong>：检测内存泄漏、无效访问、非法读写、未初始化内存使用等。</li>
+  <li><strong>Cachegrind</strong>：模拟 CPU 的缓存行为，分析缓存命中率。</li>
+  <li><strong>Massif</strong>：内存使用分析工具，帮助优化程序的内存使用。</li>
+  <li><strong>Helgrind</strong>：检测多线程程序中的数据竞争和锁定错误。</li>
+  <li><strong>DRD</strong>：另一个数据竞争检测工具，类似于 Helgrind。</li>
+</ul>
+
+<p>在检测内存泄漏和非法访问时，通常使用 <code class="language-plaintext highlighter-rouge">Memcheck</code> 子工具。</p>
+
+<h5 id="基本使用方法">基本使用方法</h5>
+
+<p>假设你的可执行文件是 <code class="language-plaintext highlighter-rouge">your_program</code>，你可以通过以下命令使用 <code class="language-plaintext highlighter-rouge">Valgrind</code> 来检测内存问题：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>valgrind <span class="nt">--leak-check</span><span class="o">=</span>full ./your_program
+</code></pre></div></div>
+
+<p>这个命令将启动 <code class="language-plaintext highlighter-rouge">Valgrind</code> 的 <code class="language-plaintext highlighter-rouge">memcheck</code> 工具，并运行 <code class="language-plaintext highlighter-rouge">your_program</code>。<code class="language-plaintext highlighter-rouge">--leak-check=full</code> 参数会提供详细的内存泄漏报告。</p>
+
+<h5 id="常用参数选项">常用参数选项</h5>
+
+<p><code class="language-plaintext highlighter-rouge">Valgrind</code> 提供了很多选项来控制内存检测的精度和输出的信息量。以下是一些常用选项：</p>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">--leak-check=&lt;yes|no|summary|full&gt;</code></strong>：设置泄漏检查的详细程度。
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">yes</code>：显示简单的内存泄漏摘要。</li>
+      <li><code class="language-plaintext highlighter-rouge">summary</code>：显示泄漏摘要。</li>
+      <li><code class="language-plaintext highlighter-rouge">full</code>：显示每个泄漏的详细信息，包括堆栈回溯。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">--show-leak-kinds=&lt;kind&gt;</code></strong>：设置报告的泄漏类型，可以选择 <code class="language-plaintext highlighter-rouge">all</code>（所有）、<code class="language-plaintext highlighter-rouge">definite</code>（确定泄漏）、<code class="language-plaintext highlighter-rouge">possible</code>（可能泄漏）、<code class="language-plaintext highlighter-rouge">reachable</code>（可达但未释放）、<code class="language-plaintext highlighter-rouge">indirect</code>（间接泄漏）。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">--track-origins=yes</code></strong>：显示未初始化值的来源，适合调试复杂内存问题。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">--log-file=&lt;filename&gt;</code></strong>：将 <code class="language-plaintext highlighter-rouge">Valgrind</code> 输出重定向到文件，方便分析。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">--num-callers=&lt;n&gt;</code></strong>：设置堆栈回溯的深度，默认是 12。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">--tool=&lt;toolname&gt;</code></strong>：选择 <code class="language-plaintext highlighter-rouge">Valgrind</code> 子工具（如 <code class="language-plaintext highlighter-rouge">memcheck</code>、<code class="language-plaintext highlighter-rouge">massif</code> 等），默认使用 <code class="language-plaintext highlighter-rouge">memcheck</code>。</li>
+</ul>
+
+<h5 id="valgrind-的输出解释">Valgrind 的输出解释</h5>
+
+<p>当运行程序出现内存错误或泄漏时，<code class="language-plaintext highlighter-rouge">Valgrind</code> 会输出详细的报告，包括：</p>
+
+<ul>
+  <li><strong>Invalid read/write</strong>：表示程序尝试读取或写入无效内存地址，可能是越界或释放后访问。</li>
+  <li><strong>Use of uninitialized value</strong>：表示程序使用了未初始化的变量。</li>
+  <li><strong>Conditional jump or move depends on uninitialized value(s)</strong>：指条件语句使用了未初始化的变量。</li>
+  <li><strong>Memory leaks</strong>：报告程序未释放的内存，给出每个泄漏的堆栈信息。</li>
+</ul>
+
+<p>例如，一个典型的内存泄漏报告如下：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>==12345== 8 bytes in 1 blocks are definitely lost in loss record 1 of 2
+==12345==    at 0x4C2B8F6: malloc (vg_replace_malloc.c:299)
+==12345==    by 0x4005F4: main (example.c:10)
+</code></pre></div></div>
+
+<p>解释：</p>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">12345</code></strong>：<code class="language-plaintext highlighter-rouge">Valgrind</code> 为该进程分配的 ID。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">8 bytes</code></strong>：泄漏的内存大小为 8 字节。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">malloc</code></strong>：内存分配的函数来源。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">main (example.c:10)</code></strong>：泄漏发生的代码位置（文件和行号）。</li>
+</ul>
+
 <h3 id="全部加载到内存太大了怎么办">全部加载到内存太大了怎么办</h3>
 
 <h3 id="数据迁移怎么保证一致性">数据迁移怎么保证一致性</h3>
@@ -237,6 +310,7 @@
   <li><a href="#c性能检测用过什么工具">C++性能检测用过什么工具</a></li>
   <li><a href="#gdb看backtrace和切换线程">gdb看backtrace和切换线程</a></li>
   <li><a href="#6-常用命令总结">6. 常用命令总结</a></li>
+  <li><a href="#检测内存泄漏">检测内存泄漏</a></li>
   <li><a href="#全部加载到内存太大了怎么办">全部加载到内存太大了怎么办</a></li>
   <li><a href="#数据迁移怎么保证一致性">数据迁移怎么保证一致性</a></li>
   <li><a href="#新旧数据不兼容怎么办">新旧数据不兼容怎么办</a></li>
