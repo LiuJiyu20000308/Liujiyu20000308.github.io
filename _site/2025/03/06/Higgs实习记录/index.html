@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="/assets/styles.css"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Higgs实习记录 | Liujiyu’s blog</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Higgs实习记录" />
+<meta name="author" content="liujiyu" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="思考 程序实现的时候要将代码逻辑和业务结合起来，比如说LoadParam中给定一个仓位，在db文件中查询相距最近的仓位对应的TradeParam，并不是单单去寻找唯一一个Param，那样的话一天就只会做一次交易，而是对于数据中每一个时间段都去寻找一个最近的仓位对应的TradeParam。 遇到非技术性问题先问deepseek，整理文档或代码时把问题整理到一起再问。" />
+<meta property="og:description" content="思考 程序实现的时候要将代码逻辑和业务结合起来，比如说LoadParam中给定一个仓位，在db文件中查询相距最近的仓位对应的TradeParam，并不是单单去寻找唯一一个Param，那样的话一天就只会做一次交易，而是对于数据中每一个时间段都去寻找一个最近的仓位对应的TradeParam。 遇到非技术性问题先问deepseek，整理文档或代码时把问题整理到一起再问。" />
+<link rel="canonical" href="http://localhost:4000/2025/03/06/Higgs%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/" />
+<meta property="og:url" content="http://localhost:4000/2025/03/06/Higgs%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/" />
+<meta property="og:site_name" content="Liujiyu’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-03-06T10:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Higgs实习记录" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"liujiyu","url":"https://github.com/Liujiyu20000308"},"dateModified":"2025-03-06T10:00:00+08:00","datePublished":"2025-03-06T10:00:00+08:00","description":"思考 程序实现的时候要将代码逻辑和业务结合起来，比如说LoadParam中给定一个仓位，在db文件中查询相距最近的仓位对应的TradeParam，并不是单单去寻找唯一一个Param，那样的话一天就只会做一次交易，而是对于数据中每一个时间段都去寻找一个最近的仓位对应的TradeParam。 遇到非技术性问题先问deepseek，整理文档或代码时把问题整理到一起再问。","headline":"Higgs实习记录","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2025/03/06/Higgs%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/head.jpg"},"name":"liujiyu"},"url":"http://localhost:4000/2025/03/06/Higgs%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/"}</script>
+<!-- End Jekyll SEO tag -->
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Liujiyu's blog" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } });
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+                       });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+</head>
+
+
+  <body>
+
+    <div class="container pure-g"><div class="sidebar-left pure-u-1 pure-u-md-1-4" style="background-color: rgb(40, 73, 77); color: rgb(255, 255, 255); background-image: url(/bg.jpg);"><header class="masthead">
+  <div class="avatar"><img src="/head.jpg" class="avatar-image" alt="liujiyu">
+    </div>
+  <div class="masthead-title">
+    <a href="/" title="Home">Liujiyu's blog</a>
+  </div>
+  <div class="masthead-tagline">
+    <small>learn & record</small>
+  </div><nav class="navigation">
+    <ul class="navigation-list"><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/">Blog</a>
+      </li><li class="navigation-item">
+        <a onclick="sessionStorage.setItem('forceCheckScroll', 'true')" href="/about/">About</a>
+      </li></ul>
+  </nav><div class="social pure-menu pure-menu-horizontal">
+      <ul class="social-icons pure-menu-list">
+      <li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="mailto://liujiyu@zju.edu.cn">
+            <i class="fas fa-envelope" title="Email"></i>
+          </a>
+        </li><li class="pure-menu-item">
+          <a class="social-icon pure-menu-link" href="https://github.com/Liujiyu20000308">
+            <i class="fab fa-github" title="GitHub"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+</header>
+</div>
+
+      <div class="content pure-u-1 pure-u-md-1-2"><main>
+  <article class="post">
+  <h1 class="post-title">Higgs实习记录</h1>
+  <div class="post-meta"><time datetime="2025-03-06T10:00:00+08:00" itemprop="datePublished">6 Mar 2025</time></div>
+
+  <h3 id="思考">思考</h3>
+<ol>
+  <li>程序实现的时候要将代码逻辑和业务结合起来，比如说LoadParam中给定一个仓位，在db文件中查询相距最近的仓位对应的TradeParam，并不是单单去寻找唯一一个Param，那样的话一天就只会做一次交易，而是对于数据中每一个时间段都去寻找一个最近的仓位对应的TradeParam。</li>
+  <li>遇到非技术性问题先问deepseek，整理文档或代码时把问题整理到一起再问。</li>
+</ol>
+
+<h3 id="技术">技术</h3>
+
+<h4 id="多线程">多线程</h4>
+
+<p>线程是程序中的独立执行流，属于同一进程内的多个线程 <strong>共享进程的内存空间</strong>​（如全局变量、堆内存），但每个线程拥有 <strong>独立的栈空间和执行上下文</strong>​（如寄存器状态、程序计数器）。</p>
+
+<p><strong>线程 vs 进程:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>​<strong>特征</strong></th>
+      <th>​<strong>进程</strong></th>
+      <th>​<strong>线程</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>​<strong>资源分配</strong></td>
+      <td>操作系统资源分配的基本单位（独立内存空间）</td>
+      <td>进程内的执行单元（共享进程内存）</td>
+    </tr>
+    <tr>
+      <td>​<strong>切换开销</strong></td>
+      <td>高（涉及虚拟内存、文件描述符等切换）</td>
+      <td>低（仅切换栈和寄存器）</td>
+    </tr>
+    <tr>
+      <td>​<strong>创建销毁</strong></td>
+      <td>通过 <code class="language-plaintext highlighter-rouge">fork()</code> 创建，系统调用消耗大</td>
+      <td>通过 <code class="language-plaintext highlighter-rouge">pthread_create()</code> 创建，消耗小</td>
+    </tr>
+    <tr>
+      <td>​<strong>独立性</strong></td>
+      <td>相互隔离，一个进程崩溃不影响其他进程</td>
+      <td>共享内存，一个线程崩溃可能导致整个进程终止</td>
+    </tr>
+    <tr>
+      <td>​<strong>通信方式</strong></td>
+      <td>管道、消息队列、共享内存、Socket 等</td>
+      <td>直接读写共享变量（需同步机制）</td>
+    </tr>
+    <tr>
+      <td>​<strong>CPU调度</strong></td>
+      <td>进程是 CPU 资源分配的基本单位</td>
+      <td>线程是 CPU 调度的基本单位</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="数据对齐">数据对齐</h4>
+
+<p>内存对齐的核心规则</p>
+<ol>
+  <li>​<strong>成员对齐规则</strong>：每个成员的起始地址必须是其自身大小的整数倍（例如 <code class="language-plaintext highlighter-rouge">int</code> 需4字节对齐，<code class="language-plaintext highlighter-rouge">double</code> 需8字节对齐）。</li>
+  <li>​<strong>结构体填充规则</strong>：结构体总大小必须是其最大成员大小的整数倍。</li>
+  <li>​<strong>成员顺序影响</strong>：成员顺序不同会导致填充字节的数量变化，进而影响总内存占用。</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">TestA</span><span class="p">{</span>
+    <span class="kt">char</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>内存布局​（假设默认8字节对齐）：</p>
+<ul>
+  <li>char a占1字节，偏移量0。</li>
+  <li>int b需4字节对齐，因此在a后填充3字节（偏移量4-7）。</li>
+  <li>char c占1字节，偏移量8。</li>
+  <li>double d需8字节对齐，因此在c后填充7字节（偏移量16-23）。</li>
+  <li>​总大小：1+3（填充）+4+1+7（填充）+8 = ​24字节。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">TestB</span><span class="p">{</span>
+    <span class="kt">char</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>内存布局：</p>
+<ul>
+  <li>char a和char c共占2字节，偏移量0-1。</li>
+  <li>int b需4字节对齐，因此在c后填充2字节（偏移量4-7）。</li>
+  <li>double d直接对齐到偏移量8（无需填充）。</li>
+  <li>​总大小：1+1+2（填充）+4+8 = ​16字节。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">TestC</span><span class="p">{</span>
+    <span class="kt">char</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>内存布局：</p>
+<ul>
+  <li>char a和char c共占2字节，偏移量0-1。</li>
+  <li>double d需8字节对齐，因此在c后填充6字节（偏移量8-15）。</li>
+  <li>char b占1字节，偏移量16。</li>
+  <li>结构体总大小需是最大成员double的倍数（8字节），因此在b后填充7字节。</li>
+  <li>​总大小：1+1+6（填充）+8+1+7（填充） = ​24字节。</li>
+</ul>
+
+<h4 id="设计模式">设计模式</h4>
+
+<h5 id="impl设计模式">Impl设计模式</h5>
+<ol>
+  <li>接口与实现解耦：
+    <ul>
+      <li>隐藏私有细节：通过将类的私有成员封装在一个独立的实现类中，头文件仅暴露公共接口，避免内部实现细节泄露。</li>
+      <li>降低耦合性：接口类仅持有指向实现类的指针（unique_ptr或shared_ptr），实现类的修改不会影响接口类的用户代码。</li>
+    </ul>
+  </li>
+  <li>减少编译依赖与提升编译速度
+    <ul>
+      <li>最小化头文件修改影响：当实现类的内部逻辑变更时，只需重新编译实现文件（.cpp），而非所有包含原头文件的代码，显著减少大型项目的编译时间。</li>
+      <li>避免头文件污染：减少头文件中的依赖项（如第三方库或复杂模板），简化编译流程。</li>
+    </ul>
+  </li>
+  <li>增强二进制兼容性
+    <ul>
+      <li>动态库接口稳定：在动态库开发中，接口类的内存布局不会因实现类的成员增减而改变，客户端无需重新编译即可兼容新版本。</li>
+    </ul>
+  </li>
+  <li>资源管理与安全性
+    <ul>
+      <li>自动内存管理：结合智能指针（如unique_ptr），可自动释放实现类对象，避免内存泄漏。</li>
+      <li>防止悬垂指针：智能指针确保指针始终有效或为空，规避非法访问风险。</li>
+    </ul>
+  </li>
+  <li>支持灵活的实现扩展
+    <ul>
+      <li>多态性与桥接模式：可通过替换不同的实现类（如平台相关代码），动态切换功能模块，符合开闭原则。</li>
+      <li>惰性初始化优化：实现类可按需初始化，提升资源利用率6。</li>
+    </ul>
+  </li>
+</ol>
+
+<h5 id="adapter设计模式">Adapter设计模式</h5>
+<p>Adapter模式通过创建一个中间层（适配器类），将一个类的接口转换为客户端期望的另一个接口，从而解决接口不兼容的问题。其核心角色包括：</p>
+<ol>
+  <li>​Target（目标接口）​：客户端期望的接口。</li>
+  <li>​Adaptee（被适配者）​：需要被适配的现有类或接口。</li>
+  <li>​Adapter（适配器）​：将Adaptee的接口转换为Target接口的中间类
+Ops Adapter包括td(trade data) adapter和md(market data) adapter，主要作用是屏蔽来自不同券商的api接口的差异，并统一适配到Higgs Ops interface定义的接口，以便于上层策略模块调用。</li>
+</ol>
+
+<h5 id="工厂模式">工厂模式</h5>
+<p>通过引入“工厂类”替代直接使用 new 关键字创建对象，将对象的创建逻辑集中管理，客户端仅需与工厂接口交互，无需关心具体类的实例化细节：</p>
+<ol>
+  <li>解耦：分离对象的创建与使用，降低模块间的依赖。</li>
+  <li>​封装：隐藏复杂的初始化逻辑（如数据库连接、配置解析），提供统一的创建接口。</li>
+  <li>​扩展性：支持新增产品类型时无需修改客户端代码，符合“开闭原则”。
+    <h4 id="数据结构">数据结构</h4>
+  </li>
+</ol>
+
+<h5 id="stdset">std::set</h5>
+<p>std::set 是基于 ​红黑树​（一种自平衡二叉搜索树）实现的。红黑树的高度始终保持在 O(log n) 级别，因此所有基于树遍历的操作（如查找、插入、删除）的时间复杂度均为对数级别。</p>
+
+<ul>
+  <li>需要频繁进行范围查询（如 lower_bound、upper_bound）时，std::set 的高效查找特性非常有用。</li>
+  <li>若仅需判断元素是否存在，优先使用 std::unordered_set（查找时间复杂度 O(1)）。</li>
+  <li>若使用 std::lower_bound 在已排序的 vector 中查找，时间复杂度同样是 O(log n)，但需要手动保证容器有序。若 vector 无序，需先排序（O(n log n)），再使用 lower_bound。</li>
+</ul>
+
+
+
+  
+    
+      <div class="post-tags-section">
+  <i class="post-tags-icon fas fa-tags"></i>
+  <ul class="post-tags"><li>
+        <a class="post-tag" href="/tags/#实习记录">实习记录</a></li></ul>
+</div>
+
+  
+
+  
+</article>
+
+
+<aside class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="/2025/03/27/C++20/">
+          C++20相关
+          <small><time datetime="2025-03-27T10:00:00+08:00">27 Mar 2025</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/10/27/DesignPattern/">
+          设计模式
+          <small><time datetime="2024-10-27T10:00:00+08:00">27 Oct 2024</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/2024/10/21/other/">
+          其他面经
+          <small><time datetime="2024-10-21T10:00:00+08:00">21 Oct 2024</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+</main>
+
+<footer class="footer"><small>
+    &copy; 2023&nbsp;-&nbsp;2025 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
+  </small>
+</footer>
+</div>
+      <div class="sidebar-right pure-u-1 pure-u-md-1-4">
+<div  class="toc-wrapper">
+  <h2 class="toc-title">Table of Contents</h2>
+    <nav class="toc-nav">
+      <ul class="toc">
+  <li><a href="#思考">思考</a></li>
+  <li><a href="#技术">技术</a></li>
+</ul>
+
+  </nav>
+</div>
+
+</div>
+    </div>
+
+    <script async src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  function strip(str, remove) {
+    while (str.length > 0 && remove.indexOf(str.charAt(0)) != -1) {
+      str = str.substr(1);
+    }
+    while (str.length > 0 && remove.indexOf(str.charAt(str.length - 1)) != -1) {
+      str = str.substr(0, str.length - 1);
+    }
+    return str;
+  }
+
+  function scroll() {
+    console.log('scroll');
+    window.scrollTo({
+      left: 0, 
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+    sessionStorage.removeItem('forceCheckScroll');
+  }
+
+  const forceCheckScroll = sessionStorage.getItem('forceCheckScroll') === 'true';
+  const checkScroll = strip(window.location.pathname, '/') !== strip('', '/');
+
+  if (forceCheckScroll || checkScroll) {
+    const maxWidth = "(max-width: 48rem)";
+    const result = window.matchMedia(maxWidth);
+    if (result.matches) {
+      scroll();
+    } else {
+      result.addListener((match) => {
+        if (match.media == maxWidth) {
+          if (match.matches) {
+            scroll();
+          }
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>

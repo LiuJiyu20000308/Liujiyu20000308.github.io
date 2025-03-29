@@ -1,4 +1,618 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2025-03-29T18:01:46+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">设计模式</title><link href="http://localhost:4000/2024/10/27/DesignPattern/" rel="alternate" type="text/html" title="设计模式" /><published>2024-10-27T10:00:00+08:00</published><updated>2024-10-27T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/27/DesignPattern</id><content type="html" xml:base="http://localhost:4000/2024/10/27/DesignPattern/"><![CDATA[<h3 id="一创建型模式">一、创建型模式</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2025-03-29T18:05:29+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Liujiyu’s blog</title><subtitle>learn &amp; record</subtitle><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><entry><title type="html">C++20相关</title><link href="http://localhost:4000/2025/03/27/C++20/" rel="alternate" type="text/html" title="C++20相关" /><published>2025-03-27T10:00:00+08:00</published><updated>2025-03-27T10:00:00+08:00</updated><id>http://localhost:4000/2025/03/27/C++20</id><content type="html" xml:base="http://localhost:4000/2025/03/27/C++20/"><![CDATA[<h2 id="concept关键字">concept关键字</h2>
+
+<p>当我们把一个类型带入模板中，如果没有提供模板要求的函数或运算符，模板就不能转换为实际可编译的函数，从而产生大量错误信息。</p>
+
+<h3 id="concept定义">concept定义</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">MyType</span><span class="p">&gt;</span>
+<span class="k">concept</span> <span class="n">Any</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>我们定义了一个概念，它永远为真，也就是说，任何类型都能满足此概念。同时，concept作为一个bool编译期常量完全可以用bool常量的方式使用：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">Any</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>这段代码里，我用刚刚定义的概念Any，代替typename的位置，对模板参数AnyType提供了一个约束，虽然只是约束了一个寂寞：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="n">Any</span> <span class="n">AnyType</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="nf">printSize</span><span class="p">(</span><span class="k">const</span> <span class="n">AnyType</span><span class="o">&amp;</span> <span class="n">anyArg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">AnyType</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>使用该模板函数时，编译器会自动把后面的AnyType带入到Any的第一个参数中，只有值为true时才使用这个模板，否则编译器会寻找其他满足约束的模板，直至报错。
+STL库的concepts头文件中有以下3个例子：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">_Tp</span><span class="p">&gt;</span>
+<span class="k">concept</span> <span class="n">integral</span> <span class="o">=</span> <span class="n">is_integral_v</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">_Tp</span><span class="p">&gt;</span>
+<span class="k">concept</span> <span class="n">signed_integral</span> <span class="o">=</span> <span class="n">integral</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span> <span class="n">is_signed_v</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">_Tp</span><span class="p">&gt;</span>
+<span class="k">concept</span> <span class="n">unsigned_integral</span> <span class="o">=</span> <span class="n">integral</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">signed_integral</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="requires表达式">requires表达式</h3>
+
+<p>以数学上的域和线性空间为例：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">ScalarType</span><span class="p">&gt;</span>
+<span class="k">concept</span> <span class="n">Field</span> <span class="o">=</span> <span class="k">requires</span><span class="p">(</span><span class="n">ScalarType</span> <span class="n">x</span><span class="p">,</span> <span class="n">ScalarType</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">{</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">{</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span> 
+    <span class="p">{</span><span class="o">+</span><span class="n">x</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">{</span><span class="o">-</span><span class="n">x</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="n">ScalarType</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="p">{</span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">{</span><span class="n">x</span> <span class="o">/</span> <span class="n">y</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="n">ScalarType</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">VectorType</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">ScalarType</span><span class="p">&gt;</span>
+<span class="k">concept</span> <span class="n">LinearSpace</span> <span class="o">=</span> <span class="k">requires</span><span class="p">(</span><span class="n">VectorType</span> <span class="n">x</span><span class="p">,</span> <span class="n">VectorType</span> <span class="n">y</span><span class="p">,</span> <span class="n">ScalarType</span> <span class="n">k</span><span class="p">)</span>  
+<span class="p">{</span>
+    <span class="k">requires</span> <span class="n">Field</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">VectorType</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">{</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">VectorType</span><span class="o">&gt;</span><span class="p">;</span> 
+    <span class="p">{</span><span class="o">+</span><span class="n">x</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">VectorType</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">{</span><span class="o">-</span><span class="n">x</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">VectorType</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="n">VectorType</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="p">{</span><span class="n">k</span> <span class="o">*</span> <span class="n">x</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">VectorType</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">{</span><span class="n">x</span> <span class="o">*</span> <span class="n">k</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">VectorType</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">{</span><span class="n">x</span> <span class="o">/</span> <span class="n">k</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">VectorType</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>requires表达式同样是bool常量，所以它能直接赋值给concept。</p>
+
+<p>requires表达式，当然要用requires开头，后面的小括号里面是在大括号中的表达式中会用到的变量的声明。requires语句的参数并不会实例化，所以不必担心这个参数的类型没有默认构造函数，或者类型是抽象类的问题，更不必担心我是不是要为了避免多余的拷贝使用引用或右值引用的问题。</p>
+
+<p>大括号中的语句分为4类：</p>
+<ol>
+  <li>简单语句 <code class="language-plaintext highlighter-rouge">VectorType(0);</code>，它是一个表达式用分号结束，如果这个语句能够通过编译，那么其值就为true，否则就是false。</li>
+  <li>类型检查语句 <code class="language-plaintext highlighter-rouge">{x + y}-&gt; std::same_as&lt;VectorType&gt;;</code>，如果大括号中的表达式可以通过编译，而且其结果满足-&gt;后面的concept，结果才为true。
+这里我们用到了concepts头文件中提供的std::same_as概念，它的作用是检查约束的类型是否与指定的类型相同，其定义为：</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">_Tp</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">_Up</span><span class="p">&gt;</span>
+<span class="k">concept</span> <span class="n">same_as</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="p">,</span> <span class="n">_Up</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ol>
+  <li>requires子句<code class="language-plaintext highlighter-rouge">requires Field&lt;ScalarType&gt;;</code>，这句话的意思就是对于线性空间其标量类型必须是一个域，其语法为<code class="language-plaintext highlighter-rouge">requires /*bool常量表达式*/;</code></li>
+  <li>这里还有一种没有用到的对类型的要求，语法为<code class="language-plaintext highlighter-rouge">typename /*要求存在的类型*/;</code>，只有这个类型真的存在时，其结果才是true，当然实际使用时，这个类型当然得和concept中约束的类型有关系，要么得是嵌套的类型，要么得是以此类型为参数的模板。</li>
+</ol>
+
+<p>这种用法对数学家是挺好的，对程序员却不友好，因为约束越多，requires后面的小括号中的参数就会极速膨胀，而且把每个语句的参数都写到一起，可读性也非常差。能想到的最好看的写法就是：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">MyType</span><span class="p">&gt;</span>
+<span class="k">concept</span> <span class="n">HasName</span> <span class="o">=</span> 
+<span class="p">(</span>
+    <span class="k">requires</span><span class="p">(</span><span class="k">const</span> <span class="n">MyType</span> <span class="n">myObj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">{</span><span class="n">myObj</span><span class="p">.</span><span class="n">GetName</span><span class="p">()}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="o">&amp;&amp;</span> <span class="k">requires</span><span class="p">(</span><span class="n">MyType</span> <span class="n">myObj</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">{</span><span class="n">myObj</span><span class="p">.</span><span class="n">SetName</span><span class="p">(</span><span class="n">name</span><span class="p">)}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>因此更推荐使用requires子句：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">MyType</span><span class="p">&gt;</span>
+<span class="k">concept</span> <span class="n">ToStringAble</span> <span class="o">=</span> <span class="k">requires</span>
+<span class="p">{</span>
+    <span class="k">requires</span> <span class="k">requires</span><span class="p">(</span><span class="k">const</span> <span class="n">MyType</span> <span class="n">myObj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">{</span><span class="n">myObj</span><span class="p">.</span><span class="n">ToString</span><span class="p">()}</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">};</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h2 id="协程coroutine">协程(coroutine)</h2>
+
+<p>协程就是一个可以 <strong>挂起(suspend)</strong> 和 <strong>恢复(resume)</strong> 的函数(但无论如何不能是 main 函数)。你可以暂停协程的执行，去做其他事情，然后在适当的时候恢复到暂停的位置继续执行。<strong>协程让我们使用同步方式写异步代码。</strong></p>
+
+<h3 id="hellocpp演示协程">hello.cpp演示协程</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// coro_task.h</span>
+<span class="cp">#ifndef COROUTINE_CORO_TASK_H
+#define COROUTINE_CORO_TASK_H
+</span>
+<span class="cp">#include</span> <span class="cpf">&lt;coroutine&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;exception&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;type_traits&gt;</span><span class="cp">
+</span>
+<span class="k">class</span> <span class="nc">Task</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">struct</span> <span class="nc">promise_type</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">TaskHd1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="nl">private:</span>
+    <span class="n">TaskHd1</span>  <span class="n">hd1_</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">Task</span><span class="p">(</span><span class="k">auto</span> <span class="n">h</span><span class="p">)</span> <span class="o">:</span> <span class="n">hd1_</span><span class="p">{</span><span class="n">h</span><span class="p">}</span> <span class="p">{}</span>
+    <span class="o">~</span><span class="n">Task</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">hd1_</span><span class="p">)</span> <span class="p">{</span> <span class="n">hd1_</span><span class="p">.</span><span class="n">destroy</span><span class="p">();</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">Task</span><span class="p">(</span><span class="k">const</span> <span class="n">Task</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+    <span class="n">Task</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Task</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+
+    <span class="kt">bool</span> <span class="n">resume</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">hd1_</span> <span class="o">||</span> <span class="n">hd1_</span><span class="p">.</span><span class="n">done</span><span class="p">())</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">hd1_</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">public:</span>
+    <span class="k">struct</span> <span class="nc">promise_type</span> <span class="p">{</span>
+        <span class="cm">/* data */</span>
+        <span class="k">auto</span> <span class="n">get_return_object</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">Task</span><span class="p">{</span><span class="n">TaskHd1</span><span class="o">::</span><span class="n">from_promise</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)};</span>
+        <span class="p">}</span>
+        <span class="k">auto</span> <span class="n">initial_suspend</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};}</span>
+        <span class="kt">void</span> <span class="n">unhandled_exception</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">terminate</span><span class="p">();}</span>
+        <span class="kt">void</span> <span class="n">return_void</span><span class="p">()</span> <span class="p">{}</span>
+        <span class="k">auto</span> <span class="n">final_suspend</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span> <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">};</span>
+<span class="cp">#endif //COROUTINE_CORO_TASK_H
+</span>
+<span class="c1">// main.cpp</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">"coro_task.h"</span><span class="cp">
+</span>
+<span class="n">Task</span> <span class="n">hello</span><span class="p">(</span><span class="kt">int</span> <span class="n">max</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"hello world</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">max</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"hello "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="k">co_await</span> <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"hello end</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">co</span> <span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">co</span><span class="p">.</span><span class="n">resume</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"hello coroutine suspend</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>从总体上来看，协程和调用者之间的关系可由下图表示</p>
+
+<div align="center"> <img src="/pic/coroutine_sample.png" width="400" /> </div>
+
+<p>若要实现一个协程，需要首先提供一个协程接口，譬如Task，在协程接口中需要提供:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">promise_type</code></li>
+  <li><code class="language-plaintext highlighter-rouge">std::coroutine_handle&lt;promise_type&gt;</code>
+在协程的函数体中需要使用 co_await，co_yield， co_return 之一的关键词。</li>
+</ul>
+
+<h3 id="hellocpp协程工作过程">hello.cpp协程工作过程</h3>
+<ol>
+  <li>协程的调用同函数相同，在main函数中，通过如下形式调用协程: <code class="language-plaintext highlighter-rouge">auto co = hello(3);</code></li>
+  <li>通过调用hello(3), 启动协程，协程立即暂停(suspend), 并返回协程接口Task对象给调用者</li>
+  <li>在main函数中，调用co实例的resume接口，通过coroutine handle恢复协程的执行</li>
+  <li>在协程中，进入for循环，初始化局部变量，并到达暂停点(suspend point), 暂停点由co_await expr确定</li>
+  <li>协程暂停后将控制权转移到main函数，main函数继续运行并从新恢复协程</li>
+  <li>协程恢复执行，继续for循环，i的值增加。再一次到达暂停点(suspend point)。转换控制权到main函数。</li>
+  <li>最终for循环结束，协程离开for循环。并将控制权返回到到main函数，main函数退出循环，并销毁协程。</li>
+</ol>
+
+<h3 id="promise_type">promise_type</h3>
+
+<p>promise_type可以用来控制协程的行为。详细来说，promise_type给开发者提供了如下能力:</p>
+<ul>
+  <li>与 coroutine 交互(从coroutine接受消息，以及将消息发送给coroutine)</li>
+  <li>创建 coroutine_handle</li>
+  <li>控制 coroutine 的 suspend 时机（在coroutine的入口和结尾）</li>
+  <li>提供了异常处理</li>
+</ul>
+
+<p>promise_type 共有以下这些接口：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">promise_type</span>
+<span class="p">{</span>
+    <span class="n">coroutine</span> <span class="n">get_return_object</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span><span class="n">coroutine</span><span class="o">::</span><span class="n">from_promise</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)};</span> <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span> <span class="n">initial_suspend</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{};</span> <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span> <span class="n">final_suspend</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{};</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">return_void</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="kt">void</span> <span class="n">unhandled_exception</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="k">auto</span> <span class="n">yeid_value</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">return_value</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">await_transform</span><span class="p">(...);</span>
+    <span class="k">operator</span> <span class="k">new</span><span class="p">(</span><span class="n">sz</span><span class="p">);</span>
+    <span class="k">operator</span> <span class="k">delete</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">sz</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">get_return_object_on_allocation_failure</span><span class="p">();</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>一个类(模版类)只要实现了promise type所需要的接口，那么该类便可以用作协程的promise_type。一个简单的模版promise_type类如下:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;coroutine&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;exception&gt;</span><span class="cp">
+</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Type</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">CoroPromise</span> <span class="p">{</span>
+  <span class="k">auto</span> <span class="n">get_return_object</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">CoroPromise</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;&gt;::</span><span class="n">from_promise</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">auto</span> <span class="n">initial_suspend</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span> <span class="p">}</span>
+
+  <span class="kt">void</span> <span class="n">unhandled_exception</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">terminate</span><span class="p">();</span> <span class="p">}</span>
+
+  <span class="kt">void</span> <span class="n">return_void</span><span class="p">()</span> <span class="p">{}</span>
+
+  <span class="k">auto</span> <span class="n">final_suspend</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span> <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>接口说明如下：</p>
+<ol>
+  <li>get_return_object(): 主要用来初始化协程接口，用来作为协程的返回值。 该函数一般做两件事情
+    <ul>
+      <li>创建coroutine handle. 通过std::coroutine_handle的静态成员函数from_promise创建和初始化</li>
+      <li>利用创建的coroutine handle初始化协程接口</li>
+    </ul>
+  </li>
+  <li>initial_suspend(): 定制coroutine启动时的行为。 eagerly 或者 lazily。
+    <ul>
+      <li>当返回值为std::suspend_never{}，coroutine 立马执行(eagerly)</li>
+      <li>当返回值为std::suspend_always{}，coroutine 立马暂停(suspending, lazily)</li>
+    </ul>
+  </li>
+  <li>return_void(): 定制coroutine到达结尾或者碰到co_return 语句时的行为。当promise_type声明并定义了该成员函数，那么coroutine必须不能返回任何值。</li>
+  <li>unhandled_exception(): 定制coroutine处理异常的方式。可以重新抛出异常也可以直接调用std::terminate()</li>
+  <li>final_suspend(): 定制coroutine是否被最终suspend。这个函数需要保证不能抛出异常，且应该总是返回std::suspend_always{}</li>
+</ol>
+
+<h3 id="stdcoroutine_handle">std::coroutine_handle</h3>
+
+<p>coroutine_handle表示一个正在执行或者暂停(suspend)的coroutine。在C++20中，coroutine_handle由标准模版 std::coroutine_handle&lt;&gt; 表示。 std::coroutine_handle的模版参数为promise_type的类型。</p>
+
+<p>当你调用一个coroutine时，编译器会为你创建一个coroutine frame。该coroutine frame中会存放coroutine相应的状态。 为了恢复coroutine的执行或者销毁coroutine frame，你需要一个coroutine handle，其用来定位相应的coroutine frame。</p>
+
+<h3 id="coroutine接口">coroutine接口</h3>
+
+<p>coroutine接口，也即是coroutine返回给coroutine调用者的实例，用来与coroutine调用者进行通信的媒介。</p>
+
+<p>若要通过coroutine接口来定制coroutine的行为，需要在coroutine接口中实现promise_type以及定义std::coroutine_handle成员。</p>
+
+<h3 id="接口实践">接口实践</h3>
+
+<p>若想将coroutine中的一些信息返回给coroutine调用者，可以初步使用co_yield和co_return这两个关键字。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;coroutine&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span>
+<span class="k">class</span> <span class="nc">CoroTask</span> <span class="p">{</span>
+<span class="nl">public:</span>
+  <span class="k">struct</span> <span class="nc">promise_type</span><span class="p">;</span>
+  <span class="k">using</span> <span class="n">CoroHd</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;</span><span class="p">;</span>
+
+  <span class="n">CoroTask</span><span class="p">(</span><span class="k">auto</span> <span class="n">hd</span><span class="p">)</span> <span class="o">:</span> <span class="n">hd_</span><span class="p">{</span><span class="n">hd</span><span class="p">}</span> <span class="p">{}</span>
+  <span class="o">~</span><span class="n">CoroTask</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">hd_</span><span class="p">)</span> <span class="p">{</span> <span class="n">hd_</span><span class="p">.</span><span class="n">destroy</span><span class="p">();</span> <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">CoroTask</span><span class="p">(</span><span class="k">const</span> <span class="n">CoroTask</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+  <span class="n">CoroTask</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">CoroTask</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+
+  <span class="kt">int</span> <span class="n">getVlaue</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">hd_</span><span class="p">.</span><span class="n">promise</span><span class="p">().</span><span class="n">CoroValue</span><span class="p">;</span> <span class="p">}</span>
+
+  <span class="kt">bool</span> <span class="n">resume</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">hd_</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">hd_</span><span class="p">.</span><span class="n">done</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">hd_</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  <span class="p">}</span>
+
+<span class="nl">public:</span>
+  <span class="k">struct</span> <span class="nc">promise_type</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">CoroValue</span><span class="p">{};</span>
+    <span class="cm">/* data */</span>
+    <span class="k">auto</span> <span class="n">get_return_object</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">CoroTask</span><span class="p">{</span><span class="n">CoroHd</span><span class="o">::</span><span class="n">from_promise</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)};</span>
+    <span class="p">}</span>
+    <span class="k">auto</span> <span class="n">initial_suspend</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};}</span>
+    <span class="kt">void</span> <span class="n">unhandled_exception</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">terminate</span><span class="p">();}</span>
+    <span class="k">auto</span> <span class="n">yield_value</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">CoroValue</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+      <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">return_void</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="k">auto</span> <span class="n">final_suspend</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span> <span class="p">}</span> 
+  <span class="p">};</span>
+
+<span class="nl">private:</span>
+  <span class="n">CoroHd</span> <span class="n">hd_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cp">#include</span> <span class="cpf">"coro_task.h"</span><span class="cp">
+</span>
+<span class="n">CoroTask</span> <span class="n">coro</span><span class="p">(</span><span class="kt">int</span> <span class="n">max</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"coro start, max: "</span> <span class="o">&lt;&lt;</span> <span class="n">max</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">max</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"coro index: "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="k">co_yield</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"coro end</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">task</span> <span class="o">=</span> <span class="n">coro</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">resume</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"main get coroutine value: "</span> <span class="o">&lt;&lt;</span> <span class="n">task</span><span class="p">.</span><span class="n">getVlaue</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>若要使用co_yield将coroutine中的某些信息传递给coroutine调用者需要coder做如下工作：</p>
+<ul>
+  <li>在promise type类中声明并定义所需要的信息结构</li>
+  <li>在promise type类中声明并定义yield_value接口，并将该接口的参数设置为相应的信息结构的类型</li>
+  <li>在yield_value的实现中完成信息的写入</li>
+  <li>在coroutine接口(coroutine返回值)中提供一个获取信息结构的接口，在该接口的实现中通过std::coroutine_handle的promise()接口获取coroutine相关的promise type并取回相应的值。</li>
+</ul>
+
+<h3 id="利用co_return返回信息给coroutine调用者">利用co_return返回信息给coroutine调用者</h3>
+<p>co_return将coroutine中产生的数据返回给coroutine调用者，并在coroutine调用者中输出相应的内容。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">CoGen</span> <span class="p">{</span>
+<span class="nl">public:</span>
+  <span class="k">class</span> <span class="nc">promise_type</span> <span class="p">{</span>
+  <span class="nl">public:</span>
+    <span class="n">CoGen</span> <span class="n">get_return_object</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">CoGen</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;::</span><span class="n">from_promise</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)};</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">return_value</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">vec</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">vec_</span> <span class="o">=</span> <span class="n">vec</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">auto</span> <span class="n">initial_suspend</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};}</span>
+    <span class="kt">void</span> <span class="n">unhandled_exception</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">terminate</span><span class="p">();}</span>
+    <span class="k">auto</span> <span class="n">final_suspend</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span> <span class="p">}</span> 
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">getResult</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">vec_</span><span class="p">;</span> <span class="p">}</span>
+
+  <span class="nl">private:</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">vec_</span><span class="p">{};</span>
+  <span class="p">};</span>
+  <span class="n">CoGen</span><span class="p">(</span><span class="k">auto</span> <span class="n">hd</span><span class="p">)</span> <span class="o">:</span> <span class="n">hd_</span><span class="p">{</span><span class="n">hd</span><span class="p">}</span> <span class="p">{}</span>
+  <span class="o">~</span><span class="n">CoGen</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">hd_</span><span class="p">)</span> <span class="p">{</span>
+       <span class="n">hd_</span><span class="p">.</span><span class="n">destroy</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">getResult</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">hd_</span><span class="p">.</span><span class="n">promise</span><span class="p">().</span><span class="n">getResult</span><span class="p">();</span> <span class="p">}</span>
+  <span class="kt">bool</span> <span class="n">resume</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">hd_</span> <span class="o">||</span> <span class="n">hd_</span><span class="p">.</span><span class="n">done</span><span class="p">())</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">hd_</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+  <span class="p">}</span>
+
+<span class="nl">private:</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;</span> <span class="n">hd_</span><span class="p">{};</span>
+<span class="p">};</span>
+
+<span class="n">CoGen</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">coroGen</span><span class="p">(</span><span class="kt">int</span> <span class="n">max</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">;</span>
+    <span class="n">vec</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">max</span><span class="p">));</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">iota</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">co_return</span> <span class="n">vec</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">task</span> <span class="o">=</span> <span class="n">coroGen</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">resume</span><span class="p">());</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"coroutine end</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">val</span> <span class="o">:</span> <span class="n">task</span><span class="p">.</span><span class="n">getResult</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">val</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="C++" /><summary type="html"><![CDATA[concept关键字]]></summary></entry><entry><title type="html">Higgs实习记录</title><link href="http://localhost:4000/2025/03/06/Higgs%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/" rel="alternate" type="text/html" title="Higgs实习记录" /><published>2025-03-06T10:00:00+08:00</published><updated>2025-03-06T10:00:00+08:00</updated><id>http://localhost:4000/2025/03/06/Higgs%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95</id><content type="html" xml:base="http://localhost:4000/2025/03/06/Higgs%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/"><![CDATA[<h3 id="思考">思考</h3>
+<ol>
+  <li>程序实现的时候要将代码逻辑和业务结合起来，比如说LoadParam中给定一个仓位，在db文件中查询相距最近的仓位对应的TradeParam，并不是单单去寻找唯一一个Param，那样的话一天就只会做一次交易，而是对于数据中每一个时间段都去寻找一个最近的仓位对应的TradeParam。</li>
+  <li>遇到非技术性问题先问deepseek，整理文档或代码时把问题整理到一起再问。</li>
+</ol>
+
+<h3 id="技术">技术</h3>
+
+<h4 id="多线程">多线程</h4>
+
+<p>线程是程序中的独立执行流，属于同一进程内的多个线程 <strong>共享进程的内存空间</strong>​（如全局变量、堆内存），但每个线程拥有 <strong>独立的栈空间和执行上下文</strong>​（如寄存器状态、程序计数器）。</p>
+
+<p><strong>线程 vs 进程:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>​<strong>特征</strong></th>
+      <th>​<strong>进程</strong></th>
+      <th>​<strong>线程</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>​<strong>资源分配</strong></td>
+      <td>操作系统资源分配的基本单位（独立内存空间）</td>
+      <td>进程内的执行单元（共享进程内存）</td>
+    </tr>
+    <tr>
+      <td>​<strong>切换开销</strong></td>
+      <td>高（涉及虚拟内存、文件描述符等切换）</td>
+      <td>低（仅切换栈和寄存器）</td>
+    </tr>
+    <tr>
+      <td>​<strong>创建销毁</strong></td>
+      <td>通过 <code class="language-plaintext highlighter-rouge">fork()</code> 创建，系统调用消耗大</td>
+      <td>通过 <code class="language-plaintext highlighter-rouge">pthread_create()</code> 创建，消耗小</td>
+    </tr>
+    <tr>
+      <td>​<strong>独立性</strong></td>
+      <td>相互隔离，一个进程崩溃不影响其他进程</td>
+      <td>共享内存，一个线程崩溃可能导致整个进程终止</td>
+    </tr>
+    <tr>
+      <td>​<strong>通信方式</strong></td>
+      <td>管道、消息队列、共享内存、Socket 等</td>
+      <td>直接读写共享变量（需同步机制）</td>
+    </tr>
+    <tr>
+      <td>​<strong>CPU调度</strong></td>
+      <td>进程是 CPU 资源分配的基本单位</td>
+      <td>线程是 CPU 调度的基本单位</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="数据对齐">数据对齐</h4>
+
+<p>内存对齐的核心规则</p>
+<ol>
+  <li>​<strong>成员对齐规则</strong>：每个成员的起始地址必须是其自身大小的整数倍（例如 <code class="language-plaintext highlighter-rouge">int</code> 需4字节对齐，<code class="language-plaintext highlighter-rouge">double</code> 需8字节对齐）。</li>
+  <li>​<strong>结构体填充规则</strong>：结构体总大小必须是其最大成员大小的整数倍。</li>
+  <li>​<strong>成员顺序影响</strong>：成员顺序不同会导致填充字节的数量变化，进而影响总内存占用。</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">TestA</span><span class="p">{</span>
+    <span class="kt">char</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>内存布局​（假设默认8字节对齐）：</p>
+<ul>
+  <li>char a占1字节，偏移量0。</li>
+  <li>int b需4字节对齐，因此在a后填充3字节（偏移量4-7）。</li>
+  <li>char c占1字节，偏移量8。</li>
+  <li>double d需8字节对齐，因此在c后填充7字节（偏移量16-23）。</li>
+  <li>​总大小：1+3（填充）+4+1+7（填充）+8 = ​24字节。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">TestB</span><span class="p">{</span>
+    <span class="kt">char</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>内存布局：</p>
+<ul>
+  <li>char a和char c共占2字节，偏移量0-1。</li>
+  <li>int b需4字节对齐，因此在c后填充2字节（偏移量4-7）。</li>
+  <li>double d直接对齐到偏移量8（无需填充）。</li>
+  <li>​总大小：1+1+2（填充）+4+8 = ​16字节。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">TestC</span><span class="p">{</span>
+    <span class="kt">char</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>内存布局：</p>
+<ul>
+  <li>char a和char c共占2字节，偏移量0-1。</li>
+  <li>double d需8字节对齐，因此在c后填充6字节（偏移量8-15）。</li>
+  <li>char b占1字节，偏移量16。</li>
+  <li>结构体总大小需是最大成员double的倍数（8字节），因此在b后填充7字节。</li>
+  <li>​总大小：1+1+6（填充）+8+1+7（填充） = ​24字节。</li>
+</ul>
+
+<h4 id="设计模式">设计模式</h4>
+
+<h5 id="impl设计模式">Impl设计模式</h5>
+<ol>
+  <li>接口与实现解耦：
+    <ul>
+      <li>隐藏私有细节：通过将类的私有成员封装在一个独立的实现类中，头文件仅暴露公共接口，避免内部实现细节泄露。</li>
+      <li>降低耦合性：接口类仅持有指向实现类的指针（unique_ptr或shared_ptr），实现类的修改不会影响接口类的用户代码。</li>
+    </ul>
+  </li>
+  <li>减少编译依赖与提升编译速度
+    <ul>
+      <li>最小化头文件修改影响：当实现类的内部逻辑变更时，只需重新编译实现文件（.cpp），而非所有包含原头文件的代码，显著减少大型项目的编译时间。</li>
+      <li>避免头文件污染：减少头文件中的依赖项（如第三方库或复杂模板），简化编译流程。</li>
+    </ul>
+  </li>
+  <li>增强二进制兼容性
+    <ul>
+      <li>动态库接口稳定：在动态库开发中，接口类的内存布局不会因实现类的成员增减而改变，客户端无需重新编译即可兼容新版本。</li>
+    </ul>
+  </li>
+  <li>资源管理与安全性
+    <ul>
+      <li>自动内存管理：结合智能指针（如unique_ptr），可自动释放实现类对象，避免内存泄漏。</li>
+      <li>防止悬垂指针：智能指针确保指针始终有效或为空，规避非法访问风险。</li>
+    </ul>
+  </li>
+  <li>支持灵活的实现扩展
+    <ul>
+      <li>多态性与桥接模式：可通过替换不同的实现类（如平台相关代码），动态切换功能模块，符合开闭原则。</li>
+      <li>惰性初始化优化：实现类可按需初始化，提升资源利用率6。</li>
+    </ul>
+  </li>
+</ol>
+
+<h5 id="adapter设计模式">Adapter设计模式</h5>
+<p>Adapter模式通过创建一个中间层（适配器类），将一个类的接口转换为客户端期望的另一个接口，从而解决接口不兼容的问题。其核心角色包括：</p>
+<ol>
+  <li>​Target（目标接口）​：客户端期望的接口。</li>
+  <li>​Adaptee（被适配者）​：需要被适配的现有类或接口。</li>
+  <li>​Adapter（适配器）​：将Adaptee的接口转换为Target接口的中间类
+Ops Adapter包括td(trade data) adapter和md(market data) adapter，主要作用是屏蔽来自不同券商的api接口的差异，并统一适配到Higgs Ops interface定义的接口，以便于上层策略模块调用。</li>
+</ol>
+
+<h5 id="工厂模式">工厂模式</h5>
+<p>通过引入“工厂类”替代直接使用 new 关键字创建对象，将对象的创建逻辑集中管理，客户端仅需与工厂接口交互，无需关心具体类的实例化细节：</p>
+<ol>
+  <li>解耦：分离对象的创建与使用，降低模块间的依赖。</li>
+  <li>​封装：隐藏复杂的初始化逻辑（如数据库连接、配置解析），提供统一的创建接口。</li>
+  <li>​扩展性：支持新增产品类型时无需修改客户端代码，符合“开闭原则”。
+    <h4 id="数据结构">数据结构</h4>
+  </li>
+</ol>
+
+<h5 id="stdset">std::set</h5>
+<p>std::set 是基于 ​红黑树​（一种自平衡二叉搜索树）实现的。红黑树的高度始终保持在 O(log n) 级别，因此所有基于树遍历的操作（如查找、插入、删除）的时间复杂度均为对数级别。</p>
+
+<ul>
+  <li>需要频繁进行范围查询（如 lower_bound、upper_bound）时，std::set 的高效查找特性非常有用。</li>
+  <li>若仅需判断元素是否存在，优先使用 std::unordered_set（查找时间复杂度 O(1)）。</li>
+  <li>若使用 std::lower_bound 在已排序的 vector 中查找，时间复杂度同样是 O(log n)，但需要手动保证容器有序。若 vector 无序，需先排序（O(n log n)），再使用 lower_bound。</li>
+</ul>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="实习记录" /><summary type="html"><![CDATA[思考 程序实现的时候要将代码逻辑和业务结合起来，比如说LoadParam中给定一个仓位，在db文件中查询相距最近的仓位对应的TradeParam，并不是单单去寻找唯一一个Param，那样的话一天就只会做一次交易，而是对于数据中每一个时间段都去寻找一个最近的仓位对应的TradeParam。 遇到非技术性问题先问deepseek，整理文档或代码时把问题整理到一起再问。]]></summary></entry><entry><title type="html">设计模式</title><link href="http://localhost:4000/2024/10/27/DesignPattern/" rel="alternate" type="text/html" title="设计模式" /><published>2024-10-27T10:00:00+08:00</published><updated>2024-10-27T10:00:00+08:00</updated><id>http://localhost:4000/2024/10/27/DesignPattern</id><content type="html" xml:base="http://localhost:4000/2024/10/27/DesignPattern/"><![CDATA[<h3 id="一创建型模式">一、创建型模式</h3>
 
 <p><strong>1. 单例模式（Singleton Pattern）</strong></p>
 
@@ -3842,659 +4456,4 @@ $0.5 \leq 0.65-\sqrt{0.21}/2 \rho_{AB} \leq 0.8 \Rightarrow -\sqrt{3/7}\leq \rho
 
 <h3 id="随机蚂蚁">随机蚂蚁</h3>
 
-<p>略，记住蚂蚁相遇只需调换标签即可。</p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="量化绿皮书" /><summary type="html"><![CDATA[一元随机变量与分布函数]]></summary></entry><entry><title type="html">概率论:事件及其概率（绿皮书+额外补充）</title><link href="http://localhost:4000/2024/09/25/Probability/" rel="alternate" type="text/html" title="概率论:事件及其概率（绿皮书+额外补充）" /><published>2024-09-25T10:00:00+08:00</published><updated>2024-09-25T10:00:00+08:00</updated><id>http://localhost:4000/2024/09/25/Probability</id><content type="html" xml:base="http://localhost:4000/2024/09/25/Probability/"><![CDATA[<h1 id="事件及其概率">事件及其概率</h1>
-
-<h2 id="基础的概率定义和集合操作">基础的概率定义和集合操作</h2>
-
-<h3 id="掷硬币游戏">掷硬币游戏</h3>
-
-<p><strong>A有$(n+1)$个公平的硬币而B有$n$个，如果他们将所有的硬币抛掷，A能有更多正面朝上硬币的概率是多少？</strong></p>
-
-<p>可以从A的硬币中取走一个，那么此时A和B是对称的，此时有三种情况：</p>
-<ol>
-  <li>A的n个硬币正面朝上的更多，概率记作$P(E_1)=x$.</li>
-  <li>一样多，概率记作$P(E_2)=y$.</li>
-  <li>B的更多，概率记作$P(E_3)=x$.</li>
-</ol>
-
-<p>此时再考虑最后一枚硬币，对于第一个情况，A始终有更多的正面朝上的硬币；对于第二种情况，最后一枚硬币需要朝上；第三种情况则A不可能有更多的正面朝上的硬币，因此概率为$x+0.5y = 0.5.$</p>
-
-<h3 id="扑克游戏">扑克游戏</h3>
-
-<p><strong>现在有52张牌，你拿一张然后荷官拿一张，如果你的数字大你才赢，那么你赢的概率是多少？</strong></p>
-
-<p>可以直接去计算概率$P=\frac{1}{13} \times \left( \frac{0}{51} + \frac{4}{51} + \cdots \frac{48}{51}\right) = \frac{8}{17}$.</p>
-
-<p>但是也可以换一个方法，把情况分为三种：你的牌大、相等、小于荷官的牌，此时$P(E_1) = P(E_3) = \frac{1}{2}(1-P(E_2)) = \frac{1}{2}(1-\frac{3}{51}) = \frac{8}{17}.$</p>
-
-<h3 id="喝醉的乘客">喝醉的乘客</h3>
-
-<p><strong>有100个乘客在排队上飞机，每个人都有自己的位置，但是第一个人喝多了，随便找个位置就坐了，假设其他人如果能坐自己的位置的话就会坐自己的，如果自己的位置被坐了就会随机坐一个，假如你是第100个登机的，请问你能坐在自己位置的概率是多少？</strong></p>
-
-<p>只要有人坐在第一个位置上，后面的乘客都将坐在自己对应的位置上，因此实际上就是计算第一个位置比第100个位置先被坐下的概率，因为两个座位是同等对称的，所以就是50%.</p>
-
-<h3 id="圆上的n个点">圆上的n个点</h3>
-
-<p><strong>N个点随机扔在一个圆周上，它们能在同一个半圆内的概率是多少？</strong></p>
-
-<p>$1,\cdots, i-1,i+1,\cdots, N$个点都在从第$i$个点开始顺时针的半圆上记为事件$E_i$，可以看出$E_1,\cdots,E_N$都是彼此互斥的，
-因此$P(E) = P(\cup_{i=1}^N E_i) = \sum_{i=1}^N P(E_i) = \sum_{i=1}^N \frac{1}{2^{N-1}} = \frac{N}{2^{N-1}}.$</p>
-
-<p>类似的如果弧长为$x$弧度的话概率就是$N\times x^{N-1}$.</p>
-
-<h2 id="组合分析">组合分析</h2>
-
-<h3 id="扑克牌">扑克牌</h3>
-
-<p><strong>52张牌，每个人拿五张，请问拿到four-of-a-kind的概率是多少？拿到葫芦的概率是多少？双对的概率是多少？</strong></p>
-
-<ol>
-  <li>$P(E_1) = \frac{C_{13}^1 \times 48}{C_{52}^{5}}$</li>
-  <li>$P(E_2) = \frac{C_{13}^1 \times C_4^3 \times C_{12}^1 \times C_4^2}{C_{52}^5}$</li>
-  <li>$P(E_3) = \frac{C_{13}^2 \times C_4^2 \times C_4^2}{C_{52}^5}$</li>
-</ol>
-
-<h3 id="古怪的海盗ii">古怪的海盗II</h3>
-
-<p><strong>有11个海盗，为了保护财宝，决定至少要大于等于6个人才能开锁，人数足够的任意小组都可以打开锁，每个锁可以有多把钥匙但每把钥匙只能开一个锁，请问最少要对财宝上多少个锁？每个海盗有几个钥匙？</strong></p>
-
-<p>任意五个人都不能打开锁，那就要对每个五人组合都有一个特殊的打不开的锁，那就是${11 \choose 5 } = 462$个锁，每个锁有6把钥匙，并且都给独特的一个6人组，也就是说不能有一个六人组每个人都有两个锁的钥匙。因此每个海盗有$462 * 6 / 11 = 252$个钥匙。</p>
-
-<h3 id="象棋比赛">象棋比赛</h3>
-
-<p><strong>一个比赛有$2^n$个选手，实力排名从高到低，$1&gt;2&gt;\cdots&gt;2^n$，比赛实行淘汰制，每轮胜者才能进入下一轮，除决赛外每一轮的对手对局都是随机的，请问1、2名选手能在决赛遇见的概率是多少？</strong></p>
-
-<p>记$E_i$为第$i$轮二人没有碰见，则
-$P(E) = P(E_1)\times P(E_2|E_1) \times \cdots \times P(E_{n-1}|E_1E_2\ldots E_{n-2}) = 
-\frac{2^n-2}{2^n-1} \times \frac{2^{n-1}-2}{2^{n-1}-1} \times \cdots \frac{2}{3} = \frac{2^{n-1}}{2^n-1}$</p>
-
-<h3 id="申请信">申请信</h3>
-
-<p><strong>你准备投五家公司，有五个信封，每个都对应一个独特的简历，但你的孩子随便将简历放进去了，请问五个简历都装错的概率是多少？</strong></p>
-
-<p>记$E_i$为第$i$个简历装入正确的信封，因此
-$P(\cup_{i=1}^5 E_i) = \sum_{i=1}^5P(E_i) - \sum_{i_1&lt;i_2}P(E_iE_j) + \cdots + (-1)^6P(E_1\ldots E_5)$</p>
-
-<p>$P(E_{i_1}\ldots E_{i_k}) = \frac{(5-k)!}{5!} \Rightarrow \sum P(E_{i_1}\ldots E_{i_k}) = \frac{1}{k!}$</p>
-
-<p>因此$P(\cup_{i=1}^5 E_i)= 1 - \frac{1}{2!} + \frac{1}{3!} - \frac{1}{4!} + \frac{1}{5!} = \frac{19}{30} \Rightarrow P(E) = \frac{11}{30}.$</p>
-
-<h3 id="生日问题">生日问题</h3>
-
-<p><strong>需要多少个人才能做到有两个人同一天生日的概率大于0.5?</strong></p>
-
-<p>假设有$n$个人，那么没有两个人同一天生日的概率为$P(\overline{E}) = \frac{A_{365}^n}{365^n} &lt; \frac{1}{2}$,可计算得到$n$最少为23.
-<strong>分母表示每个人都不相同，因此分子是排列数而不是组合数。类似的问题有n个球放入N个盒子里，恰好有n个盒子里面有球的概率即为$\frac{A_N^n}{N^n}$.</strong></p>
-
-<h3 id="100位小数">100位小数</h3>
-
-<p><strong>请问$(1+\sqrt{2})^{3000}$的第100位小数是多少？</strong></p>
-
-<p>$(1+\sqrt{2})^{3000} + (1-\sqrt{2})^{3000} = 2\sum_{k=2j, 0\leq j\leq 2/n} {n \choose k}\sqrt{2}^{k}$始终为整数，然而$(1-\sqrt{2})^{3000}$远小于$10^{-100}$，因此第100位小数为9.</p>
-
-<h3 id="以11结尾的整数的三次方">以11结尾的整数的三次方</h3>
-<p><strong>$x$为1到$10^{12}$中间的一个整数，请问x的三次方以11结尾的概率是多少？</strong></p>
-
-<p>$x = a+10b \Rightarrow x^3 = a^3 + 30a^2b + 300ab^2 + 1000b^3.$
-$x^3$的末尾只由$a^3$决定，因此$a=1$，此时又要保证$3b$是1为结尾，那么$b$的末尾数字必须是7，也就是说$x$的末尾两位数必须是71，因此概率为0.01.</p>
-
-<h3 id="抽签问题">抽签问题</h3>
-
-<p><strong>52张牌有a张红牌b张黑牌，放回或不放回抽n张的话，恰好有k张红牌的概率是多少？</strong></p>
-
-<ol>
-  <li>不放回的话概率为$\frac{C_a^k C_b^{n-k}}{C_N^n}.$</li>
-  <li>放回的话可以考虑为一个二项分布，试验成功即为抓到红牌，则概率为${n \choose k}p^k(1-p)^{n-k}, p = \frac{a}{N}, 1-p = \frac{b}{N}.$</li>
-</ol>
-
-<h3 id="抽签问题ii">抽签问题II</h3>
-
-<p><strong>编号为1到n的球，a个红球b个白球，每次摸一个不放回，摸n次，求第k次摸到红球的概率。</strong></p>
-
-<p>将每次摸的球做一个排列，视为一个样本点，那么概率为$\frac{a(n-1)!}{n!} = \frac{a}{n}.$</p>
-
-<h2 id="条件分布和贝叶斯公式">条件分布和贝叶斯公式</h2>
-
-<table>
-  <tbody>
-    <tr>
-      <td><strong>全概率公式</strong>：对于两两互斥的事件${F_i}$，他们的并集是整个样本空间，那么有$$ P(E) = \sum_{i=1}^n P(E</td>
-      <td>F_i)P(F_i).$$</td>
-    </tr>
-  </tbody>
-</table>
-
-<p><strong>A、B事件相互独立</strong> $\Leftrightarrow P(AB)=P(A)P(B) \rightarrow P(AB^c)=P(A)P(B^c).$</p>
-
-<p><strong>ABC事件两两独立</strong> $\Leftrightarrow P(AB)=P(A)P(B), P(AC)=P(A)P(C), P(BC)=P(B)P(C).$</p>
-
-<p><strong>ABC事件相互独立</strong> $\Leftrightarrow P(ABC)=P(A)P(B)P(C) +$ABC两两独立.</p>
-
-<table>
-  <tbody>
-    <tr>
-      <td><strong>贝叶斯公式</strong>：$P(F_j</td>
-      <td>E) = \frac{P(E</td>
-      <td>F_j)P(F_j)}{\sum_{i=1}^n P(E</td>
-      <td>F_i)P(F_i)}.$</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="男女孩">男女孩</h3>
-
-<p><strong>公司为每个有至少一个儿子的妈妈准备晚宴，有两个孩子的Jack女士被邀请参加，她有两个儿子的概率是多少？</strong></p>
-
-<table>
-  <tbody>
-    <tr>
-      <td>$P(A</td>
-      <td>B) = \frac{P(AB)}{P(B)} = \frac{1/4}{3/4} = \frac{1}{3}.$</td>
-    </tr>
-  </tbody>
-</table>
-
-<p><strong>当你在路上看到Jack女士带着一个男孩在路上走，她有两个儿子的概率是多少？</strong></p>
-
-<p>此时概率即为$\frac{1}{2}.$</p>
-
-<p>这两个问题给的前提是不一样的，一个是至少有一个儿子，一个是其中一个是男孩。</p>
-
-<h3 id="全是女孩的世界">全是女孩的世界？</h3>
-<p><strong>在原始社会，每个夫妻都想有一个女儿，他们会一直要孩子直到生了一个女儿，他们就不再生孩子了，请问社会上女孩的比例最终会是多少？</strong></p>
-
-<p>始终都会是50%，因为每生一个孩子是男是女的概率都是50%，这与夫妻行为无关。</p>
-
-<h3 id="不公平的硬币">不公平的硬币</h3>
-
-<p><strong>给你1000个硬币，有一个两边都是正面，你任意选一个硬币扔10次，每次都是正面向上，请问你这个硬币是不公平的硬币的概率是多少？</strong></p>
-
-<p>记A为该硬币不公平，B为十次投掷均为正面向上，则有：
-\(P(A|B) = \frac{P(B|A)P(A)}{P(B|A)P(A)+P(B|A^c)P(A^c)} 
-\approx 0.5\)</p>
-
-<h3 id="不公平硬币中寻找公平概率">不公平硬币中寻找公平概率</h3>
-
-<p><strong>给你一个不公平硬币，正面朝上的概率是未知的，请问你可以用这个硬币得到50%概率的事件吗？</strong></p>
-
-<p>投掷两次，先正后反记为输，先反后正记为赢，如果没出现这两种情况则重新再投掷两次。</p>
-
-<h3 id="飞镖游戏">飞镖游戏</h3>
-
-<p><strong>Jason扔两次飞镖，第二次比第一次偏离得多，请问第三次比第一次更远的概率为多少？</strong></p>
-
-<p>三次从近到远记为A\B\C三个等级，枚举一下即可得到概率为$\frac{2}{3}$</p>
-
-<p><strong>假如扔n次，后n-1次都比第一次远，那么他扔第n+1次比第一次也远的概率是多少？</strong></p>
-
-<p>实际上就相当于n个人排列好了，第n+1个人随机站一个位置，他站到第一个位置的概率是多少，就是$\frac{n}{n+1}.$</p>
-
-<h3 id="生日队列">生日队列</h3>
-
-<p><strong>电影院管理说他会送排队的人中第一个生日与前面买过票的人生日一致的人一张票，请问你站在什么位置得到票的概率最高？</strong></p>
-
-<p>p(n) = p(前n-1个人生日不同)*p(你的生日在前n-1个中) = $\frac{365\times\cdots\times (365-n+2)}{365^{n-1}}\times \frac{n-1}{365}.$ 求解不等式组$P(n)&gt;P(n-1), P(n) &gt; P(n+1)$可以得到$n=20.$</p>
-
-<h3 id="骰子顺序">骰子顺序</h3>
-
-<p><strong>你依次掷骰子三次，得到一个递增数列的概率是多少？</strong></p>
-
-<table>
-  <tbody>
-    <tr>
-      <td>当掷的三个数不同时，是一个递增数列的概率是$1/6$，这个与飞镖问题的道理一致，因此最终概率为$P(三个数不同)P(递增</td>
-      <td>三个数不同) = (1\times \frac{5}{6} \times \frac{4}{6})\times \frac{1}{6} = \frac{5}{54}.$</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="monty-hall问题">Monty Hall问题</h3>
-
-<p><strong>有三个门，其中一个是车，另外两个是羊，你现在选了一个门，Monty开了另外两个中有羊的一个，现在他给你机会换一个门，你要换吗，换门后赢的概率是多少？</strong></p>
-
-<p>记A为不换门赢，C为主持人打开一个有羊的门。<strong>注意P(C)==1！</strong>
-$P(A|C) = \frac{P(C|A)P(A)}{P(C|A)P(A)+P(C|A^c)P(A^c)} = \frac{1/3}{1/3+2/3} = \frac{1}{3}.$也就是说不换门赢当且仅当你最初选的就是有车的门，概率为$\frac{1}{3}$，那么换门赢的概率则为$\frac{2}{3}.$</p>
-
-<h3 id="amoeba人口数">Amoeba人口数</h3>
-
-<p><strong>池塘里有一个amoeba，每分钟它可能死，可能不变，可能分裂成两个或者三个，每个情况概率相同，请问最后amoeba死光的概率是多少？</strong></p>
-
-<table>
-  <tbody>
-    <tr>
-      <td>$P(E) = P(E</td>
-      <td>F_1)P(F_1) + \cdots + P(E</td>
-      <td>F_4)P(F_4)$</td>
-    </tr>
-    <tr>
-      <td>1. 对于事件1，$P(E</td>
-      <td>F_1) = 1.$</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>2. 对于事件2，$P(E</td>
-      <td>F_2) = P(E).$</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>3. 对于事件3，$P(E</td>
-      <td>F_3) = P(E)^2.$</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>4. 对于事件4，$P(E</td>
-      <td>F_4) = P(E)^3.$</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
-<p>因此$p = \frac{1}{4}(1+p+p^2+p^3) \Rightarrow p = \sqrt{2}-1.$</p>
-
-<h3 id="盒子中的蜡烛">盒子中的蜡烛</h3>
-
-<p><strong>盒子中有10个红蜡烛，20个蓝色，30个绿色的，你一个一个拿出来，请问当你拿出所有红蜡烛之后里面还至少有一个蓝色和一个绿色蜡烛的概率是多少？</strong></p>
-
-<p>记最后一个红色、蓝色、绿色是在$T_r,T_b,T_g$次被拿出来，那么
-$P(E) = P(T_r&lt;T_b \cap T_r&lt;T_g) = P(T_r&lt;T_b&lt;T_g) + P(T_r&lt;T_g&lt;T_b) = P(T_r&lt;T_b|T_g=60)P(T_g=60) + P(T_r&lt;T_g|T_b=60)P(T_b=60) = \frac{30}{60}\times\frac{20}{30} + \frac{20}{60}\times\frac{30}{40} = \frac{7}{12}.$</p>
-
-<h3 id="投掷硬币游戏">投掷硬币游戏</h3>
-
-<p><strong>AB轮流掷硬币，假如背面朝上的下一次为正面朝上则游戏结束，掷出背面的人赢，请问A赢的概率为多少？</strong></p>
-
-<p>$P(A) = \frac{1}{2}P(A|H) + \frac{1}{2}P(A|T)$
-$P(A|H) = \frac{1}{2} + \frac{1}{2}(1-P(A|H)) \Rightarrow P(A|H) = \frac{1}{3}.$
-$P(A|T) = P(B) = 1-P(A)$
-因此$P(A) = \frac{1}{6}+\frac{1}{2}(1-P(A)) \Rightarrow P(A)=\frac{4}{9}.$</p>
-
-<h3 id="俄罗斯转盘">俄罗斯转盘</h3>
-
-<p><strong>一发子弹装在容量为6的手枪内，两个人轮流开枪，你可以选择第一个来还是第二个来，你该怎么选择？</strong></p>
-
-<p>注意，当游戏开始，谁死就已经固定了，如果子弹在1、3、5管内则第一个人死，2、4、6则第二个人死，因此概率就是$\frac{1}{2}$.</p>
-
-<p><strong>如果每次开枪都重新旋转枪管呢？</strong></p>
-
-<p>设第一个人输的概率为$p$，则$p=\frac{1}{6} + \frac{5}{6}(1-p) \Rightarrow p = \frac{6}{11}.$所以应该选第二个开枪。</p>
-
-<p><strong>如果装了两发子弹，对手第一个开枪并且没事，给你选择是否转动枪管再开枪，你该怎么选择？</strong></p>
-
-<p>转了的话这轮活的那就是$\frac{2}{3}$，不转的话这轮活的概率是$\frac{2}{5}.$因此需要转。</p>
-
-<p><strong>如果两个子弹被装在了连续的两个位置，对手第一个开枪并且没事，给你选择是否转动枪管再开枪，你该怎么选择？</strong></p>
-
-<p>转的话活的概率还是$\frac{2}{3}$，不转的话，活的概率为$\frac{3}{4}$，因此不要转。</p>
-
-<h3 id="ace">Ace</h3>
-<p><strong>52张牌发给4个人，每人13张，他们每个人都有一个A的概率是多少？</strong></p>
-
-<p>给4个人发牌总共有$\frac{52!}{13!13!13!13!}$种情况，如果每人都有一个A，可以先考虑先发A，共有$4!$种可能，再发剩余48张牌，共有$\frac{48!}{12!12!12!12!}$种可能，因此概率为$\frac{52}{52}\times \frac{39}{51} \times \frac{26}{50} \times \frac{13}{49}$.</p>
-
-<p>如果用条件概率的话逻辑会更清晰，第一张A肯定有$\frac{52}{52}$的概率属于一个人，第二张A在另一个人手里的概率为$\frac{39}{51}$，以此类推，即可得到最终概率。</p>
-
-<h3 id="赌博问题">赌博问题</h3>
-
-<p><strong>一个赌博的人初始有$i$元，每一轮游戏，他有p的概率赢1元，有q=1-p的概率输1元，他要么有了N元或者输光才会停止，请问他最后拥有N元的概率为多少？</strong></p>
-
-<p>设$P_i$为初始为$i$元时赢到N的概率，那么有</p>
-
-\[P_i = pP_{i+1}+qP_{i-1} \Rightarrow P_{i+1}-P_i = \frac{q}{p}(P_i-P_{i-1}) = \cdots = (\frac{q}{p})^i(P_1-P_0)\]
-
-<p>我们有$P_0=0,P_N=1$,我们可以开始计算
-$P_1 = pP_2 + qP_0 \Rightarrow P_2=(1+\frac{q}{p})P_1$
-$P_3 = (1+\frac{q}{p} + (\frac{q}{p})^2)P_1$
-以此类推，
-$P_N = 1 = [1+\frac{q}{p}+\cdots + (\frac{q}{p})^{N-1}]P_1 =\begin{cases}
-    \frac{1-(q/p)^N}{1-q/p}P_1,\ q/p\neq 1 <br />
-    NP_1,\ q/p = 1
-\end{cases}$
-可以求出$P_1$再求出$P_i$.</p>
-
-<h3 id="篮球分数">篮球分数</h3>
-
-<p><strong>运动员投100个球，投进得一分，她又中了第一个，第二个没投中，后续她的命中率是她过去投中的比例，那么她刚好得到50分的概率为多少？</strong></p>
-
-<p>令$P_{n,k}$为投n个球后得到k分的概率，可以观察到$P_{3,1} = \frac{1}{2}, P_{3,2}=\frac{1}{2}.$</p>
-
-\[\begin{cases}
-    P_{4,1} = P((4,1)|(3,1))P_{3,1} + P((4,1)|(3,2))P_{3,2} = \frac{1}{3} \\
-    P_{4,2} = P((4,2)|(3,1))P_{3,1} + P((4,2)|(3,2))P_{3,2} = \frac{1}{3} \\ 
-    P_{4,3} = P((4,3)|(3,1))P_{3,1} + P((4,3)|(3,2))P_{3,2} = \frac{1}{3} 
-\end{cases}\]
-
-<p>因此可以用数学归纳法证明$P_{n,k}=\frac{1}{n-1}\Rightarrow P_{100,50} = \frac{1}{99}.$</p>
-
-<h3 id="路上的车">路上的车</h3>
-
-<p>如果在任意20分钟时间段观察到高速上至少有一辆车的概率为$\frac{609}{625}$，那么在任意5分钟时间段观察到至少有一辆车的概率为多少？假设在20分钟内的任意时间观察到一辆车的概率都是一致的。</p>
-
-<p>$1 - \frac{609}{625} = (1-p)^4 \Rightarrow p=\frac{3}{5}.$</p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="量化绿皮书" /><summary type="html"><![CDATA[事件及其概率]]></summary></entry><entry><title type="html">绿皮书第二章：Brain Teasers</title><link href="http://localhost:4000/2024/09/10/QuantitiveChap2/" rel="alternate" type="text/html" title="绿皮书第二章：Brain Teasers" /><published>2024-09-10T10:00:00+08:00</published><updated>2024-09-10T10:00:00+08:00</updated><id>http://localhost:4000/2024/09/10/QuantitiveChap2</id><content type="html" xml:base="http://localhost:4000/2024/09/10/QuantitiveChap2/"><![CDATA[<h2 id="问题简化">问题简化</h2>
-
-<h3 id="海盗分金">海盗分金</h3>
-
-<p>五名海盗抢劫了一个装满 100 枚金币的箱子。 作为一群民主海盗，他们同意以下分配战利品的方法：最资深的海盗将提议分配硬币。 所有海盗，包括最资深的海盗，都将投票。如果至少 50% 的海盗（在这种情况下为 3 名海盗）接受该提议，则按提议分配金币。 如果没有，最高级的海盗将被喂给鲨鱼，这个过程从下一个最高级的海盗开始。重复这个过程，直到计划被批准。 你可以假设所有的海盗都是完全理性的：他们想先活下去，然后尽可能多地获得金币。 最后，作为嗜血的海盗，如果可以选择的话，就算自己获得的金币是一样的，他们希望船上的海盗数量越少越好。</p>
-
-<p><strong>金币最终会如何分配？</strong></p>
-
-<ol>
-  <li>1个海盗不用分，都是自己的；</li>
-  <li>2个海盗也不用分，资深的（第1个）那个肯定全分给自己，因为自己占50%的投票，所以分法是（Remaining，0）；</li>
-  <li>3个海盗时，最资深的（第1个）知道2个海盗时，第3个海盗会一枚也得不到，因此会给他一枚，而第2个海盗就别想得到了，因为第1个海盗的策略已经得到2/3人的支持，因此分法是（Remaining，0,1）；</li>
-  <li>4个海盗时，最资深的（第1个）知道3个海盗时，第3个海盗会一枚也得不到，因此给他一枚获得他的投票，其他两个海盗不给，投票50%也能通过，因此分法是（Remaining，0,1,0）</li>
-  <li>如此动态推下去，分法是（Remaining，0，1,0,1，…, x） 如果海盗数为偶数，x 为0；否则x为1。</li>
-</ol>
-
-<h3 id="老虎和羊">老虎和羊</h3>
-<p>100只老虎和1只羊被放在一个只有草的魔法岛上。 老虎可以吃草，但他们宁愿吃羊。 假设： A. 每次只有一只老虎可以吃一只羊，而那只老虎在吃完羊后自己也会变成一只羊。 B. 所有的老虎都很聪明，完全理性，它们都想活着。 那么羊会被吃掉吗？</p>
-
-<ol>
-  <li>1只老虎，羊肯定被吃，因为老虎吃完羊后变成羊，依然可以活着，没有其他老虎会吃他；</li>
-  <li>2只老虎，羊不被吃，因为先吃羊的那只老虎会被后面一直老虎吃掉，所以哪一只都不会先吃羊，达成一个平衡；</li>
-  <li>3只老虎，羊被吃，先想出两只老虎情况下羊会不被吃的那只老虎，会吃了羊变成羊，然后活下去；</li>
-  <li>4只老虎，羊不被吃，因为剩下3只老虎会吃掉变成羊的那只老虎，所以没有老虎会去吃羊，达成平衡；</li>
-  <li>如此类推，偶数只老虎时，羊不被吃，而奇数只老虎时，羊会被吃。 回到本题，100只老虎，则羊不会被吃。</li>
-</ol>
-
-<h2 id="逻辑推理">逻辑推理</h2>
-
-<h3 id="快速过河">快速过河</h3>
-<p>A、B、C、D 四个人需要过河。 过河的唯一方法是通过一座旧桥，一次最多可容纳 2 人。 天黑了，他们没有手电筒就不能过桥，而他们只有一个手电筒。 所以每一对只能以较慢的人的速度行走。 他们需要尽快将所有这些人带到另一边。 A是最慢的，需要10分钟才能通过； B 需要 5 分钟； C 需要 2 分钟； D 需要 1 分钟。</p>
-
-<p><strong>那么过河最短的时间是多少，方案是什么？</strong></p>
-
-<ol>
-  <li>第一趟，让C、D通过，然后C或者D一个人，返回送手电筒；假设为D，则时间为 2 + 1；</li>
-  <li>第二趟，让A、B通过，然后C或者D剩下的那个人返回送手电，按第一趟的假设，这次应该是C，则时间为10+2；</li>
-  <li>第三趟，C、D通过，用时2分钟。
-此时，全部人都到对岸，总用时3+12+2 = 17分钟。</li>
-</ol>
-
-<h3 id="猜生日">猜生日</h3>
-<p>您和您的同事都知道您的老板 A 的生日是以下 10 个日期之一：
-3 月 4 日、3 月 5 日、3 月 8 日
-6 月 4 日，6 月 7 日
-9 月 1 日，9 月 5 日
-12 月 1 日、12 月 2 日、12 月 8 日</p>
-
-<p>A 只告诉了你他生日的月份，并告诉了你的同事 C 生日的号数。 之后，你先说：“我不知道A的生日，C也不知道。” 听完你的话，C回答说：“我不知道A的生日，现在我知道了。” 你笑着说：“现在我也知道了。” 在查看了 10 个日期并听取了您的意见后，您的行政助理没有问任何问题就记下了 A 的生日。 那么助理写了什么？</p>
-
-<ol>
-  <li>“C也不知道”，说明我所知道的月份里，对应的号数都是重复的，这样6月和12月被排除，因为如果C拿到7日或者2日，那就很容易知道生日是哪天。所以现在剩下3月和9月。</li>
-  <li>C已经推理到月份只有3月和9月，那么C能推出生日，说明肯定不是5号，这样 3月5日和9月5日被排除。</li>
-  <li>“现在我也知道了。”这句判断的前提是知道3月5日和9月5日被排除，还剩3月两天，和9月一天。如果你拿到的是3月，肯定没有信心判断是哪天，那么唯一的可能是你拿到的是9月，所以生日是9月1号。</li>
-</ol>
-
-<h3 id="花色牌">花色牌</h3>
-<p>赌场提供使用一副普通 52 张牌的纸牌游戏。 规则是你每次翻两张牌。对于每一对，如果两者都是黑色的，则进入庄家的牌堆； 如果两者都是红色的，它们会进入你的堆； 如果一黑一红，则丢弃。 重复该过程，直到你们两个通过所有 52 张卡。 如果您的牌堆中有更多牌，您将赢得 100 美元； 否则（包括牌数相同的情况）你什么也得不到。 赌场允许您协商要为游戏支付的价格。 你愿意花多少钱来玩这个游戏？</p>
-
-<p>一毛钱都不给。因为不管怎么发牌，最终牌数都是相同的。</p>
-
-<h3 id="烧绳计时">烧绳计时</h3>
-<p>你有两根绳子，每根绳子都可以燃烧一个小时。 但是任何一根绳子密度不均，密的地方烧的慢，疏的地方烧的快，不能保证绳子不同段燃烧速度的一致性。 你如何用这两条绳子测量 45 分钟？</p>
-
-<p>首先<strong>点燃一根的两头和另一根的一头</strong>，开始计时。当两头烧的烧完了，计时半小时，同时<strong>点燃另一个绳子的另一头</strong>，让它也两头烧，重新计时，当它烧完时，计时15分钟。两个加起来就是45分钟。</p>
-
-<h3 id="用天平区分次品球">用天平区分次品球</h3>
-<p>有12个球，其中有一个球是次品，跟其他球的重量不一样，是更重还是更轻不清楚。现有一个天平，请问用3次天平测量，如何测出次品球来，并区分是重还是轻。</p>
-
-<div align="center"> <img src="/pic/QuantGuideBook/DefectiveBall.jpg" width="600" /> </div>
-<p>这里面有规律，如果球的缺陷类别（重或轻）已知，则可以用M次测量区分3^M个球中的一个次品球；如果缺陷类别未知，则可以区分(3^M-3)/2个球中的一个次品球。</p>
-
-<h3 id="阶乘尾0的个数">阶乘尾0的个数</h3>
-<p>100！的尾部有几个0？</p>
-
-<ol>
-  <li>分析相乘产生0 的情况。2<em>5 = 10； 4</em>25 = 100 =4<em>5</em>5。 也就是一个5乘一个偶数就能得到1个0，偶数比5的个数要多得多，所以0的个数，取决于能分解出多少个5。那么（5,10，…,100）能分解出多少个5？</li>
-  <li>
-    <p>（5,10,…，100）除以5，有（1,2，…，20），含20个5，另外（1,2，…，20）中还有4个5，因为（5,10,15,20），除以5有（1,2,3,4），没5了，所以总共含有24个5，也就是有24个0。</p>
-  </li>
-  <li>
-    <table>
-      <tbody>
-        <tr>
-          <td>那么1000！呢？ [5,1000]</td>
-          <td>200 + [5,200]</td>
-          <td>40 + [5,40]</td>
-          <td>8 + [5,8]</td>
-          <td>1 = 249个</td>
-        </tr>
-      </tbody>
-    </table>
-  </li>
-</ol>
-
-<h3 id="无限序列">无限序列</h3>
-<p>$x^{x^{\cdots}} = 2$，求 x</p>
-
-<p>解答：无限序列的情况，用迭代的思想列方程，$x^{x^{\cdots}} = x^{x^{x^{\cdots}}} = x^2 = 2 \Rightarrow x = \sqrt{2}.$</p>
-
-<h3 id="赛马比赛">赛马比赛</h3>
-
-<p>有25匹马，一次比赛只能跑五匹马，问最少用多少次比赛可以找到前三个最快的。</p>
-
-<ol>
-  <li>先分五组跑五次，设1，6，11，16，21为各组第一；</li>
-  <li>他们五个再跑一次，假设排名就是1，6，11，16，21；</li>
-  <li>1肯定是最快的，再让2，3，6，7，11跑一次就可以了。</li>
-</ol>
-
-<h2 id="跳出思维框架">跳出思维框架</h2>
-
-<h3 id="打包箱子">打包箱子</h3>
-<p>请问能否把53块1x1x4的砖块放到6x6x6的箱子里？</p>
-
-<p>这题是国际象棋题的升级版。国际象棋的题目是二维的，而箱子是三维的，更难一些，但是解法都是一样的。从国际象棋题展开来说。如图象棋棋盘是黑白相间的64个小方格，假设都为1x1，现在拿去对角线上的两个小方块，请问，还能否放入31个1x2的方格进去？</p>
-
-<div align="center"> <img src="/pic/QuantGuideBook/BoxPacking.jpg" width="600" /> </div>
-
-<p>管怎么放1x2的方格，都会占据1黑1白两个方格。那么最多能放几个1x2方格，取决于黑格或者白格的数量最少的那个。本来64个，黑白各32个，但是移除对角线的两个方格，是同颜色的，那么就还剩下30个黑32个白，或者30个白32个黑，所以不论什么情况，最多是30个，占据的面积是60，有两个不相连的方格剩下。</p>
-
-<p>按照这个套路，解决箱子问题。用小正方体给它上色，也就是2x2x2的小箱子。这样的小箱子总共有3x3x3=27个，然后他们颜色相间的话，只能是13黑14白或者13白14黑。同时因为两个黑白的小箱子能装4块砖（底面积是4倍），所以总共能装的是13x4 等于52块砖。注定有一块2x2x2的小箱子浪费。</p>
-
-<h3 id="日历骰子">日历骰子</h3>
-<p>用2个自制的骰子（6面），刻画所有月份里的天数，仅仅是天数。其中第一天为01，一个骰子显示0，一个显示1。那么请问该如何设计这两个骰子。</p>
-
-<ol>
-  <li>012345</li>
-  <li>012678</li>
-  <li>6和9是对称的，只要刻一个数字就可以表达2个数</li>
-</ol>
-
-<h3 id="offer之门">offer之门</h3>
-<p>假如两个守卫守着两扇门，一扇通往offer，一扇“谢谢你的投递，but you failed”。两守卫一个诚实只说真话，一个狡猾只说假话。你只能问其中一个守卫一句只能用yes/or回答的问题，你如何问，才能顺利打开offer之门？</p>
-
-<p><strong>问其中一个守卫“另一个守卫会说你守的是offer门吗？”，如果该守卫说是的，则选另一扇门，如果说No，那就是这扇门。</strong></p>
-
-<h3 id="挂锁快递">挂锁快递</h3>
-<p>你想给上海的朋友发快递送物资，但是最近时局动荡，没上锁的快递不安全，东西会丢，需要用挂锁箱子运送。但是目前你跟你朋友各自有一把锁，但是各自都只有一把钥匙，那么应该怎么送，物资才能安全送达？</p>
-
-<p>第一趟送的时候挂你的锁，安全送到上海，但是你朋友打不开。没关系，你朋友在箱子上又挂了一把他自己的锁，然后快递送回来，你把自己的锁解开，再快递到上海，这时候，就是你朋友的锁在保护物资了。平安到上海后，你朋友就可以打开箱子获得物资了。</p>
-
-<h3 id="最后一球的颜色">最后一球的颜色</h3>
-<p>如果袋子里有20个蓝球，14个红球。每次抽两个球，不放回，扔掉。如果抽出的是同色的，往袋子里添加一个蓝球；如果是不同色的，则添加一个红球。假设球足够进行这些操作。请问，袋子里最后一个球是什么颜色的？如果是20个蓝球，13个红球呢？</p>
-
-<p>观察各个组合带来的蓝球和红球的变动规律，蓝球奇数变动，要么加1要么减1；红球要么不变，要么减2，都是偶数变动。所以<strong>如果14个红球的话，最后肯定变成0，13个红球的话最后肯定变成1。</strong></p>
-
-<h3 id="控制灯的开关是哪个">控制灯的开关是哪个</h3>
-<p>屋外有四个开关，屋内有一盏灯，其中只有一个开关控制灯。你在屋外不能及时看到灯的状态。请问至少需要进屋几次才能分辨出控制灯的开关是哪个，该如何操作。</p>
-
-<p>灯除了明灭的信息，还有冷热的信息，那么两种状态（亮否，热否）可以表示四种可能情况。那么我们可以先闭合1和2开关，等待一段时间。然后把开关2断开，合上开关3，立即进屋查看灯的两种状态。判断规则如下：</p>
-
-<ol>
-  <li>如果灯是亮且热的，那么开关1控制；</li>
-  <li>如果灯是亮但不热的，那么开关3控制；</li>
-  <li>如果灯是暗但热的，那么开关2控制；</li>
-  <li>如果等是暗且不热的，那么开关4控制。</li>
-</ol>
-
-<h3 id="求量化平均工资">求量化平均工资</h3>
-<p>5个量化工程师去酒吧喝酒，他们好奇量化行业的平均工资是多少，但是又不想暴露自己的收入情况。请问有什么方法可以在不暴露各自收入的情况下，求得他们的收入均值？</p>
-
-<p>第一个工程师设置一个随机初值，写上自己的收入与初值的加和，然后传递给第二个工程师；第二个工程师也加上自己的收入，依次加总完后，将数据给第一个工程师，他将最后的总数减去随机初值，然后除以人数，就是他们收入的均值。这里并没有泄露任何人的真实收入。</p>
-
-<h2 id="巧用对称性">巧用对称性</h2>
-
-<h3 id="确保两堆硬币有同样数量的字面朝上">确保两堆硬币有同样数量的字面朝上</h3>
-<p>假设有1000个硬币，其中有20个字面朝上，980个花面朝上；你不能通过触摸感受硬币是哪一面，但是你可以无限次数的翻转硬币。请问怎么分，才能确保分出来的两堆硬币字面朝上的硬币数量相同？</p>
-
-<p>假设给第一堆分了n个硬币，其中有m个字面朝上的，那么另一堆则有1000-n个硬币，其中20-m个字面朝上。我们要确保两边的字面朝上，且手段只有翻面。那么</p>
-
-<p><strong>从1000个硬币中随机选20个，不管这20个里面是否有字面朝上的硬币，都给翻转过来，就能保证这两堆里，字面朝上的硬币数量相等。</strong></p>
-
-<h3 id="打错标签的水果袋">打错标签的水果袋</h3>
-<p>有三袋水果，分别装着梨、苹果以及苹果和梨的混装。每个袋子外面打了相应的标签，但是现在水果店老板告诉你，标签都打错了，你可以拿出水果来判断袋子的正确标签，那么请问怎么拿最少次数水果，更正所有的标签？你可以拿无数次，袋子是非透明的。</p>
-
-<ol>
-  <li>一次即可，从标记为混装的袋子里拿水果，拿出来的是梨，那么这个袋子里装的就全是梨；拿出来的是苹果，那么这个袋子里装的就全是苹果。它不会出现混装的情况，因为题目告诉了，所有标签都错了。</li>
-  <li>假设我们从混装袋子里拿出的是梨，那么标签为梨的袋子里装的肯定是苹果，标签为苹果的就是混装。</li>
-</ol>
-
-<h3 id="智者斗酋长">智者斗酋长</h3>
-<p>野人酋长抓了50个智者。每分钟他随机抓一个智者去问话，问话前每个智者可以翻转大堂门口的一个玻璃杯，也可以不翻转。如果智者可以肯定地正确地回答“所有智者至少被酋长问过一次话”，那么酋长会放了所有人。否则，回答错误的话，也就是说不是所有人都被问过话，但有智者回答是，那么所有人会被献祭。在他们被关到各自牢房（一人一间）前，他们可以聚集一次商量对策。 那么智者该如何应对才能活下来。被问话的智者是随机且无限次抽取的。不回答不视为答错，智者在没把握的时候可以选择不回答。</p>
-
-<ol>
-  <li>非破题人初次被喊话：
-    <ol>
-      <li>如果杯子是正放的，倒置它（发出信号，等待破题人接收）</li>
-      <li>如果杯子是倒置的，不操作；（另一个人发出的信号，且未被破题人归置，也就是信号还未传达至破题人）</li>
-    </ol>
-  </li>
-  <li>非破题人非初次被喊话：
-    <ol>
-      <li>如果自己未翻转过杯子且杯子是正放的，倒置它；（发出自己的信号，等到接收）</li>
-      <li>如果自己已经翻转过杯子，则不做任何操作；</li>
-    </ol>
-  </li>
-  <li>破题人：
-    <ol>
-      <li>如果杯子是倒置的，计数+1，然后摆正杯子；（接收到信号，1人至少被问话一次）</li>
-      <li>如果杯子是正放的，不做操作。这样计数到49时，就可以答题了。</li>
-    </ol>
-  </li>
-</ol>
-
-<h2 id="数列求和">数列求和</h2>
-
-<h3 id="钟表碎片">钟表碎片</h3>
-<p>一块钟表刻度为1,2，…，12，摔碎成了连续的3块，且每块的刻度数字和相同，请问碎成了哪三块？</p>
-
-<p>第一块肯定是11,12,1,2；那么往两边推，11点前面的是10,9，加8就超过26了，然后2点往后是3,4, 所以第二块是9,10,3,4；剩下的为第三块，7,8,5,6。</p>
-
-<h3 id="缺失的整数">缺失的整数</h3>
-<p>1到100个整数里，缺了两个，问怎么快速得到这个缺失值？</p>
-
-<p>分别求一次和和二次和，列两个方程，然后解方程。</p>
-
-<h3 id="快速定位劣币袋子">快速定位劣币袋子</h3>
-<p>有10袋子硬币，每袋100个硬币，每个真币重10克。其中有一袋的硬币全是假币，可能比真硬币重1克，也可能轻1克（全都重或者全都轻）。现在有个电子秤，请问如何用最少的次数称重，找出假币的袋子？</p>
-
-<p><strong>第一个袋子拿1个硬币，第二个袋子拿2个硬币，如此类推，第10个袋子拿10个硬币</strong>，这样假硬币的数量就能反向指出袋子的编号。</p>
-
-<p>类似的还有用二进制序列来区分试剂药品之类的题。比如有1000罐药，其中有一罐有毒，一点就致命，但是需要一天才能显现效果，现在有10只小白鼠，问该如何测试，才能最快把毒药辨别出来？方法是混合试剂，用2进制的方式混。如第9罐药，对应10位的2进制为“0000001001”，也就是喂第7只和第10只小白鼠喝第9罐药（一丁点）。如此类推，将药罐的编号变换为对应的10位2进制，然后为1的数对应的小白鼠喝药，最后看小白鼠的死亡pattern，转换成对应的二进制数，再换算成药罐的序号，就可以在一天内找到毒药。</p>
-
-<p><strong>不管是连续序列，还是2进制变换，本质是要找到一种传递信息或者区分的方式。</strong></p>
-
-<h3 id="100楼层测试玻璃球硬度">100楼层测试玻璃球硬度</h3>
-<p>假设你有两颗玻璃球，楼有100层，采用楼层高度表述玻璃球的硬度。当球从小于X层往下掉时不会碎，而当从大于等于X层处下落时会碎。那么考虑最坏的情况，应该怎么测试才能最小化球下落的次数，从而测试出玻璃球的硬度。</p>
-
-<p>假设最坏情况，我们至少要扔N次玻璃球。第一球从N层下落，如果碎了，第二个球从1层开始测到N-1层，肯定能测出X；如果第一球层N层下落，没碎，那么下一步，需要从第N+N-1层下落进行测试，因为如果碎了，另一球可以从N+1层测试到2N -2层，测试N-2次；如此类推，第一球如果没碎，则每次间隔减少1层，直到在N次测试时，覆盖100层楼，也就是 N+（N-1）+(N-2)+… + 1 &gt;=100, 求得N&gt;=14，取最小值14，也就是最少扔14次，不论怎么样，可以测出球的硬度。</p>
-
-<h2 id="鸽笼原理">鸽笼原理</h2>
-<p>n只鸽笼，mn+1只鸽子，分配到各个鸽笼里，至少有一只笼子里的鸽子不小于m+1只，也就是至少有m+1只鸽子要共享一只笼子。</p>
-
-<h3 id="袜子成对">袜子成对</h3>
-<p>假设你有黄绿红三色袜子x, y, z只（x，y，z均大于0，x+y+z&gt;3），请问随机取，取多少次一定能配上一对？</p>
-
-<p>4次。</p>
-
-<h3 id="是否有两人握手次数相同">是否有两人握手次数相同</h3>
-<p>假如你是新上任的领导，第一次去见你的n个团队成员，他们列成一排一一跟你握手。同时他们之间也有新来的相互不认识也会互相握手打招呼。那么请问你是否能肯定地说，“这些人中，至少有两人握手的次数是相同的”。</p>
-
-<p>n+1个人，每个人握手1到n次，因此一定至少有两人握手的次数是相同的。</p>
-
-<h3 id="我们之前见过吗">我们之前见过吗</h3>
-<p>晚会上有6人，证明要么至少3人是熟人，要么至少3人是陌生人。</p>
-
-<p>首先，假设我是第六个人，至少有三个人见过我或者没见过我。</p>
-
-<ol>
-  <li>如果有三个人见过我：如果有两个互相见过，那加上我就是三个；否则他们三个是陌生人。</li>
-  <li>如果有三个人没见过我：如果有两个是陌生人，加上我就是三个；否则他们三个是熟人。</li>
-</ol>
-
-<h3 id="正方形中的蚂蚁">正方形中的蚂蚁</h3>
-
-<p>一个边长为1的正方形中有51个蚂蚁，你有一个1/7半径的瓶子，是否能找到一个地方放瓶子能盖住至少三个蚂蚁？</p>
-
-<p>可以的。首先将正方形分为5x5个小正方形，肯定有一个上至少有三个蚂蚁。同时 <strong>$1/5 &lt; \sqrt{2}/7$说明瓶子能盖住这个小正方形。</strong></p>
-
-<h3 id="找假币ii">找假币II</h3>
-
-<p>现在有五个袋子，每个里面有100个硬币，每个袋子中的硬币都是相同的，但是有可能是9g、10g或者11g。我们不知道每个袋子里装的是哪种硬币，你需要几次测量来得到每个袋子中的硬币种类？</p>
-
-<ol>
-  <li>如果只有两个袋子的话，此时解空间有9种可能，那么我们就需要第一个袋子取1个，第二个袋子取3个，这样总和在-4到4中间，正好是9个情况：
-    <div align="center"> <img src="/pic/QuantGuideBook/Coin2.jpg" width="600" /> </div>
-  </li>
-  <li>三个袋子的话，有27个可能，第三个袋子就需要取9个。</li>
-  <li>以此类推，我们需要从每个袋子中依次取1,3,9,27,81个来测量就可以了。</li>
-</ol>
-
-<h2 id="取余运算">取余运算</h2>
-
-<h3 id="猜帽子颜色">猜帽子颜色</h3>
-
-<p>有100个犯人，每个人会给一个红色或者蓝色帽子，他们可以看到别人的帽子但看不到自己的，每个人都会被随机叫去猜自己帽子颜色，猜对了就放走，请问最多能让多少犯人活下来？</p>
-
-<p>可以至少让99个活下来，第一个犯人如果看到红色帽子个数为奇数就说自己是红色的，否则说自己是蓝色的。这样其他人都能推断出自己帽子是什么颜色的。</p>
-
-<p>三个颜色也是一样的道理。</p>
-
-<h3 id="被9整除">被9整除</h3>
-<p>给定一个整数，证明为什么各个位数相加能被9整除，原数就能被9整除。</p>
-
-<p>$a=a_n10^n+\cdots+a_1 10^1 + a_0, a_n+\cdots+a_0 = 9x \Rightarrow 
-b = a_n(10^n-1)+\cdots+a_1(10^1-1) = a - 9x$
-b是可以被9整除的，因此a可以被9整除。</p>
-
-<p>同理可证$(-1)^na_n+\cdots+(-1)a_1+a_0$ 被 11 整除 当且仅当 a 可以被11整除。</p>
-
-<h3 id="变色龙颜色">变色龙颜色</h3>
-
-<p>岛屿上有13个红色变色龙，15个绿色和17个蓝色，每当两只不同颜色的变色龙相遇时就会变成第三种颜色，请问最后他们会变成同一种颜色吗？</p>
-
-<p>假如(m+1,n+1,p+1)可以变成同一种颜色，那么(m,n,p)也是可以的。因此我们考虑(0,2,4)即可，而(0,2,4)是永远变不到(0,0,6)的。</p>
-
-<h2 id="数学归纳法">数学归纳法</h2>
-
-<h3 id="硬币分配问题">硬币分配问题</h3>
-<p>假如有1000个硬币，分为两堆，分别有x和y个，此时相乘得到xy，再分别将两堆进行划分，此时得到xy+x1x2+y1y2，以此类推直到每堆只有一个硬币，请问最后的和是多少？</p>
-
-<p>证明$f(n)=\frac{n(n-1)}{2}$即可。</p>
-
-<h3 id="巧克力问题">巧克力问题</h3>
-
-<p>一个6x8的巧克力，需要多少下才能掰成48个小块呢？</p>
-
-<p>证明$f(m,n) = mn-1$即可。</p>
-
-<h3 id="卡车出发点">卡车出发点</h3>
-
-<p>一个环形路上有N个加油站，每个加油站的油量总和是支撑得住车开一圈的，假设最初车没油，请问如何选取加油站作为出发点才能跑完一圈？</p>
-
-<p>Leetcode的一道贪心问题。
-设油为x_1,…,x_N，路程油耗为y_1,…,y_N。从头开始遍历，如果x_1+…+x_m &lt; y_1+…+y_m，就将起点设为m+1，再从m+1重新从0计算油量和油耗。</p>
-
-<h2 id="反证法">反证法</h2>
-
-<h3 id="证明sqrt2是无理数">证明$\sqrt{2}$是无理数</h3>
-
-<p>假设$\sqrt{2} = \frac{a}{b}$并且gcd(a,b)=1，则有$a^2 = 2b^2$，a为偶数且a被4整除，因此b也是偶数，这就出现了矛盾。</p>
-
-<h3 id="彩虹帽">彩虹帽</h3>
-
-<p>有七个犯人，每个人带彩虹中的一个颜色的帽子，他们能看到别人的帽子但看不到自己的。让他们猜自己帽子的颜色，有一个猜对的就解放，请问是否能够做到。</p>
-
-<p>设七个颜色分别对应0,1,2,3,4,5,6，记每个人的帽子颜色为$x_i$，他们的猜测为$g_i$，那么就让每个人$(g_i+\sum_{k\neq i}x_k) \% 7 = i$</p>
-
-<p>如果$g_i\neq x_i$，那么 $\sum_{i=1}^7 x_i \% 7 \neq i, i=0,1,2,3,4,5,6$，这样就出现了矛盾。</p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="量化绿皮书" /><summary type="html"><![CDATA[问题简化]]></summary></entry></feed>
+<p>略，记住蚂蚁相遇只需调换标签即可。</p>]]></content><author><name>liujiyu</name><email>liujiyu_at_zju.edu.cn</email></author><category term="量化绿皮书" /><summary type="html"><![CDATA[一元随机变量与分布函数]]></summary></entry></feed>
