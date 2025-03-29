@@ -1298,8 +1298,8 @@
     <ol>
       <li><strong><code class="language-plaintext highlighter-rouge">memory_order_relaxed</code></strong>：
         <ul>
-          <li>放松顺序，仅保证操作是原子的，不会引入任何同步或顺序约束。</li>
-          <li>适用于不需要跨线程同步顺序的场景，性能最好，但只能用于极少数的、独立的状态更新场景。</li>
+          <li>仅保证操作的原子性，不保证线程间的可见性和操作顺序。编译器和处理器可能对指令进行重排，但单个线程内的操作顺序保持逻辑一致性。</li>
+          <li>适合对顺序无严格要求的场景，如独立计数器、统计类操作。</li>
         </ul>
       </li>
       <li><strong><code class="language-plaintext highlighter-rouge">memory_order_consume</code></strong>：
@@ -1310,14 +1310,12 @@
       </li>
       <li><strong><code class="language-plaintext highlighter-rouge">memory_order_acquire</code></strong>：
         <ul>
-          <li>保证从当前操作读取的变量及其之前的所有写入在当前线程中可见。</li>
-          <li>通常用于获取操作，以确保获取的数据对当前线程可见。</li>
+          <li>保证当前线程的后续操作（读取或写入）不会重排到原子加载操作之前，确保读取的可见性。</li>
         </ul>
       </li>
       <li><strong><code class="language-plaintext highlighter-rouge">memory_order_release</code></strong>：
         <ul>
-          <li>确保在此操作之前的所有写操作在其他线程中可见。</li>
-          <li>通常用于释放操作，以确保当前线程的更改对其他线程可见。</li>
+          <li>保证当前线程的先前操作不会重排到原子存储操作之后，确保写入的可见性</li>
         </ul>
       </li>
       <li><strong><code class="language-plaintext highlighter-rouge">memory_order_acq_rel</code></strong>（Acquire-Release）：
@@ -1788,8 +1786,8 @@
       </li>
     
       <li>
-        <a href="/2024/10/21/CS/">
-          计算机系统、网络面经
+        <a href="/2024/10/21/Cpp11_14/">
+          C++11\14特性
           <small><time datetime="2024-10-21T10:00:00+08:00">21 Oct 2024</time></small>
         </a>
       </li>
@@ -1801,7 +1799,7 @@
 </main>
 
 <footer class="footer"><small>
-    &copy; 2023&nbsp;-&nbsp;2024 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    &copy; 2023&nbsp;-&nbsp;2025 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
     Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
   </small>
 </footer>

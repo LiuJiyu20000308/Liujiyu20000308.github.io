@@ -256,6 +256,41 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="k个一组反转链表">K个一组反转链表</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pair</span><span class="o">&lt;</span><span class="n">ListNode</span><span class="o">*</span><span class="p">,</span><span class="n">ListNode</span><span class="o">*&gt;</span> <span class="n">reverse</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span><span class="n">head</span><span class="p">,</span> <span class="n">ListNode</span> <span class="o">*</span><span class="n">tail</span><span class="p">){</span>
+    <span class="n">ListNode</span> <span class="o">*</span><span class="n">pre</span> <span class="o">=</span> <span class="n">tail</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="n">ListNode</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pre</span> <span class="o">!=</span> <span class="n">tail</span><span class="p">){</span>
+        <span class="n">ListNode</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span> 
+        <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">pre</span><span class="p">;</span>
+        <span class="n">pre</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">tail</span><span class="p">,</span> <span class="n">head</span><span class="p">};</span>
+<span class="p">}</span>
+    
+<span class="n">ListNode</span><span class="o">*</span> <span class="n">reverseKGroup</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ListNode</span> <span class="o">*</span><span class="n">dummyhead</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">head</span><span class="p">);</span>
+    <span class="n">ListNode</span> <span class="o">*</span><span class="n">pre</span> <span class="o">=</span> <span class="n">dummyhead</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ListNode</span> <span class="o">*</span><span class="n">tail</span> <span class="o">=</span> <span class="n">pre</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+            <span class="n">tail</span> <span class="o">=</span> <span class="n">tail</span><span class="o">-&gt;</span> <span class="n">next</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">tail</span><span class="p">){</span>
+                <span class="k">return</span> <span class="n">dummyhead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">ListNode</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span><span class="n">tail</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">tie</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">)</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">);</span>
+        <span class="n">pre</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+        <span class="c1">// tail-&gt;next = tmp;</span>
+        <span class="n">pre</span> <span class="o">=</span> <span class="n">tail</span><span class="p">;</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">dummyhead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 <h3 id="两两交换链表中的节点">两两交换链表中的节点</h3>
 
 <p>给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。</p>
@@ -456,8 +491,8 @@
       </li>
     
       <li>
-        <a href="/2024/10/21/CS/">
-          计算机系统、网络面经
+        <a href="/2024/10/21/Cpp/">
+          C++补充
           <small><time datetime="2024-10-21T10:00:00+08:00">21 Oct 2024</time></small>
         </a>
       </li>
@@ -469,7 +504,7 @@
 </main>
 
 <footer class="footer"><small>
-    &copy; 2023&nbsp;-&nbsp;2024 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
+    &copy; 2023&nbsp;-&nbsp;2025 <a href="https://github.com/Liujiyu20000308">liujiyu</a>. All rights reserved.
     Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
   </small>
 </footer>
@@ -482,6 +517,7 @@
   <li><a href="#理解虚拟头结点">理解虚拟头结点</a></li>
   <li><a href="#设计链表">设计链表</a></li>
   <li><a href="#反转链表">反转链表</a></li>
+  <li><a href="#k个一组反转链表">K个一组反转链表</a></li>
   <li><a href="#两两交换链表中的节点">两两交换链表中的节点</a></li>
   <li><a href="#删除链表倒数第n个节点">删除链表倒数第n个节点</a></li>
   <li><a href="#链表相交">链表相交</a></li>
