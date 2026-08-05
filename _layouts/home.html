@@ -2,44 +2,106 @@
 layout: default
 ---
 
-{% include home-header.html %}
+{% assign profile = site.data.profile %}
 
-<div class="posts">
-  {% for post in paginator.posts %}
-  <section class="post-entry">
-    <h2 class="post-title">
-      <a href="{{ post.url | relative_url }}">
-        {{ post.title }}
-      </a>
-    </h2>
+<section class="profile-hero">
+  <div class="shell profile-layout">
+    <aside class="profile-sidebar">
+      <img class="profile-photo" src="{{ '/head.jpg' | relative_url }}" alt="Portrait of Jiyu Liu" width="160" height="160">
+      <h1>{{ profile.name }} <span lang="zh-CN">{{ profile.native_name }}</span></h1>
+      <p class="profile-title">Direct-track doctoral student<br>Computational Mathematics</p>
+      <p class="profile-affiliation">Zhejiang University</p>
+      <div class="profile-links">
+        <a href="mailto:{{ profile.email }}">Email</a>
+        <a href="{{ profile.github }}">GitHub</a>
+        <a href="{{ profile.resume_pdf | relative_url }}">CV</a>
+      </div>
+    </aside>
 
-    <div class="post-meta">
-      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date_to_string }}</time>
-      {%- if jekyll.environment == "production" and site.disqus -%}
-        <span> • </span>
-        <a class="comment-count" href="{{ post.url | relative_url }}#disqus_thread">
-          <span class="disqus-comment-count" data-disqus-url="{{ post.url | absolute_url }}"></span>
-        </a>
-      {%- endif -%}
+    <div class="profile-bio">
+      <h2>About Me</h2>
+      <p>I am a direct-track doctoral student in Computational Mathematics at Zhejiang University. My work spans production database systems and high-order numerical computing. During a one-year Qingyun internship at Tencent, I worked on distributed SQL execution, performance profiling, and compute-node reliability.</p>
+      <p>My doctoral research focuses on fourth-order finite-volume and multigrid methods for elliptic and incompressible-flow problems on complex geometries. I am interested in AI infrastructure, high-performance C++ systems, and quantitative infrastructure.</p>
+
+      <a class="cv-link" href="{{ profile.resume_pdf | relative_url }}">Download CV</a>
+
+      <div class="profile-meta-grid">
+        <section>
+          <h3>Interests</h3>
+          <ul>
+            <li>AI infrastructure</li>
+            <li>Distributed systems</li>
+            <li>High-performance C++</li>
+            <li>Numerical computing</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Education</h3>
+          <ul class="education-compact">
+            {% for item in site.data.education %}
+              <li><strong>{{ item.program }}</strong><span>{{ item.institution }} · {{ item.dates }}</span></li>
+            {% endfor %}
+          </ul>
+        </section>
+      </div>
     </div>
+  </div>
+</section>
 
-    <p>{{ post.excerpt | strip_html }}</p>
+<div class="shell home-content">
+  <section class="home-section" id="experience">
+    <div class="section-title-row">
+      <h2>Experience</h2>
+      <a href="{{ '/experience/' | relative_url }}">Details</a>
+    </div>
+    {% for job in site.data.experience %}
+      <article class="home-entry">
+        <div class="entry-heading">
+          <div>
+            <h3>{{ job.role }}</h3>
+            <p>{{ job.company }}{% if job.team %} · {{ job.team }}{% endif %}</p>
+          </div>
+          <time>{{ job.dates }}</time>
+        </div>
+        <p>{{ job.summary }}</p>
+      </article>
+    {% endfor %}
   </section>
-  {% endfor %}
-  {%- if jekyll.environment == "production" and site.disqus -%}
-    <script id="dsq-count-scr" src="//{{ site.disqus }}.disqus.com/count.js" async></script>
-  {%- endif -%}
-</div>
 
-<div class="pagination">
-  {% if paginator.next_page %}
-    <a class="pagination-item older" href="{{ paginator.next_page_path | relative_url }}">Older</a>
-  {% else %}
-    <span class="pagination-item older">Older</span>
-  {% endif %}
-  {% if paginator.previous_page %}
-    <a class="pagination-item newer" href="{{ paginator.previous_page_path | prepend: relative_url }}">Newer</a>
-  {% else %}
-    <span class="pagination-item newer">Newer</span>
-  {% endif %}
+  <section class="home-section" id="projects">
+    <div class="section-title-row">
+      <h2>Selected Projects</h2>
+      <a href="{{ '/projects/' | relative_url }}">Details</a>
+    </div>
+    {% for project in site.data.projects limit:3 %}
+      <article class="home-entry project-summary">
+        <p class="entry-label">{{ project.category }}</p>
+        <h3>{{ project.title }}</h3>
+        <p>{{ project.outcome }}</p>
+      </article>
+    {% endfor %}
+  </section>
+
+  <section class="home-section" id="publication">
+    <h2>Publication</h2>
+    {% assign publication = site.data.research[0].publication %}
+    <article class="publication-entry">
+      <p>{{ publication.authors }} (2026).</p>
+      <h3><a href="{{ publication.url }}">{{ publication.title }}</a></h3>
+      <p>{{ publication.venue }} · Preprint; journal submission has not yet been made.</p>
+    </article>
+  </section>
+
+  <section class="home-section" id="technical-notes">
+    <div class="section-title-row">
+      <h2>Technical Notes</h2>
+      <a href="{{ '/notes/' | relative_url }}">All notes</a>
+    </div>
+    <div class="recent-notes">
+      {% assign visible_posts = site.posts | where_exp: 'post', 'post.portfolio_hidden != true' %}
+      {% for post in visible_posts limit:6 %}
+        <a href="{{ post.url | relative_url }}"><time>{{ post.date | date: '%Y.%m.%d' }}</time><span>{{ post.title }}</span></a>
+      {% endfor %}
+    </div>
+  </section>
 </div>

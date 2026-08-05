@@ -1,4 +1,10 @@
-- title: Blog
+- title: Bio
   url: /
-- title: About
-  url: /about/
+- title: Experience
+  url: /experience/
+- title: Projects
+  url: /projects/
+- title: Technical Notes
+  url: /notes/
+- title: CV
+  url: /assets/Jiyu_Liu_Resume.pdf

@@ -1,0 +1,34 @@
+- group: Production systems
+  context: Used in database and quantitative-infrastructure work
+  items:
+    - C++ (STL, modern C++, concurrency, resource lifetime)
+    - Python and SQL
+    - Linux, Git, CMake, GDB
+    - SQL execution engine and query optimizer internals
+    - MPP execution, data exchange and pipeline scheduling
+    - TPC-H, TPC-DS, MTR, profiling and regression analysis
+
+- group: Scientific computing
+  context: Used in doctoral research and solver development
+  items:
+    - Numerical PDEs and finite-volume methods
+    - Geometric multigrid and sparse linear algebra
+    - OpenMP, Eigen, LAPACK / MKL
+    - HDF5 / Silo data workflows
+    - Accuracy, convergence and complexity studies
+
+- group: Data infrastructure
+  context: Used in market-data and internal tooling
+  items:
+    - SQLite and TDengine
+    - Concurrent ingestion and real-time subscription
+    - Brokerage market-data API integration
+    - LightRAG, Vanna AI and Streamlit prototypes
+
+- group: Current study
+  context: Listed as active learning, not production experience
+  items:
+    - PyTorch and Dive into Deep Learning
+    - LLM prefill / decode fundamentals
+    - KV cache and prefix-caching concepts
+    - vLLM and SGLang architecture reading plan

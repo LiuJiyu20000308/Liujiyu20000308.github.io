@@ -1,0 +1,58 @@
+- company: Tencent
+  team: Distributed Database R&D Center
+  role: Distributed Database Engineering Intern · Qingyun Program
+  dates: Jul 2025 — Jul 2026
+  location: China
+  summary: >-
+    Contributed to a production analytical database, with work spanning
+    distributed SQL execution, observability, and compute-node reliability.
+  bullets:
+    - >-
+      Extended an MPP execution engine with two-stage aggregation and
+      distributed-plan support for complex subqueries; resolved intermediate-
+      state merging, data redistribution, and cross-node semantic-consistency
+      issues.
+    - >-
+      Built a distributed query-profiling path that connects frontend,
+      planner/optimizer, and worker metrics into query, operator, node, and
+      thread views; added operator-boundary inspection for complex-plan
+      debugging.
+    - >-
+      Identified lock contention caused by high-frequency instrumentation in a
+      large analytical benchmark and moved collection to operator boundaries
+      to keep diagnostic overhead under control.
+    - >-
+      Contributed to compute-node lifecycle and fault recovery across
+      registration, heartbeats, versioned state convergence, distributed
+      locking, query retry, and integration testing.
+  technologies:
+    - C++
+    - SQL engine internals
+    - MPP SQL
+    - TPC-H / TPC-DS
+    - Profiling
+
+- company: Hangzhou Higgs Investment Management Co., Ltd.
+  role: Full-Stack Strategy Engineer
+  dates: Nov 2024 — Jun 2025
+  location: Hangzhou, China
+  summary: >-
+    Developed market-data infrastructure and internal analysis tools for
+    quantitative research and live-trading operations.
+  bullets:
+    - >-
+      Built high-frequency market-data storage and real-time subscription
+      pipelines with C++/Python, SQLite, and TDengine, supporting concurrent
+      access from multiple threads and processes.
+    - >-
+      Integrated brokerage market-data APIs and delivered trading-monitoring
+      and live-parameter query tools for research and operational workflows.
+    - >-
+      Prototyped a local document and natural-language SQL assistant with
+      LightRAG, Vanna AI, DeepSeek, and Streamlit for internal troubleshooting.
+  technologies:
+    - C++ / Python
+    - SQLite
+    - TDengine
+    - Market data
+    - RAG / Text-to-SQL

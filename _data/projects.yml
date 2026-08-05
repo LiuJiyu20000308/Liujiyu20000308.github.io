@@ -1,0 +1,72 @@
+- title: Distributed Query Profiling
+  category: Database Systems
+  problem: >-
+    A single-node profiler could not explain latency, skew, and hotspots across
+    a distributed execution hierarchy.
+  approach: >-
+    Connected frontend, planning, optimization, worker, and operator metrics
+    through stable identifiers while preserving node- and thread-level detail.
+  outcome: >-
+    Produced query/operator/node/thread diagnostics and used them to identify
+    lock contention introduced by high-frequency instrumentation.
+  technologies:
+    - C++
+    - SQL engine internals
+    - MPP execution
+    - Performance profiling
+
+- title: Fourth-Order Cut-Cell Multigrid Solver
+  category: Numerical Computing
+  problem: >-
+    Standard high-order stencils lose accuracy near irregular boundaries,
+    cut cells, and multi-component interfaces.
+  approach: >-
+    Built fourth-order finite-volume operators using cut cells, PLG polynomial
+    reconstruction, weighted least squares, geometric multigrid, and block
+    relaxation for irregular unknowns.
+  outcome: >-
+    Achieved approximately fourth-order convergence and near-optimal
+    refinement complexity; a sparse bottom solve reduced one benchmark from
+    118.770 s to 4.441 s (26.7×).
+  technologies:
+    - C++
+    - OpenMP
+    - Finite volume
+    - Geometric multigrid
+    - Sparse linear algebra
+
+- title: Density-Stratified Flow Solver
+  category: Computational Fluid Dynamics
+  problem: >-
+    High-order spatial discretization, pressure projection, time integration,
+    and moving geometry must remain accurate and stable when coupled.
+  approach: >-
+    Implemented a modular two-dimensional C++ solver with PLG-based
+    finite-volume operators, pressure projection, geometric multigrid, and
+    OpenMP-accelerated numerical kernels.
+  outcome: >-
+    Verified fourth-order accuracy in manufactured-solution studies and
+    obtained results consistent with reference experiments.
+  technologies:
+    - C++
+    - OpenMP
+    - LAPACK / MKL
+    - HDF5 / Silo
+    - Navier–Stokes
+
+- title: Market-Data and Analysis Tooling
+  category: Quantitative Infrastructure
+  problem: >-
+    Research and live operations needed a consistent path from brokerage feeds
+    to storage, monitoring, and ad-hoc data access.
+  approach: >-
+    Combined brokerage API integration, concurrent C++/Python ingestion,
+    SQLite/TDengine storage, and lightweight internal query interfaces.
+  outcome: >-
+    Delivered a unified workflow for market-data subscription, monitoring, and
+    operational investigation without claiming unverified latency figures.
+  technologies:
+    - C++ / Python
+    - SQLite
+    - TDengine
+    - Brokerage APIs

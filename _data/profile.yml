@@ -1,0 +1,25 @@
+name: Jiyu Liu
+native_name: 刘骥宇
+eyebrow: Systems Engineering × Scientific Computing
+headline: I build dependable systems for data-intensive and numerical workloads.
+summary: >-
+  My work connects distributed database engineering with computational
+  mathematics: from MPP query execution and performance diagnostics to
+  fourth-order finite-volume and multigrid solvers for complex geometries.
+location: Hangzhou, China
+email: liujiyu@zju.edu.cn
+github: https://github.com/LiuJiyu20000308
+github_label: LiuJiyu20000308
+resume_url: /resume/
+resume_pdf: /assets/Jiyu_Liu_Resume.pdf
+focus:
+  - Distributed databases
+  - High-performance C++
+  - Numerical PDE solvers
+metrics:
+  - value: 26.7×
+    label: solver speedup on a complex-geometry benchmark
+  - value: 4th order
+    label: verified spatial convergence on multiple geometries
+  - value: 4 levels
+    label: distributed profiling across query, operator, node, and thread

@@ -1,13 +1,31 @@
-# Setup
-title: Liujiyu's blog
-description: learn & record
+# Site identity
+title: Jiyu Liu
+tagline: Distributed Systems · High-Performance C++
+description: >-
+  Portfolio of Jiyu Liu, a computational mathematics researcher and systems
+  engineer working on distributed databases, high-performance C++, and
+  high-order numerical solvers.
 url: https://liujiyu20000308.github.io
-avatar: /head.jpg
-paginate: 5
-permalink: pretty
-cover_image: /bg.jpg
+baseurl: ""
+lang: en
+timezone: Asia/Shanghai
 
-# Gems
+# Public profile metadata
+author:
+  name: Jiyu Liu
+  url: https://github.com/LiuJiyu20000308
+  email: liujiyu@zju.edu.cn
+logo: /head.jpg
+social:
+  name: Jiyu Liu
+  links:
+    - https://github.com/LiuJiyu20000308
+
+# Content
+permalink: pretty
+excerpt_separator: "<!--more-->"
+
+# Plugins supported by GitHub Pages
 plugins:
   - jekyll-gist
   - jekyll-paginate
@@ -15,45 +33,41 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
 
-# Optimize Jekyll
+sass:
+  sass_dir: _sass
+  style: compressed
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      image: /head.jpg
+      lang: zh-CN
+      math: true
+  - scope:
+      path: ""
+    values:
+      image: /head.jpg
+
 exclude:
   - .editorconfig
   - .git
   - .jekyll-cache
+  - .sass-cache
+  - _site
   - Gemfile
   - Gemfile.lock
   - LICENSE.md
   - README.md
+  - README.html
+  - FastPush.sh
+  - OnceADay.sh
+  - package.json
   - scripts/
   - not-pure-poole.gemspec
 
-# Optimize Jekyl SEO Tag
-#twitter:
-#  username: vszhub
-#  card: summary
-logo: head.jpg
-social:
-  name: Liujiyu
-  links:
-#    - https://twitter.com/vszhub
-    - https://github.com/Liujiyu20000308
-# google_site_verification: xxxxx
-lang: en
-
-sass:
-  sass_dir: _sass
-  style: :compressed
-
-# Options
-
-# Replace this value and uncomment to enable Google Analytics tracking
-# google_analytics: UA-000000-0
-
-# Replace this value and uncomment to enable Disqus
-# disqus: xxxxxx
-
-# Specify the author for blog posts
-author:
-  name: liujiyu
-  url: https://github.com/Liujiyu20000308
-  email: liujiyu_at_zju.edu.cn
+# Optional integrations are intentionally disabled until IDs are provided.
+# google_analytics:
+# disqus:

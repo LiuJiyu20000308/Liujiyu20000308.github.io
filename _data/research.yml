@@ -1,0 +1,74 @@
+- id: elliptic
+  title: Fourth-Order Cut-Cell Multigrid Solvers
+  subtitle: Elliptic boundary-value and interface problems on complex geometries
+  role: Researcher · Co-first author
+  summary: >-
+    A modular C++ framework for high-order finite-volume discretization and
+    geometric multigrid on irregular embedded boundaries.
+  challenge: >-
+    Standard high-order finite-difference stencils break down near cut cells,
+    small volume fractions, and multi-component interfaces.
+  contributions:
+    - >-
+      Constructed fourth-order finite-volume operators with cut cells, PLG
+      polynomial reconstruction, and weighted least squares for variable-
+      coefficient boundary-value and interface problems.
+    - >-
+      Designed geometric multigrid and block relaxation for irregular unknowns,
+      separating geometry, discretization, inter-grid transfer, and sparse
+      linear algebra into maintainable modules.
+    - >-
+      Added OpenMP parallelism and stage-level profiling; replaced repeated
+      bottom-level relaxation with a reusable sparse direct solve.
+  results:
+    - Approximately fourth-order convergence across multiple complex geometries
+    - Near-optimal complexity for the boundary-value solver under grid refinement
+    - Complex-geometry solve time reduced from 118.770 s to 4.441 s (26.7×)
+  technologies:
+    - C++
+    - OpenMP
+    - Eigen SparseLU / SparseQR
+    - Geometric multigrid
+    - Finite volume
+    - CMake
+  publication:
+    title: A Fourth-Order Cut-cell Multigrid Method for Solving Elliptic Equations on Arbitrary Domains
+    authors: Jiyu Liu, Zhixuan Li, Jiatu Yan, Zhiqi Li, and Qinghai Zhang
+    venue: arXiv:2601.02975 (v3)
+    url: https://arxiv.org/abs/2601.02975
+  publication_note: arXiv preprint; journal submission to JCP is planned but has not yet been made.
+
+- id: flow
+  title: High-Fidelity Solvers for Density-Stratified Flows
+  subtitle: Fourth-order moving-boundary incompressible Navier–Stokes methods
+  role: Researcher and C++ developer
+  summary: >-
+    A high-order finite-volume solver for density-stratified incompressible
+    flows under the Boussinesq approximation, including irregular and moving
+    boundaries.
+  challenge: >-
+    Couple high-order spatial discretization, time integration, pressure
+    projection, and moving geometry without losing accuracy or solver
+    robustness.
+  contributions:
+    - >-
+      Built fourth-order PLG-based spatial discretization and used the GePUP
+      framework to organize time integration and pressure projection.
+    - >-
+      Decoupled geometry, spatial operators, temporal updates, and linear
+      solvers in a modular two-dimensional C++ implementation.
+    - >-
+      Used geometric multigrid for Poisson/Helmholtz subproblems and OpenMP plus
+      LAPACK/MKL for stencil, inter-grid, and linear-algebra kernels.
+  results:
+    - Fourth-order accuracy in space and time for manufactured-solution studies
+    - Numerical results consistent with reference experiments
+    - Cavity, cylinder-flow, and density-stratified moving-boundary test coverage
+  technologies:
+    - C++
+    - OpenMP
+    - LAPACK / MKL
+    - GePUP
+    - HDF5 / Silo
+    - Navier–Stokes
+  publication_note: Moving-boundary manuscript under review; public bibliographic details omitted.
