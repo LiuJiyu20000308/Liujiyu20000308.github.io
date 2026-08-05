@@ -11,7 +11,9 @@ email: liujiyu@zju.edu.cn
 github: https://github.com/LiuJiyu20000308
 github_label: LiuJiyu20000308
 resume_url: /resume/
-resume_pdf: /assets/Jiyu_Liu_Resume.pdf
+resume_pdf: /assets/Liujiyu_CV_zh.pdf
+resume_pdf_zh: /assets/Liujiyu_CV_zh.pdf
+resume_pdf_en: /assets/Jiyu_Liu_Resume.pdf
 focus:
   - Distributed databases
   - High-performance C++

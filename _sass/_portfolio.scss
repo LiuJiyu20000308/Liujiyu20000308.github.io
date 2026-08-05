@@ -227,6 +227,28 @@ h4 {
   font-size: .82rem;
 }
 
+.cv-actions {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  margin-top: .25rem;
+}
+
+.cv-actions .cv-link {
+  margin-top: 0;
+}
+
+.cv-secondary-link {
+  color: #fff;
+  font-size: .8rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cv-secondary-link:hover {
+  color: #fff;
+}
+
 .cv-link:hover {
   color: var(--hero);
   background: #fff;
@@ -730,6 +752,10 @@ h4 {
   margin: .2rem 0 0;
 }
 
+.resume-document-zh {
+  font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", var(--font-sans);
+}
+
 .post {
   padding-top: 3.5rem;
   padding-bottom: 5rem;
@@ -1034,5 +1060,30 @@ h4 {
     margin-bottom: .12rem;
     font-size: 7.2pt;
     line-height: 1.28;
+  }
+
+  .resume-document-zh > section {
+    padding-top: .7rem;
+  }
+
+  .resume-document-zh > section > h3 {
+    font-size: 7.5pt;
+  }
+
+  .resume-document-zh .resume-entry + .resume-entry {
+    margin-top: .5rem;
+  }
+
+  .resume-document-zh .resume-entry-heading h4 {
+    font-size: 9pt;
+  }
+
+  .resume-document-zh .resume-entry p,
+  .resume-document-zh .resume-entry li,
+  .resume-document-zh > section > p,
+  .resume-document-zh .resume-skills p {
+    margin-bottom: .16rem;
+    font-size: 8.35pt;
+    line-height: 1.34;
   }
 }

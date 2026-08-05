@@ -9,7 +9,8 @@ body_class: resume-page
 ---
 
 <div class="resume-actions" data-nosnippet>
-  <a class="button button-primary" href="{{ site.data.profile.resume_pdf | relative_url }}" download>Download public PDF</a>
+  <a class="button button-primary" href="{{ site.data.profile.resume_pdf_en | relative_url }}" download>Download English PDF</a>
+  <a class="button button-secondary" href="{{ site.data.profile.resume_pdf_zh | relative_url }}" download>下载中文 PDF</a>
   <button class="button button-secondary" type="button" onclick="window.print()">Print this page</button>
   <a class="button button-secondary" href="mailto:{{ site.data.profile.email }}">Request a tailored résumé</a>
 </div>
