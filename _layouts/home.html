@@ -101,8 +101,9 @@ layout: default
       <a href="{{ '/notes/' | relative_url }}">All notes</a>
     </div>
     <div class="recent-notes">
+      <a href="{{ '/technical-notes/duckdb/' | relative_url }}"><time>SERIES</time><span>DuckDB 查询引擎源码笔记：从 Binder 到向量化执行</span></a>
       {% assign visible_posts = site.posts | where_exp: 'post', 'post.portfolio_hidden != true' %}
-      {% for post in visible_posts limit:6 %}
+      {% for post in visible_posts limit:5 %}
         <a href="{{ post.url | relative_url }}"><time>{{ post.date | date: '%Y.%m.%d' }}</time><span>{{ post.title }}</span></a>
       {% endfor %}
     </div>

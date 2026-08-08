@@ -25,6 +25,11 @@ social:
 permalink: pretty
 excerpt_separator: "<!--more-->"
 
+collections:
+  duckdb:
+    output: true
+    permalink: /technical-notes/duckdb/:name/
+
 # Plugins supported by GitHub Pages
 plugins:
   - jekyll-gist
@@ -38,6 +43,14 @@ sass:
   style: compressed
 
 defaults:
+  - scope:
+      path: ""
+      type: duckdb
+    values:
+      layout: duckdb
+      image: /head.jpg
+      lang: zh-CN
+      toc: true
   - scope:
       path: ""
       type: posts

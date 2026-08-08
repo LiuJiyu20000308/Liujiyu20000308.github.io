@@ -1,0 +1,46 @@
+---
+layout: default
+---
+
+{% assign chapters = site.duckdb | sort: 'order' %}
+{% assign current_index = nil %}
+{% for chapter in chapters %}
+  {% if chapter.url == page.url %}{% assign current_index = forloop.index0 %}{% endif %}
+{% endfor %}
+
+<article class="post shell shell-reading duckdb-chapter">
+  <header class="post-header">
+    <a class="back-link" href="{{ '/technical-notes/duckdb/' | relative_url }}">← DuckDB 技术文档</a>
+    <p class="series-label">DUCKDB INTERNALS · CHAPTER {{ page.order }}</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}<p class="chapter-summary">{{ page.summary }}</p>{% endif %}
+  </header>
+
+  {% if page.toc %}
+    <details class="post-toc" open>
+      <summary>本章目录</summary>
+      {% include toc.html html=content h_min=2 h_max=3 skipNoIDs=true class="toc" %}
+    </details>
+  {% endif %}
+
+  <div class="prose">
+    {{ content }}
+  </div>
+
+  <nav class="chapter-pagination" aria-label="DuckDB chapter navigation">
+    {% if current_index != nil %}
+      {% assign previous_index = current_index | minus: 1 %}
+      {% assign next_index = current_index | plus: 1 %}
+      {% if previous_index >= 0 %}
+        {% assign previous_chapter = chapters[previous_index] %}
+        <a href="{{ previous_chapter.url | relative_url }}"><span>上一章</span>{{ previous_chapter.title }}</a>
+      {% else %}
+        <span></span>
+      {% endif %}
+      {% if next_index < chapters.size %}
+        {% assign next_chapter = chapters[next_index] %}
+        <a class="chapter-next" href="{{ next_chapter.url | relative_url }}"><span>下一章</span>{{ next_chapter.title }}</a>
+      {% endif %}
+    {% endif %}
+  </nav>
+</article>
