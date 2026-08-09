@@ -15,14 +15,11 @@ The portfolio is intentionally data-driven:
 - `_data/education.yml` and `_data/honors.yml`: résumé data;
 - `_posts/`: historical technical notes.
 
-`assets/Liujiyu_CV_zh.pdf` is the default Chinese CV, and
-`assets/Jiyu_Liu_Resume.pdf` is the English version. Both are privacy-safe
-public documents generated from the corresponding résumé pages. The private
-application résumé is intentionally kept outside this repository.
+`assets/Liujiyu_CV.pdf` is the canonical résumé. It is copied directly from
+the author-maintained PDF rather than generated from an HTML résumé page.
 
 Update these files instead of duplicating content across pages. Do not publish
-phone numbers, private repository links, internal identifiers, unpublished
-implementation details, or unconfirmed publication metadata.
+private repository links or unconfirmed publication metadata.
 
 ## Local build
 
@@ -40,6 +37,4 @@ builds the site from the source files on the default branch.
 - `/experience/` — work history and impact;
 - `/projects/` — systems and numerical-computing work;
 - `/notes/` — technical notes and retained learning archive;
-- `/resume/` — printable public résumé;
-- `/assets/Liujiyu_CV_zh.pdf` — default privacy-safe Chinese CV;
-- `/assets/Jiyu_Liu_Resume.pdf` — privacy-safe English CV.
+- `/assets/Liujiyu_CV.pdf` — canonical résumé PDF.

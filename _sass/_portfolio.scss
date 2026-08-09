@@ -227,28 +227,6 @@ h4 {
   font-size: .82rem;
 }
 
-.cv-actions {
-  display: flex;
-  align-items: center;
-  gap: .9rem;
-  margin-top: .25rem;
-}
-
-.cv-actions .cv-link {
-  margin-top: 0;
-}
-
-.cv-secondary-link {
-  color: #fff;
-  font-size: .8rem;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.cv-secondary-link:hover {
-  color: #fff;
-}
-
 .cv-link:hover {
   color: var(--hero);
   background: #fff;
@@ -760,8 +738,7 @@ h4 {
   font-size: 1.1rem;
 }
 
-.contact-links,
-.resume-actions {
+.contact-links {
   display: flex;
   flex-wrap: wrap;
   gap: .6rem;
@@ -796,101 +773,6 @@ h4 {
 .button-primary:hover {
   color: #fff;
   background: var(--accent-dark);
-}
-
-.resume-actions {
-  margin-bottom: 1.5rem;
-}
-
-.resume-document {
-  padding: 2rem;
-  border: 1px solid var(--line);
-}
-
-.resume-header {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #243640;
-}
-
-.resume-header h2 {
-  margin-bottom: .2rem;
-  font-size: 1.7rem;
-}
-
-.resume-header h2 span {
-  color: var(--muted);
-  font-size: .9rem;
-}
-
-.resume-header p {
-  margin-bottom: 0;
-  color: var(--muted);
-  font-size: .83rem;
-}
-
-.resume-contact {
-  display: grid;
-  align-content: start;
-  justify-items: end;
-  font-size: .75rem;
-}
-
-.resume-document > section {
-  padding-top: 1rem;
-}
-
-.resume-document > section > h3 {
-  padding-bottom: .2rem;
-  margin-bottom: .5rem;
-  color: var(--hero);
-  border-bottom: 1px solid var(--line);
-  font-size: .72rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
-
-.resume-entry + .resume-entry {
-  margin-top: .8rem;
-}
-
-.resume-entry-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.resume-entry-heading h4 {
-  margin-bottom: .2rem;
-  font-size: .9rem;
-}
-
-.resume-entry-heading span {
-  flex: 0 0 auto;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: .65rem;
-}
-
-.resume-entry p,
-.resume-entry li,
-.resume-document > section > p,
-.resume-skills p {
-  margin-bottom: .2rem;
-  color: #46545f;
-  font-size: .76rem;
-}
-
-.resume-entry ul {
-  padding-left: 1rem;
-  margin: .2rem 0 0;
-}
-
-.resume-document-zh {
-  font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", var(--font-sans);
 }
 
 .post {
@@ -1063,9 +945,7 @@ h4 {
 
   .entry-heading,
   .entry-header,
-  .contact-panel,
-  .resume-header,
-  .resume-entry-heading {
+  .contact-panel {
     display: block;
   }
 
@@ -1075,8 +955,7 @@ h4 {
     margin-top: .25rem;
   }
 
-  .entry-meta,
-  .resume-contact {
+  .entry-meta {
     justify-items: start;
   }
 
@@ -1129,10 +1008,6 @@ h4 {
     font-size: 1.65rem;
   }
 
-  .resume-contact {
-    margin-top: .5rem;
-  }
-
   .footer-inner {
     align-items: flex-start;
     flex-direction: column;
@@ -1160,97 +1035,7 @@ h4 {
 
   .site-header,
   .site-footer,
-  .resume-page .page-heading,
-  .resume-actions,
   .skip-link {
     display: none !important;
-  }
-
-  .resume-page .page-content {
-    width: 100%;
-    max-width: none;
-    padding: 0;
-  }
-
-  .resume-document {
-    padding: 0;
-    border: 0;
-  }
-
-  .resume-header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
-    padding-bottom: .45rem;
-  }
-
-  .resume-header h2 {
-    font-size: 16pt;
-  }
-
-  .resume-contact {
-    display: grid;
-    justify-items: end;
-  }
-
-  .resume-document a {
-    color: #111;
-    text-decoration: none;
-  }
-
-  .resume-document > section {
-    padding-top: .52rem;
-  }
-
-  .resume-document > section > h3 {
-    padding-bottom: .1rem;
-    margin-bottom: .2rem;
-    font-size: 6.8pt;
-  }
-
-  .resume-entry {
-    break-inside: avoid;
-  }
-
-  .resume-entry + .resume-entry {
-    margin-top: .35rem;
-  }
-
-  .resume-entry-heading h4 {
-    font-size: 8pt;
-  }
-
-  .resume-entry p,
-  .resume-entry li,
-  .resume-document > section > p,
-  .resume-skills p {
-    margin-bottom: .12rem;
-    font-size: 7.2pt;
-    line-height: 1.28;
-  }
-
-  .resume-document-zh > section {
-    padding-top: .7rem;
-  }
-
-  .resume-document-zh > section > h3 {
-    font-size: 7.5pt;
-  }
-
-  .resume-document-zh .resume-entry + .resume-entry {
-    margin-top: .5rem;
-  }
-
-  .resume-document-zh .resume-entry-heading h4 {
-    font-size: 9pt;
-  }
-
-  .resume-document-zh .resume-entry p,
-  .resume-document-zh .resume-entry li,
-  .resume-document-zh > section > p,
-  .resume-document-zh .resume-skills p {
-    margin-bottom: .16rem;
-    font-size: 8.35pt;
-    line-height: 1.34;
   }
 }
