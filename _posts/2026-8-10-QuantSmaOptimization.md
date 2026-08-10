@@ -75,15 +75,21 @@ instrument_history_prices[current_tick.instrument_id];
 O(N * (log M + W))
 ```
 
-### 1.2 先明确结果到底要不要保存
+### 1.2 明确本题的历史数据语义
 
-原程序维护 `instrument_sma_results`，但最后没有读取它。需要先问清需求：
+这里的需求是每个合约同时保留两段历史：
 
-1. 策略只需要当前 SMA：每个合约只保存一个 `latest_sma`；
-2. 下游需要每笔 SMA：计算后立即传给策略或持久化模块；
-3. 只是做 benchmark：累加一个 checksum，防止计算结果完全没有观察者。
+1. 最近 100 个 price；
+2. 最近 100 个与 Tick 一一对应的 SMA 结果。
 
-下面的第一版按“只需要最新 SMA，并用 checksum 验证计算确实执行”实现。
+每收到一个有效 price，都必须产生一条 SMA 记录：
+
+- 当前 price 历史不足 100 个时，SMA 记录为 `NaN`；
+- 收到第 100 个 price 时，第一次得到有效 SMA；
+- 第 101 个 price 到来后，淘汰最旧 price，并计算新的 SMA；
+- SMA 历史同样只保留最近 100 条，淘汰规则与 Tick 顺序对齐。
+
+因此不能像上一稿那样只保存 `latest_sma`。下面每个版本都保留 100 个 price 和 100 个 SMA；checksum 只用于 benchmark 校验，不替代 SMA 历史。
 
 ## 2. 第一版：只改 SMA 计算，其他架构全部保留
 
@@ -91,7 +97,7 @@ O(N * (log M + W))
 
 1. `vector<double>` 改为 `deque<double>`，使用 `pop_front()` 删除最旧价格；
 2. 每个合约保存 `sum`，新价格加入时加上，旧价格离开时减掉；
-3. 不再维护没有下游消费者的 SMA 历史，只保存 `latest_sma`。
+3. SMA 结果也改成 `deque`，每个 Tick 写入一条，并只保留最近 100 条。
 
 以下部分故意不改：
 
@@ -138,8 +144,8 @@ inline constexpr std::size_t kSmaWindowSize = 100;
 // 第一版的新状态：仍由 map 保存，但窗口使用 deque，并额外维护 rolling sum。
 struct InstrumentSmaState {
     std::deque<double> prices;
+    std::deque<double> sma_history;
     double sum = 0.0;
-    double latest_sma = std::numeric_limits<double>::quiet_NaN();
 };
 
 void producer(int num_ticks, int num_instruments) {
@@ -172,6 +178,8 @@ void consumer() {
     std::map<int, InstrumentSmaState> states;
 
     std::uint64_t processed_count = 0;
+    std::uint64_t sma_output_count = 0;
+    std::uint64_t nan_count = 0;
     std::uint64_t ready_count = 0;
     double checksum = 0.0;
 
@@ -193,11 +201,6 @@ void consumer() {
             g_tick_queue.pop();
         }
 
-        // 非有限价格不能进入 rolling sum，否则该合约后续结果会一直是 NaN。
-        if (!std::isfinite(tick.price)) {
-            continue;
-        }
-
         InstrumentSmaState& state = states[tick.instrument_id];
 
         // 步骤 1：新价格进入窗口，同时加入 rolling sum。
@@ -210,19 +213,42 @@ void consumer() {
             state.prices.pop_front();
         }
 
-        // 步骤 3：只有窗口恰好填满后才产生 SMA。
+        // 步骤 3：先把本 Tick 的结果初始化为 NaN。
+        // price 不足 100 个时，NaN 就是本 Tick 应保存和返回的结果。
+        double current_sma = std::numeric_limits<double>::quiet_NaN();
+
+        // 步骤 4：只有 price 窗口恰好填满后才计算有效 SMA。
         if (state.prices.size() == kSmaWindowSize) {
-            state.latest_sma =
-                state.sum / static_cast<double>(kSmaWindowSize);
-            checksum += state.latest_sma;
+            current_sma = state.sum / static_cast<double>(kSmaWindowSize);
+            checksum += current_sma;
             ++ready_count;
+        } else {
+            ++nan_count;
         }
 
+        // 步骤 5：每个 Tick 都保存一条 SMA；历史最多保留最近 100 条。
+        state.sma_history.push_back(current_sma);
+        if (state.sma_history.size() > kSmaWindowSize) {
+            state.sma_history.pop_front();
+        }
+
+        ++sma_output_count;
         ++processed_count;
     }
 
+    std::size_t retained_price_count = 0;
+    std::size_t retained_sma_count = 0;
+    for (const auto& entry : states) {
+        retained_price_count += entry.second.prices.size();
+        retained_sma_count += entry.second.sma_history.size();
+    }
+
     std::cout << "processed=" << processed_count
+              << " sma_outputs=" << sma_output_count
+              << " nan=" << nan_count
               << " ready=" << ready_count
+              << " retained_price=" << retained_price_count
+              << " retained_sma=" << retained_sma_count
               << " checksum=" << checksum << '\n';
 }
 
@@ -244,13 +270,13 @@ int main() {
 成熟窗口每个 Tick 的计算从：
 
 ```text
-移动 99 个价格 + 移动结果 + 遍历 100 个价格
+移动 99 个价格 + 移动 99 个 SMA + 遍历 100 个价格
 ```
 
 变成：
 
 ```text
-push_back + sum 加新值 + sum 减旧值 + pop_front
+price push/pop + sum 加新值/减旧值 + SMA history push/pop
 ```
 
 窗口维护从 `O(W)` 降为摊还 `O(1)`。整个 consumer 仍包含 `map` 查询，因此总体近似为：
@@ -266,7 +292,8 @@ O(N log M)
 - 共享队列仍是无界的；
 - 生产者和消费者仍逐 Tick 争用 mutex；
 - 多消费者仍不能安全扩展；
-- `double` rolling sum 仍会逐渐积累舍入误差。
+- `double` rolling sum 仍会逐渐积累舍入误差；
+- 还没有封装“每次 update 必须返回一个数，未成熟时返回 NaN”的接口。
 
 这些问题留到后续版本，不在第一版一次解决。
 
@@ -287,6 +314,14 @@ if (error > 1e-10) {
 100 * (10000 - 99) = 990100
 ```
 
+同时还应满足：
+
+```text
+SMA 输出总数 = 1,000,000
+NaN 输出总数 = 100 * 99 = 9,900
+最终保留的 SMA 历史数 = 100 个合约 * 每个 100 条 = 10,000
+```
+
 ## 3. 第二版：只改合约状态和内存布局
 
 第一版已经消除了最明显的 `O(W)` 重复工作。第二版再解决 `map + deque` 的查找、分配和 cache locality，但仍保留原来的全局 mutex 队列。
@@ -294,8 +329,8 @@ if (error > 1e-10) {
 ### 3.1 相对第一版改什么
 
 1. 合约 ID 已知是 `[0, num_instruments)`，所以 `map` 改为 `vector`；
-2. SMA 窗口固定为 100，所以 `deque` 改为 `std::array<double, 100>`；
-3. 使用 `next_` 指向下一次覆盖位置，形成真正的环形窗口；
+2. price 和 SMA 历史都固定为 100，所以两个 `deque` 都改为 `std::array<double, 100>`；
+3. 两段历史分别使用 `next_` 指向下一次覆盖位置，形成真正的环形窗口；
 4. 每隔一段时间完整重算窗口和，限制浮点累计误差。
 
 队列、生产者、结束标志和单消费者仍保持第一版不变。
@@ -305,14 +340,48 @@ if (error > 1e-10) {
 ```cpp
 #include <array>
 #include <cstddef>
-#include <optional>
+#include <limits>
+#include <stdexcept>
+
+// 通用的固定长度历史：写满后覆盖最旧元素，始终只保留最近 Capacity 条。
+template <typename T, std::size_t Capacity>
+class FixedHistory {
+    static_assert(Capacity > 0);
+
+public:
+    void push(const T& value) {
+        values_[next_] = value;
+        next_ = (next_ + 1) % Capacity;
+        if (count_ < Capacity) {
+            ++count_;
+        }
+    }
+
+    std::size_t size() const noexcept {
+        return count_;
+    }
+
+    // 按“从旧到新”的逻辑顺序读取，而不是按 array 的物理下标读取。
+    const T& oldest_at(std::size_t offset) const {
+        if (offset >= count_) {
+            throw std::out_of_range("history offset out of range");
+        }
+        const std::size_t oldest = count_ < Capacity ? 0 : next_;
+        return values_[(oldest + offset) % Capacity];
+    }
+
+private:
+    std::array<T, Capacity> values_{};
+    std::size_t next_ = 0;
+    std::size_t count_ = 0;
+};
 
 template <std::size_t Window>
 class RollingSma {
     static_assert(Window > 0);
 
 public:
-    std::optional<double> update(double price) {
+    double update(double price) {
         if (count_ < Window) {
             // 窗口未满：next_ 指向尚未使用的位置。
             values_[next_] = price;
@@ -336,10 +405,15 @@ public:
             updates_until_rebase_ = kRebaseInterval;
         }
 
+        // 每个 price 都返回一个结果；不足 Window 时按需求返回 NaN。
         if (count_ < Window) {
-            return std::nullopt;
+            return std::numeric_limits<double>::quiet_NaN();
         }
         return sum_ * kInverseWindow;
+    }
+
+    std::size_t size() const noexcept {
+        return count_;
     }
 
 private:
@@ -353,6 +427,35 @@ private:
     std::size_t updates_until_rebase_ = kRebaseInterval;
     double sum_ = 0.0;
 };
+
+template <std::size_t Window>
+class InstrumentState {
+public:
+    double on_price(double price) {
+        const double sma = price_window_.update(price);
+        sma_history_.push(sma);  // NaN 和有效 SMA 都进入最近 100 条历史。
+        return sma;
+    }
+
+    double on_invalid_price() {
+        // 非法 price 不污染 price window，但当前 Tick 仍留下一个 NaN 结果。
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        sma_history_.push(nan);
+        return nan;
+    }
+
+    const FixedHistory<double, Window>& sma_history() const noexcept {
+        return sma_history_;
+    }
+
+    std::size_t price_history_size() const noexcept {
+        return price_window_.size();
+    }
+
+private:
+    RollingSma<Window> price_window_;            // 最近 100 个有效 price。
+    FixedHistory<double, Window> sma_history_;  // 最近 100 个对应输出。
+};
 ```
 
 ### 3.3 consumer 只替换状态部分
@@ -362,9 +465,11 @@ private:
 ```cpp
 void consumer(std::size_t instrument_count) {
     // ID 稠密时，states[id] 比 map 查找更直接且内存连续。
-    std::vector<RollingSma<100>> states(instrument_count);
+    std::vector<InstrumentState<100>> states(instrument_count);
 
     std::uint64_t processed_count = 0;
+    std::uint64_t sma_output_count = 0;
+    std::uint64_t nan_count = 0;
     std::uint64_t ready_count = 0;
     double checksum = 0.0;
 
@@ -384,16 +489,23 @@ void consumer(std::size_t instrument_count) {
         }
 
         if (tick.instrument_id < 0 ||
-            static_cast<std::size_t>(tick.instrument_id) >= states.size() ||
-            !std::isfinite(tick.price)) {
+            static_cast<std::size_t>(tick.instrument_id) >= states.size()) {
             continue;
         }
 
         auto& state = states[static_cast<std::size_t>(tick.instrument_id)];
-        if (auto sma = state.update(tick.price)) {
-            checksum += *sma;
+        const double sma = std::isfinite(tick.price)
+            ? state.on_price(tick.price)
+            : state.on_invalid_price();
+
+        // NaN 是合法的 warm-up 输出，但不进入数值 checksum。
+        if (!std::isnan(sma)) {
+            checksum += sma;
             ++ready_count;
+        } else {
+            ++nan_count;
         }
+        ++sma_output_count;
         ++processed_count;
     }
 }
@@ -410,7 +522,7 @@ i % num_instruments
 真实市场的 instrument ID 如果非常稀疏，直接按最大 ID 创建 vector 会浪费大量空间。此时第二版应改为：
 
 ```cpp
-std::unordered_map<int, RollingSma<100>> states;
+std::unordered_map<int, InstrumentState<100>> states;
 states.reserve(expected_instrument_count);
 ```
 
@@ -578,8 +690,11 @@ batch.reserve(kBatchSize);
 while (queue.pop_batch(batch, kBatchSize) != 0) {
     // pop_batch 返回时已经释放队列锁。
     for (const MarketDataTick& tick : batch) {
-        if (auto sma = states[tick.instrument_id].update(tick.price)) {
-            checksum += *sma;
+        const double sma = states[tick.instrument_id].on_price(tick.price);
+        // state 内部已经把本次结果写入最近 100 条 SMA 历史。
+        // warm-up 阶段的 NaN 不参与 checksum，但仍是正式输出。
+        if (!std::isnan(sma)) {
+            checksum += sma;
         }
     }
 }
@@ -727,8 +842,8 @@ volumes[]
 | 版本 | 只解决什么 | 保留什么 | 计算复杂度 |
 |---|---|---|---:|
 | 原始版 | 基本生产消费链路 | `map + vector + 完整求和` | `O(N(log M+W))` |
-| 第一版 | 头删和重复求和 | `map + 原队列 + 单消费者` | `O(N log M)` |
-| 第二版 | map/deque 查找与分配 | 原 mutex 队列、单消费者 | `O(N)` |
+| 第一版 | price/SMA 头删和重复求和 | `map + 两段 100 条历史 + 原队列` | `O(N log M)` |
+| 第二版 | map/deque 查找与分配 | 两个固定环形历史、原 mutex 队列 | `O(N)` |
 | 第三版 | 无界队列和逐条同步 | 单生产者、单消费者 | `O(N)`，同步按 batch 摊薄 |
 | 第四版 | 单消费者 CPU 瓶颈 | 每个合约单写、有序 | 多 shard 并行 |
 | 第五版 | 剩余同步/cache/NUMA | 前面已经验证的语义 | 依硬件与实现而定 |
@@ -753,6 +868,16 @@ volumes[]
 | 第三版 | 待测 | 待测 | 待测 | 待测 | 记录 | 必须一致 |
 | 第四版 | 待测 | 待测 | 待测 | 待测 | 分 shard 记录 | 必须一致 |
 
+性能指标之外，每一版还必须满足同一组功能指标：
+
+```text
+每个有效 Tick 恰好产生一条 SMA 输出
+每个合约 price 不足 100 条时输出 NaN
+第 100 条 price 开始输出有限 SMA
+每个合约最终只保留最近 100 个 price 和最近 100 个 SMA
+按逻辑时间顺序遍历环形历史时，两段数据保持对齐
+```
+
 ### 8.1 基准测试规则
 
 1. Release 编译：`-O3 -DNDEBUG -march=native -pthread`；
@@ -760,7 +885,7 @@ volumes[]
 3. `steady_clock` 测耗时，交易所时间戳使用行情源字段；
 4. 先 warm-up，再多次运行，报告中位数和波动范围；
 5. 分开测试纯 SMA kernel、queue 和端到端；
-6. 对每个合约、每个成熟窗口与 reference 逐点比较；
+6. 对每个合约逐点比较：warm-up 位置必须同为 NaN，成熟窗口必须在容差内一致；
 7. 同时报吞吐和 P99，batch 提升吞吐不代表延迟更低；
 8. 用 checksum 防止无观察者计算，但 checksum 不能替代逐点对拍；
 9. 使用 `perf stat`、火焰图、ThreadSanitizer 和 UBSan 验证判断。
@@ -801,11 +926,11 @@ volumes[]
 
 ### 10.1 第一层：先说第一版
 
-> 我不会一上来就把它改成 lock-free。先看原 consumer，每个成熟 Tick 都会 `vector.erase(begin())` 搬移窗口、再遍历 100 个价格求和。我第一版保留原来的 map、mutex、condition_variable 和单生产者单消费者，只把价格窗口改成 deque，并给每个合约维护 rolling sum。新值进来加上，窗口超长就减掉并 pop_front 最旧值，这样窗口更新从 O(W) 变成 O(1)。原来的 SMA 结果 vector 没有消费者，我会先只保存最新值或用 checksum 验证。
+> 我不会一上来就把它改成 lock-free。先看原 consumer，每个成熟 Tick 都会对 price 和 SMA 历史执行 `vector.erase(begin())`，还要重新遍历 100 个 price 求和。第一版保留原来的 map、mutex、condition_variable 和单生产者单消费者，只把两段历史改成 deque，并为每个合约维护 rolling sum。每个 Tick 都向 SMA 历史写一条结果：price 不足 100 个就写 NaN，第 100 个开始写实际 SMA；两段历史都只保留最近 100 条。这样既保留原需求，又把窗口维护从 O(W) 降成 O(1)。
 
 ### 10.2 对方继续问，再说第二版
 
-> 第一版之后还有每 Tick 的 map 查找和 deque 分段存储。模拟代码的 instrument_id 是连续的，所以第二版把状态改成 vector，下标直接定位合约；窗口固定 100，就用 array 做环形缓冲区。这样 map 查找、节点分配和窗口动态分配都去掉，计算部分整体做到 O(N)。如果真实 ID 稀疏，则用提前 reserve 的 unordered_map，而不是盲目按最大 ID 开 vector。
+> 第一版之后还有每 Tick 的 map 查找和 deque 分段存储。模拟代码的 instrument_id 是连续的，所以第二版把合约状态改成 vector，下标直接定位；price window 和 SMA history 都固定为 100，就分别用 array 做环形缓冲区。SMA update 直接返回 double，warm-up 返回 NaN，并把这个返回值写入第二个环。这样既保持两段 100 条历史，也去掉 map 查找、节点分配和窗口动态分配，计算部分整体做到 O(N)。
 
 ### 10.3 对方继续问并发，再说第三、四版
 
@@ -837,17 +962,22 @@ volumes[]
 
 因为它只优化传输同步，不会解决原来的 `O(W)` 计算和 map 查找，而且内存序、关闭、满队列和忙等策略更容易写错。先完成低风险优化，再用 profiling 判断同步是否值得复杂化。
 
+### Q7：为什么 warm-up 返回 NaN，不用 optional？
+
+这里需要让 price 序列和 SMA 序列按 Tick 一一对齐，所以每个输入都必须占据一个输出位置。`NaN` 能明确表示“这个位置存在，但窗口尚未成熟”；使用 `optional` 也能表达未就绪，却会让调用方额外决定是否向历史写占位值。既然接口要求固定长度数值历史，就直接返回并保存 NaN，但后续聚合、比较和 checksum 必须显式用 `std::isnan()` 排除它。
+
 ## 12. 最终检查清单
 
-- [ ] 第一版只改 deque + rolling sum，结果与 reference 逐点一致；
-- [ ] 第二版再改 vector state + fixed ring，单独测收益；
+- [ ] 第一版使用两个 deque 保留最近 100 个 price 和 SMA，并用 rolling sum；
+- [ ] 每个有效 Tick 都产生 SMA 记录，前 99 个为 NaN，第 100 个开始有效；
+- [ ] 第二版再把两段历史改为 fixed ring，并按逻辑时间顺序验证对齐；
 - [ ] 第三版先定义背压，再增加 batch；
 - [ ] 第四版按 instrument_id 分片，验证合约内 sequence 单调；
 - [ ] 第五版只在 profiling 支持时进入；
 - [ ] 明确是 Tick 数窗口还是时间窗口；
 - [ ] 处理 NaN、Inf、非法 ID、重复、丢包和乱序；
 - [ ] rolling sum 定期校准或使用定点价格；
-- [ ] 每版 checksum 和成熟结果数量一致；
+- [ ] 每版 SMA 输出数、NaN 数、成熟结果数、保留历史数和 checksum 一致；
 - [ ] 同时记录吞吐、P99、queue depth、CPU 和丢弃数；
 - [ ] 使用固定回放、Release 编译和多轮统计；
 - [ ] 使用 sanitizer 与 perf 验证正确性和瓶颈。
