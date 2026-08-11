@@ -73,7 +73,7 @@ Y = conv(X)  # [32, 64, 224, 224]
 设输入高为 $H$、总 padding 为每侧 $P$、卷积核大小 $K$、stride 为 $S$、dilation 为 $D$，则
 
 $$
-H_{out}=left\lfloor
+H_{out}=\left\lfloor
 \frac{H+2P-D(K-1)-1}{S}+1
 \right\rfloor,
 $$
