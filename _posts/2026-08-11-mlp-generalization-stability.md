@@ -302,7 +302,7 @@ $$
 
 - 上一篇：[从线性回归到 softmax 分类]({{ '/deep-learning/linear-models/' | relative_url }})
 - [系列总览]({{ '/deep-learning/' | relative_url }})
-- 下一篇：[PyTorch 工程实践与完整建模流程]({{ '/deep-learning/pytorch-engineering/' | relative_url }})
+- 下一篇：[PyTorch 深度学习计算与工程实践]({{ '/deep-learning/pytorch-engineering/' | relative_url }})
 
 ## 对应章节与参考资料
 
