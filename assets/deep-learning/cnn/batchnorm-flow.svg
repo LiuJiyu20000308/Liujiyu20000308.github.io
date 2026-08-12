@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="330" viewBox="0 0 960 330" role="img" aria-labelledby="title desc">
+  <title id="title">Batch Normalization 数据流</title>
+  <desc id="desc">卷积输出依次经过批统计标准化、可学习缩放平移和激活函数。训练使用当前批统计并更新运行统计，推理使用运行统计。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#39576a"/></marker>
+    <style>
+      .box{fill:#f7fafc;stroke:#315d75;stroke-width:2;rx:12}.accent{fill:#e9f4ff;stroke:#1f65b5}.train{fill:#eef8ef;stroke:#39834b}.infer{fill:#fff4e8;stroke:#c2701c}.t{font:600 17px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#17212a;text-anchor:middle}.s{font:14px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#394b57;text-anchor:middle}.arrow{stroke:#39576a;stroke-width:2;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect class="box" x="35" y="80" width="130" height="80"/><text class="t" x="100" y="112">Conv / Linear</text><text class="s" x="100" y="138">输出 x</text>
+  <path class="arrow" d="M165 120 H215"/>
+  <rect class="box accent" x="215" y="55" width="210" height="130"/><text class="t" x="320" y="92">标准化</text><text class="s" x="320" y="120">x̂=(x−μ)/√(σ²+ε)</text><text class="s" x="320" y="148">每个通道独立统计</text>
+  <path class="arrow" d="M425 120 H475"/>
+  <rect class="box accent" x="475" y="80" width="170" height="80"/><text class="t" x="560" y="112">仿射变换</text><text class="s" x="560" y="138">y=γx̂+β</text>
+  <path class="arrow" d="M645 120 H695"/>
+  <rect class="box" x="695" y="80" width="130" height="80"/><text class="t" x="760" y="112">ReLU</text><text class="s" x="760" y="138">激活输出</text>
+  <path class="arrow" d="M825 120 H915"/>
+  <text class="t" x="870" y="106">下一层</text>
+
+  <rect class="box train" x="215" y="225" width="270" height="72"/><text class="t" x="350" y="251">训练：当前 mini-batch</text><text class="s" x="350" y="277">计算 μB、σ²B，并更新 running stats</text>
+  <path class="arrow" d="M320 225 V188"/>
+  <rect class="box infer" x="520" y="225" width="270" height="72"/><text class="t" x="655" y="251">推理：运行统计</text><text class="s" x="655" y="277">读取 running_mean、running_var</text>
+  <path class="arrow" d="M655 225 C590 195 505 195 400 183"/>
+</svg>

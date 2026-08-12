@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-labelledby="title desc">
+  <title id="title">Inception V3 主干架构</title>
+  <desc id="desc">299×299 输入经过 stem、三个 Inception-A、Reduction-A、四个 Inception-B、Reduction-B、两个 Inception-C，最后全局平均池化、Dropout 和分类层。</desc>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#46616f"/></marker>
+    <style>
+      .b{stroke-width:2;rx:12}.stem{fill:#eef4f7;stroke:#456474}.inc{fill:#e9f4ff;stroke:#1f65b5}.red{fill:#fff0df;stroke:#bf6b16}.head{fill:#eef8ef;stroke:#39834b}.t{font:600 17px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#17212a;text-anchor:middle}.s{font:14px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#41515b;text-anchor:middle}.arr{stroke:#46616f;stroke-width:2;fill:none;marker-end:url(#a)}.note{font:13px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#5b6870}
+    </style>
+  </defs>
+  <text class="t" x="480" y="30">Inception V3：从 299×299 到分类 logits</text>
+  <rect class="b stem" x="340" y="52" width="280" height="72"/><text class="t" x="480" y="80">输入 299×299×3</text><text class="s" x="480" y="105">Stem：3×3 conv / pool / 1×1 conv</text>
+  <path class="arr" d="M480 124 V154"/>
+  <rect class="b inc" x="315" y="154" width="330" height="78"/><text class="t" x="480" y="183">Inception-A × 3</text><text class="s" x="480" y="208">35×35；1×1、5×5、双 3×3、pool 分支</text>
+  <path class="arr" d="M480 232 V262"/>
+  <rect class="b red" x="340" y="262" width="280" height="68"/><text class="t" x="480" y="288">Reduction-A</text><text class="s" x="480" y="312">35×35 → 17×17</text>
+  <path class="arr" d="M480 330 V360"/>
+  <rect class="b inc" x="300" y="360" width="360" height="78"/><text class="t" x="480" y="389">Inception-B × 4</text><text class="s" x="480" y="414">17×17；7×7 分解为 1×7 + 7×1</text>
+  <path class="arr" d="M480 438 V468"/>
+  <rect class="b red" x="340" y="468" width="280" height="68"/><text class="t" x="480" y="494">Reduction-B</text><text class="s" x="480" y="518">17×17 → 8×8</text>
+  <path class="arr" d="M480 536 V566"/>
+  <rect class="b inc" x="300" y="566" width="360" height="72"/><text class="t" x="480" y="593">Inception-C × 2</text><text class="s" x="480" y="617">8×8；分支再拆成 1×3 与 3×1</text>
+
+  <rect class="b head" x="690" y="476" width="230" height="150"/><text class="t" x="805" y="510">分类头</text><text class="s" x="805" y="541">AdaptiveAvgPool(1)</text><text class="s" x="805" y="567">Dropout</text><text class="s" x="805" y="593">Linear(2048, classes)</text>
+  <path class="arr" d="M660 602 H690"/>
+  <text class="note" x="26" y="678">每个 BasicConv2d 都是 Conv → BatchNorm → ReLU。</text>
+  <text class="note" x="26" y="704">训练时可在 17×17 阶段接辅助分类器；推理只返回主分类头。</text>
+</svg>

@@ -865,6 +865,41 @@ h4 {
   border: 1px solid var(--line);
 }
 
+.network-figure {
+  padding: 1rem;
+  margin: 1.4rem 0 1.75rem;
+  overflow-x: auto;
+  background: #fbfcfd;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.network-figure img {
+  width: auto;
+  max-width: 100%;
+  max-height: 680px;
+  margin: 0 auto;
+  border-radius: 0;
+}
+
+.network-figure-wide img {
+  min-width: 700px;
+}
+
+.network-figure-tall img {
+  width: min(100%, 260px);
+  max-height: none;
+}
+
+.network-figure figcaption {
+  max-width: 680px;
+  margin: .8rem auto 0;
+  color: var(--muted);
+  font-size: .78rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
 .site-footer {
   padding: 2.2rem 0;
   color: var(--muted);
