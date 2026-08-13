@@ -122,34 +122,116 @@ DDP本身不创建进程。命令中的`--nproc-per-node=2`让`torchrun`在本�
 torchrun --standalone --nproc-per-node=2 assets/code/single-node-ddp.py
 ```
 
-完整的可运行示例见[单机多卡DDP源码]({{ '/assets/code/single-node-ddp.py' | relative_url }})，核心结构如下：
+下面是完整源码，不依赖Notebook中的变量；为了让重点落在DDP流程上，数据集用样本编号生成确定性数据：
 
 ```python
-local_rank = int(os.environ["LOCAL_RANK"])
-torch.cuda.set_device(local_rank)
-device = torch.device("cuda", local_rank)
-dist.init_process_group("nccl", init_method="env://", device_id=device)
+import os
+import torch
+import torch.distributed as dist
+from torch import nn
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.utils.data import DataLoader, Dataset
+from torch.utils.data.distributed import DistributedSampler
 
-sampler = DistributedSampler(dataset, shuffle=True)
-loader = DataLoader(dataset, batch_size=128, sampler=sampler)
-model = DDP(model.to(device), device_ids=[local_rank])
 
-for epoch in range(epochs):
-    sampler.set_epoch(epoch)
-    for x, y in loader:
-        optimizer.zero_grad(set_to_none=True)
-        loss = criterion(model(x.to(device)), y.to(device))
-        loss.backward()                # 自动同步梯度
-        optimizer.step()
+class ToyDataset(Dataset):
+    def __init__(self, size=4096, features=32):
+        self.size, self.features = size, features
 
-if dist.get_rank() == 0:
-    torch.save(model.module.state_dict(), "model.pt")
-dist.destroy_process_group()
+    def __len__(self):
+        return self.size
+
+    def __getitem__(self, index):
+        generator = torch.Generator().manual_seed(index)
+        x = torch.randn(self.features, generator=generator)
+        return x, (x.sum() > 0).long()
+
+
+def main():
+    if not torch.cuda.is_available():
+        raise RuntimeError("该示例需要支持CUDA的PyTorch")
+
+    # torchrun为每个进程设置LOCAL_RANK、RANK和WORLD_SIZE。
+    local_rank = int(os.environ["LOCAL_RANK"])
+    torch.cuda.set_device(local_rank)
+    device = torch.device("cuda", local_rank)
+    dist.init_process_group("nccl", init_method="env://", device_id=device)
+    rank = dist.get_rank()
+
+    try:
+        dataset = ToyDataset()
+        sampler = DistributedSampler(dataset, shuffle=True)
+        loader = DataLoader(
+            dataset, batch_size=128, sampler=sampler,
+            num_workers=2, pin_memory=True)
+
+        model = nn.Sequential(
+            nn.Linear(32, 64), nn.ReLU(), nn.Linear(64, 2)
+        ).to(device)
+        model = DDP(model, device_ids=[local_rank])
+        optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
+        criterion = nn.CrossEntropyLoss()
+
+        for epoch in range(5):
+            sampler.set_epoch(epoch)
+            model.train()
+            for x, y in loader:
+                x = x.to(device, non_blocking=True)
+                y = y.to(device, non_blocking=True)
+                optimizer.zero_grad(set_to_none=True)
+                loss = criterion(model(x), y)
+                loss.backward()          # DDP在这里自动同步梯度
+                optimizer.step()
+
+            if rank == 0:
+                print(f"epoch={epoch + 1}, last_loss={loss.item():.4f}")
+
+        if rank == 0:
+            torch.save(model.module.state_dict(), "toy_ddp.pt")
+    finally:
+        dist.destroy_process_group()
+
+
+if __name__ == "__main__":
+    main()
 ```
 
-`DistributedSampler`保证各rank读取不同数据；`set_epoch()`让所有rank在新一轮使用协调后的新洗牌，否则每轮顺序会重复。模型包装为DDP后，反向传播计算出某个梯度桶时，DDP钩子通过PyTorch的`ProcessGroupNCCL`发起All-Reduce。它不是把所有梯度集中到rank 0：Ring实现会把梯度分块，经Reduce-Scatter分工求和，再经All-Gather让每张GPU得到完整结果。每个rank随后用一致梯度独立执行相同的`optimizer.step()`。
+这份代码也可以从[源码文件]({{ '/assets/code/single-node-ddp.py' | relative_url }})下载。`DistributedSampler`保证各rank读取不同数据；`set_epoch()`让所有rank在新一轮使用协调后的新洗牌，否则每轮顺序会重复。DDP构造时会将rank 0的模型状态同步到其他rank；此后每个进程保存完整模型，并用相同的聚合梯度独立更新参数。
 
-因此rank 0主要用于一次性日志、评估归约后的展示和checkpoint保存，不是“主梯度GPU”。DDP还能在前面层仍做反向计算时，同步后面层已经就绪的梯度桶，使通信与计算部分重叠。NCCL可能根据拓扑选用Ring、Tree等算法，Ring只是All-Reduce的一种实现策略。
+### Ring All-Reduce到底做了什么
+
+设有4个rank，每个rank根据自己的数据算出局部梯度$g_0,g_1,g_2,g_3$。目标是让每个rank最终都拥有
+
+$$
+g=\frac{g_0+g_1+g_2+g_3}{4}.
+$$
+
+把每个局部梯度按相同位置切成4块，并把rank连成逻辑环。Ring All-Reduce通常包含两个阶段：
+
+1. **Reduce-Scatter**：共走3轮。每轮每个rank向下一个邻居发送一块，同时接收上一邻居的一块并累加；结束后，rank 0到3各自只持有一块已经汇总了全部局部梯度的结果。
+2. **All-Gather**：再走3轮。各rank沿环传递自己负责的最终块；结束后，每个rank都收齐4个块，重新得到完整的全局梯度。
+
+```text
+局部梯度：
+rank 0: [a0, b0, c0, d0]     rank 1: [a1, b1, c1, d1]
+rank 2: [a2, b2, c2, d2]     rank 3: [a3, b3, c3, d3]
+
+Reduce-Scatter结束：
+rank 0持有 Σa    rank 1持有 Σb    rank 2持有 Σc    rank 3持有 Σd
+
+All-Gather结束：
+所有rank都持有 [Σa, Σb, Σc, Σd]
+```
+
+若梯度共$S$字节、rank数为$n$，每个rank在两个阶段传输的数据量约为
+
+$$
+2\frac{n-1}{n}S,
+$$
+
+而不是把自己的完整梯度分别广播给其余$n-1$个rank。所有设备共同传输和归约，没有专门的“梯度主GPU”。PyTorch DDP还会把参数梯度组织成多个bucket：反向传播从网络后部向前计算，当某个bucket就绪时，DDP钩子通过`ProcessGroupNCCL`立即发起All-Reduce，同时GPU继续计算其他bucket，从而让通信与反向计算重叠。
+
+Ring是All-Reduce的一种算法，不是DDP协议本身。NCCL会结合消息规模和PCIe、NVLink、网络拓扑选择Ring、Tree或其他策略；rank 0主要用于一次性日志、指标展示和checkpoint保存，并不集中处理训练梯度。
 
 ## 7. 为什么正式训练通常选择DDP
 
@@ -166,11 +248,43 @@ dist.destroy_process_group()
 
 DDP的代价是工程边界更明确：必须用`torchrun`等启动器创建进程，数据要分片，指标要跨rank归约，日志和保存要避免重复，异常时还要正确清理通信组。它也不保证任何情况下更快；当模型很小、单卡本地batch太小、输入流水慢或网络通信占比过高时，多卡收益可能有限甚至为负。正确结论不是“DDP永远快”，而是“在可扩展的同步数据并行中，DDP通常比DP拥有更合理的执行与通信结构”。
 
-## 8. 从单机DDP扩展到多机
+## 8. 多机训练：多机DDP与参数服务器
+
+### 8.1 多机DDP
 
 几个名称先统一：**node**是一台机器；**local rank**是进程在本机的编号，通常对应本机GPU；**rank**是进程在整个作业中的唯一编号；**world size**是全部节点的进程总数。例如两台机器、每台4个进程时，world size为8，每台机器的local rank都是0到3，但全局rank是0到7。
 
-两台机器运行同一份脚本，指定同一个主节点地址和端口：
+多机DDP仍使用上一节的完整脚本，数据分片、参数与梯度交互分别由下面三处定义，并不是只配置IP就会自动发生：
+
+```python
+# 1. 所有进程根据torchrun环境变量建立通信组。
+dist.init_process_group("nccl", init_method="env://", device_id=device)
+
+# 2. 各rank读取同一个逻辑数据集中的不同分片。
+sampler = DistributedSampler(dataset, shuffle=True)
+loader = DataLoader(dataset, batch_size=128, sampler=sampler)
+
+# 3. 同步初始模型；backward时自动All-Reduce梯度。
+model = DDP(model.to(device), device_ids=[local_rank])
+loss.backward()
+```
+
+真实项目中，每台机器必须有相同版本的代码，并能从本地副本、共享文件系统或对象存储访问同一个逻辑数据集；DDP不会在节点间传输原始样本。若还要计算全局验证指标，则要显式汇总统计量：
+
+```python
+@torch.no_grad()
+def evaluate(model, loader, device):
+    model.eval()
+    stats = torch.zeros(2, dtype=torch.float64, device=device)
+    for x, y in loader:
+        x, y = x.to(device), y.to(device)
+        stats[0] += (model(x).argmax(1) == y).sum()  # 本rank正确数
+        stats[1] += y.numel()                        # 本rank样本数
+    dist.all_reduce(stats, op=dist.ReduceOp.SUM)
+    return (stats[0] / stats[1]).item()
+```
+
+两台机器分别启动同一份脚本，并指定相同的主节点地址和端口：
 
 ```bash
 # 节点0；请替换GPU数量、IP和端口占位符
@@ -186,9 +300,23 @@ torchrun --nnodes=2 --node_rank=1 \
 
 `--nnodes`是机器数，`--node_rank`标识当前机器，`--nproc-per-node`是每台机器启动的进程数。所有进程通过同一rendezvous信息组成进程组，仍然各自读取数据分片、计算局部梯度并执行All-Reduce；区别只是部分通信跨越了机器边界，带宽通常更低、延迟更高，因此梯度大小、网络拓扑和计算通信重叠更加重要。
 
-D2L参数服务器章节还描述了中心化push/pull架构，它与标准DDP不同：参数服务器接收梯度并更新或返回参数，可能支持异步更新；DDP没有中央更新者。该章的“梯度分块、环同步、边计算边通信”与DDP思想直接相连，而中央参数服务器不是DDP。
-
 多机故障常落在几个地方：节点间`master_port`不通；CUDA、PyTorch、NCCL或代码版本不一致；rank/world size配置错误导致集合通信永久等待；未正确使用`DistributedSampler`造成重复数据；所有rank同时打印或覆盖同一个checkpoint。遇到“卡住”时应先核对进程是否全部启动、网络端口是否互通，再检查每个rank是否以相同顺序进入集合通信。
+
+### 8.2 参数服务器
+
+D2L `parameterserver.ipynb`的“多机训练”主要描述另一种架构。Worker计算局部梯度后执行`push`，参数服务器聚合梯度、执行更新，再由Worker通过`pull`取得新参数：
+
+```text
+机器0 Worker ──push梯度──┐
+机器1 Worker ──push梯度──┼→ 参数服务器：聚合并更新参数
+机器2 Worker ──push梯度──┘              │
+       ↑                                │
+       └────────pull新参数───────────────┘
+```
+
+单个参数服务器容易形成网络与计算瓶颈，因此可以把参数按key切片，让多台服务器各自负责一部分。参数服务器还可以允许Worker异步push/pull，减少慢节点等待，但Worker可能使用不同版本的参数，梯度陈旧会改变优化行为。
+
+它与多机DDP共享“不同Worker处理不同数据并聚合梯度”的数学目标，但系统实现不同：DDP没有中央更新者，各rank通过All-Reduce得到相同梯度并独立执行相同的`optimizer.step()`；参数服务器集中或分片保存状态，以Push/Pull完成交互。今天密集神经网络的同步训练通常优先DDP、FSDP等集合通信方案，而参数服务器仍适合超大稀疏Embedding、推荐系统或需要异步更新的场景。
 
 ## 9. 知识地图
 
@@ -199,6 +327,24 @@ D2L参数服务器章节还描述了中心化push/pull架构，它与标准DDP�
 3. 单机数据并行让各GPU处理不同样本、计算局部梯度，再同步成一致梯度；通信和负载决定扩展效率。
 4. DP胜在简单，DDP胜在去中心化、多进程、通信重叠和多机扩展；正式多GPU训练通常优先DDP，但结论必须由基准验证。
 5. 单机DDP扩展到多机时训练逻辑不变，只是rank分布到不同node，网络从实现细节升级为主要性能约束。
+
+## 10. 参数服务器章节练习思考
+
+### 10.1 怎样进一步提高环同步性能？
+
+最直接的方法是使用**双向环**：把梯度再切成两组，一组顺时针传输，另一组逆时针传输，同时利用两个方向的链路带宽。进一步还可以根据NVLink、PCIe和跨机网络的真实拓扑构造多个环；先在机器内归约、再跨机器归约、最后在机器内广播，形成分层All-Reduce。工程上还应调整bucket大小，把足够小的梯度合并成大消息以摊薄启动延迟，并尽早同步已就绪的bucket，让通信与反向计算重叠。优化目标不是固定使用某一种环，而是让可用链路尽量同时繁忙，并减少跨越低带宽边界的数据量。
+
+### 10.2 能否在计算仍进行时异步通信？有什么影响？
+
+可以。DDP的梯度bucket就是典型例子：后面层的梯度先算好后，立即用非阻塞All-Reduce同步，前面层继续反向计算；只需在优化器读取该bucket前等待通信完成。理想情况下，被计算覆盖的通信不再增加关键路径时间。但bucket过小会产生大量通信启动开销，过大又会推迟第一次同步；不同rank的计算速度不一致仍会让快rank等待慢rank。
+
+还要区分“异步通信”和“异步参数更新”。前者只是重叠计算与传输，更新前仍使用本轮完整梯度，通常不改变同步SGD语义；参数服务器若允许Worker不等待其他Worker就更新，则会出现陈旧梯度，虽然吞吐可能提高，但收敛行为和可复现性都会改变。
+
+### 10.3 长时间训练丢失一台服务器时怎样避免从头重启？
+
+同步DDP的集合通信要求全部rank参与，一个rank消失后不能让其余rank无条件继续；需要停止当前进程组，通过弹性rendezvous按新成员关系重建进程组，再从最近checkpoint恢复。checkpoint应定期写入可靠的共享或对象存储，至少包含模型、优化器、学习率调度器、混合精度scaler、epoch/step、随机数状态和数据采样进度。日志与checkpoint写入还要具有原子性或版本号，避免故障留下半个文件。
+
+参数服务器架构还可以采用主从复制或分片副本、心跳与故障检测、写前日志和幂等更新；某个参数分片失效后由副本接管。无论采用哪种架构，容错都不是简单“忽略丢失节点”，而是保存足够状态、检测故障、重新确定成员关系，并保证恢复后不会重复或漏掉关键更新。
 
 ## 对应资料
 
