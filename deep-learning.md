@@ -8,7 +8,7 @@ math: true
 
 这组文章面向已经粗略学过一遍深度学习、但知识仍散落在公式、Notebook 和 API 之间的读者。它不按函数名罗列知识点，而是沿着一条问题驱动的路线重新组织：张量如何承载数据，梯度如何穿过计算图，线性模型为何能回归却难以表达复杂边界，非线性网络如何获得容量并保持泛化，工程代码怎样成为可复现的训练系统，最后又为什么从 LeNet 一路演化出 AlexNet、VGG、NiN、GoogLeNet、ResNet 和 DenseNet。
 
-学习边界到现代卷积神经网络结束，包括 D2L 的预备知识、线性神经网络、多层感知机、深度学习计算、卷积基础和现代 CNN；不进入 RNN、GRU、LSTM 等循环神经网络。
+学习边界包括 D2L 的预备知识、线性神经网络、多层感知机、深度学习计算、卷积基础、现代 CNN 与计算性能；不进入 RNN、GRU、LSTM 等循环神经网络。
 
 ## 知识路线
 
@@ -19,7 +19,8 @@ $$
 \rightarrow \text{线性回归与分类}
 \rightarrow \text{MLP 与泛化}
 \rightarrow \text{可复现工程流程}
-\rightarrow \text{卷积与现代 CNN}.
+\rightarrow \text{卷积与现代 CNN}
+\rightarrow \text{并行与分布式训练}.
 $$
 
 其中，“训练基础”给出所有模型共享的执行机制；“线性模型”建立损失与概率解释；“MLP”回答表达能力、泛化和稳定性；“深度学习计算与工程实践”完整对应 D2L 的 `chapter_deep-learning-computation`，把层与块、参数、延后初始化、自定义层、读写文件和 GPU 落到可保存、可迁移、可复现的代码；“CNN 演进”则把这些组件放进图像任务，观察架构如何在真实约束下逐步演化。
@@ -40,6 +41,9 @@ $$
 
 5. [CNN：从卷积到 DenseNet]({{ '/deep-learning/cnn-evolution/' | relative_url }})
    以“上一代遇到什么问题”为线索，串起卷积基础、LeNet、AlexNet、VGG、NiN、GoogLeNet、BatchNorm、ResNet 和 DenseNet。
+
+6. [D2L 计算性能：从硬件、异步执行到多机 DDP]({{ '/deep-learning/computational-performance/' | relative_url }})
+   从 CPU、GPU 和数据搬运出发，梳理 PyTorch 自动并行与异步执行、单机多卡、DP/DDP 选择、NCCL All-Reduce 以及多机训练。
 
 ## 如何使用这组文章
 
