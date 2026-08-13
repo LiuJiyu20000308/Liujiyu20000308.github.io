@@ -277,4 +277,3 @@ Notebook提示代码若把`finetune_net.parameters()`全部设为`False`，也�
 - [PyTorch：Transfer Learning for Computer Vision Tutorial](https://docs.pytorch.org/tutorials/beginner/transfer_learning_tutorial.html)
 - [Torchvision：ResNet-18与预训练权重](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.resnet18.html)
 - [PyTorch：`nn.Module`训练与评估模式](https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html)
-
