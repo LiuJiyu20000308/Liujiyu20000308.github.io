@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "D2L 微调学习总结：从迁移学习到热狗识别"
-date: 2026-08-13 16:00 +0800
+date: 2026-08-13 15:30 +0800
 tags: [D2L, PyTorch, 深度学习, 迁移学习, 微调, 计算机视觉]
 toc: true
 math: true
