@@ -100,16 +100,80 @@ else:
 
 `nn.DataParallel`使用一个Python进程和多个执行线程。输入先到主GPU，再被scatter到其他GPU；每次前向时复制模型，各卡计算后把输出gather回主GPU，反向梯度也归约到主模型，由主进程更新参数。
 
+下面直接给出当前Notebook中的完整DP训练源码。它依赖`d2l`提供的`Residual`、Fashion-MNIST加载、计时、绘图与评估函数：
+
 ```python
 import torch
 from torch import nn
+from d2l import torch as d2l
 
-if torch.cuda.device_count() >= 2:
-    model = nn.DataParallel(nn.Linear(32, 2), device_ids=[0, 1]).cuda(0)
-    x = torch.randn(256, 32, device="cuda:0")
-    logits = model(x)
-else:
-    print("DataParallel示例需要至少两张可见GPU")
+
+def resnet18(num_classes, in_channels=1):
+    """稍加修改的ResNet-18模型"""
+    def resnet_block(in_channels, out_channels, num_residuals,
+                     first_block=False):
+        blocks = []
+        for i in range(num_residuals):
+            if i == 0 and not first_block:
+                blocks.append(d2l.Residual(
+                    in_channels, out_channels,
+                    use_1x1conv=True, strides=2))
+            else:
+                blocks.append(d2l.Residual(out_channels, out_channels))
+        return nn.Sequential(*blocks)
+
+    net = nn.Sequential(
+        nn.Conv2d(in_channels, 64, kernel_size=3, stride=1, padding=1),
+        nn.BatchNorm2d(64),
+        nn.ReLU())
+    net.add_module("resnet_block1", resnet_block(
+        64, 64, 2, first_block=True))
+    net.add_module("resnet_block2", resnet_block(64, 128, 2))
+    net.add_module("resnet_block3", resnet_block(128, 256, 2))
+    net.add_module("resnet_block4", resnet_block(256, 512, 2))
+    net.add_module("global_avg_pool", nn.AdaptiveAvgPool2d((1, 1)))
+    net.add_module("fc", nn.Sequential(
+        nn.Flatten(), nn.Linear(512, num_classes)))
+    return net
+
+
+def train_dp(net, num_gpus, batch_size, lr):
+    train_iter, test_iter = d2l.load_data_fashion_mnist(batch_size)
+    devices = [d2l.try_gpu(i) for i in range(num_gpus)]
+
+    def init_weights(module):
+        if isinstance(module, (nn.Linear, nn.Conv2d)):
+            nn.init.normal_(module.weight, std=0.01)
+
+    net.apply(init_weights)
+    net = nn.DataParallel(net, device_ids=devices).to(devices[0])
+    optimizer = torch.optim.SGD(net.parameters(), lr=lr)
+    criterion = nn.CrossEntropyLoss()
+    timer, num_epochs = d2l.Timer(), 10
+    animator = d2l.Animator("epoch", "test acc", xlim=[1, num_epochs])
+
+    for epoch in range(num_epochs):
+        net.train()
+        timer.start()
+        for X, y in train_iter:
+            X = X.to(devices[0])
+            y = y.to(devices[0])
+            optimizer.zero_grad(set_to_none=True)
+            loss = criterion(net(X), y)
+            loss.backward()
+            optimizer.step()
+        timer.stop()
+        accuracy = d2l.evaluate_accuracy_gpu(net, test_iter)
+        animator.add(epoch + 1, (accuracy,))
+
+    print(f"测试精度：{animator.Y[0][-1]:.2f}，"
+          f"{timer.avg():.1f}秒/轮，在{devices}")
+
+
+if torch.cuda.device_count() < 2:
+    raise RuntimeError("该DP示例需要至少两张可见GPU")
+
+train_dp(resnet18(10), num_gpus=2, batch_size=512, lr=0.2)
 ```
 
 DP的优点是改动少，适合快速验证。主要代价是GPU 0额外承担输入切分、输出与梯度聚合，并保存主模型，负载和显存不均衡；单进程内的Python调度也受到GIL影响。模型复制和中心化通信使它难以随GPU数量扩展，而且不能自然扩展到多机。
@@ -119,84 +183,179 @@ DP的优点是改动少，适合快速验证。主要代价是GPU 0额外承担�
 DDP本身不创建进程。命令中的`--nproc-per-node=2`让`torchrun`在本机启动两个Python进程，并分别设置`LOCAL_RANK=0/1`；脚本据此绑定`cuda:0/1`。`init_process_group()`也不扫描并接管所有GPU，它只是读取`RANK`、`WORLD_SIZE`、主节点地址等信息，让已经启动的进程建立通信组。
 
 ```bash
-torchrun --standalone --nproc-per-node=2 assets/code/single-node-ddp.py
+torchrun --standalone --nproc-per-node=2 multiple_gpus_ddp.py
 ```
 
-下面是完整源码，不依赖Notebook中的变量；为了让重点落在DDP流程上，数据集用样本编号生成确定性数据：
+下面直接给出当前`multiple_gpus_ddp.py`的完整训练源码。与DP版本相同，它使用简化ResNet-18和Fashion-MNIST；为控制篇幅，只省略了部分逐行注释：
 
 ```python
+import argparse
 import os
+import time
+
 import torch
 import torch.distributed as dist
 from torch import nn
 from torch.nn.parallel import DistributedDataParallel as DDP
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
+from d2l import torch as d2l
 
 
-class ToyDataset(Dataset):
-    def __init__(self, size=4096, features=32):
-        self.size, self.features = size, features
+def resnet18(num_classes, in_channels=1):
+    def resnet_block(in_channels, out_channels, num_residuals,
+                     first_block=False):
+        blocks = []
+        for i in range(num_residuals):
+            if i == 0 and not first_block:
+                blocks.append(d2l.Residual(
+                    in_channels, out_channels,
+                    use_1x1conv=True, strides=2))
+            else:
+                blocks.append(d2l.Residual(out_channels, out_channels))
+        return nn.Sequential(*blocks)
 
-    def __len__(self):
-        return self.size
+    net = nn.Sequential(
+        nn.Conv2d(in_channels, 64, kernel_size=3, stride=1, padding=1),
+        nn.BatchNorm2d(64), nn.ReLU())
+    net.add_module("resnet_block1", resnet_block(
+        64, 64, 2, first_block=True))
+    net.add_module("resnet_block2", resnet_block(64, 128, 2))
+    net.add_module("resnet_block3", resnet_block(128, 256, 2))
+    net.add_module("resnet_block4", resnet_block(256, 512, 2))
+    net.add_module("global_avg_pool", nn.AdaptiveAvgPool2d((1, 1)))
+    net.add_module("fc", nn.Sequential(
+        nn.Flatten(), nn.Linear(512, num_classes)))
+    return net
 
-    def __getitem__(self, index):
-        generator = torch.Generator().manual_seed(index)
-        x = torch.randn(self.features, generator=generator)
-        return x, (x.sum() > 0).long()
 
-
-def main():
+def init_distributed():
     if not torch.cuda.is_available():
-        raise RuntimeError("该示例需要支持CUDA的PyTorch")
+        raise RuntimeError("DDP示例需要支持CUDA的PyTorch和至少一个GPU")
 
-    # torchrun为每个进程设置LOCAL_RANK、RANK和WORLD_SIZE。
     local_rank = int(os.environ["LOCAL_RANK"])
     torch.cuda.set_device(local_rank)
     device = torch.device("cuda", local_rank)
-    dist.init_process_group("nccl", init_method="env://", device_id=device)
-    rank = dist.get_rank()
+    dist.init_process_group(
+        backend="nccl", init_method="env://", device_id=device)
+    return local_rank, dist.get_rank(), dist.get_world_size()
+
+
+def make_dataloaders(global_batch_size, world_size, rank, num_workers):
+    if global_batch_size % world_size:
+        raise ValueError("global_batch_size必须能被GPU数量整除")
+
+    # 单机上只让rank 0首先检查或下载数据，避免并发写缓存。
+    if rank == 0:
+        d2l.load_data_fashion_mnist(1)
+    dist.barrier()
+    train_base, test_base = d2l.load_data_fashion_mnist(1)
+
+    train_sampler = DistributedSampler(
+        train_base.dataset,
+        num_replicas=world_size,
+        rank=rank,
+        shuffle=True)
+    test_sampler = DistributedSampler(
+        test_base.dataset,
+        num_replicas=world_size,
+        rank=rank,
+        shuffle=False)
+
+    per_gpu_batch = global_batch_size // world_size
+    loader_args = dict(
+        batch_size=per_gpu_batch,
+        num_workers=num_workers,
+        pin_memory=True,
+        persistent_workers=num_workers > 0)
+    train_iter = DataLoader(
+        train_base.dataset,
+        sampler=train_sampler,
+        drop_last=False,
+        **loader_args)
+    test_iter = DataLoader(
+        test_base.dataset,
+        sampler=test_sampler,
+        drop_last=False,
+        **loader_args)
+    return train_iter, test_iter, train_sampler
+
+
+@torch.no_grad()
+def evaluate(net, data_iter, device):
+    net.eval()
+    stats = torch.zeros(2, dtype=torch.float64, device=device)
+    for X, y in data_iter:
+        X = X.to(device, non_blocking=True)
+        y = y.to(device, non_blocking=True)
+        stats[0] += (net(X).argmax(dim=1) == y).sum()
+        stats[1] += y.numel()
+    dist.all_reduce(stats, op=dist.ReduceOp.SUM)
+    return (stats[0] / stats[1]).item()
+
+
+def train(args):
+    local_rank, rank, world_size = init_distributed()
+    device = torch.device("cuda", local_rank)
 
     try:
-        dataset = ToyDataset()
-        sampler = DistributedSampler(dataset, shuffle=True)
-        loader = DataLoader(
-            dataset, batch_size=128, sampler=sampler,
-            num_workers=2, pin_memory=True)
+        torch.manual_seed(args.seed)
+        train_iter, test_iter, train_sampler = make_dataloaders(
+            args.batch_size, world_size, rank, args.num_workers)
 
-        model = nn.Sequential(
-            nn.Linear(32, 64), nn.ReLU(), nn.Linear(64, 2)
-        ).to(device)
-        model = DDP(model, device_ids=[local_rank])
-        optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
-        criterion = nn.CrossEntropyLoss()
+        net = resnet18(10).to(device)
+        for module in net.modules():
+            if isinstance(module, (nn.Linear, nn.Conv2d)):
+                nn.init.normal_(module.weight, std=0.01)
 
-        for epoch in range(5):
-            sampler.set_epoch(epoch)
-            model.train()
-            for x, y in loader:
-                x = x.to(device, non_blocking=True)
+        net = DDP(
+            net, device_ids=[local_rank], output_device=local_rank)
+        optimizer = torch.optim.SGD(net.parameters(), lr=args.lr)
+        loss = nn.CrossEntropyLoss()
+
+        for epoch in range(args.epochs):
+            train_sampler.set_epoch(epoch)
+            net.train()
+            torch.cuda.synchronize(device)
+            start = time.perf_counter()
+
+            for X, y in train_iter:
+                X = X.to(device, non_blocking=True)
                 y = y.to(device, non_blocking=True)
                 optimizer.zero_grad(set_to_none=True)
-                loss = criterion(model(x), y)
-                loss.backward()          # DDP在这里自动同步梯度
+                loss(net(X), y).backward()
                 optimizer.step()
 
-            if rank == 0:
-                print(f"epoch={epoch + 1}, last_loss={loss.item():.4f}")
+            torch.cuda.synchronize(device)
+            elapsed = time.perf_counter() - start
+            accuracy = evaluate(net, test_iter, device)
+            elapsed_tensor = torch.tensor(elapsed, device=device)
+            dist.reduce(elapsed_tensor, dst=0, op=dist.ReduceOp.MAX)
 
-        if rank == 0:
-            torch.save(model.module.state_dict(), "toy_ddp.pt")
+            if rank == 0:
+                print(f"epoch {epoch + 1}: test acc {accuracy:.3f}, "
+                      f"{elapsed_tensor.item():.1f}秒/轮")
     finally:
         dist.destroy_process_group()
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--batch-size", type=int, default=512,
+        help="所有GPU合计的全局批量大小")
+    parser.add_argument("--lr", type=float, default=0.2)
+    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--num-workers", type=int, default=2)
+    parser.add_argument("--seed", type=int, default=42)
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    main()
+    train(parse_args())
 ```
 
-这份代码也可以从[源码文件]({{ '/assets/code/single-node-ddp.py' | relative_url }})下载。`DistributedSampler`保证各rank读取不同数据；`set_epoch()`让所有rank在新一轮使用协调后的新洗牌，否则每轮顺序会重复。DDP构造时会将rank 0的模型状态同步到其他rank；此后每个进程保存完整模型，并用相同的聚合梯度独立更新参数。
+`DistributedSampler`保证各rank读取不同数据；`set_epoch()`让所有rank在新一轮使用协调后的新洗牌，否则每轮顺序会重复。DDP构造时会将rank 0的模型状态同步到其他rank；此后每个进程保存完整模型，并用相同的聚合梯度独立更新参数。
 
 ### Ring All-Reduce到底做了什么
 
@@ -210,6 +369,11 @@ $$
 
 1. **Reduce-Scatter**：共走3轮。每轮每个rank向下一个邻居发送一块，同时接收上一邻居的一块并累加；结束后，rank 0到3各自只持有一块已经汇总了全部局部梯度的结果。
 2. **All-Gather**：再走3轮。各rank沿环传递自己负责的最终块；结束后，每个rank都收齐4个块，重新得到完整的全局梯度。
+
+<figure class="network-figure network-figure-wide">
+  <img src="{{ '/assets/deep-learning/computation/ringsync.svg' | relative_url }}" alt="四张GPU上的环形梯度同步过程：先执行分块归约，再执行分块分发">
+  <figcaption>D2L 的环形同步图。上半部分“分块归约同步”就是 Reduce-Scatter；下半部分“分块分发同步”就是 All-Gather。后者不是 All-Scatter：它要让每个 rank 最终都收集到全部归约结果。</figcaption>
+</figure>
 
 ```text
 局部梯度：
