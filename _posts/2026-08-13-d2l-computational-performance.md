@@ -397,6 +397,65 @@ $$
 
 Ring是All-Reduce的一种算法，不是DDP协议本身。NCCL会结合消息规模和PCIe、NVLink、网络拓扑选择Ring、Tree或其他策略；rank 0主要用于一次性日志、指标展示和checkpoint保存，并不集中处理训练梯度。
 
+### 从Ring同步理解DDP中的“异步”
+
+DDP中的异步不是“各rank使用不同版本的参数独立更新”，而是**在仍然保证本轮梯度同步完成的前提下，把通信和其他计算重叠起来**。标准DDP仍是同步SGD：所有rank从相同参数出发，分别计算局部梯度，得到相同的聚合梯度后，才各自执行`optimizer.step()`。
+
+#### 第一层异步：较早bucket的Ring通信与较晚梯度的反向计算重叠
+
+反向传播从输出层向输入层进行。DDP不会等整个模型的梯度全部算完才开始通信，而是把参数梯度按反向完成顺序组织成若干bucket，并在参数上注册Autograd hook：
+
+```text
+第4、3层梯度完成 → bucket A就绪 → 启动bucket A的Ring All-Reduce
+第2、1层梯度仍在计算 → bucket B尚未就绪
+```
+
+因此一段时间内，GPU可能同时进行两类工作：
+
+```text
+时间 ─────────────────────────────────────────────→
+
+反向计算流： [第4层][第3层][第2层][第1层]
+通信流：                  [bucket A: RS → AG]
+                                      [bucket B: RS → AG]
+参数更新：                                            [step]
+```
+
+其中RS表示Reduce-Scatter，AG表示All-Gather。bucket A的通信启动后，反向引擎可以继续计算bucket B中的梯度。NCCL通信通常在专用CUDA stream上排队，反向算子运行在计算stream上；DDP建立必要的stream依赖，确保通信不会读取尚未算好的梯度，也确保参数更新不会读取尚未归约完成的梯度。
+
+这也是bucket大小需要折中的原因：bucket太大，要等很多梯度就绪后才能启动第一次通信，重叠机会减少；bucket太小，则会产生大量小型集合通信，启动延迟占比上升。一般先使用DDP默认值，只在性能分析后调整`bucket_cap_mb`。
+
+#### 第二层异步：Ring内部是分块流水线
+
+对一个已经就绪的bucket，假设有4个rank，NCCL把梯度切成4块并构造逻辑环：
+
+```text
+rank 0 → rank 1 → rank 2 → rank 3 → rank 0
+```
+
+Reduce-Scatter的每一轮里，4个rank都同时向下一邻居发送一块、从上一邻居接收一块，并把收到的数据累加到本地对应块。下一轮再把累加后的块继续向前传。经过$n-1$轮，每个rank只保留一个已经包含全部rank贡献的最终块。
+
+All-Gather再用$n-1$轮传递这些最终块。所有rank仍然同时发送和接收，最后每个rank都重新收齐完整聚合梯度。因此Ring不是由一张主GPU串行完成“收集、求和、广播”，而是所有链路共同参与、各分块沿环形成流水线。
+
+不过，“异步”不代表Ring中的步骤没有顺序：同一数据块的下一轮依赖上一轮的接收和累加，All-Gather也依赖Reduce-Scatter生成最终归约块。它能并行的是各rank在同一轮的收发、不同分块的流水传输，以及整个Ring通信与其他bucket反向计算之间的重叠。
+
+#### 为什么DDP最后仍然会等待
+
+All-Reduce是集合通信，每个rank必须按照一致顺序参与。若rank 0到2的bucket已经就绪，而rank 3仍在计算，前三个rank可以先提交通信任务，但完整的Ring无法绕过rank 3完成。因此训练速度最终仍受最慢rank约束。
+
+正常训练代码不需要手写`dist.all_reduce(async_op=True)`或到处调用`torch.cuda.synchronize()`：
+
+```python
+optimizer.zero_grad(set_to_none=True)
+loss = criterion(ddp_model(X), y)
+loss.backward()       # 梯度就绪时自动启动各bucket的All-Reduce
+optimizer.step()      # 使用同步完成后的梯度更新本地模型副本
+```
+
+`backward()`内部可以异步提交NCCL工作并让计算与通信重叠，但DDP和CUDA依赖会保证梯度在被优化器使用前已经可用。它和异步参数服务器的区别是：前者只改变任务的调度时间，不改变同步SGD的数学语义；后者可能允许Worker用旧参数计算并直接提交陈旧梯度，优化语义本身已经改变。
+
+一句话概括：**某个bucket一准备好，就进入“Reduce-Scatter → All-Gather”的Ring流水线，同时GPU继续计算后续bucket；所有必要的Ring同步完成后，本轮才能更新参数。**
+
 ## 7. 为什么正式训练通常选择DDP
 
 | 对比项 | DP | DDP |
