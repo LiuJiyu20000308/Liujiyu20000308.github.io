@@ -716,7 +716,7 @@ logits = net(torch.randn(2, 3, 224, 224))  # [2, 10]
 
 - 上一篇：[PyTorch 深度学习计算与工程实践]({{ '/deep-learning/pytorch-engineering/' | relative_url }})
 - [系列总览]({{ '/deep-learning/' | relative_url }})
-- 下一篇：无（本篇是系列终点）
+- 下一篇：[D2L 计算性能：从硬件、异步执行到多机 DDP]({{ '/deep-learning/computational-performance/' | relative_url }})
 
 ## 对应章节与参考资料
 

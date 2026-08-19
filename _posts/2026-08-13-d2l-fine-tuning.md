@@ -271,6 +271,12 @@ Notebook提示代码若把`finetune_net.parameters()`全部设为`False`，也�
 
 热狗例子最重要的结论不是某个固定准确率，而是三种先验可以逐层利用：预训练骨干提供通用视觉特征；冻结策略控制保留多少旧知识；ImageNet热狗输出权重还能提供类别级先验。先验越具体，越需要检查源任务与目标任务的语义是否真的一致，最终仍应让独立验证集决定是否采用。
 
+## 系列导航
+
+- 上一篇：[D2L 计算性能：从硬件、异步执行到多机 DDP]({{ '/deep-learning/computational-performance/' | relative_url }})
+- [系列总览]({{ '/deep-learning/' | relative_url }})
+- 下一篇：[计算机视觉任务全景]({{ '/deep-learning/computer-vision-tasks/' | relative_url }})
+
 ## 对应资料
 
 - [D2L：微调](https://zh.d2l.ai/chapter_computer-vision/fine-tuning.html)

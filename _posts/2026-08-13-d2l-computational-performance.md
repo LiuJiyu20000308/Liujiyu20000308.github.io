@@ -569,6 +569,12 @@ D2L `parameterserver.ipynb`的“多机训练”主要描述另一种架构。Wo
 
 参数服务器架构还可以采用主从复制或分片副本、心跳与故障检测、写前日志和幂等更新；某个参数分片失效后由副本接管。无论采用哪种架构，容错都不是简单“忽略丢失节点”，而是保存足够状态、检测故障、重新确定成员关系，并保证恢复后不会重复或漏掉关键更新。
 
+## 系列导航
+
+- 上一篇：[CNN：从卷积到 DenseNet]({{ '/deep-learning/cnn-evolution/' | relative_url }})
+- [系列总览]({{ '/deep-learning/' | relative_url }})
+- 下一篇：[D2L 微调：从迁移学习到热狗识别]({{ '/deep-learning/fine-tuning/' | relative_url }})
+
 ## 对应资料
 
 - D2L PyTorch版：`chapter_computational-performance`中的硬件、自动并行、异步计算、多GPU训练、简洁多GPU实现和参数服务器。
