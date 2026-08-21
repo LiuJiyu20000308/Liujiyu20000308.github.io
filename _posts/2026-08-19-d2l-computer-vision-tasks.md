@@ -664,7 +664,7 @@ SSD 在所有尺度一次输出；R-CNN 系列逐步提高共享计算和端到�
 
 - 上一篇：[D2L 微调：从迁移学习到热狗识别]({{ '/deep-learning/fine-tuning/' | relative_url }})
 - [系列总览]({{ '/deep-learning/' | relative_url }})
-- 下一篇：无（本篇是当前系列终点）
+- 下一篇：[D2L 注意力机制：从 QKV、多头自注意力到 Transformer]({{ '/deep-learning/attention-transformer/' | relative_url }})
 
 ## 对应章节与参考资料
 
