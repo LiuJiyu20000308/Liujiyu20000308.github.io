@@ -6,7 +6,6 @@ tags: [数据结构与算法]
 toc: true
 ---
 
-> **Python 版本：** 本文保留原有 C++ 推导；每个例题对应的 Python 实现统一收录在[Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})中。
 
 单调栈通常是一维数组，**要寻找任一个元素的右边或者左边第一个比自己大或者小的元素的位置**，此时我们就要想到可以用单调栈了。时间复杂度为O(n)。
 
@@ -84,10 +83,22 @@ vector<int> dailyTemperatures(vector<int>& T) {
 }
 ```
 
+#### Python 实现
+
+```python
+def daily_temperatures(temperatures):
+    answer, stack = [0] * len(temperatures), []
+    for i, value in enumerate(temperatures):
+        while stack and temperatures[stack[-1]] < value:
+            old = stack.pop(); answer[old] = i - old
+        stack.append(i)
+    return answer
+```
+
+
 ### 最大二叉树
 
 ### Leetcode 654
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-097)
 
 给定一个不重复的整数数组 nums 。 最大二叉树 可以用下面的算法从 nums 递归地构建:
 1. 创建一个根节点，其值为 nums 中的最大值。
@@ -159,11 +170,20 @@ TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
 }
 ```
 
+#### Python 实现
+
+```python
+def construct_maximum_binary_tree(nums):
+    if not nums: return None
+    i = max(range(len(nums)), key=nums.__getitem__)
+    return TreeNode(nums[i], construct_maximum_binary_tree(nums[:i]), construct_maximum_binary_tree(nums[i + 1:]))
+```
+
+
 
 ### 接雨水
 
 ### Leetcode 42
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-098)
 
 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
 
@@ -199,10 +219,23 @@ int trap(vector<int>& height) {
 }
 ```
 
+#### Python 实现
+
+```python
+def trap(height):
+    left, right, left_max, right_max, water = 0, len(height) - 1, 0, 0, 0
+    while left < right:
+        if height[left] < height[right]:
+            left_max = max(left_max, height[left]); water += left_max - height[left]; left += 1
+        else:
+            right_max = max(right_max, height[right]); water += right_max - height[right]; right -= 1
+    return water
+```
+
+
 ### 柱状图中最大的矩形
 
 ### Leetcode 84
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-099)
 
 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。求在该柱状图中，能够勾勒出来的矩形的最大面积。
 
@@ -230,4 +263,16 @@ int largestRectangleArea(vector<int>& heights) {
     }
     return res;
 }
+```
+
+#### Python 实现
+
+```python
+def largest_rectangle_area(heights):
+    stack, answer = [-1], 0
+    for i, height in enumerate(heights + [0]):
+        while stack[-1] != -1 and heights[stack[-1]] >= height:
+            answer = max(answer, heights[stack.pop()] * (i - stack[-1] - 1))
+        stack.append(i)
+    return answer
 ```

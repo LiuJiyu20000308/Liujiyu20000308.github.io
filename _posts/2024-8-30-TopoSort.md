@@ -6,7 +6,6 @@ tags: [数据结构与算法]
 toc: true
 ---
 
-> **Python 版本：** 本文保留原有 C++ 推导；每个例题对应的 Python 实现统一收录在[Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})中。
 
 ## 拓扑排序
 
@@ -65,4 +64,21 @@ int main() {
         cout << result[n - 1];
     } else cout << -1 << endl;
 }
+```
+
+#### Python 实现
+
+```python
+from collections import deque
+
+def topological_sort(n, edges):
+    graph, indegree = [[] for _ in range(n)], [0] * n
+    for source, target in edges: graph[source].append(target); indegree[target] += 1
+    queue, order = deque(i for i in range(n) if indegree[i] == 0), []
+    while queue:
+        node = queue.popleft(); order.append(node)
+        for neighbor in graph[node]:
+            indegree[neighbor] -= 1
+            if indegree[neighbor] == 0: queue.append(neighbor)
+    return order if len(order) == n else []
 ```

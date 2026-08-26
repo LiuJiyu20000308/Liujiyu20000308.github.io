@@ -6,7 +6,6 @@ tags: [数据结构与算法]
 toc: true
 ---
 
-> **Python 版本：** 本文保留原有 C++ 推导；每个例题对应的 Python 实现统一收录在[Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})中。
 
 ## 回溯框架
 
@@ -43,7 +42,6 @@ void backtracking(参数) {
 
 ### 组合（最基本的回溯）
 ### Leetcode 77
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-100)
 
 给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
 
@@ -67,9 +65,22 @@ vector<vector<int>> combine(int n, int k) {
 }
 ```
 
+#### Python 实现
+
+```python
+def combine(n, k):
+    answer = []
+    def dfs(start, path):
+        if len(path) == k: answer.append(path[:]); return
+        for value in range(start, n - (k - len(path)) + 2):
+            path.append(value); dfs(value + 1, path); path.pop()
+    dfs(1, [])
+    return answer
+```
+
+
 ### 组合求和I
 ### Leetcode 39
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-101)
 
 给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。candidates 中的数字可以**无限制重复被选取。**
 **只需注意遍历的时候startIdx还可以从自身开始即可。**
@@ -101,9 +112,24 @@ vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
 }
 ```
 
+#### Python 实现
+
+```python
+def combination_sum(candidates, target):
+    answer = []
+    def dfs(start, remaining, path):
+        if remaining == 0: answer.append(path[:]); return
+        for i in range(start, len(candidates)):
+            value = candidates[i]
+            if value > remaining: break
+            path.append(value); dfs(i, remaining - value, path); path.pop()
+    candidates.sort(); dfs(0, target, [])
+    return answer
+```
+
+
 ### 组合求和II
 ### Leetcode 216
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-103)
 
 找出所有相加之和为 n 的 k 个数的组合。组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。
 
@@ -135,6 +161,23 @@ vector<vector<int>> combinationSum3(int k, int n) {
     return result;
     }
 ```
+
+#### Python 实现
+
+```python
+def combination_sum3(k, n):
+    answer = []
+    def dfs(start, remaining, path):
+        if len(path) == k:
+            if remaining == 0: answer.append(path)
+            return
+        for value in range(start, 10):
+            if value > remaining: break
+            dfs(value + 1, remaining - value, path + [value])
+    dfs(1, n, [])
+    return answer
+```
+
 
 ### 组合求和III（有重复元素）
 给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。candidates 中的每个数字在每个组合中只能使用一次。
@@ -179,11 +222,26 @@ vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
 }
 ```
 
+#### Python 实现
+
+```python
+def combination_sum2(candidates, target):
+    answer = []
+    def dfs(start, remaining, path):
+        if remaining == 0: answer.append(path[:]); return
+        for i in range(start, len(candidates)):
+            if i > start and candidates[i] == candidates[i - 1]: continue
+            if candidates[i] > remaining: break
+            dfs(i + 1, remaining - candidates[i], path + [candidates[i]])
+    candidates.sort(); dfs(0, target, [])
+    return answer
+```
+
+
 ## 分割问题
 
 ### 分割回文串
 ### Leetcode 131
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-104)
 
 给定一个字符串 s，将 s 分割成一些子串，使每个子串都是回文串。返回 s 所有可能的分割方案。
 
@@ -267,9 +325,23 @@ vector<vector<string>> partition(string s) {
     return result;
 }
 ```
+
+#### Python 实现
+
+```python
+def partition(s):
+    answer = []
+    def dfs(start, path):
+        if start == len(s): answer.append(path); return
+        for end in range(start + 1, len(s) + 1):
+            part = s[start:end]
+            if part == part[::-1]: dfs(end, path + [part])
+    dfs(0, [])
+    return answer
+```
+
 ### 复原IP地址
 ### Leetcode 93
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-105)
 
 给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。有效的 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 '.' 分隔。
 
@@ -323,11 +395,28 @@ vector<string> restoreIpAddresses(string s) {
 }
 ```
 
+#### Python 实现
+
+```python
+def restore_ip_addresses(s):
+    answer = []
+    def dfs(start, parts):
+        if len(parts) == 4:
+            if start == len(s): answer.append(".".join(parts))
+            return
+        for end in range(start + 1, min(start + 3, len(s)) + 1):
+            part = s[start:end]
+            if (part[0] == "0" and len(part) > 1) or int(part) > 255: continue
+            dfs(end, parts + [part])
+    dfs(0, [])
+    return answer
+```
+
+
 ## 子集问题
 
 ### 子集I
 ### Leetcode 78
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-106)
 
 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
 
@@ -355,9 +444,18 @@ vector<vector<int>> subsets(vector<int>& nums) {
 }
 ```
 
+#### Python 实现
+
+```python
+def subsets(nums):
+    answer = [[]]
+    for value in nums: answer += [part + [value] for part in answer]
+    return answer
+```
+
+
 ### 子集II
 ### Leetcode 90
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-107)
 
 给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
 
@@ -391,9 +489,21 @@ vector<vector<int>> subsetsWithDup(vector<int>& nums) {
 }
 ```
 
+#### Python 实现
+
+```python
+def subsets_with_dup(nums):
+    nums.sort(); answer = [[]]; previous_size = 0
+    for i, value in enumerate(nums):
+        start = previous_size if i and nums[i] == nums[i - 1] else 0
+        previous_size = len(answer)
+        answer += [answer[j] + [value] for j in range(start, previous_size)]
+    return answer
+```
+
+
 ### 递增子序列
 ### Leetcode 491
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-108)
 
 给定一个整型数组, 你的任务是找到所有该数组的递增子序列，递增子序列的长度至少是2。
 
@@ -427,11 +537,24 @@ vector<vector<int>> findSubsequences(vector<int>& nums) {
 }
 ```
 
+#### Python 实现
+
+```python
+def find_subsequences(nums):
+    answer = set()
+    def dfs(index, path):
+        if len(path) >= 2: answer.add(tuple(path))
+        for i in range(index, len(nums)):
+            if not path or nums[i] >= path[-1]: dfs(i + 1, path + [nums[i]])
+    dfs(0, [])
+    return list(map(list, answer))
+```
+
+
 ## 排列问题
 
 ### 全排列I
 ### Leetcode 46
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-109)
 
 给定一个 没有重复 数字的序列，返回其所有可能的全排列。
 
@@ -464,9 +587,17 @@ vector<vector<int>> permute(vector<int>& nums) {
 }
 ```
 
+#### Python 实现
+
+```python
+def permute(nums):
+    if not nums: return [[]]
+    return [[nums[i]] + tail for i in range(len(nums)) for tail in permute(nums[:i] + nums[i + 1:])]
+```
+
+
 ### 全排列II
 ### Leetcode 47
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-110)
 
 给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。
 
@@ -507,6 +638,20 @@ vector<vector<int>> permuteUnique(vector<int>& nums) {
 }
 ```
 
+#### Python 实现
+
+```python
+def permute_unique(nums):
+    answer = []
+    def dfs(path, remaining):
+        if not remaining: answer.append(path); return
+        for value in sorted(set(remaining)):
+            copy = remaining[:]; copy.remove(value); dfs(path + [value], copy)
+    dfs([], nums)
+    return answer
+```
+
+
 **其实以上所有问题在涉及到去重的时候都可以使用unordered_set来实现，但是这样做的话空间复杂度就从用used数组的$O(n)$变为$O(n^2)$了。**
 
 ## 棋盘问题
@@ -515,7 +660,6 @@ vector<vector<int>> permuteUnique(vector<int>& nums) {
 
 ### n皇后问题
 ### Leetcode 51
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-111)
 
 n皇后问题研究的是如何将n个皇后放置在n×n的棋盘上，并且使皇后彼此之间不能相互攻击。
 
@@ -566,9 +710,25 @@ vector<vector<string>> solveNQueens(int n) {
 }
 ```
 
+#### Python 实现
+
+```python
+def solve_n_queens(n):
+    answer, columns, diagonals1, diagonals2 = [], set(), set(), set()
+    def dfs(row, board):
+        if row == n: answer.append(["".join(line) for line in board]); return
+        for col in range(n):
+            if col in columns or row - col in diagonals1 or row + col in diagonals2: continue
+            columns.add(col); diagonals1.add(row - col); diagonals2.add(row + col)
+            line = ["."] * n; line[col] = "Q"; dfs(row + 1, board + [line])
+            columns.remove(col); diagonals1.remove(row - col); diagonals2.remove(row + col)
+    dfs(0, [])
+    return answer
+```
+
+
 ### 数独问题
 ### Leetcode 37
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-112)
 
 编写一个程序，通过填充空格来解决数独问题。
 
@@ -621,9 +781,27 @@ void solveSudoku(vector<vector<char>>& board) {
 }
 ```
 
+#### Python 实现
+
+```python
+def solve_sudoku(board):
+    empty = [(r, c) for r in range(9) for c in range(9) if board[r][c] == "."]
+    def dfs(index):
+        if index == len(empty): return True
+        r, c = empty[index]
+        used = set(board[r]) | {board[i][c] for i in range(9)} | {board[i][j] for i in range(r // 3 * 3, r // 3 * 3 + 3) for j in range(c // 3 * 3, c // 3 * 3 + 3)}
+        for digit in "123456789":
+            if digit not in used:
+                board[r][c] = digit
+                if dfs(index + 1): return True
+                board[r][c] = "."
+        return False
+    dfs(0)
+```
+
+
 ### 重新规划行程
 ### Leetcode 332
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-113)
 
 给定一个机票的字符串二维数组 [from, to]，子数组中的两个成员分别表示飞机出发和降落的机场地点，对该行程进行重新规划排序，如果有多种排序方法只返回字典序最大的一个。所有这些机票都属于一个从 JFK（肯尼迪国际机场）出发的先生，所以该行程必须从 JFK 开始。
 
@@ -668,4 +846,20 @@ vector<string> findItinerary(vector<vector<string>>& tickets) {
     backtracking(tickets.size(), result);
     return result;
 }
+```
+
+#### Python 实现
+
+```python
+from collections import defaultdict
+
+def find_itinerary(tickets):
+    graph = defaultdict(list)
+    for source, target in sorted(tickets, reverse=True): graph[source].append(target)
+    route = []
+    def visit(airport):
+        while graph[airport]: visit(graph[airport].pop())
+        route.append(airport)
+    visit("JFK")
+    return route[::-1]
 ```

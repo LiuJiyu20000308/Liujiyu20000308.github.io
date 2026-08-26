@@ -6,7 +6,6 @@ tags: [数据结构与算法]
 toc: true
 ---
 
-> **Python 版本：** 本文保留原有 C++ 推导；每个例题对应的 Python 实现统一收录在[Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})中。
 
 ## 并查集原理
 
@@ -62,7 +61,6 @@ int find(int u) {
 
 ### 寻找存在的路径
 ### Leetcode 1971
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-172)
 
 给定一个包含 n 个节点的无向图中，节点编号从 1 到 n （含 1 和 n ）。你的任务是判断是否有一条从节点 source 出发到节点 destination 的路径存在。
 
@@ -96,9 +94,21 @@ bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
 }
 ```
 
+#### Python 实现
+
+```python
+def valid_path(n, edges, source, destination):
+    parent = list(range(n))
+    def find(x):
+        while x != parent[x]: parent[x] = parent[parent[x]]; x = parent[x]
+        return x
+    for a, b in edges: parent[find(a)] = find(b)
+    return find(source) == find(destination)
+```
+
+
 ### 冗余连接
 ### Leetcode 684
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-173)
 
 树可以看成是一个图（拥有 n 个节点和 n - 1 条边的连通无环无向图）。现给定一个拥有 n 个节点（节点编号从 1 到 n）和 n 条边的连通无向图，请找出一条可以删除的边，删除后图可以变成一棵树。
 
@@ -120,9 +130,23 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 }
 ```
 
+#### Python 实现
+
+```python
+def find_redundant_connection(edges):
+    parent = list(range(len(edges) + 1))
+    def find(x):
+        if parent[x] != x: parent[x] = find(parent[x])
+        return parent[x]
+    for a, b in edges:
+        ra, rb = find(a), find(b)
+        if ra == rb: return [a, b]
+        parent[ra] = rb
+```
+
+
 ### 冗余连接II
 ### Leetcode 685
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-174)
 
 有一种有向树,该树只有一个根节点，所有其他节点都是该根节点的后继。该树除了根节点之外的每一个节点都有且只有一个父节点，而根节点没有父节点。有向树拥有 n 个节点和 n - 1 条边。
 
@@ -199,4 +223,26 @@ vector<int> findRedundantDirectedConnection(vector<vector<int>>& edges) {
     auto result = getRemove(edges);
     return result;
 }
+```
+
+#### Python 实现
+
+```python
+def find_redundant_directed_connection(edges):
+    incoming = {}
+    first = second = None
+    for edge in edges:
+        source, target = edge
+        if target in incoming: first, second = incoming[target], edge
+        else: incoming[target] = edge
+    parent = list(range(len(edges) + 1))
+    def find(x):
+        if parent[x] != x: parent[x] = find(parent[x])
+        return parent[x]
+    for edge in edges:
+        if edge is second: continue
+        source, target = edge; rs, rt = find(source), find(target)
+        if rs == rt: return first if first else edge
+        parent[rt] = rs
+    return second
 ```

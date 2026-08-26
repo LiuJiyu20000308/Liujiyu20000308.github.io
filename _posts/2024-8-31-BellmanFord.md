@@ -6,7 +6,6 @@ tags: [数据结构与算法]
 toc: true
 ---
 
-> **Python 版本：** 本文保留原有 C++ 推导；每个例题对应的 Python 实现统一收录在[Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})中。
 
 ## Bellman-ford算法
 
@@ -63,6 +62,20 @@ int main() {
 
 }
 ```
+
+#### Python 实现
+
+```python
+def bellman_ford(n, edges, source):
+    distance = [float("inf")] * n; distance[source] = 0
+    for _ in range(n - 1):
+        changed = False
+        for a, b, weight in edges:
+            if distance[a] + weight < distance[b]: distance[b] = distance[a] + weight; changed = True
+        if not changed: break
+    return distance
+```
+
 时间复杂度： O(N * E) , N为节点数量，E为图中边的数量
 空间复杂度： O(N) ，即 minDist 数组所开辟的空间
 
@@ -125,6 +138,24 @@ int main() {
     else cout << minDist[end] << endl; // 到达终点最短路径
 }
 ```
+
+#### Python 实现
+
+```python
+from collections import deque
+
+def spfa(n, graph, source):
+    distance, queued, queue = [float("inf")] * n, [False] * n, deque([source])
+    distance[source] = 0; queued[source] = True
+    while queue:
+        node = queue.popleft(); queued[node] = False
+        for neighbor, weight in graph[node]:
+            if distance[node] + weight < distance[neighbor]:
+                distance[neighbor] = distance[node] + weight
+                if not queued[neighbor]: queue.append(neighbor); queued[neighbor] = True
+    return distance
+```
+
 
 队列优化版Bellman_ford 的时间复杂度 并不稳定，效率高低依赖于图的结构。一般来说，SPFA 的时间复杂度为 O(K * N) K 为不定值，因为 节点需要计入几次队列取决于图的稠密度。如果图是一条线形图且单向的话，每个节点的入度为1，那么只需要加入一次队列，这样时间复杂度就是 O(N)。
 
@@ -247,6 +278,20 @@ int main() {
 }
 ```
 
+#### Python 实现
+
+```python
+def has_negative_cycle(n, edges):
+    distance = [0] * n
+    for iteration in range(n):
+        changed = False
+        for a, b, weight in edges:
+            if distance[a] + weight < distance[b]: distance[b] = distance[a] + weight; changed = True
+        if not changed: return False
+    return True
+```
+
+
 
 ## Bellman-ford之单源有限最短路径
 
@@ -297,3 +342,14 @@ int main() {
 }
 ```
 
+#### Python 实现
+
+```python
+def shortest_path_with_at_most_k_edges(n, edges, source, k):
+    distance = [float("inf")] * n; distance[source] = 0
+    for _ in range(k):
+        previous = distance[:]
+        for a, b, weight in edges:
+            distance[b] = min(distance[b], previous[a] + weight)
+    return distance
+```

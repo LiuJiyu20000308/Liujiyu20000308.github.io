@@ -6,7 +6,6 @@ tags: [数据结构与算法]
 toc: true
 ---
 
-> **Python 版本：** 本文保留原有 C++ 推导；每个例题对应的 Python 实现统一收录在[Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})中。
 ## 二叉树理论基础
 
 ### 二叉树的种类
@@ -279,6 +278,21 @@ vector<int> postorderTraversal(TreeNode* root) {
 }
 ```
 
+#### Python 实现
+
+```python
+def preorder_unified(root):
+    answer, stack = [], [(root, False)]
+    while stack:
+        node, visited = stack.pop()
+        if not node: continue
+        if visited: answer.append(node.val)
+        else:
+            stack.extend([(node.right, False), (node.left, False), (node, True)])
+    return answer
+```
+
+
 ### 二叉树层级遍历
 
 需要借用一个辅助数据结构即队列来实现，队列先进先出，符合一层一层遍历的逻辑，而用栈先进后出适合模拟深度优先遍历也就是递归的逻辑。而这种层序遍历方式就是图论中的广度优先遍历，只不过我们应用在二叉树上。
@@ -327,14 +341,75 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 }
 ```
 
+#### Python 实现
+
+```python
+from collections import deque
+
+def level_order(root):
+    if not root: return []
+    queue, answer = deque([root]), []
+    while queue:
+        level = []
+        for _ in range(len(queue)):
+            node = queue.popleft(); level.append(node.val)
+            if node.left: queue.append(node.left)
+            if node.right: queue.append(node.right)
+        answer.append(level)
+    return answer
+```
+
+
 ### 相关题目
 
 
 ### Leetcode 144：二叉树的前序遍历
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-070)
+
+#### Python 实现
+
+```python
+def traversals(root):
+    preorder, inorder, postorder = [], [], []
+    def visit(node):
+        if not node: return
+        preorder.append(node.val)
+        visit(node.left)
+        inorder.append(node.val)
+        visit(node.right)
+        postorder.append(node.val)
+    visit(root)
+    return preorder, inorder, postorder
+```
+
 
 ### Leetcode 94：二叉树的中序遍历
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-071)
+
+#### Python 实现
+
+```python
+def inorder_traversal(root):
+    answer, stack, node = [], [], root
+    while stack or node:
+        while node: stack.append(node); node = node.left
+        node = stack.pop(); answer.append(node.val); node = node.right
+    return answer
+```
+
 
 ### Leetcode 145：二叉树的后序遍历
-**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-070)
+
+#### Python 实现
+
+```python
+def traversals(root):
+    preorder, inorder, postorder = [], [], []
+    def visit(node):
+        if not node: return
+        preorder.append(node.val)
+        visit(node.left)
+        inorder.append(node.val)
+        visit(node.right)
+        postorder.append(node.val)
+    visit(root)
+    return preorder, inorder, postorder
+```
