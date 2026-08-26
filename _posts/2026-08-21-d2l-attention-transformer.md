@@ -584,7 +584,7 @@ Transformer 编码器让每个源位置通过多头自注意力读取完整源�
 
 ## 系列导航
 
-- 上一篇：[计算机视觉任务全景：从数据增强、目标检测到语义分割与风格迁移]({{ '/deep-learning/computer-vision-tasks/' | relative_url }})
+- 上一篇：[D2L Seq2Seq 机器翻译：从双语数据、编码器—解码器到掩码损失与自回归生成]({{ '/deep-learning/seq2seq-machine-translation/' | relative_url }})
 - [系列总览]({{ '/deep-learning/' | relative_url }})
 - 下一篇：无（本篇是当前已发布系列终点）
 
