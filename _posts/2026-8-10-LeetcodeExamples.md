@@ -20,6 +20,8 @@ toc: true
 
 ### 基本二分查找
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-001)
+
 **形象理解**：像查字典，不从第一页开始翻，而是每次打开中间一页。目标更大就扔掉左半本，更小就扔掉右半本，每次将搜索范围缩小一半。
 
 ```cpp
@@ -32,6 +34,8 @@ toc: true
 
 ### 二分查找左右边界
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-002)
+
 **形象理解**：普通二分只要“撞见一个目标”就结束；边界二分像在一排相同书名中寻找最左或最右一本，找到后仍继续向对应方向挤压。
 
 ```cpp
@@ -42,6 +46,8 @@ toc: true
 ```
 
 ### 两个有序数组的中位数
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-003)
 
 **形象理解**：不是把两副排好序的牌全部合并，而是寻找第 k 小。比较两副牌各自第 `k/2` 张，较小一侧的前半段肯定不可能包含第 k 小，可以整段丢弃。
 
@@ -56,6 +62,8 @@ toc: true
 
 ### 链表的中间结点
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-004)
+
 **形象理解**：两个人同时沿链表走，一个每次一步，一个每次两步。快的人走到终点时，慢的人刚好走完整条路的一半。
 
 ```cpp
@@ -66,6 +74,8 @@ toc: true
 ```
 
 ### 删除有序数组中的重复项
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-005)
 
 **形象理解**：慢指针是“已整理区域的最后一个位置”，快指针像质检员向后扫描。看到新数字，就把它搬到已整理区域后面。
 
@@ -79,6 +89,8 @@ toc: true
 
 ### 有序数组的平方
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-006)
+
 **形象理解**：平方后的最大值一定来自原数组两端，因为最负的数平方后也可能最大。左右两端像两名候选人，每次把平方更大的放到答案末尾。
 
 ```cpp
@@ -90,6 +102,8 @@ toc: true
 
 ### 反转字符串
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-007)
+
 **形象理解**：像交换一排人的座位，最左和最右互换，然后向中间靠拢，直到两人相遇。
 
 ```cpp
@@ -100,6 +114,8 @@ toc: true
 ```
 
 ### 最长回文子串
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-008)
 
 **形象理解**：把每个字符或两个字符之间的缝隙都当成“折纸中心”，同时向左右展开；左右字符相同就继续展开，断开时记录最大半径。
 
@@ -115,6 +131,8 @@ toc: true
 
 ### 长度最小的子数组
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-009)
+
 **形象理解**：窗口像一根可以伸缩的尺子。右端不断向前吸收数字，和达到 target 后，左端尽量收缩，找出仍满足条件的最短尺子。
 
 ```cpp
@@ -127,6 +145,8 @@ toc: true
 
 ### 无重复字符的最长子串
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-010)
+
 **形象理解**：窗口像一段只允许每种卡片出现一次的队伍。右边加入重复卡片时，从左边逐个赶人，直到重复被消除。
 
 ```cpp
@@ -138,6 +158,8 @@ toc: true
 
 ### 最大连续 1 的个数 III
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-011)
+
 **形象理解**：把最多 k 次翻转看成 k 张“0 的通行证”。窗口里 0 的数量超过 k，就从左边收回通行证，直到重新合法。
 
 ```cpp
@@ -148,6 +170,8 @@ toc: true
 ```
 
 ### 最小覆盖子串
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-012)
 
 **形象理解**：要凑齐一张购物清单。右端不断把商品放进购物车，凑齐后左端开始退掉多余商品，直到再退一步就不完整，此时得到局部最小答案。
 
@@ -161,6 +185,8 @@ toc: true
 
 ### 水果成篮
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-013)
+
 **形象理解**：只有两个篮子，每个篮子只能装一种水果。走过果树时出现第三种水果，就从最左边开始丢弃，直到篮子里重新只剩两种。
 
 ```cpp
@@ -171,6 +197,8 @@ toc: true
 ```
 
 ### 找出所有字母异位词
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-014)
 
 **形象理解**：用一张 26 格的“欠账表”比较固定长度窗口和目标串。窗口每向右滑一格，只需处理离开的字符和新进入的字符，不必重新清点全部字符。
 
@@ -184,6 +212,8 @@ toc: true
 
 ### 串联所有单词的子串
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-015)
+
 **形象理解**：字符变成等长积木。按单词长度对字符串切片，共有 `wordLength` 种起始偏移；每种偏移上都运行一次“单词版异位词窗口”。
 
 ```cpp
@@ -196,6 +226,8 @@ toc: true
 
 ### 字符串的排列
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-016)
+
 **形象理解**：与异位词题相同，只是不需要收集所有位置；固定长度窗口的字符账本一旦与 `s1` 完全一致，就可以立即返回 true。
 
 ```cpp
@@ -206,6 +238,8 @@ toc: true
 ```
 
 ### 除自身以外数组的乘积
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-017)
 
 **形象理解**：每个位置的答案由“左边所有人的乘积”和“右边所有人的乘积”拼成。先从左向右发左侧成绩，再从右向左乘上右侧成绩。
 
@@ -218,6 +252,8 @@ toc: true
 
 ### 和为 K 的子数组
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-018)
+
 **形象理解**：当前前缀和是 `pre`，要让某段和为 k，只需在过去找前缀和 `pre-k`。哈希表像一本账簿，记录每种历史余额出现过几次。
 
 ```cpp
@@ -229,6 +265,8 @@ toc: true
 
 ### 和可被 K 整除的子数组
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-019)
+
 **形象理解**：两个前缀和除以 k 的余数相同，它们的差就能被 k 整除。只需要统计过去见过多少次相同余数。
 
 ```cpp
@@ -239,6 +277,8 @@ toc: true
 ```
 
 ### 连续数组
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-020)
 
 **形象理解**：把 0 看成 -1，问题就变成找和为 0 的最长子数组。同一个前缀和再次出现，说明两次出现之间的增量为 0。
 
@@ -252,6 +292,8 @@ toc: true
 ## 模拟过程
 
 ### 螺旋矩阵 II
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-021)
 
 **形象理解**：像沿着一圈圈跑道填数字。每填完外圈，就把上、下、左、右四条边同时向内收缩一格。
 
@@ -267,6 +309,8 @@ toc: true
 
 ### 删除链表元素与虚拟头结点
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-022)
+
 **形象理解**：虚拟头结点像在真实队伍前放一个永远不删除的领队，使删除第一个真实节点和删除中间节点使用完全相同的操作。
 
 ```cpp
@@ -278,6 +322,8 @@ toc: true
 ```
 
 ### 设计链表
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-023)
 
 **形象理解**：链表类像一列可插拔车厢；虚拟头结点固定不动，`size` 记录真实车厢数，使每次插入和删除都先找到前驱车厢再改两根连接。
 
@@ -291,6 +337,8 @@ toc: true
 
 ### 反转链表
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-024)
+
 **形象理解**：像逐节把火车连接方向掉头。`cur` 拿着当前车厢，`next` 先保存后续车厢，再让当前车厢指回 `prev`。
 
 ```cpp
@@ -302,6 +350,8 @@ toc: true
 ```
 
 ### K 个一组反转链表
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-025)
 
 **形象理解**：把链表按每 k 节切成一节节车厢组。先确认凑得齐 k 节，整组掉头后再与前后组重新接轨；最后不足 k 节的部分保持原样。
 
@@ -315,6 +365,8 @@ toc: true
 
 ### 两两交换链表节点
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-026)
+
 **形象理解**：每次处理相邻两节 `first`、`second`，先把前驱接到 second，再让 second 接 first，最后让 first 接回后续链表。
 
 ```cpp
@@ -326,6 +378,8 @@ toc: true
 ```
 
 ### 删除链表倒数第 N 个节点
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-027)
 
 **形象理解**：让 fast 比 slow 领先 n 步，之后两人同速前进。fast 到终点时，slow 恰好站在待删除节点的前一位。
 
@@ -339,6 +393,8 @@ toc: true
 
 ### 链表相交
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-028)
+
 **形象理解**：A 走完自己的路后去走 B，B 走完自己的路后去走 A。两人总路程都变成 `A+B`，若有共同尾巴就会在入口相遇。
 
 ```cpp
@@ -349,6 +405,8 @@ toc: true
 ```
 
 ### 环形链表入口
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-029)
 
 **形象理解**：快慢指针像操场上的两名跑者，有环就一定会相遇。相遇后让一人回起点，两人都改成一步一格，再次相遇的位置就是环入口。
 
@@ -364,6 +422,8 @@ toc: true
 
 ### 有效的字母异位词
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-030)
+
 **形象理解**：给 26 个字母各开一个账户，读取 s 时存款，读取 t 时取款；最后所有账户都归零，才说明两串只是排列不同。
 
 ```cpp
@@ -375,6 +435,8 @@ toc: true
 
 ### 两个数组的交集
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-031)
+
 **形象理解**：先把第一个数组的元素登记成会员名单，再扫描第二个数组；查到会员就加入答案集合，集合天然负责去重。
 
 ```cpp
@@ -385,6 +447,8 @@ toc: true
 ```
 
 ### 快乐数
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-032)
 
 **形象理解**：每个数字都会唯一地变成下一个数字，整个过程像沿单向道路前进；若到不了 1，就一定会进入以前走过的环。
 
@@ -398,6 +462,8 @@ toc: true
 
 ### 两数之和
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-033)
+
 **形象理解**：看到当前数字 x 时，不向后盲找，而是在过去的账本中查询它的搭档 `target-x` 是否已经出现。
 
 ```cpp
@@ -408,6 +474,8 @@ toc: true
 ```
 
 ### 四数相加 II
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-034)
 
 **形象理解**：把四重循环拆成两支两人队伍。先统计 A+B 的所有成绩，再让 C+D 查询需要多少个相反成绩才能凑成 0。
 
@@ -420,6 +488,8 @@ toc: true
 
 ### 三数之和
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-035)
+
 **形象理解**：排序后固定第一个数，剩下两个数像夹子从左右两端向中间夹。和太小就移动左端，太大就移动右端。
 
 ```cpp
@@ -431,6 +501,8 @@ toc: true
 ```
 
 ### 四数之和
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-036)
 
 **形象理解**：在三数之和外再固定一个数。前两层像锁定两张牌，后两张仍用左右夹逼寻找目标。
 
@@ -446,6 +518,8 @@ toc: true
 
 ### 反转字符串 II
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-037)
+
 **形象理解**：把字符串按每 `2k` 个字符划成一组，每组只把前 k 个人掉头；最后一组人数不足时按照同样边界规则处理。
 
 ```cpp
@@ -456,6 +530,8 @@ toc: true
 ```
 
 ### 替换数字
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-038)
 
 **形象理解**：每个数字要膨胀成 `number`。先计算最终长度，再从后向前搬运，就不会覆盖还没读取的原字符。
 
@@ -469,6 +545,8 @@ toc: true
 
 ### 反转字符串中的单词
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-039)
+
 **形象理解**：先把整句话像磁带一样整体倒放，单词顺序已经反过来；再把每个单词内部单独倒正，最后压缩多余空格。
 
 ```cpp
@@ -479,6 +557,8 @@ toc: true
 ```
 
 ### 右旋字符串
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-040)
 
 **形象理解**：要把尾部 k 个字符搬到前面，可以先整体翻面，再分别把新前半段和后半段翻正，像三次翻转一副分成两摞的牌。
 
@@ -491,6 +571,8 @@ toc: true
 
 ### 找出字符串中第一个匹配下标
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-041)
+
 **形象理解**：暴力算法每次不匹配都回到起点；KMP 像记住模式串自己有哪些相同前后缀，失败时直接滑到仍可能匹配的位置。
 
 ```cpp
@@ -502,6 +584,8 @@ toc: true
 ```
 
 ### 重复的子字符串
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-042)
 
 **形象理解**：如果字符串由某个短模板重复组成，最长相等前后缀会留下一个完整周期；总长度必须能被周期长度整除。
 
@@ -516,6 +600,8 @@ toc: true
 
 ### 用栈实现队列
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-043)
+
 **形象理解**：一个栈负责收件，另一个栈负责发件。发件栈为空时，把收件栈全部倒过去，两次后进先出就恢复成先进先出。
 
 ```cpp
@@ -526,6 +612,8 @@ toc: true
 ```
 
 ### 用队列实现栈
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-044)
 
 **形象理解**：新元素入队后，让它前面的所有旧元素依次出队再入队，新元素就被旋转到队首，成为栈顶。
 
@@ -538,6 +626,8 @@ toc: true
 
 ### 有效的括号
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-045)
+
 **形象理解**：左括号像打开的盒子，必须按后开先关的顺序闭合。栈顶永远保存当前最需要被关闭的盒子。
 
 ```cpp
@@ -549,6 +639,8 @@ toc: true
 
 ### 删除相邻重复项
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-046)
+
 **形象理解**：栈像一块消除游戏棋盘。新字符与栈顶相同就一起消失，否则留下成为新的栈顶。
 
 ```cpp
@@ -559,6 +651,8 @@ toc: true
 ```
 
 ### 中缀表达式转后缀表达式
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-047)
 
 **形象理解**：数字直接进入输出，运算符在栈中按优先级排队；括号像临时隔离墙，右括号到来时把墙内运算符全部放行。
 
@@ -572,6 +666,8 @@ toc: true
 
 ### 逆波兰表达式求值
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-048)
+
 **形象理解**：数字先放到工作台；遇到运算符就取出最近的两个数字计算，再把结果放回工作台。
 
 ```cpp
@@ -582,6 +678,8 @@ toc: true
 ```
 
 ### 前 K 个高频元素
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-049)
 
 **形象理解**：先给每个数字计票，再用一个只保留 k 名候选人的小顶堆。堆顶是当前入围者中票数最低的人，新候选人更强时就替换他。
 
@@ -594,6 +692,8 @@ toc: true
 
 ### 滑动窗口最大值
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-050)
+
 **形象理解**：单调队列只保留仍可能成为冠军的人。新选手比队尾强时，队尾以后既更早退场又更弱，可以永久淘汰。
 
 ```cpp
@@ -605,6 +705,8 @@ toc: true
 ```
 
 ### 和至少为 K 的最短子数组
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-051)
 
 **形象理解**：前缀和队列保存最值得作为左端点的候选人。更晚且前缀和更小的候选人同时拥有“起点更靠后、减数更小”两项优势，可以淘汰旧候选人。
 
@@ -619,6 +721,8 @@ toc: true
 
 ### 选择排序
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-052)
+
 **形象理解**：像每轮从未站好的队伍中选出最矮的人，把他换到当前第一个空位；左侧已排序区每轮增长一人。
 
 ```cpp
@@ -629,6 +733,8 @@ toc: true
 ```
 
 ### 冒泡排序
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-053)
 
 **形象理解**：相邻两人逆序就交换，较大的数像气泡一样一步步浮到右端；每轮结束都会固定一个当前最大值。
 
@@ -641,6 +747,8 @@ toc: true
 
 ### 插入排序
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-054)
+
 **形象理解**：像整理手里的扑克牌。拿起一张新牌，先把所有比它大的牌向右挪一格，再把它插进腾出的空位。
 
 ```cpp
@@ -652,6 +760,8 @@ toc: true
 
 ### 希尔排序
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-055)
+
 **形象理解**：先让相距很远的元素做插入排序，快速消除大的逆序；随后逐步缩短间隔，最后用 gap=1 的插入排序收尾。
 
 ```cpp
@@ -662,6 +772,8 @@ toc: true
 ```
 
 ### 归并排序
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-056)
 
 **形象理解**：不断把队伍对半拆开，单人队伍天然有序；再让左右两个有序队伍比较队首，小者先进入新队伍。
 
@@ -675,6 +787,8 @@ toc: true
 
 ### 快速排序
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-057)
+
 **形象理解**：选一名基准，让比它小的人站左边、比它大的人站右边；基准就到达最终位置，再分别整理两边。
 
 ```cpp
@@ -686,6 +800,8 @@ toc: true
 ```
 
 ### 堆排序与 `priority_queue`
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-058)
 
 **形象理解**：最大堆像一座冠军擂台，堆顶永远是最大值。把冠军换到数组末尾后缩小赛场，再让剩余元素重新决出冠军。
 
@@ -700,6 +816,8 @@ toc: true
 
 ### 计数排序
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-059)
+
 **形象理解**：不比较元素，而是给每个数值准备一个计数格；清点完后按数值从小到大重复输出对应次数。
 
 ```cpp
@@ -711,6 +829,8 @@ toc: true
 ```
 
 ### 桶排序
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-060)
 
 **形象理解**：先把数据按区间扔进不同桶中，桶之间天然有先后顺序；只需把每个小桶内部排好，再从左到右倒出来。
 
@@ -724,6 +844,8 @@ toc: true
 
 ### 基数排序
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-061)
+
 **形象理解**：先按个位稳定排队，再按十位、百位排队；因为每轮排序稳定，较低位的顺序会被保留，最终得到完整数值顺序。
 
 ```cpp
@@ -735,6 +857,8 @@ toc: true
 ```
 
 ### Introsort
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-062)
 
 **形象理解**：它先用快速排序获得优秀的平均性能；递归过深说明分区不理想，就切换到堆排序兜底；小区间最后交给插入排序收尾。
 
@@ -748,6 +872,8 @@ toc: true
 
 ### 滑动窗口中位数
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-063)
+
 **形象理解**：`lower` 保存较小一半，`upper` 保存较大一半，像天平两侧；每次插入或删除后重新平衡，中间位置自然落在两个集合边界。
 
 ```cpp
@@ -760,6 +886,8 @@ toc: true
 
 ### 并行归并排序与快速排序
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-064)
+
 **形象理解**：左右子区间像两组互不干扰的工人，可以同时工作；只有归并或 partition 形成的数据依赖点需要等待。
 
 ```cpp
@@ -770,6 +898,8 @@ toc: true
 ```
 
 ### LRU 缓存
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-065)
 
 **形象理解**：像把最近借过的书放回书架最前面，最久没碰的书逐渐沉到末尾。哈希表负责瞬间找到书，双向链表负责瞬间调整书的位置。
 
@@ -783,6 +913,8 @@ toc: true
 
 ### LFU 缓存
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-066)
+
 **形象理解**：先按使用次数把书分到不同楼层，同一楼层再按最近使用排序。淘汰时去最低频楼层，拿走其中最久没用的一本。
 
 ```cpp
@@ -794,6 +926,8 @@ toc: true
 ```
 
 ### 基于时间的键值存储 TimeMap
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-067)
 
 **形象理解**：每个 key 都有一本按时间追加的档案。查询时间 t 时要找“不晚于 t 的最后一条记录”，即第一个大于 t 的位置再向前一步。
 
@@ -807,6 +941,8 @@ toc: true
 
 ### 带 TTL 的令牌验证系统
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-068)
+
 **形象理解**：哈希表是“每张门票当前有效期”，队列是“按过期时间排列的清理提醒”。续期会留下旧提醒，清理时必须核对它是否仍代表最新有效期。
 
 ```cpp
@@ -818,6 +954,8 @@ toc: true
 ```
 
 ### 全 O(1) 数据结构 AllOne
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-069)
 
 **形象理解**：每个计数值是一节车厢，同计数 key 坐在同一车厢；加一或减一只会走到相邻车厢，空车厢立即摘掉，因此首尾始终是最小和最大计数。
 
@@ -833,6 +971,8 @@ toc: true
 
 ### 递归前序、中序和后序遍历
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-070)
+
 **形象理解**：递归像让每个节点都执行同一张工作单。前序是“先登记自己，再访问孩子”，中序是“左边回来后登记自己”，后序是“两个孩子都回来后再登记自己”。
 
 ```cpp
@@ -845,6 +985,8 @@ toc: true
 
 ### 迭代前序、中序和后序遍历
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-071)
+
 **形象理解**：递归原本由系统调用栈替你记住“下一步回到哪里”，迭代只是把这个栈拿到自己手里。中序尤其像沿左侧楼梯走到底，再逐层返回并转向右侧。
 
 ```cpp
@@ -855,6 +997,8 @@ toc: true
 ```
 
 ### 统一格式迭代遍历
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-072)
 
 **形象理解**：栈里同时放“待访问节点”和“待执行任务”。空指针标记相当于一张便签：再次看到它时，不再展开节点，而是把紧邻的节点值写入结果。
 
@@ -867,6 +1011,8 @@ toc: true
 
 ### 二叉树层序遍历
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-073)
+
 **形象理解**：像水波从树根一圈圈向外扩散。队列中当前已有的元素正好构成一层，先记住这一层人数，处理时加入的孩子留给下一轮。
 
 ```cpp
@@ -877,6 +1023,8 @@ toc: true
 ```
 
 ### 二叉树的右视图
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-074)
 
 **形象理解**：站在树的右边，每一层只能看见最右侧节点。层序遍历时，每层最后一个出队的人就是答案。
 
@@ -889,6 +1037,8 @@ toc: true
 
 ### 二叉树每层的平均值
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-075)
+
 **形象理解**：把每一层当成一个班级，先统计总分，再除以该层人数。总和使用更宽类型，避免节点较多时溢出。
 
 ```cpp
@@ -899,6 +1049,8 @@ toc: true
 ```
 
 ### 填充每个节点的下一个右侧节点指针
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-076)
 
 **形象理解**：每层节点像排成一队，处理到第二个人时，就能让前一个人的 `next` 指向当前人；队尾自然指向空。
 
@@ -912,6 +1064,8 @@ toc: true
 
 ### 对称二叉树
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-077)
+
 **形象理解**：不是比较两棵子树相同位置，而是把它们放到镜子两侧：左边的外侧要对上右边的外侧，左边的内侧要对上右边的内侧。
 
 ```cpp
@@ -924,6 +1078,8 @@ toc: true
 
 ### 二叉树和 N 叉树的最大深度
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-078)
+
 **形象理解**：树高等于“最高孩子的身高再加自己这一层”。N 叉树只是孩子从两个变成一组，核心仍是从所有孩子中挑最大值。
 
 ```cpp
@@ -935,6 +1091,8 @@ toc: true
 
 ### 二叉树的最小深度
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-079)
+
 **形象理解**：最小深度必须走到真正的叶子，不能在“只有一边为空”时提前下车。单孩子节点只能沿存在的那一侧继续走。
 
 ```cpp
@@ -945,6 +1103,8 @@ toc: true
 ```
 
 ### 平衡二叉树
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-080)
 
 **形象理解**：每个节点都是一架天平。孩子先报告自己的高度；任何孩子已经失衡，或两侧高度差超过 1，就用 `-1` 一路上报故障。
 
@@ -958,6 +1118,8 @@ toc: true
 
 ### 二叉树的所有路径
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-081)
+
 **形象理解**：路径像旅行清单。进入节点时写下名字，走到叶子时拍照保存；回到岔路口前擦掉刚才那一站，才能复用清单探索另一条路。
 
 ```cpp
@@ -968,6 +1130,8 @@ toc: true
 ```
 
 ### 路径总和
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-082)
 
 **形象理解**：把目标和当成旅行预算，每经过一个节点就扣除节点值；只有走到叶子并且预算恰好清零，才把这条完整路线拍照保存。随后仍要返回岔路口，继续寻找其他路线。
 
@@ -981,6 +1145,8 @@ toc: true
 
 ### 左叶子之和
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-083)
+
 **形象理解**：重点不是“位于左边的节点”，而是“父节点的左孩子恰好是叶子”。因此判断动作应发生在父节点处。
 
 ```cpp
@@ -991,6 +1157,8 @@ toc: true
 ```
 
 ### 找树左下角的值
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-084)
 
 **形象理解**：层序遍历中每到新一层，第一个出队的节点就是该层最左节点；不断覆盖答案，最后留下的就是最深层最左值。
 
@@ -1003,6 +1171,8 @@ toc: true
 
 ### 翻转二叉树
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-085)
+
 **形象理解**：给树上的每个节点都做同一个动作——交换左右孩子。交换发生在前序还是后序都可以，只要每个节点恰好处理一次。
 
 ```cpp
@@ -1014,6 +1184,8 @@ toc: true
 ```
 
 ### 根据前序和中序遍历构造二叉树
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-086)
 
 **形象理解**：前序序列的第一个人一定是组长；在中序序列中找到组长后，左边全属于左组，右边全属于右组，再对两个小组重复这个过程。
 
@@ -1029,6 +1201,8 @@ toc: true
 
 ### 搜索和插入 BST
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-087)
+
 **形象理解**：BST 像按编号分岔的走廊：小于当前值永远向左，大于当前值永远向右。搜索沿唯一方向走；插入则在第一次遇到空房间时落座。
 
 ```cpp
@@ -1039,6 +1213,8 @@ toc: true
 ```
 
 ### 删除 BST 节点
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-088)
 
 **形象理解**：删除没有孩子或只有一个孩子的人，可以让孩子直接顶替；有两个孩子时，请右子树里最小的人接班，才能保持整棵树的排序规则。
 
@@ -1052,6 +1228,8 @@ toc: true
 
 ### 验证 BST
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-089)
+
 **形象理解**：只比较节点和直接孩子不够，因为右子树深处也可能混入过小值。中序遍历 BST 应当得到严格递增序列，像检查一列已经排好序的号码。
 
 ```cpp
@@ -1063,6 +1241,8 @@ toc: true
 ```
 
 ### BST 转双向链表
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-090)
 
 **形象理解**：中序遍历本来就按从小到大依次“点名”。记住上一个被点名的节点，每来一个新节点就把二者双向牵手。
 
@@ -1076,6 +1256,8 @@ toc: true
 
 ### BST 中的最小绝对差和众数
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-091)
+
 **形象理解**：中序序列已经排好序，最小差只可能出现在相邻数字之间；相同数字也会连成一段，因此众数可以像数连续车厢一样统计。
 
 ```cpp
@@ -1087,6 +1269,8 @@ toc: true
 
 ### 二叉树与 BST 的最近公共祖先
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-092)
+
 **形象理解**：普通树中，一个节点若能从左右两边分别收到 p、q 的“找到”信号，它就是汇合点；BST 中则可利用大小关系，p、q 分居当前值两侧时当前节点就是分岔口。
 
 ```cpp
@@ -1097,6 +1281,8 @@ toc: true
 ```
 
 ### 修剪 BST
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-093)
 
 **形象理解**：如果当前值小于下界，它的整个左子树只会更小，可以整棵丢弃；值大于上界时同理丢弃整个右子树。
 
@@ -1110,6 +1296,8 @@ toc: true
 
 ### BST 转累加树
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-094)
+
 **形象理解**：普通中序从小到大；反向中序从大到小。一路维护已经见过的所有更大值之和，当前节点加上它，就得到累加后的值。
 
 ```cpp
@@ -1120,6 +1308,8 @@ toc: true
 ```
 
 ### 有序数组转平衡 BST
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-095)
 
 **形象理解**：每次选择数组中点当组长，左右人数最接近；对子区间继续选中点，树就不会偏向一侧。
 
@@ -1135,6 +1325,8 @@ toc: true
 
 ### 每日温度
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-096)
+
 **形象理解**：栈里是还在等待更暖一天的人。新温度更高时，它会连续通知栈顶那些更冷的人，并用下标差算出他们等了几天。
 
 ```cpp
@@ -1145,6 +1337,8 @@ toc: true
 ```
 
 ### 最大二叉树
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-097)
 
 **形象理解**：更大的数字会吃掉左边连续比它小的节点并让它们成为左孩子；它又可能成为左侧最近更大节点的右孩子。单调栈正好维护这条父子边界。
 
@@ -1157,6 +1351,8 @@ toc: true
 
 ### 接雨水
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-098)
+
 **形象理解**：栈里保存还没找到右挡板的低洼地。新柱子更高时，弹出的柱子是池底，新的栈顶是左挡板，当前柱子是右挡板。
 
 ```cpp
@@ -1168,6 +1364,8 @@ toc: true
 ```
 
 ### 柱状图中最大的矩形
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-099)
 
 **形象理解**：每根柱子都想知道自己能向左右延伸多远。遇到更矮柱子时，栈顶高柱的右边界已经确定，而弹栈后的新栈顶就是它左边第一个更矮位置。
 
@@ -1183,6 +1381,8 @@ toc: true
 
 ### 组合
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-100)
+
 **形象理解**：从一排号码中挑 k 个，路径是手里已经拿到的号码，`startIndex` 是下一次只能从哪里往后挑。走满 k 层就拍下一张组合照片。
 
 ```cpp
@@ -1196,6 +1396,8 @@ toc: true
 
 ### 组合总和 I
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-101)
+
 **形象理解**：像用不同面额硬币凑金额，每种面额可反复使用。选择某个数后下一层仍从当前下标开始，而不是从下一个下标开始。
 
 ```cpp
@@ -1207,6 +1409,8 @@ toc: true
 ```
 
 ### 组合总和 II（原记录“组合求和 III”，Leetcode 40）
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-102)
 
 **形象理解**：每张数字卡只能使用一次，而且相同数字卡很多。先排序，让同一层中相同的卡站在一起；同层跳过重复卡，但不同层仍可选择另一个相同值。
 
@@ -1221,6 +1425,8 @@ toc: true
 
 ### 组合总和 III（原记录“组合求和 II”，Leetcode 216）
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-103)
+
 **形象理解**：只能从 1 到 9 中挑 k 个不同数字凑成 n。既要控制手里卡片数量，也要控制剩余金额；任一条件不可能满足都可提前结束。
 
 ```cpp
@@ -1232,6 +1438,8 @@ toc: true
 ```
 
 ### 分割回文串
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-104)
 
 **形象理解**：在字符串的字符缝隙中放剪刀。每次只剪下一段已经确认是回文的片段；走到字符串末尾时，桌上的所有片段就是一种合法切法。
 
@@ -1245,6 +1453,8 @@ toc: true
 
 ### 复原 IP 地址
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-105)
+
 **形象理解**：要在数字串中准确插入三个点，切成四段。每段必须是 0 到 255，且除了单独的 0 之外不能有前导零。
 
 ```cpp
@@ -1256,6 +1466,8 @@ toc: true
 ```
 
 ### 子集 I
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-106)
 
 **形象理解**：组合题只在长度达标时拍照，子集题在到达每个节点时都拍照，因为空集、一个元素、两个元素等每种长度都是答案。
 
@@ -1269,6 +1481,8 @@ toc: true
 
 ### 子集 II
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-107)
+
 **形象理解**：与子集 I 相同，但输入中有相同卡片。排序后，同一父节点下只允许第一个相同值开分支，避免生成两棵完全相同的子树。
 
 ```cpp
@@ -1280,6 +1494,8 @@ toc: true
 ```
 
 ### 递增子序列
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-108)
 
 **形象理解**：原数组不能排序，因为顺序本身就是题目的一部分。每一层用一张临时名单记录本层已经选过的数，避免相同值从不同下标长出重复分支。
 
@@ -1293,6 +1509,8 @@ toc: true
 
 ### 全排列 I
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-109)
+
 **形象理解**：有 n 个座位，每层决定一个座位坐谁。`used[i]` 表示第 i 个人已经坐下，直到所有座位填满时记录一种排列。
 
 ```cpp
@@ -1304,6 +1522,8 @@ toc: true
 ```
 
 ### 全排列 II
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-110)
 
 **形象理解**：相同数字像长相一样的人。排序后规定在同一个座位上，只有前一个相同数字已经被使用时，后一个才有资格出场，避免交换双胞胎产生重复排列。
 
@@ -1317,6 +1537,8 @@ toc: true
 
 ### N 皇后
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-111)
+
 **形象理解**：逐行摆皇后，每行只放一个。新皇后只需向上检查同列和两条斜线，因为下面的行还没有摆任何皇后。
 
 ```cpp
@@ -1329,6 +1551,8 @@ toc: true
 
 ### 数独
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-112)
+
 **形象理解**：找到第一个空格，尝试放入 1 到 9；一旦后续无解就擦掉重试。找到一条完整解后立即向上返回 true，不再枚举其他分支。
 
 ```cpp
@@ -1340,6 +1564,8 @@ toc: true
 ```
 
 ### 重新安排行程
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-113)
 
 **形象理解**：机票是只能使用一次的边，机场是图节点。行程必须用完所有票，且同一机场有多个目的地时优先尝试字典序更小者。
 
@@ -1355,6 +1581,8 @@ toc: true
 
 ### 分发饼干
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-114)
+
 **形象理解**：小饼干留给容易满足的孩子，大饼干优先尝试满足胃口最大的孩子，避免大饼干被不必要地浪费。
 
 ```cpp
@@ -1366,6 +1594,8 @@ toc: true
 ```
 
 ### 摆动序列
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-115)
 
 **形象理解**：只保留山峰和山谷，中间同坡度的点都可以删去。当前差值与上一段有效差值异号时，才真正形成一次摆动。
 
@@ -1379,6 +1609,8 @@ toc: true
 
 ### 最大子序和
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-116)
+
 **形象理解**：前面的累计和如果已经是负债，就不值得带到今天；从当前数字重新开一段一定更好。
 
 ```cpp
@@ -1390,6 +1622,8 @@ toc: true
 
 ### 买卖股票的最佳时机 II
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-117)
+
 **形象理解**：只要明天比今天贵，就把这一小段上涨收入囊中。连续上涨的每个小台阶之和，正好等于最低点买、最高点卖的总利润。
 
 ```cpp
@@ -1400,6 +1634,8 @@ toc: true
 ```
 
 ### 跳跃游戏 I
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-118)
 
 **形象理解**：维护目前最远能铺到哪里，像不断延长一块安全地毯。只要当前下标仍在地毯内，就能从这里继续把地毯向前铺。
 
@@ -1413,6 +1649,8 @@ toc: true
 
 ### 跳跃游戏 II
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-119)
+
 **形象理解**：一次跳跃能覆盖一段区间。扫描当前区间内的所有起跳点，计算下一跳最远能覆盖哪里；走到本层边界时才把跳数加一，类似按层 BFS。
 
 ```cpp
@@ -1425,6 +1663,8 @@ toc: true
 
 ### K 次取反后最大化数组和
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-120)
+
 **形象理解**：绝对值大的负数翻正收益最大，因此按绝对值从大到小处理。负数都翻完后若还剩奇数次，只能翻绝对值最小的数字，损失最少。
 
 ```cpp
@@ -1435,6 +1675,8 @@ toc: true
 ```
 
 ### 加油站
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-121)
 
 **形象理解**：从某站出发后若在 j 站前油量变负，那么这段区间里的任何站作为起点都无法越过 j；可以整段跳过，从 j+1 重新开始。
 
@@ -1447,6 +1689,8 @@ toc: true
 
 ### 分发糖果
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-122)
+
 **形象理解**：先只听左邻居的要求，从左向右保证高分者比左边多；再只听右邻居的要求，从右向左取两种要求的较大值。
 
 ```cpp
@@ -1457,6 +1701,8 @@ toc: true
 ```
 
 ### 柠檬水找零
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-123)
 
 **形象理解**：5 元是最灵活的零钱。收到 20 元时优先用一张 10 元加一张 5 元，保留更多 5 元应对只能用 5 元组合的情况。
 
@@ -1470,6 +1716,8 @@ toc: true
 
 ### 根据身高重建队列
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-124)
+
 **形象理解**：高个子不受矮个子影响，所以先安排高个子。按身高从高到低处理时，把人插入下标 k，前面恰好已有 k 个不矮于他的人。
 
 ```cpp
@@ -1480,6 +1728,8 @@ toc: true
 ```
 
 ### 用最少数量的箭引爆气球
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-125)
 
 **形象理解**：把每个气球看成横轴上的区间。一支箭要尽量同时穿过更多区间，因此把箭放在当前重叠区域最靠右的位置，为后面的气球留下最大余地。
 
@@ -1492,6 +1742,8 @@ toc: true
 
 ### 无重叠区间
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-126)
+
 **形象理解**：要保留尽可能多的会议，就总选最早结束的那场，它给后续会议留下的时间最多；删除数等于总区间数减保留数。
 
 ```cpp
@@ -1502,6 +1754,8 @@ toc: true
 ```
 
 ### 划分字母区间
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-127)
 
 **形象理解**：每个字符都拉着一根线直到它最后一次出现的位置。扫描一个片段时，遇到的新字符可能把片段右边界继续拉长；走到最远边界才能切断。
 
@@ -1514,6 +1768,8 @@ toc: true
 
 ### 合并区间
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-128)
+
 **形象理解**：区间按起点排队后，只需观察新来的区间是否碰到结果中最后一段；碰到就拉长终点，没碰到就另开一段。
 
 ```cpp
@@ -1524,6 +1780,8 @@ toc: true
 ```
 
 ### 单调递增的数字
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-129)
 
 **形象理解**：从右向左找数字下降的位置。左边数字减一后，把右侧全部改成 9，既能恢复单调，又能让结果尽可能大。
 
@@ -1536,6 +1794,8 @@ toc: true
 ```
 
 ### 监控二叉树
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-130)
 
 **形象理解**：摄像头放在叶子上很浪费；让叶子先保持“未覆盖”，它的父节点就会安装摄像头，同时覆盖父、孩子和祖父。状态从下向上传递最自然。
 
@@ -1552,6 +1812,8 @@ toc: true
 
 ### 爬楼梯
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-131)
+
 **形象理解**：到第 i 级的最后一步只有两种来源：从 i-1 走一步，或从 i-2 跨两步，因此总方法数就是两条来路之和。
 
 ```cpp
@@ -1562,6 +1824,8 @@ toc: true
 ```
 
 ### 使用最小花费爬楼梯
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-132)
 
 **形象理解**：站上第 i 级可以从前一级或前两级跨来，比较两条路线截至出发台阶所付的总费用，选择更便宜的一条。
 
@@ -1574,6 +1838,8 @@ toc: true
 
 ### 不同路径
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-133)
+
 **形象理解**：机器人进入一个格子只能来自上方或左方，所以当前格子的路线数等于“从上方来的路线数 + 从左方来的路线数”。
 
 ```cpp
@@ -1584,6 +1850,8 @@ toc: true
 ```
 
 ### 不同路径 II
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-134)
 
 **形象理解**：障碍格像封死的路口，到达方法数直接清零；其他格仍把上方和左方的路线汇总过来。
 
@@ -1597,6 +1865,8 @@ toc: true
 
 ### 整数拆分
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-135)
+
 **形象理解**：第一次把 i 切出一段 j，剩下的 i-j 可以选择不再拆，也可以继续按最优方式拆；两者取更大的乘积。
 
 ```cpp
@@ -1608,6 +1878,8 @@ toc: true
 ```
 
 ### 不同的二叉搜索树
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-136)
 
 **形象理解**：从 1 到 n 中选 i 当根后，左边 i-1 个数可组成若干左树，右边 n-i 个数可组成若干右树；左右方案可以任意配对，所以要相乘。
 
@@ -1623,6 +1895,8 @@ toc: true
 
 ### 打家劫舍 I
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-137)
+
 **形象理解**：走到第 i 家时只有两种合法决定：不偷它，继承前一家最优值；偷它，就必须跳过前一家并加上前两家的最优值。
 
 ```cpp
@@ -1634,6 +1908,8 @@ toc: true
 
 ### 打家劫舍 II
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-138)
+
 **形象理解**：首尾相邻意味着不能同时偷。把环拆成两个互斥场景：不考虑最后一家，或不考虑第一家，各做一次线性打家劫舍并取较大值。
 
 ```cpp
@@ -1644,6 +1920,8 @@ toc: true
 ```
 
 ### 打家劫舍 III
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-139)
 
 **形象理解**：每个树节点向父亲汇报两个数字：偷我时最多拿多少、不偷我时最多拿多少。父亲根据自己的选择组合孩子的两类状态。
 
@@ -1658,6 +1936,8 @@ toc: true
 
 ### 只能买卖一次
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-140)
+
 **形象理解**：每天结束只记录两种账户状态：手里有股票或没有股票。只允许一次交易时，“持有”的买入来源必须是初始现金，而不能接在上一笔卖出之后。
 
 ```cpp
@@ -1670,6 +1950,8 @@ toc: true
 
 ### 可以买卖任意次
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-141)
+
 **形象理解**：仍是持股和空仓两个账户，但今天买入可以使用之前已经赚到的现金，因此允许一笔交易结束后再开始下一笔。
 
 ```cpp
@@ -1680,6 +1962,8 @@ toc: true
 ```
 
 ### 最多买卖两次
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-142)
 
 **形象理解**：一天结束可能处于五个阶段：未操作、第一次持有、第一次卖出、第二次持有、第二次卖出。每个阶段只从自己或前一阶段转移。
 
@@ -1693,6 +1977,8 @@ toc: true
 
 ### 最多买卖 K 次
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-143)
+
 **形象理解**：把两次交易的五个阶段扩展成 `2k+1` 个阶段，奇数编号表示第几次持有，偶数编号表示第几次卖出。
 
 ```cpp
@@ -1705,6 +1991,8 @@ toc: true
 
 ### 含冷冻期的股票交易
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-144)
+
 **形象理解**：卖出后的第二天不能买，所以不能只区分持股和空仓；要单独记住“今天刚卖出”和“处于冷冻/普通空仓”的状态。
 
 ```cpp
@@ -1716,6 +2004,8 @@ toc: true
 ```
 
 ### 含手续费的股票交易
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-145)
 
 **形象理解**：仍使用持股/空仓两状态，只需在买入或卖出的一侧扣一次手续费，不能两边都扣。
 
@@ -1731,6 +2021,8 @@ toc: true
 
 ### 二维 0-1 背包
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-146)
+
 **形象理解**：每件物品像一次性卡牌。走到第 i 件时，可以不拿它，或在背包容量足够时拿它并接上“只考虑前 i-1 件”的最优值。
 
 ```cpp
@@ -1742,6 +2034,8 @@ toc: true
 ```
 
 ### 一维 0-1 背包
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-147)
 
 **形象理解**：把二维表压成一行后，容量必须从大到小更新。这样读取的 `dp[j-weight]` 仍属于上一轮，保证当前物品不会在同一轮被拿多次。
 
@@ -1755,6 +2049,8 @@ toc: true
 
 ### 分割等和子集
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-148)
+
 **形象理解**：总和若为奇数一定无法平分；否则问题就是从数组中挑一些数，恰好装满容量为 `sum/2` 的 0-1 背包。
 
 ```cpp
@@ -1766,6 +2062,8 @@ toc: true
 ```
 
 ### 最后一块石头的重量 II
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-149)
 
 **形象理解**：把石头分成两堆互相碰撞，最终重量是两堆总重之差。让较轻那堆尽量接近总重一半，差值就最小。
 
@@ -1779,6 +2077,8 @@ toc: true
 
 ### 目标和
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-150)
+
 **形象理解**：设加正号的数之和为 P、加负号的数之和为 N，则 `P-N=target` 且 `P+N=sum`，所以只需统计和为 `(sum+target)/2` 的子集数量。
 
 ```cpp
@@ -1790,6 +2090,8 @@ toc: true
 ```
 
 ### 一和零
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-151)
 
 **形象理解**：背包有两个容量维度：最多能用 m 个 0 和 n 个 1。每个字符串是一件同时消耗两种资源、价值为 1 的物品。
 
@@ -1803,6 +2105,8 @@ toc: true
 
 ### 完全背包的遍历顺序
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-152)
+
 **形象理解**：完全背包中的物品可重复拿，所以容量从小到大更新；这样本轮刚更新的 `dp[j-weight]` 可以继续使用当前物品。
 
 ```cpp
@@ -1813,6 +2117,8 @@ toc: true
 ```
 
 ### 零钱兑换 II
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-153)
 
 **形象理解**：要统计不考虑顺序的硬币组合，所以先固定硬币种类，再逐步扩充金额；同一组合不会因为拿币顺序不同被重复计算。
 
@@ -1826,6 +2132,8 @@ toc: true
 
 ### 组合总和 IV
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-154)
+
 **形象理解**：`[1,2]` 和 `[2,1]` 算两种答案，因此先枚举目标总和，再枚举最后放入哪个数字，让不同顺序进入不同转移路径。
 
 ```cpp
@@ -1837,6 +2145,8 @@ toc: true
 ```
 
 ### 爬楼梯作为完全背包
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-155)
 
 **形象理解**：若一次可走 1..m 级，每一种走法就是用这些“步长硬币”按顺序凑出楼层 n；顺序不同的步长序列算不同路线。
 
@@ -1850,6 +2160,8 @@ toc: true
 
 ### 零钱兑换
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-156)
+
 **形象理解**：每个金额都问：“如果最后使用某枚硬币，之前最少需要几枚？”从所有合法硬币给出的候选值中选最小。
 
 ```cpp
@@ -1860,6 +2172,8 @@ toc: true
 ```
 
 ### 完全平方数
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-157)
 
 **形象理解**：把 `1,4,9...` 这些平方数当成可无限使用的硬币，目标是用最少硬币凑成 n。
 
@@ -1872,6 +2186,8 @@ toc: true
 ```
 
 ### 单词拆分
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-158)
 
 **形象理解**：`dp[i]` 表示字符串前 i 个字符已经能被词典切好。枚举最后一个切口 j，只要前半段可达且 `s[j..i)` 在词典中，i 就可达。
 
@@ -1887,6 +2203,8 @@ toc: true
 
 ### 最长递增子序列
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-159)
+
 **形象理解**：`dp[i]` 只负责“必须以 nums[i] 收尾”的队伍。向前寻找所有比它小的末尾，把 nums[i] 接在其中最长的一队后面。
 
 ```cpp
@@ -1899,6 +2217,8 @@ toc: true
 
 ### 最长连续递增序列
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-160)
+
 **形象理解**：连续意味着不能从更早位置跳过来。当前数字比前一个大时，当前增长跑道延长一格；否则从当前位置重新起跑。
 
 ```cpp
@@ -1910,6 +2230,8 @@ toc: true
 
 ### 最长重复子数组
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-161)
+
 **形象理解**：把两个数组排成棋盘，元素相等时当前格能沿左上角的连续对角线延长一格；不相等则连续段立即归零。
 
 ```cpp
@@ -1920,6 +2242,8 @@ toc: true
 ```
 
 ### 最长公共子序列
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-162)
 
 **形象理解**：两个字符串的末尾字符相同，就把它接到两个前缀的公共子序列后；末尾不同，就尝试放弃任意一边的末尾字符。
 
@@ -1933,6 +2257,8 @@ toc: true
 
 ### 不相交的线
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-163)
+
 **形象理解**：相同数字之间连线且不能相交，等价于保持两数组原顺序选择相同元素，也就是最长公共子序列。
 
 ```cpp
@@ -1944,6 +2270,8 @@ toc: true
 
 ### 动态规划版本的最大子序和
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-164)
+
 **形象理解**：与贪心解释一致，只是显式定义 `dp[i]` 为必须以 i 结尾的最大和，决定接上前一段还是从当前数重新开始。
 
 ```cpp
@@ -1954,6 +2282,8 @@ toc: true
 ```
 
 ### 判断子序列
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-165)
 
 **形象理解**：二维 DP 版本记录 s 的前 i 个字符能否全部嵌入 t 的前 j 个字符；若当前字符不匹配，只能丢弃 t 的当前字符继续寻找。
 
@@ -1967,6 +2297,8 @@ toc: true
 
 ### 不同的子序列
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-166)
+
 **形象理解**：计算 s 中能选出多少个 t。若当前字符相同，可以用它匹配 t 的末尾，也可以不用它；不同则只能不用它。
 
 ```cpp
@@ -1979,6 +2311,8 @@ toc: true
 
 ### 两个字符串的删除操作
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-167)
+
 **形象理解**：先找两字符串都愿意保留的最长公共子序列，其余字符全部删除；两边删除数就是总长度减去两倍的保留长度。
 
 ```cpp
@@ -1989,6 +2323,8 @@ toc: true
 ```
 
 ### 编辑距离
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-168)
 
 **形象理解**：让两个前缀对齐。末尾相同时不花钱；不同时考虑删除、插入、替换三种动作，选择从哪个相邻状态走一步最便宜。
 
@@ -2002,6 +2338,8 @@ toc: true
 
 ### 回文子串
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-169)
+
 **形象理解**：区间 `[i,j]` 是回文，需要两端字符相同，并且内部 `[i+1,j-1]` 已是回文；长度 1 或 2 时内部为空，可直接成立。
 
 ```cpp
@@ -2012,6 +2350,8 @@ toc: true
 ```
 
 ### 最长回文子序列
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-170)
 
 **形象理解**：区间两端相等时，可以把它们一起包在内部最长回文两侧；不相等时，只能舍弃左端或右端并选择更长结果。
 
@@ -2024,6 +2364,8 @@ toc: true
 ```
 
 ### 正则表达式匹配
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-171)
 
 **形象理解**：普通字符或 `.` 只消费一次；`*` 像一个可伸缩印章，可以让前一个模式出现零次，也可以在字符匹配时再消费一次文本、但继续保留这个印章。
 
@@ -2040,6 +2382,8 @@ toc: true
 
 ### 寻找图中是否存在路径
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-172)
+
 **形象理解**：并查集给每个连通块选一个代表人。每条边让两边代表人合并；最后只需看起点和终点是否拥有同一个代表人。
 
 ```cpp
@@ -2051,6 +2395,8 @@ toc: true
 
 ### 冗余连接
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-173)
+
 **形象理解**：一棵树中新增一条连接同一连通块内部两点的边，就会闭合成环。扫描边时若两端代表人已相同，这条边就是多余边。
 
 ```cpp
@@ -2061,6 +2407,8 @@ toc: true
 ```
 
 ### 冗余连接 II
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-174)
 
 **形象理解**：有向树失效只有两类原因：某节点有两个父亲，或图中出现环。先找“双父节点”的两条候选边，再通过跳过候选边做并查集验证。
 
@@ -2076,6 +2424,8 @@ toc: true
 
 ### 所有可能的路径
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-175)
+
 **形象理解**：从 0 号节点出发沿每条有向边试走，路径像一条面包屑轨迹；到达终点就复制轨迹，返回时擦掉最后一步去试另一条边。
 
 ```cpp
@@ -2087,6 +2437,8 @@ toc: true
 ```
 
 ### 岛屿数量
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-176)
 
 **形象理解**：每发现一块尚未标记的陆地，就发现了一座新岛；从它出发把上下左右连着的陆地全部“涂掉”，同一座岛之后就不会重复计数。
 
@@ -2100,6 +2452,8 @@ toc: true
 
 ### 岛屿的最大面积
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-177)
+
 **形象理解**：每次从一块新陆地开始做“洪水填充”，搜索返回这座岛包含的格子数，再用它更新最大面积。
 
 ```cpp
@@ -2110,6 +2464,8 @@ toc: true
 ```
 
 ### 孤岛的最大面积
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-178)
 
 **形象理解**：从边界能走出去的陆地都不是封闭孤岛。先从四条边界出发淹掉所有相连陆地，剩余陆地才是被水完全包围的部分；原记录最终统计这些剩余陆地的总面积。
 
@@ -2122,6 +2478,8 @@ toc: true
 
 ### 沉没孤岛（被围绕的区域）
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-179)
+
 **形象理解**：边界上的陆地 `1` 及其连通区域不会被包围，先给它们贴上临时安全标记 `2`；剩下的 `1` 全部沉成水域 `0`，最后再恢复安全区。
 
 ```cpp
@@ -2133,6 +2491,8 @@ toc: true
 
 ### 太平洋大西洋水流问题
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-180)
+
 **形象理解**：正向从每个格子试着往低处流很重复。反过来分别从两片海岸向高处爬，能被两次逆向搜索都到达的格子，就能顺流到两片海。
 
 ```cpp
@@ -2143,6 +2503,8 @@ toc: true
 ```
 
 ### 建造最大岛屿
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-181)
 
 **形象理解**：先给每座已有岛屿刷上独立颜色并记录面积。尝试把一个 0 改成 1 时，只需把上下左右不同颜色岛屿的面积相加，再加上新格子本身。
 
@@ -2156,6 +2518,8 @@ toc: true
 
 ### 岛屿的周长
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-182)
+
 **形象理解**：每块陆地最初贡献四条边；每与另一块陆地共享一条边，总周长就少两条，因为两边都变成内部边。
 
 ```cpp
@@ -2167,6 +2531,8 @@ toc: true
 ```
 
 ### 单词接龙
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-183)
 
 **形象理解**：每个单词是节点，只差一个字符的单词之间有边。BFS 像从起点同时扩散的波纹，第一次碰到终点时走过的层数一定最少。
 
@@ -2182,6 +2548,8 @@ toc: true
 
 ### Prim 算法
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-184)
+
 **形象理解**：已经连通的节点形成一座岛，每轮选择从岛内伸向岛外最便宜的一座桥，把一个新节点纳入岛中。
 
 ```cpp
@@ -2193,6 +2561,8 @@ toc: true
 ```
 
 ### Kruskal 算法
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-185)
 
 **形象理解**：把所有道路按造价从低到高排队，只要一条路连接的是两个不同村落联盟，就修建它；已经在同一联盟的两端再连会成环，必须跳过。
 
@@ -2206,6 +2576,8 @@ toc: true
 
 ### Dijkstra 朴素算法
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-186)
+
 **形象理解**：每轮从尚未确定的城市中选当前距离最近者。非负边保证以后绕路不可能让它更近，因此可以盖章确认，再用它帮助邻居缩短距离。
 
 ```cpp
@@ -2217,6 +2589,8 @@ toc: true
 ```
 
 ### Dijkstra 堆优化
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-187)
 
 **形象理解**：最小堆替代“每轮在所有城市中找最近者”的线性搜索。堆里可能保留旧报价，弹出时若比最新 `dist` 更差就丢弃。
 
@@ -2230,6 +2604,8 @@ toc: true
 
 ### 拓扑排序
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-188)
+
 **形象理解**：入度为 0 的课程没有任何先修课，可以立即学习。学完它就删除其出边，后续课程的先修数量减少；不断重复直到没有可学课程。
 
 ```cpp
@@ -2241,6 +2617,8 @@ toc: true
 ```
 
 ### Bellman-Ford
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-189)
 
 **形象理解**：最短简单路径最多包含 V-1 条边。每一轮让已知最短距离沿所有边再传播一步，连续做 V-1 轮就能覆盖所有可能的简单路径。
 
@@ -2254,6 +2632,8 @@ toc: true
 
 ### SPFA 队列优化
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-190)
+
 **形象理解**：Bellman-Ford 每轮检查所有边，SPFA 只让“距离刚刚变小的节点”去通知邻居；没有新消息的节点无需重复广播。
 
 ```cpp
@@ -2266,6 +2646,8 @@ toc: true
 
 ### Bellman-Ford 判断负权回路
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-191)
+
 **形象理解**：V-1 轮后正常最短路已经稳定；若第 V 轮还能变短，说明路径可以绕某个负权环不断降价，不存在有限最短值。
 
 ```cpp
@@ -2276,6 +2658,8 @@ toc: true
 ```
 
 ### Bellman-Ford 单源有限最短路径
+
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-192)
 
 **形象理解**：题目限制最多经过 k 条边，就让距离只传播 k 轮。每轮必须读取上一轮的快照，避免同一轮连续使用多条边而突破边数限制。
 
@@ -2289,6 +2673,8 @@ toc: true
 
 ### Floyd 算法
 
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-193)
+
 **形象理解**：逐个开放中转站 k。开放第 k 个站后，任意 i 到 j 的路线可以保持原路，也可以改走 `i -> k -> j`，选更短者。
 
 ```cpp
@@ -2298,3 +2684,8 @@ toc: true
 // 4. 两段都可达时更新 dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])。
 // 5. k 必须放在最外层；完成后得到任意两点最短路。
 ```
+
+## 系列导航
+
+- [原专题文章索引](#原代码索引)
+- 下一篇：[LeetCode 例题 Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})

@@ -6,6 +6,8 @@ tags: [数据结构与算法]
 toc: true
 ---
 
+> **Python 版本：** 本文保留原有 C++ 推导；每个例题对应的 Python 实现统一收录在[Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})中。
+
 单调栈通常是一维数组，**要寻找任一个元素的右边或者左边第一个比自己大或者小的元素的位置**，此时我们就要想到可以用单调栈了。时间复杂度为O(n)。
 
 单调栈的本质是**空间换时间**，因为在遍历的过程中需要用一个栈来记录右边第一个比当前元素高的元素，优点是整个数组只需要遍历一次。
@@ -84,7 +86,10 @@ vector<int> dailyTemperatures(vector<int>& T) {
 
 ### 最大二叉树
 
-Leetcode 654. 给定一个不重复的整数数组 nums 。 最大二叉树 可以用下面的算法从 nums 递归地构建:
+### Leetcode 654
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-097)
+
+给定一个不重复的整数数组 nums 。 最大二叉树 可以用下面的算法从 nums 递归地构建:
 1. 创建一个根节点，其值为 nums 中的最大值。
 2. 递归地在最大值 左边 的 子数组前缀上 构建左子树。
 3. 递归地在最大值 右边 的 子数组后缀上 构建右子树。
@@ -157,7 +162,10 @@ TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
 
 ### 接雨水
 
-Leetcode 42. 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+### Leetcode 42
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-098)
+
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
 
 **注意每次存入的时候的循环是while循环，要把前面所有的都考虑到。**
 ```cpp
@@ -193,7 +201,10 @@ int trap(vector<int>& height) {
 
 ### 柱状图中最大的矩形
 
-Leetcode 84. 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。求在该柱状图中，能够勾勒出来的矩形的最大面积。
+### Leetcode 84
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-099)
+
+给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。求在该柱状图中，能够勾勒出来的矩形的最大面积。
 
 ```cpp
 int largestRectangleArea(vector<int>& heights) {

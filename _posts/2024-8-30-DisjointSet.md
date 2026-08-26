@@ -6,6 +6,8 @@ tags: [数据结构与算法]
 toc: true
 ---
 
+> **Python 版本：** 本文保留原有 C++ 推导；每个例题对应的 Python 实现统一收录在[Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})中。
+
 ## 并查集原理
 
 并查集常用来解决连通性问题。并查集主要有两个功能：
@@ -59,7 +61,10 @@ int find(int u) {
 ## 例题
 
 ### 寻找存在的路径
-Leetcode 1971. 给定一个包含 n 个节点的无向图中，节点编号从 1 到 n （含 1 和 n ）。你的任务是判断是否有一条从节点 source 出发到节点 destination 的路径存在。
+### Leetcode 1971
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-172)
+
+给定一个包含 n 个节点的无向图中，节点编号从 1 到 n （含 1 和 n ）。你的任务是判断是否有一条从节点 source 出发到节点 destination 的路径存在。
 
 ```cpp
 vector<int> father;
@@ -92,7 +97,10 @@ bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
 ```
 
 ### 冗余连接
-Leetcode 684. 树可以看成是一个图（拥有 n 个节点和 n - 1 条边的连通无环无向图）。现给定一个拥有 n 个节点（节点编号从 1 到 n）和 n 条边的连通无向图，请找出一条可以删除的边，删除后图可以变成一棵树。
+### Leetcode 684
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-173)
+
+树可以看成是一个图（拥有 n 个节点和 n - 1 条边的连通无环无向图）。现给定一个拥有 n 个节点（节点编号从 1 到 n）和 n 条边的连通无向图，请找出一条可以删除的边，删除后图可以变成一棵树。
 
 **只要加入的边的两个顶点已经在同一个集合里了，就说明这条边的加入会构成环，删掉即可：**
 ```cpp
@@ -113,7 +121,10 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 ```
 
 ### 冗余连接II
-Leetcode 685. 有一种有向树,该树只有一个根节点，所有其他节点都是该根节点的后继。该树除了根节点之外的每一个节点都有且只有一个父节点，而根节点没有父节点。有向树拥有 n 个节点和 n - 1 条边。
+### Leetcode 685
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-174)
+
+有一种有向树,该树只有一个根节点，所有其他节点都是该根节点的后继。该树除了根节点之外的每一个节点都有且只有一个父节点，而根节点没有父节点。有向树拥有 n 个节点和 n - 1 条边。
 
 现在有一个有向图，有向图是在有向树中的两个没有直接链接的节点中间添加一条有向边。输入一个有向图，该图由一个有着 n 个节点(节点编号 从 1 到 n)，n 条边，请返回一条可以删除的边，使得删除该条边之后该有向图可以被当作一颗有向树。若有多个答案，返回最后出现在给定二维数组的答案。
 

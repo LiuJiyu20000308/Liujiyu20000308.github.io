@@ -6,6 +6,8 @@ tags: [数据结构与算法]
 toc: true
 ---
 
+> **Python 版本：** 本文保留原有 C++ 推导；每个例题对应的 Python 实现统一收录在[Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})中。
+
 ## 回溯框架
 
 回溯法，一般可以解决如下几种问题：
@@ -40,7 +42,10 @@ void backtracking(参数) {
 ## 组合问题
 
 ### 组合（最基本的回溯）
-Leetcode 77. 给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
+### Leetcode 77
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-100)
+
+给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
 
 ```cpp
 vector<vector<int>> result;
@@ -63,7 +68,10 @@ vector<vector<int>> combine(int n, int k) {
 ```
 
 ### 组合求和I
-Leetcode 39. 给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。candidates 中的数字可以**无限制重复被选取。**
+### Leetcode 39
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-101)
+
+给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。candidates 中的数字可以**无限制重复被选取。**
 **只需注意遍历的时候startIdx还可以从自身开始即可。**
 ```cpp
 vector<vector<int>> result;
@@ -94,7 +102,10 @@ vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
 ```
 
 ### 组合求和II
-Leetcode 216. 找出所有相加之和为 n 的 k 个数的组合。组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。
+### Leetcode 216
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-103)
+
+找出所有相加之和为 n 的 k 个数的组合。组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。
 
 **只需改变一下终止条件即可。**
 ```cpp
@@ -171,7 +182,10 @@ vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
 ## 分割问题
 
 ### 分割回文串
-Leetcode 131. 给定一个字符串 s，将 s 分割成一些子串，使每个子串都是回文串。返回 s 所有可能的分割方案。
+### Leetcode 131
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-104)
+
+给定一个字符串 s，将 s 分割成一些子串，使每个子串都是回文串。返回 s 所有可能的分割方案。
 
 其实切割问题类似组合问题:
 ```cpp
@@ -254,7 +268,10 @@ vector<vector<string>> partition(string s) {
 }
 ```
 ### 复原IP地址
-Leetcode 93. 给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。有效的 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 '.' 分隔。
+### Leetcode 93
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-105)
+
+给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。有效的 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 '.' 分隔。
 
 仍是要检查每个字符串是否满足性质，满足则继续划分，**注意insert函数的作用效果以及插入逗点后backTracking的startIdx**：
 ```cpp
@@ -309,7 +326,10 @@ vector<string> restoreIpAddresses(string s) {
 ## 子集问题
 
 ### 子集I
-Leetcode 78. 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+### Leetcode 78
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-106)
+
+给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
 
 如果把 子集问题、组合问题、分割问题都抽象为一棵树的话，那么**组合问题和分割问题都是收集树的叶子节点，而子集问题是找树的所有节点！** 其实子集也是一种组合问题，因为它的集合是无序的，子集{1,2} 和 子集{2,1}是一样的。那么既然是无序，取过的元素不会重复取，**写回溯算法的时候，for就要从startIndex开始，而不是从0开始！**
 
@@ -336,7 +356,10 @@ vector<vector<int>> subsets(vector<int>& nums) {
 ```
 
 ### 子集II
-Leetcode 90. 给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+### Leetcode 90
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-107)
+
+给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
 
 **先排序再used判断可以将{2，3}，{3，2}直接去重掉。**
 ```cpp
@@ -369,7 +392,10 @@ vector<vector<int>> subsetsWithDup(vector<int>& nums) {
 ```
 
 ### 递增子序列
-Leetcode 491. 给定一个整型数组, 你的任务是找到所有该数组的递增子序列，递增子序列的长度至少是2。
+### Leetcode 491
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-108)
+
+给定一个整型数组, 你的任务是找到所有该数组的递增子序列，递增子序列的长度至少是2。
 
 **这里要注意不能进行排序，但是有一点好处是它要求递增子序列，相对于组合问题，隐含着做了一步去重，这里我们只需要在每一层定义一次unordered_set，确保同一父节点下不能重复使用即可。**
 
@@ -404,7 +430,10 @@ vector<vector<int>> findSubsequences(vector<int>& nums) {
 ## 排列问题
 
 ### 全排列I
-Leetcode46. 给定一个 没有重复 数字的序列，返回其所有可能的全排列。
+### Leetcode 46
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-109)
+
+给定一个 没有重复 数字的序列，返回其所有可能的全排列。
 
 **处理排列问题就不用使用startIndex了。但排列问题需要一个used数组，标记已经选择的元素。**
 
@@ -436,7 +465,10 @@ vector<vector<int>> permute(vector<int>& nums) {
 ```
 
 ### 全排列II
-Leetcode 47. 给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。
+### Leetcode 47
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-110)
+
+给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。
 
 **注意去重一定要对元素进行排序，这样我们才方便通过相邻的节点来判断是否重复使用了。**
 
@@ -482,7 +514,10 @@ vector<vector<int>> permuteUnique(vector<int>& nums) {
 这里涉及到什么时候backTrack需要返回值，什么时候不需要：**当需要遍历整棵树，找到所有可行的叶子节点时不需要返回值，而如果只需要找到一种可行树枝的话就需要一个bool返回值，如果不及时return的话回溯会把找到的结果清空。** 以下三个问题可以作为例子
 
 ### n皇后问题
-Leetcode 51. n皇后问题研究的是如何将n个皇后放置在n×n的棋盘上，并且使皇后彼此之间不能相互攻击。
+### Leetcode 51
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-111)
+
+n皇后问题研究的是如何将n个皇后放置在n×n的棋盘上，并且使皇后彼此之间不能相互攻击。
 
 **本质上就是回溯算法，只不过每一步需要isValid进行一次判断：**
 ```cpp
@@ -532,7 +567,10 @@ vector<vector<string>> solveNQueens(int n) {
 ```
 
 ### 数独问题
-Leetcode 37. 编写一个程序，通过填充空格来解决数独问题。
+### Leetcode 37
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-112)
+
+编写一个程序，通过填充空格来解决数独问题。
 
 棋盘搜索问题可以使用回溯法暴力搜索，只不过这次我们要做的是二维递归。N皇后问题是一维递归，因为每一行每一列只放一个皇后，只需要一层for循环遍历一行，递归来遍历列，然后一行一列确定皇后的唯一位置。
 
@@ -584,7 +622,10 @@ void solveSudoku(vector<vector<char>>& board) {
 ```
 
 ### 重新规划行程
-Leetcode 332. 给定一个机票的字符串二维数组 [from, to]，子数组中的两个成员分别表示飞机出发和降落的机场地点，对该行程进行重新规划排序，如果有多种排序方法只返回字典序最大的一个。所有这些机票都属于一个从 JFK（肯尼迪国际机场）出发的先生，所以该行程必须从 JFK 开始。
+### Leetcode 332
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-113)
+
+给定一个机票的字符串二维数组 [from, to]，子数组中的两个成员分别表示飞机出发和降落的机场地点，对该行程进行重新规划排序，如果有多种排序方法只返回字典序最大的一个。所有这些机票都属于一个从 JFK（肯尼迪国际机场）出发的先生，所以该行程必须从 JFK 开始。
 
 这道题目有几个难点：
 

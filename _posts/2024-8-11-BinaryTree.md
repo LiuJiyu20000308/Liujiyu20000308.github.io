@@ -5,6 +5,8 @@ date: 2024-8-10 14:00 +0800
 tags: [数据结构与算法]
 toc: true
 ---
+
+> **Python 版本：** 本文保留原有 C++ 推导；每个例题对应的 Python 实现统一收录在[Python 实现全集]({{ '/leetcode/python-implementations/' | relative_url }})中。
 ## 二叉树理论基础
 
 ### 二叉树的种类
@@ -328,6 +330,11 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 ### 相关题目
 
 
-Leetcode 144.二叉树的前序遍历
-Leetcode 94. 二叉树的中序遍历
-Leetcode 145.二叉树的后序遍历
+### Leetcode 144：二叉树的前序遍历
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-070)
+
+### Leetcode 94：二叉树的中序遍历
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-071)
+
+### Leetcode 145：二叉树的后序遍历
+**Python 实现：** [查看对应代码]({{ '/leetcode/python-implementations/' | relative_url }}#py-070)
