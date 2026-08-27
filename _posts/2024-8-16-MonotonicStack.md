@@ -86,6 +86,7 @@ vector<int> dailyTemperatures(vector<int>& T) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def daily_temperatures(temperatures):
     answer, stack = [0] * len(temperatures), []
     for i, value in enumerate(temperatures):
@@ -173,6 +174,7 @@ TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def construct_maximum_binary_tree(nums):
     if not nums: return None
     i = max(range(len(nums)), key=nums.__getitem__)
@@ -222,6 +224,7 @@ int trap(vector<int>& height) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def trap(height):
     left, right, left_max, right_max, water = 0, len(height) - 1, 0, 0, 0
     while left < right:
@@ -268,6 +271,7 @@ int largestRectangleArea(vector<int>& heights) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def largest_rectangle_area(heights):
     stack, answer = [-1], 0
     for i, height in enumerate(heights + [0]):

@@ -281,6 +281,7 @@ vector<int> postorderTraversal(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def preorder_unified(root):
     answer, stack = [], [(root, False)]
     while stack:
@@ -368,6 +369,7 @@ def level_order(root):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def traversals(root):
     preorder, inorder, postorder = [], [], []
     def visit(node):
@@ -387,6 +389,7 @@ def traversals(root):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def inorder_traversal(root):
     answer, stack, node = [], [], root
     while stack or node:
@@ -401,6 +404,7 @@ def inorder_traversal(root):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def traversals(root):
     preorder, inorder, postorder = [], [], []
     def visit(node):

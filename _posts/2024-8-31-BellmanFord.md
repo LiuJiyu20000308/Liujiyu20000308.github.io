@@ -66,6 +66,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def bellman_ford(n, edges, source):
     distance = [float("inf")] * n; distance[source] = 0
     for _ in range(n - 1):
@@ -281,6 +282,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def has_negative_cycle(n, edges):
     distance = [0] * n
     for iteration in range(n):
@@ -345,6 +347,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def shortest_path_with_at_most_k_edges(n, edges, source, k):
     distance = [float("inf")] * n; distance[source] = 0
     for _ in range(k):

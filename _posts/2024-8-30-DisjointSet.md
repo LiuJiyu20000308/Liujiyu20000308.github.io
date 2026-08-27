@@ -97,6 +97,7 @@ bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def valid_path(n, edges, source, destination):
     parent = list(range(n))
     def find(x):
@@ -133,6 +134,7 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_redundant_connection(edges):
     parent = list(range(len(edges) + 1))
     def find(x):
@@ -228,6 +230,7 @@ vector<int> findRedundantDirectedConnection(vector<vector<int>>& edges) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_redundant_directed_connection(edges):
     incoming = {}
     first = second = None

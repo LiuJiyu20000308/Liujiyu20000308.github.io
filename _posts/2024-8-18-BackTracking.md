@@ -68,6 +68,7 @@ vector<vector<int>> combine(int n, int k) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def combine(n, k):
     answer = []
     def dfs(start, path):
@@ -115,6 +116,7 @@ vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def combination_sum(candidates, target):
     answer = []
     def dfs(start, remaining, path):
@@ -165,6 +167,7 @@ vector<vector<int>> combinationSum3(int k, int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def combination_sum3(k, n):
     answer = []
     def dfs(start, remaining, path):
@@ -225,6 +228,7 @@ vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def combination_sum2(candidates, target):
     answer = []
     def dfs(start, remaining, path):
@@ -329,6 +333,7 @@ vector<vector<string>> partition(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def partition(s):
     answer = []
     def dfs(start, path):
@@ -398,6 +403,7 @@ vector<string> restoreIpAddresses(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def restore_ip_addresses(s):
     answer = []
     def dfs(start, parts):
@@ -447,6 +453,7 @@ vector<vector<int>> subsets(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def subsets(nums):
     answer = [[]]
     for value in nums: answer += [part + [value] for part in answer]
@@ -492,6 +499,7 @@ vector<vector<int>> subsetsWithDup(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def subsets_with_dup(nums):
     nums.sort(); answer = [[]]; previous_size = 0
     for i, value in enumerate(nums):
@@ -540,6 +548,7 @@ vector<vector<int>> findSubsequences(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_subsequences(nums):
     answer = set()
     def dfs(index, path):
@@ -590,6 +599,7 @@ vector<vector<int>> permute(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def permute(nums):
     if not nums: return [[]]
     return [[nums[i]] + tail for i in range(len(nums)) for tail in permute(nums[:i] + nums[i + 1:])]
@@ -641,6 +651,7 @@ vector<vector<int>> permuteUnique(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def permute_unique(nums):
     answer = []
     def dfs(path, remaining):
@@ -713,6 +724,7 @@ vector<vector<string>> solveNQueens(int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def solve_n_queens(n):
     answer, columns, diagonals1, diagonals2 = [], set(), set(), set()
     def dfs(row, board):
@@ -784,6 +796,7 @@ void solveSudoku(vector<vector<char>>& board) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def solve_sudoku(board):
     empty = [(r, c) for r in range(9) for c in range(9) if board[r][c] == "."]
     def dfs(index):

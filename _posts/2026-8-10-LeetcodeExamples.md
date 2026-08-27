@@ -74,6 +74,7 @@ int search(vector<int>& nums, int target) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def search(nums, target):
     left, right = 0, len(nums) - 1
     while left <= right:
@@ -214,6 +215,7 @@ double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_median_sorted_arrays(a, b):
     if len(a) > len(b):
         a, b = b, a
@@ -268,6 +270,7 @@ ListNode middleNode(ListNode head) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def middle_node(head):
     slow = fast = head
     while fast and fast.next:
@@ -310,6 +313,7 @@ int removeElement(vector<int>& nums, int val) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def remove_duplicates(nums):
     write = 0
     for value in nums:
@@ -357,6 +361,7 @@ vector<int> sortedSquares(vector<int>& A) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def sorted_squares(nums):
     answer = [0] * len(nums)
     left, right = 0, len(nums) - 1
@@ -404,6 +409,7 @@ void reverseString(char[] s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def reverse_string(chars):
     left, right = 0, len(chars) - 1
     while left < right:
@@ -457,6 +463,7 @@ string longestPalindrome(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def longest_palindrome(s):
     best_left = best_right = 0
     for center in range(len(s)):
@@ -511,6 +518,7 @@ int minSubArrayLen(int s, vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def min_sub_array_len(target, nums):
     left = window_sum = 0
     answer = len(nums) + 1
@@ -559,6 +567,7 @@ int lengthOfLongestSubstring(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def length_of_longest_substring(s):
     last, left, answer = {}, 0, 0
     for right, char in enumerate(s):
@@ -605,6 +614,7 @@ int longestOnes(vector<int>& nums, int k) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def longest_ones(nums, k):
     left = zeros = 0
     for right, value in enumerate(nums):
@@ -1013,6 +1023,7 @@ vector<int> productExceptSelf(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def product_except_self(nums):
     answer, prefix = [1] * len(nums), 1
     for i, value in enumerate(nums):
@@ -1163,6 +1174,7 @@ int findMaxLength(vector<int>& nums)
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_max_length(nums):
     first, balance, answer = {0: -1}, 0, 0
     for i, value in enumerate(nums):
@@ -1244,6 +1256,7 @@ vector<vector<int>> generateMatrix(int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def generate_matrix(n):
     matrix = [[0] * n for _ in range(n)]
     left, right, top, bottom, value = 0, n - 1, 0, n - 1, 1
@@ -1308,6 +1321,7 @@ ListNode* removeElements(ListNode* head, int val) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def remove_elements(head, value):
     dummy = ListNode(0, head)
     current = dummy
@@ -1441,6 +1455,7 @@ private:
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 class MyLinkedList:
     def __init__(self):
         self.size = 0
@@ -1517,6 +1532,7 @@ ListNode* reverseList(ListNode* head) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def reverse_list(head):
     previous = None
     while head:
@@ -1580,6 +1596,7 @@ ListNode* reverseKGroup(ListNode* head, int k) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def reverse_k_group(head, k):
     dummy = ListNode(0, head)
     group_prev = dummy
@@ -1649,6 +1666,7 @@ ListNode* swapPairs(ListNode* head) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def swap_pairs(head):
     dummy = ListNode(0, head)
     previous = dummy
@@ -1701,6 +1719,7 @@ def swap_pairs(head):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def remove_nth_from_end(head, n):
     dummy = ListNode(0, head)
     fast = slow = dummy
@@ -1751,6 +1770,7 @@ ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def get_intersection_node(head_a, head_b):
     a, b = head_a, head_b
     while a is not b:
@@ -1802,6 +1822,7 @@ ListNode *detectCycle(ListNode *head) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def detect_cycle(head):
     slow = fast = head
     while fast and fast.next:
@@ -1907,6 +1928,7 @@ vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def intersection(nums1, nums2):
     return list(set(nums1) & set(nums2))
 ```
@@ -1952,6 +1974,7 @@ bool isHappy(int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def is_happy(n):
     seen = set()
     while n != 1 and n not in seen:
@@ -1994,6 +2017,7 @@ vector<int> twoSum(vector<int>& nums, int target) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def two_sum(nums, target):
     seen = {}
     for i, value in enumerate(nums):
@@ -2099,6 +2123,7 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def three_sum(nums):
     nums.sort()
     answer = []
@@ -2189,6 +2214,7 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def four_sum(nums, target):
     nums.sort()
     answer = []
@@ -2245,6 +2271,7 @@ string reverseStr(string s, int k) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def reverse_str(s, k):
     chars = list(s)
     for start in range(0, len(chars), 2 * k):
@@ -2308,6 +2335,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def replace_digits(s):
     return "".join("number" if char.isdigit() else char for char in s)
 ```
@@ -2350,6 +2378,7 @@ string reverseWords(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def reverse_words(s):
     return " ".join(reversed(s.split()))
 ```
@@ -2392,6 +2421,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def rotate_right(s, k):
     if not s:
         return s
@@ -2441,6 +2471,7 @@ int strStr(string haystack, string needle) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def str_str(haystack, needle):
     if not needle:
         return 0
@@ -2489,6 +2520,7 @@ bool repeatedSubstringPattern(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def repeated_substring_pattern(s):
     return s in (s + s)[1:-1]
 ```
@@ -2558,6 +2590,7 @@ public:
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 class MyQueue:
     def __init__(self):
         self.input, self.output = [], []
@@ -2700,6 +2733,7 @@ bool isValid(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def is_valid(s):
     pairs, stack = {")": "(", "]": "[", "}": "{"}, []
     for char in s:
@@ -2752,6 +2786,7 @@ string removeDuplicates(string S) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def remove_duplicates_string(s):
     stack = []
     for char in s:
@@ -2844,6 +2879,7 @@ string infixToPostfix(string infix) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def infix_to_postfix(tokens):
     precedence = {"+": 1, "-": 1, "*": 2, "/": 2}
     output, operators = [], []
@@ -2906,6 +2942,7 @@ int evalRPN(vector<string>& tokens) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def eval_rpn(tokens):
     stack = []
     for token in tokens:
@@ -3123,6 +3160,7 @@ void selectionSort(vector<int>& arr) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def selection_sort(nums):
     for i in range(len(nums)):
         smallest = min(range(i, len(nums)), key=nums.__getitem__)
@@ -3171,6 +3209,7 @@ void bubbleSort(vector<int>& arr) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def bubble_sort(nums):
     for end in range(len(nums) - 1, 0, -1):
         changed = False
@@ -3220,6 +3259,7 @@ void insertionSort(vector<int>& arr) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def insertion_sort(nums):
     for i in range(1, len(nums)):
         value, j = nums[i], i - 1
@@ -3268,6 +3308,7 @@ void shellSort(vector<int>& arr) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def shell_sort(nums):
     gap = len(nums) // 2
     while gap:
@@ -3357,6 +3398,7 @@ void mergeSort(vector<int>& arr, int left, int right) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def merge_sort(nums):
     if len(nums) <= 1:
         return nums
@@ -3415,6 +3457,7 @@ void quickSort(vector<int>& arr, int low, int high) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def quick_sort(nums, left=0, right=None):
     right = len(nums) - 1 if right is None else right
     if left >= right:
@@ -3544,6 +3587,7 @@ void countingSort(vector<int>& arr) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def counting_sort(nums):
     if not nums: return []
     low, high = min(nums), max(nums)
@@ -3601,6 +3645,7 @@ void bucketSort(vector<int>& arr) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def bucket_sort(nums, bucket_size=10):
     if not nums: return []
     low = min(nums)
@@ -3668,6 +3713,7 @@ void radixSort(std::vector<int>& arr) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def radix_sort_nonnegative(nums):
     exponent = 1
     while nums and max(nums) // exponent:
@@ -4270,6 +4316,7 @@ private:
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 class AuthenticationManager:
     def __init__(self, timeToLive):
         self.ttl, self.expiration = timeToLive, {}
@@ -4381,6 +4428,7 @@ private:
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 class Bucket:
     def __init__(self, count=0):
         self.count, self.keys = count, set()
@@ -4491,6 +4539,7 @@ void traversal(TreeNode* cur, vector<int>& vec) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def traversals(root):
     preorder, inorder, postorder = [], [], []
     def visit(node):
@@ -4579,6 +4628,7 @@ vector<int> postorderTraversal(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def inorder_traversal(root):
     answer, stack, node = [], [], root
     while stack or node:
@@ -4679,6 +4729,7 @@ vector<int> postorderTraversal(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def preorder_unified(root):
     answer, stack = [], [(root, False)]
     while stack:
@@ -4806,6 +4857,7 @@ vector<int> rightSideView(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def right_side_view(root):
     return [level[-1] for level in level_order(root)]
 ```
@@ -4859,6 +4911,7 @@ vector<double> averageOfLevels(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def average_of_levels(root):
     return [sum(level) / len(level) for level in level_order(root)]
 ```
@@ -4943,6 +4996,7 @@ Node* connect(Node* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def connect(root):
     level = root
     while level and level.left:
@@ -4999,6 +5053,7 @@ bool isSymmetric(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def is_symmetric(root):
     def mirror(left, right):
         if not left or not right: return left is right
@@ -5072,6 +5127,7 @@ int maxDepth(Node* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_depth(root):
     if not root: return 0
     children = getattr(root, "children", None)
@@ -5113,6 +5169,7 @@ int minDepth(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def min_depth(root):
     if not root: return 0
     if not root.left: return 1 + min_depth(root.right)
@@ -5157,6 +5214,7 @@ bool isBalanced(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def is_balanced(root):
     def height(node):
         if not node: return 0
@@ -5206,6 +5264,7 @@ vector<string> binaryTreePaths(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def binary_tree_paths(root):
     if not root: return []
     if not root.left and not root.right: return [str(root.val)]
@@ -5271,6 +5330,7 @@ vector<vector<int>> pathSum(TreeNode* root, int sum) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def path_sum(root, target):
     answer = []
     def dfs(node, remaining, path):
@@ -5316,6 +5376,7 @@ int sumOfLeftLeaves(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def sum_of_left_leaves(root):
     if not root: return 0
     left = root.left.val if root.left and not root.left.left and not root.left.right else sum_of_left_leaves(root.left)
@@ -5409,6 +5470,7 @@ TreeNode* invertTree(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def invert_tree(root):
     if root:
         root.left, root.right = invert_tree(root.right), invert_tree(root.left)
@@ -5461,6 +5523,7 @@ TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def build_tree(preorder, inorder):
     positions, pre_index = {value: i for i, value in enumerate(inorder)}, 0
     def build(left, right):
@@ -5530,6 +5593,7 @@ TreeNode* insertIntoBST(TreeNode* root, int val) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def search_bst(root, value):
     while root and root.val != value:
         root = root.left if value < root.val else root.right
@@ -5607,6 +5671,7 @@ def insert_into_bst(root, value):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def delete_node(root, key):
     if not root: return None
     if key < root.val: root.left = delete_node(root.left, key)
@@ -5665,6 +5730,7 @@ bool isValidBST(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def is_valid_bst(root):
     def validate(node, low, high):
         return not node or low < node.val < high and validate(node.left, low, node.val) and validate(node.right, node.val, high)
@@ -5711,6 +5777,7 @@ Node* treeToDoublyList(Node* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def tree_to_doubly_list(root):
     if not root: return None
     first = previous = None
@@ -5905,6 +5972,7 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def lowest_common_ancestor(root, p, q):
     if not root or root is p or root is q: return root
     left, right = lowest_common_ancestor(root.left, p, q), lowest_common_ancestor(root.right, p, q)
@@ -5949,6 +6017,7 @@ TreeNode* trimBST(TreeNode* root, int low, int high) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def trim_bst(root, low, high):
     if not root: return None
     if root.val < low: return trim_bst(root.right, low, high)
@@ -5990,6 +6059,7 @@ TreeNode* convertBST(TreeNode* root) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def convert_bst(root):
     total = 0
     def visit(node):
@@ -6036,6 +6106,7 @@ TreeNode* sortedArrayToBST(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def sorted_array_to_bst(nums):
     if not nums: return None
     middle = len(nums) // 2
@@ -6087,6 +6158,7 @@ vector<int> dailyTemperatures(vector<int>& T) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def daily_temperatures(temperatures):
     answer, stack = [0] * len(temperatures), []
     for i, value in enumerate(temperatures):
@@ -6138,6 +6210,7 @@ TreeNode* construct(const vector<int>& nums, int left, int right) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def construct_maximum_binary_tree(nums):
     if not nums: return None
     i = max(range(len(nums)), key=nums.__getitem__)
@@ -6196,6 +6269,7 @@ int trap(vector<int>& height) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def trap(height):
     left, right, left_max, right_max, water = 0, len(height) - 1, 0, 0, 0
     while left < right:
@@ -6253,6 +6327,7 @@ int largestRectangleArea(vector<int>& heights) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def largest_rectangle_area(heights):
     stack, answer = [-1], 0
     for i, height in enumerate(heights + [0]):
@@ -6306,6 +6381,7 @@ vector<vector<int>> combine(int n, int k) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def combine(n, k):
     answer = []
     def dfs(start, path):
@@ -6365,6 +6441,7 @@ vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def combination_sum(candidates, target):
     answer = []
     def dfs(start, remaining, path):
@@ -6434,6 +6511,7 @@ vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def combination_sum2(candidates, target):
     answer = []
     def dfs(start, remaining, path):
@@ -6495,6 +6573,7 @@ vector<vector<int>> combinationSum3(int k, int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def combination_sum3(k, n):
     answer = []
     def dfs(start, remaining, path):
@@ -6566,6 +6645,7 @@ vector<vector<string>> partition(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def partition(s):
     answer = []
     def dfs(start, path):
@@ -6647,6 +6727,7 @@ vector<string> restoreIpAddresses(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def restore_ip_addresses(s):
     answer = []
     def dfs(start, parts):
@@ -6704,6 +6785,7 @@ vector<vector<int>> subsets(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def subsets(nums):
     answer = [[]]
     for value in nums: answer += [part + [value] for part in answer]
@@ -6760,6 +6842,7 @@ vector<vector<int>> subsetsWithDup(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def subsets_with_dup(nums):
     nums.sort(); answer = [[]]; previous_size = 0
     for i, value in enumerate(nums):
@@ -6818,6 +6901,7 @@ vector<vector<int>> findSubsequences(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_subsequences(nums):
     answer = set()
     def dfs(index, path):
@@ -6876,6 +6960,7 @@ vector<vector<int>> permute(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def permute(nums):
     if not nums: return [[]]
     return [[nums[i]] + tail for i in range(len(nums)) for tail in permute(nums[:i] + nums[i + 1:])]
@@ -6937,6 +7022,7 @@ vector<vector<int>> permuteUnique(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def permute_unique(nums):
     answer = []
     def dfs(path, remaining):
@@ -7014,6 +7100,7 @@ vector<vector<string>> solveNQueens(int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def solve_n_queens(n):
     answer, columns, diagonals1, diagonals2 = [], set(), set(), set()
     def dfs(row, board):
@@ -7093,6 +7180,7 @@ void solveSudoku(vector<vector<char>>& board) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def solve_sudoku(board):
     empty = [(r, c) for r in range(9) for c in range(9) if board[r][c] == "."]
     def dfs(index):
@@ -7212,6 +7300,7 @@ int findContentChildren(vector<int>& g, vector<int>& s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_content_children(children, cookies):
     children.sort(); cookies.sort(); child = 0
     for cookie in cookies:
@@ -7258,6 +7347,7 @@ int wiggleMaxLength(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def wiggle_max_length(nums):
     up = down = 1
     for a, b in zip(nums, nums[1:]):
@@ -7301,6 +7391,7 @@ int maxSubArray(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_sub_array(nums):
     current = answer = nums[0]
     for value in nums[1:]:
@@ -7338,6 +7429,7 @@ int maxProfit(vector<int>& prices) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_profit_unlimited(prices):
     return sum(max(0, right - left) for left, right in zip(prices, prices[1:]))
 ```
@@ -7375,6 +7467,7 @@ bool canJump(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def can_jump(nums):
     farthest = 0
     for i, jump in enumerate(nums):
@@ -7422,6 +7515,7 @@ int jump(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def jump(nums):
     steps = end = farthest = 0
     for i in range(len(nums) - 1):
@@ -7469,6 +7563,7 @@ int largestSumAfterKNegations(vector<int>& A, int K) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def largest_sum_after_k_negations(nums, k):
     nums.sort(key=abs, reverse=True)
     for i in range(len(nums)):
@@ -7515,6 +7610,7 @@ int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def can_complete_circuit(gas, cost):
     total = tank = start = 0
     for i, (supply, expense) in enumerate(zip(gas, cost)):
@@ -7563,6 +7659,7 @@ int candy(vector<int>& ratings) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def candy(ratings):
     sweets = [1] * len(ratings)
     for i in range(1, len(ratings)):
@@ -7622,6 +7719,7 @@ bool lemonadeChange(vector<int>& bills) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def lemonade_change(bills):
     five = ten = 0
     for bill in bills:
@@ -7674,6 +7772,7 @@ vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def reconstruct_queue(people):
     answer = []
     for person in sorted(people, key=lambda item: (-item[0], item[1])):
@@ -7719,6 +7818,7 @@ int findMinArrowShots(vector<vector<int>>& points) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_min_arrow_shots(points):
     arrows, end = 0, float("-inf")
     for start, finish in sorted(points, key=lambda point: point[1]):
@@ -7763,6 +7863,7 @@ int eraseOverlapIntervals(vector<vector<int>>& intervals) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def erase_overlap_intervals(intervals):
     kept, end = 0, float("-inf")
     for start, finish in sorted(intervals, key=lambda interval: interval[1]):
@@ -7810,6 +7911,7 @@ def erase_overlap_intervals(intervals):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def partition_labels(s):
     last, start, end, answer = {char: i for i, char in enumerate(s)}, 0, 0, []
     for i, char in enumerate(s):
@@ -7860,6 +7962,7 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def merge(intervals):
     answer = []
     for interval in sorted(intervals):
@@ -7908,6 +8011,7 @@ int monotoneIncreasingDigits(int N) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def monotone_increasing_digits(n):
     digits = list(str(n)); marker = len(digits)
     for i in range(len(digits) - 1, 0, -1):
@@ -7975,6 +8079,7 @@ public:
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def min_camera_cover(root):
     cameras = 0
     def state(node):
@@ -8023,6 +8128,7 @@ def min_camera_cover(root):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def climb_stairs(n):
     first, second = 1, 1
     for _ in range(n): first, second = second, first + second
@@ -8061,6 +8167,7 @@ int minCostClimbingStairs(vector<int>& cost) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def min_cost_climbing_stairs(cost):
     previous, current = 0, 0
     for value in cost: previous, current = current, min(previous, current) + value
@@ -8101,6 +8208,7 @@ int uniquePaths(int m, int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def unique_paths(m, n):
     dp = [1] * n
     for _ in range(1, m):
@@ -8148,6 +8256,7 @@ int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def unique_paths_with_obstacles(grid):
     dp = [0] * len(grid[0]); dp[0] = 1
     for row in grid:
@@ -8190,6 +8299,7 @@ int integerBreak(int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def integer_break(n):
     dp = [0] * (n + 1); dp[1] = 1
     for total in range(2, n + 1):
@@ -8231,6 +8341,7 @@ int numTrees(int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def num_trees(n):
     dp = [1] + [0] * n
     for nodes in range(1, n + 1):
@@ -8274,6 +8385,7 @@ int rob(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def rob(nums):
     skip = take = 0
     for value in nums: skip, take = max(skip, take), skip + value
@@ -8321,6 +8433,7 @@ int robRange(vector<int>& nums, int start, int end) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def rob_circle(nums):
     if len(nums) == 1: return nums[0]
     return max(rob(nums[:-1]), rob(nums[1:]))
@@ -8364,6 +8477,7 @@ vector<int> robTree(TreeNode* cur) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def rob_tree(root):
     def dfs(node):
         if not node: return 0, 0
@@ -8407,6 +8521,7 @@ int maxProfit(vector<int>& prices) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_profit_once(prices):
     minimum, answer = float("inf"), 0
     for price in prices: minimum, answer = min(minimum, price), max(answer, price - minimum)
@@ -8447,6 +8562,7 @@ int maxProfit(vector<int>& prices) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_profit_many(prices):
     cash, hold = 0, float("-inf")
     for price in prices: cash, hold = max(cash, hold + price), max(hold, cash - price)
@@ -8491,6 +8607,7 @@ int maxProfit(vector<int>& prices) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_profit_twice(prices):
     buy1 = buy2 = float("-inf"); sell1 = sell2 = 0
     for price in prices:
@@ -8537,6 +8654,7 @@ int maxProfit(int k, vector<int>& prices) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_profit_k(k, prices):
     if k >= len(prices) // 2: return max_profit_many(prices)
     buy, sell = [float("-inf")] * (k + 1), [0] * (k + 1)
@@ -8584,6 +8702,7 @@ int maxProfit(vector<int>& prices) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_profit_cooldown(prices):
     hold, sold, rest = float("-inf"), 0, 0
     for price in prices: hold, sold, rest = max(hold, rest - price), hold + price, max(rest, sold)
@@ -8624,6 +8743,7 @@ def max_profit_cooldown(prices):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_profit_fee(prices, fee):
     cash, hold = 0, -prices[0]
     for price in prices[1:]: cash, hold = max(cash, hold + price - fee), max(hold, cash - price)
@@ -8688,6 +8808,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def knapsack_2d(weights, values, capacity):
     dp = [[0] * (capacity + 1) for _ in range(len(weights) + 1)]
     for i, (weight, value) in enumerate(zip(weights, values), 1):
@@ -8727,6 +8848,7 @@ def knapsack_2d(weights, values, capacity):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def knapsack(weights, values, capacity):
     dp = [0] * (capacity + 1)
     for weight, value in zip(weights, values):
@@ -8783,6 +8905,7 @@ bool canPartition(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def can_partition(nums):
     total = sum(nums)
     if total % 2: return False
@@ -8829,6 +8952,7 @@ int lastStoneWeightII(vector<int>& stones) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def last_stone_weight_ii(stones):
     possible = {0}
     for stone in stones: possible |= {total + stone for total in possible}
@@ -8928,6 +9052,7 @@ int findMaxForm(vector<string>& strs, int m, int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_max_form(strings, m, n):
     dp = [[0] * (n + 1) for _ in range(m + 1)]
     for string in strings:
@@ -8969,6 +9094,7 @@ int completeKnapsack(const vector<int>& weight, const vector<int>& value, int ca
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def complete_knapsack(weights, values, capacity):
     dp = [0] * (capacity + 1)
     for weight, value in zip(weights, values):
@@ -9010,6 +9136,7 @@ int change(int amount, vector<int>& coins) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def change(amount, coins):
     dp = [1] + [0] * amount
     for coin in coins:
@@ -9053,6 +9180,7 @@ int combinationSum4(vector<int>& nums, int target) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def combination_sum4(nums, target):
     dp = [1] + [0] * target
     for total in range(1, target + 1): dp[total] = sum(dp[total - value] for value in nums if value <= total)
@@ -9096,6 +9224,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def climb_stairs_complete(n, steps=(1, 2)):
     dp = [1] + [0] * n
     for total in range(1, n + 1): dp[total] = sum(dp[total - step] for step in steps if step <= total)
@@ -9138,6 +9267,7 @@ int coinChange(vector<int>& coins, int amount) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def coin_change(coins, amount):
     dp = [0] + [amount + 1] * amount
     for total in range(1, amount + 1): dp[total] = min((dp[total - coin] + 1 for coin in coins if coin <= total), default=amount + 1)
@@ -9178,6 +9308,7 @@ int numSquares(int n) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def num_squares(n):
     dp = [0] + [n] * n
     for total in range(1, n + 1): dp[total] = 1 + min(dp[total - root * root] for root in range(1, int(total ** 0.5) + 1))
@@ -9222,6 +9353,7 @@ bool wordBreak(string s, vector<string>& wordDict) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def word_break(s, word_dict):
     words, dp = set(word_dict), [True] + [False] * len(s)
     for end in range(1, len(s) + 1): dp[end] = any(dp[start] and s[start:end] in words for start in range(end))
@@ -9312,6 +9444,7 @@ int findLengthOfLCIS(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_length_of_lcis(nums):
     current = answer = int(bool(nums))
     for left, right in zip(nums, nums[1:]):
@@ -9355,6 +9488,7 @@ int findLength(vector<int>& nums1, vector<int>& nums2) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_length(nums1, nums2):
     dp, answer = [0] * (len(nums2) + 1), 0
     for a in nums1:
@@ -9400,6 +9534,7 @@ int longestCommonSubsequence(string text1, string text2) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def longest_common_subsequence(a, b):
     dp = [0] * (len(b) + 1)
     for char_a in a:
@@ -9442,6 +9577,7 @@ int maxUncrossedLines(vector<int>& nums1, vector<int>& nums2) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_uncrossed_lines(nums1, nums2):
     return longest_common_subsequence(nums1, nums2)
 ```
@@ -9480,6 +9616,7 @@ int maxSubArray(vector<int>& nums) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_sub_array_dp(nums):
     dp = nums[:]
     for i in range(1, len(nums)): dp[i] = max(nums[i], dp[i - 1] + nums[i])
@@ -9521,6 +9658,7 @@ def max_sub_array_dp(nums):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def is_subsequence(s, t):
     iterator = iter(t)
     return all(char in iterator for char in s)
@@ -9566,6 +9704,7 @@ int numDistinct(string s, string t) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def num_distinct(s, t):
     dp = [1] + [0] * len(t)
     for source in s:
@@ -9612,6 +9751,7 @@ int minDistance(string word1, string word2) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def min_distance_delete(word1, word2):
     common = longest_common_subsequence(word1, word2)
     return len(word1) + len(word2) - 2 * common
@@ -9657,6 +9797,7 @@ def min_distance_delete(word1, word2):
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def min_distance(word1, word2):
     dp = list(range(len(word2) + 1))
     for i, first in enumerate(word1, 1):
@@ -9708,6 +9849,7 @@ int countSubstrings(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def count_substrings(s):
     answer = 0
     for center in range(2 * len(s) - 1):
@@ -9754,6 +9896,7 @@ int longestPalindromeSubseq(string s) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def longest_palindrome_subseq(s):
     return longest_common_subsequence(s, s[::-1])
 ```
@@ -9810,6 +9953,7 @@ bool isMatch(string s, string p) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def is_match(s, p):
     dp = [[False] * (len(p) + 1) for _ in range(len(s) + 1)]; dp[0][0] = True
     for j in range(2, len(p) + 1):
@@ -9873,6 +10017,7 @@ bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def valid_path(n, edges, source, destination):
     parent = list(range(n))
     def find(x):
@@ -9919,6 +10064,7 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_redundant_connection(edges):
     parent = list(range(len(edges) + 1))
     def find(x):
@@ -10022,6 +10168,7 @@ vector<int> findRedundantDirectedConnection(vector<vector<int>>& edges) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def find_redundant_directed_connection(edges):
     incoming = {}
     first = second = None
@@ -10110,6 +10257,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def all_paths_source_target(graph):
     answer = []
     def dfs(node, path):
@@ -10182,6 +10330,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def num_islands(grid):
     def flood(row, col):
         if row < 0 or row == len(grid) or col < 0 or col == len(grid[0]) or grid[row][col] != "1": return
@@ -10254,6 +10403,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def max_area_of_island(grid):
     def flood(row, col):
         if row < 0 or row == len(grid) or col < 0 or col == len(grid[0]) or not grid[row][col]: return 0
@@ -10331,6 +10481,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def largest_enclosed_island(grid):
     for row in range(len(grid)):
         for col in (0, len(grid[0]) - 1):
@@ -10420,6 +10571,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def solve_surrounded_regions(board):
     def mark(row, col):
         if row < 0 or row == len(board) or col < 0 or col == len(board[0]) or board[row][col] != "O": return
@@ -10506,6 +10658,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def pacific_atlantic(heights):
     rows, cols = len(heights), len(heights[0])
     def reach(starts):
@@ -10613,6 +10766,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def largest_island(grid):
     n, areas, label = len(grid), {0: 0}, 2
     def paint(row, col):
@@ -10685,6 +10839,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def island_perimeter(grid):
     land = sum(map(sum, grid)); shared = 0
     for row in range(len(grid)):
@@ -10971,6 +11126,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def kruskal_mst(n, edges):
     parent = list(range(n))
     def find(x):
@@ -11055,6 +11211,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def dijkstra_dense(graph, source):
     n, distance, visited = len(graph), [float("inf")] * len(graph), [False] * len(graph)
     distance[source] = 0
@@ -11310,6 +11467,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def bellman_ford(n, edges, source):
     distance = [float("inf")] * n; distance[source] = 0
     for _ in range(n - 1):
@@ -11473,6 +11631,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def has_negative_cycle(n, edges):
     distance = [0] * n
     for iteration in range(n):
@@ -11540,6 +11699,7 @@ int main() {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def shortest_path_with_at_most_k_edges(n, edges, source, k):
     distance = [float("inf")] * n; distance[source] = 0
     for _ in range(k):
@@ -11586,6 +11746,7 @@ vector<vector<long long>> floydWarshall(vector<vector<long long>> dist) {
 #### Python 实现
 
 ```python
+# 本题仅使用 Python 内置功能，无需额外 import。
 def floyd_warshall(distance):
     n = len(distance)
     for middle in range(n):
