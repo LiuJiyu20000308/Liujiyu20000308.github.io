@@ -3884,16 +3884,90 @@ public:
 #### Python 实现
 
 ```python
-from bisect import bisect_left, insort
+from collections import Counter, deque
+import heapq
 
-def median_sliding_window(nums, k):
-    window, answer = sorted(nums[:k]), []
-    for right in range(k, len(nums) + 1):
-        answer.append(window[k // 2] if k % 2 else (window[k // 2 - 1] + window[k // 2]) / 2)
-        if right == len(nums): break
-        window.pop(bisect_left(window, nums[right - k]))
-        insort(window, nums[right])
-    return answer
+
+class StockPriceMedian:
+    WINDOW_SECONDS = 600
+
+    def __init__(self):
+        self.window = deque()
+        self.lower, self.upper = [], []
+        self.delayed = Counter()
+        self.lower_size = self.upper_size = 0
+
+    def insert(self, time, value):
+        if self.window and time < self.window[-1][0]:
+            raise ValueError("time 必须按非递减顺序插入")
+        self.window.append((time, value))
+        self._add(value)
+
+        cutoff = time - self.WINDOW_SECONDS
+        while self.window and self.window[0][0] <= cutoff:
+            _, expired_value = self.window.popleft()
+            self._remove(expired_value)
+
+    def median(self):
+        if self.lower_size + self.upper_size == 0:
+            raise ValueError("窗口中没有数据")
+        self._prune(self.lower, True)
+        self._prune(self.upper, False)
+        if self.lower_size == self.upper_size:
+            return (-self.lower[0] + self.upper[0]) / 2.0
+        return float(-self.lower[0])
+
+    def _add(self, value):
+        self._prune(self.lower, True)
+        if not self.lower or value <= -self.lower[0]:
+            heapq.heappush(self.lower, -value)
+            self.lower_size += 1
+        else:
+            heapq.heappush(self.upper, value)
+            self.upper_size += 1
+        self._rebalance()
+
+    def _remove(self, value):
+        self._prune(self.lower, True)
+        self._prune(self.upper, False)
+        self.delayed[value] += 1
+        if value <= -self.lower[0]:
+            self.lower_size -= 1
+        else:
+            self.upper_size -= 1
+        self._rebalance()
+
+    def _rebalance(self):
+        self._prune(self.lower, True)
+        self._prune(self.upper, False)
+        while self.lower_size > self.upper_size + 1:
+            heapq.heappush(self.upper, -heapq.heappop(self.lower))
+            self.lower_size -= 1
+            self.upper_size += 1
+            self._prune(self.lower, True)
+        while self.lower_size < self.upper_size:
+            heapq.heappush(self.lower, -heapq.heappop(self.upper))
+            self.lower_size += 1
+            self.upper_size -= 1
+            self._prune(self.upper, False)
+
+    def _prune(self, heap, is_lower):
+        while heap:
+            value = -heap[0] if is_lower else heap[0]
+            if self.delayed[value] == 0:
+                break
+            heapq.heappop(heap)
+            self.delayed[value] -= 1
+            if self.delayed[value] == 0:
+                del self.delayed[value]
+
+
+prices = StockPriceMedian()
+prices.insert(0, 10)
+prices.insert(100, 20)
+print(prices.median())  # 15.0
+prices.insert(601, 30)
+print(prices.median())  # 25.0
 ```
 
 
