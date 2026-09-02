@@ -353,6 +353,25 @@ token embedding [B,T,H]
 
 ## 9. Transformer 的总维度契约
 
+先从全局看传统 Transformer 的完整数据流。左侧编码器一次读入整个源序列，产生 `enc_outputs`；右侧解码器读取已经右移的目标序列，先做因果自注意力，再以自身表示作为查询、以编码器输出作为键和值做交叉注意力，最后预测每个目标位置的下一个词元。
+
+<figure class="network-figure network-figure-wide">
+  <a href="{{ '/assets/deep-learning/attention/transformer-architecture.svg' | relative_url }}">
+    <img src="{{ '/assets/deep-learning/attention/transformer-architecture.svg' | relative_url }}" alt="传统 Transformer 的完整编码器—解码器架构：源序列经词嵌入、位置编码和多层编码器得到 memory；右移目标序列经掩蔽自注意力、交叉注意力和前馈网络，再由线性层与 softmax 输出词元概率">
+  </a>
+  <figcaption>传统 Transformer 的完整流程。Encoder Block 重复 N 次；Decoder Block 也重复 N 次。每个注意力或 FFN 子层后都有独立的残差连接与 LayerNorm。点击图片可查看原尺寸。</figcaption>
+</figure>
+
+读图时从下往上看：
+
+1. **源序列进入编码器**：词元编号 `[B,T_s]` 经过 embedding 变成 `[B,T_s,H]`，乘以 $\sqrt H$ 后与位置编码相加。每个 Encoder Block 依次执行多头自注意力、`AddNorm`、逐位置 FFN、`AddNorm`，最终得到 `enc_outputs=[B,T_s,H]`。
+2. **目标前缀进入解码器**：训练时输入的是右移一位的真实目标序列，例如 `<bos>, y_1,\ldots,y_{t-1}`；推理时输入的是模型此前已经生成的词元。它同样经过 embedding、缩放和位置编码。
+3. **解码器先看目标侧历史**：掩蔽多头自注意力令位置 $t$ 只能读取不晚于 $t$ 的目标词元，不能偷看未来答案。
+4. **解码器再读取源序列**：交叉注意力的查询 $Q$ 来自当前解码器表示，键 $K$ 和值 $V$ 都来自 `enc_outputs`。因此每个目标位置都能按自己的查询，从完整源序列中提取当前最需要的信息。
+5. **得到词元概率**：最后一个 Decoder Block 的输出仍为 `[B,T_t,H]`。线性层把最后一维从 $H$ 映射到词表大小 $V$，Softmax 得到 `[B,T_t,V]` 的概率分布。训练时可以并行计算所有目标位置；推理时通常选出一个词元，再把它送回解码器继续生成。
+
+图中的 `Add & Norm` 采用 D2L 代码和原始 Transformer 常见的 Post-LN 画法，即先做残差相加，再做 LayerNorm。许多现代实现改用 Pre-LN，但编码器—解码器的信息流和三种注意力的职责没有因此改变。
+
 Transformer 把模型宽度统一为 $H$：
 
 ```text
