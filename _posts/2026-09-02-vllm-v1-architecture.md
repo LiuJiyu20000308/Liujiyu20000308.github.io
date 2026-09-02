@@ -53,6 +53,49 @@ HTTP POST /v1/chat/completions
 
 端口只是操作系统接收连接的编号，不对应一张 GPU。`/health` 成功说明前端能响应健康检查，不证明完整生成路径、负载下 p99 或输出正确性。
 
+### Offline 调用链：同步 API 不等于串行执行
+
+按 v0.20.0 的职责边界，可以这样读 `LLM.generate()`：
+
+```text
+用户 Python
+  → LLM.generate(prompts, sampling_params)
+  → 输入预处理 / request ids
+  → LLMEngine.add_request(...)
+  → while unfinished: LLMEngine.step()
+  → EngineCoreClient.get_output()
+       ├─ InprocClient: 同进程驱动 EngineCore
+       └─ MP client: 经 IPC 读取后台 EngineCore 的输出
+  → RequestOutput 列表
+```
+
+`generate()` 对调用者是阻塞函数，但内部可以把 prompts 同时加入 engine，并在 iteration 边界动态组成 batch。它返回的是完成后的 Python 对象，不含 HTTP、SSE、客户端断连和网络 backpressure。
+
+### Online 调用链：同一 core 外面多了服务生命周期
+
+```text
+HTTP client
+  → FastAPI route / OpenAI 协议校验
+  → chat messages --chat template--> prompt text/token ids
+  → tokenizer + 参数校验
+  → AsyncLLM / EngineCoreClient.add_request
+  → 后台 EngineCore schedule→execute→update
+  → EngineCoreOutput
+  → OutputProcessor / detokenize / stop strings
+  → SSE chunk 或最终 JSON
+```
+
+chat template 是把 `{role, content}` 消息转换成模型训练时约定的文本格式；tokenizer 再把文本变成 token ids。两份肉眼相同的消息若模板、special tokens 或 tokenizer 版本不同，得到的 token prefix 也可能不同，从而影响长度、logits 与 APC 命中。
+
+健康检查、一次 HTTP 200、输出语义正确与负载性能是四种不同证据：
+
+| 检查 | 能证明 | 不能证明 |
+|---|---|---|
+| `/health` | 前端进程可响应 | 模型 forward 成功 |
+| 一次 200 | 完整路径至少成功一次 | 并发稳定、p99 达标 |
+| 固定输入比对 | 当前配置下输出/分布符合预期 | 高吞吐 |
+| 压测 + profiler | 指定 workload 的性能 | 所有模型与硬件通用 |
+
 ## 3. async task、进程和 GPU worker 不要混为一谈
 
 - async task 是事件循环里的协作任务；`await` 在 I/O 等待时让出执行权；
@@ -61,6 +104,36 @@ HTTP POST /v1/chat/completions
 - rank 是分布式进程在全局或并行组中的编号，不是 HTTP request id。
 
 v0.20.0 的 `EngineCoreClient.make_client` 会依据配置选择同进程或多进程客户端。`InprocClient` 可在当前进程调用 core；MP client 则通过后台 core 和 IPC 交换小型消息。共同接口让上层不必针对每种拓扑重写 add request/get output。
+
+完整进程图应把“并发单位”和“模型分片单位”分开：
+
+```text
+server process
+  ├─ HTTP event loop
+  │    ├─ async task: request A
+  │    ├─ async task: request B
+  │    └─ async task: streaming writer
+  └─ EngineCoreClient
+        │ inproc call 或 IPC
+        ▼
+EngineCore process
+  └─ executor
+       ├─ worker process / global rank 0 → GPU 0
+       ├─ worker process / global rank 1 → GPU 1
+       └─ ... TP/PP/DP collective groups
+```
+
+`await` 只表示当前协程在等待时让出事件循环，不会凭空创建 OS process，也不会让同一 GPU 同时无限执行 kernels。每个 worker 内还可能有 CPU 准备、CUDA streams、CUDA Graph 和 device kernels 的并行/重叠；这与“有几个 worker”是不同层次。
+
+常见 client 选择可归纳为：
+
+| client | core 所在位置 | 上层看到的接口 | 主要边界 |
+|---|---|---|---|
+| `InprocClient` | 同进程 | add/abort/get output | Python 直接调用 |
+| `SyncMPClient` | 后台进程 | 同步调用 | IPC 阻塞边界 |
+| `AsyncMPClient` | 后台进程 | async 调用 | event loop + IPC |
+
+DP、外部 launcher 或其他 executor 可能增加子类/进程，表格不是所有拓扑枚举。准确表述应是 `LLMEngine.step → EngineCoreClient.get_output`，然后才根据 client 类型落到同进程 core 或 IPC；不能无条件画成 `LLMEngine.step → EngineCore.step`。
 
 ## 4. 一条请求的表示怎样变化
 
@@ -94,6 +167,20 @@ EngineCoreOutput → detokenize → SSE/JSON
 ```
 
 `EngineCoreRequest` 是跨边界消息，`Request` 是 Scheduler 持续修改的运行状态，`SchedulerOutput` 是单次 iteration 的执行计划。三者生命周期不同。
+
+### 每种对象的输入、输出与所有者
+
+| 对象 | 创建者 | 所有者/修改者 | 典型字段 | 生命周期 |
+|---|---|---|---|---|
+| HTTP schema | route | 前端 | messages、model、stream | 一次网络请求 |
+| `EngineCoreRequest` | 前端/engine facade | 作为消息传给 core | prompt ids、sampling params、request id | 跨边界传输 |
+| `Request` | `Request.from_engine_core_request` | Scheduler | status、all ids、computed、spec ids | 整个推理请求 |
+| `SchedulerOutput` | `Scheduler.schedule()` | executor 消费 | scheduled counts、new/cached/finished、block ids | 一次 iteration |
+| `ModelRunnerOutput` | model runner | Scheduler 消费 | sampled ids、logprobs 等 | 一次 iteration |
+| `EngineCoreOutput` | Scheduler/core | 前端消费 | 新 token ids、finish reason | 一次更新 |
+| `RequestOutput` | output processor | API 调用者 | 文本、token、metrics | 对外返回 |
+
+`ModelRunnerOutput.sampled_token_ids` 跨进程时适合用小型 Python lists；这不表示 sampling 必然在 CPU。设备上可以先产生 tensor，再在必须推进控制状态的边界做 copy/转换。反过来，把巨大 K/V payload 放进每轮 IPC 消息会引入地址空间、同步和传输问题，所以消息通常传 block ids，而 K/V 常驻 worker 的 GPU pool。
 
 ## 5. 为什么最终 `num_tokens=7`，computed 可能只有 6
 
@@ -129,6 +216,41 @@ EngineCore
   └─ Scheduler.update(...)       接收 sampled tokens，推进请求状态
 ```
 
+“基于真实输出的 token/stop 更新必须在 execute 之后”是一个正确性约束：schedule 只承诺准备算多少 token；真正的 sampled ids、推测解码接受长度、模型错误和部分停止条件要等执行结果。要注意 v0.20.0 的 Scheduler 会在计划构造后先把 scheduled positions 乐观计入 `num_computed_tokens`，把它当作“已完成或已提交的调度前沿”；这不是提前伪造 sampled token。失败、拒绝或异步差异仍要在 output 处理时校正。
+
+```python
+# 教学伪代码：同步核心主干
+while has_work():
+    plan = scheduler.schedule()              # 读权威状态，预留资源
+    try:
+        runner_output = executor.execute(plan)
+    except Exception:
+        scheduler.rollback(plan)             # 不能保留虚假的进度
+        raise
+    core_outputs = scheduler.update_from_output(plan, runner_output)
+    publish(core_outputs)
+```
+
+输入是 Scheduler 的长期请求状态和资源状态；输出是本轮可发布的新 token。`schedule()` 可能修改预留/队列元数据，`update` 才按真实结果提交 token 进度。真实 v0.20.0 还处理 grammar bitmask、执行期间 abort、KV connector、错误诊断、pipeline/batch queue 等分支；教学伪代码不能证明某个运行配置走同步路径。
+
+### 为什么先初始化真实 KV 容量，再构造依赖它的调度器
+
+启动主线可以概括为：
+
+```text
+create ModelExecutor
+  → get_kv_cache_specs()
+  → determine_available_memory()
+  → get_kv_cache_configs(...)
+  → generate scheduler KV-cache config
+  → executor.initialize_from_config(...)  # worker 建真实 GPU cache
+  → create Scheduler(config)               # 管同一容量的控制面 blocks
+```
+
+Scheduler 判断能否准入/增长请求，必须先知道 pool 有多少 blocks、block size 与 cache groups。控制面 `KVCacheManager` 保存 block ids、hash、ref count 等；worker 保存 K/V tensor。两者由 `SchedulerOutput` 同步映射。如果 Scheduler 认为请求拿到 physical block 7，而 worker-side `BlockTable` 没收到更新，kernel 就可能寻址错误。
+
+无 KV 的模型、connector、elastic expert parallel、PP batch queue 等有条件分支；上述流程只表达资源依赖，不把所有配置写成同一条无条件路径。
+
 ## 7. 控制面与数据面
 
 Scheduler 长期操作 request id、status、token counts、block ids、hash、ref count 和队列。这些对象小、不规则、分支多，适合 CPU 控制面。
@@ -147,6 +269,49 @@ KV pool[physical block 8]
 
 大体积 K/V 不会跟随每个 `SchedulerOutput` 在进程之间来回复制。消息传递的是位置和本轮工作量。
 
+### block table 从 Python metadata 到 device tensor
+
+```text
+Scheduler / KVCacheManager
+  request A → physical block ids [7, 3, 11]
+          │ SchedulerOutput（小型控制消息）
+          ▼
+GPUModelRunner._update_states
+  更新 worker-side request state / BlockTable
+          │ commit / copy
+          ▼
+device block_table tensor [num_reqs, max_blocks_per_req]
+          │ attention metadata
+          ▼
+backend kernel: logical position → block id → slot → KV pool address
+```
+
+概念布局可写成 `kv_cache[layer][K_or_V][physical_block][offset][kv_head][head_dim]`，但真实轴顺序、是否 K/V 合并、page/block 大小和 dtype 必须查选中的 cache spec/backend。这张图只说明地址翻译，不是 ABI。
+
+CPU 适合不规则、分支多的请求队列和引用状态；GPU 适合批量 tensor 计算。GPU 并非“总是更快”：把 Scheduler 的大量 Python 分支改成许多微小 kernels 可能增加 launch/sync，而每步从 CPU 经 PCIe 搬权重/KV 又会让传输成为瓶颈。
+
+### 一次请求的端到端时序
+
+```text
+client      front end       core/scheduler       runner/GPU
+  | POST       |                   |                  |
+  |----------->| template/tokenize |                  |
+  |            |---add request---->| WAITING          |
+  |            |                   |--schedule------->|
+  |            |                   |  prompt + blocks | forward/sample 21
+  |            |                   |<--runner output--|
+  |            |                   | update computed=4|
+  |<--SSE 21---|<--core output-----|                  |
+  |            |                   |--schedule 21---->|
+  |            |                   |<--sample 22------|
+  |<--SSE 22---|<--update----------|                  |
+  |            |                   |--schedule 22---->|
+  |            |                   |<--sample 23------|
+  |<--SSE 23---|<--finish/free-----|                  |
+```
+
+客户端断连不等于 core 请求自动消失。前端要检测断连并发出 abort/cancel；若请求已在执行，本轮仍可能完成后才观察到取消。server TTFT 可包含网络、解析和排队，而 Offline TTFT 没有同一边界，比较时必须声明计时起点。
+
 ## 8. 性能问题应回到所属层
 
 - `num_scheduled_tokens` 不合理：先查 Scheduler；
@@ -155,6 +320,21 @@ KV pool[physical block 8]
 - kernel/dtype/layout 不支持：查 attention backend；
 - HTTP 200 但内容异常：还要检查模板、采样、finish reason 与 detokenization；
 - GPU 间出现大段空隙：区分 queue、CPU preparation、IPC、launch gap 和 kernel device time。
+
+### 推荐断点与日志字段
+
+| 目标 | v0.20.0 阅读/断点入口 | 建议记录 |
+|---|---|---|
+| 外部请求形成 | `entrypoints/llm.py::LLM.generate` 或 OpenAI route | request id、prompt tokens、sampling params |
+| client 拓扑 | `v1/engine/core_client.py::make_client` | client class、MP/DP 配置 |
+| core 迭代 | `v1/engine/core.py` 的 step 主干 | iteration、schedule/execute/update 时间 |
+| 调度计划 | `v1/core/sched/scheduler.py::schedule` | waiting/running、budget、per-request scheduled tokens |
+| KV 分配 | `v1/core/kv_cache_manager.py::allocate_slots` | blocks、hits、free blocks、preemption |
+| worker 同步 | `v1/worker/gpu_model_runner.py::_update_states` | new/cached/finished requests、block ids |
+| device 输入 | runner input/metadata builder | input ids、positions、query starts、block table shape |
+| backend | `v1/attention/backends/registry.py` 与选中 backend | backend 名、dtype、layout、block size |
+
+这些断点分别证明静态调用或某次动态路径。类存在于注册表只证明它是候选；必须看到启动日志/trace 才能说本次运行选中了它，必须有 profiler 才能归因性能。
 
 ## 常见误区
 
