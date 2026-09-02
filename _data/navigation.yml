@@ -8,5 +8,7 @@
   url: /notes/
 - title: Deep Learning
   url: /deep-learning/
+- title: vLLM
+  url: /vllm/
 - title: CV
   url: /assets/Liujiyu_CV.pdf
